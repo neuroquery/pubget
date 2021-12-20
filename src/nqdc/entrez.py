@@ -25,8 +25,8 @@ class EntrezClient:
         self._session.params = self._entrez_id
         self._session.timeout = self._default_timeout
 
-    def _send_request(self, url, params):
-        req = requests.Request("GET", url, params=params)
+    def _send_request(self, url, params, verb="GET"):
+        req = requests.Request(verb, url, params=params)
         prepped = self._session.prepare_request(req)
         _LOG.debug(f"sending request: {prepped.url}")
         try:
@@ -49,7 +49,9 @@ class EntrezClient:
         if web_env is not None and query_key is not None:
             search_params["WebEnv"] = web_env
             search_params["query_key"] = query_key
-        resp = self._send_request(self._esearch_base_url, params=search_params)
+        resp = self._send_request(
+            self._esearch_base_url, params=search_params, verb="POST"
+        )
         try:
             search_info = resp.json()["esearchresult"]
         except Exception:
