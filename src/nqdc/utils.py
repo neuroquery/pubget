@@ -4,6 +4,7 @@ from datetime import datetime
 import logging
 import logging.config
 import sys
+import hashlib
 
 
 import configobj
@@ -81,3 +82,13 @@ def get_config():
     get_config.config = config
     _configure_logging()
     return config
+
+
+def get_data_dir():
+    return Path(get_config()["data_dir"])
+
+
+def hash(value):
+    if isinstance(value, str):
+        value = value.encode("utf-8")
+    return hashlib.md5(value).hexdigest()
