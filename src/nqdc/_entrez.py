@@ -5,14 +5,14 @@ import time
 
 import requests
 
-from nqdc.utils import get_config
+from nqdc._utils import get_config
 
 _LOG = logging.getLogger(__name__)
 
 
 class EntrezClient:
     _default_timeout = 10
-    _entrez_base_url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
+    _entrez_base_url = "https://e_utils.ncbi.nlm.nih.gov/entrez/e_utils/"
     _esearch_base_url = urljoin(_entrez_base_url, "esearch.fcgi")
     _efetch_base_url = urljoin(_entrez_base_url, "efetch.fcgi")
 

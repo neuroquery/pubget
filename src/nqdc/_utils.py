@@ -12,7 +12,7 @@ import validate
 from lxml import etree
 
 
-def _configure_logging():
+def configure_logging():
     log_file = get_config()["log_file"]
     fmt_string = (
         "%(levelname)s\t%(asctime)s\t%(process)d\t%(name)s"
@@ -81,12 +81,7 @@ def get_config():
     log_file = log_dir / f"ukbiobank-{now}-{pid}.log"
     config["log_file"] = str(log_file)
     get_config.config = config
-    _configure_logging()
     return config
-
-
-def configure_logging():
-    get_config()
 
 
 def get_data_dir():

@@ -3,14 +3,14 @@ from pathlib import Path
 
 from lxml import etree
 
-from nqdc import utils
+from nqdc import _utils
 
 _LOG = logging.getLogger(__name__)
 
 
 def extract_articles(input_dir):
     input_dir = Path(input_dir)
-    data_dir = utils.get_data_dir()
+    data_dir = _utils.get_data_dir()
     output_dir = data_dir.joinpath("articles", input_dir.name)
     output_dir.mkdir(exist_ok=True, parents=True)
     n_articles = 0
@@ -19,7 +19,7 @@ def extract_articles(input_dir):
         for (pmcid, article) in _extract_from_articleset(
             batch_file, output_dir
         ):
-            subdir = output_dir / utils.hash(str(pmcid))[:3]
+            subdir = output_dir / _utils.hash(str(pmcid))[:3]
             subdir.mkdir(exist_ok=True, parents=True)
             target_file = subdir / f"pmcid_{pmcid}.xml"
             with open(target_file, "wb") as f:

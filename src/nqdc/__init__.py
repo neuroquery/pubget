@@ -1,4 +1,4 @@
-from nqdc.utils import configure_logging
+from nqdc._utils import configure_logging as _configure_logging
 
 
-configure_logging()
+_configure_logging()

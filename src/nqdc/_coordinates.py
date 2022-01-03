@@ -1,12 +1,11 @@
 import logging
-from pathlib import Path
 import re
 import html
 
 import pandas as pd
 from lxml import etree
 
-from nqdc import utils
+from nqdc import _utils
 
 _LOG = logging.getLogger(__name__)
 
@@ -52,51 +51,25 @@ _COORD_DATA_TRIPLET = _TRIPLET.format(
 )
 
 
-def extract_coordinates(articles_dir):
-    articles_dir = Path(articles_dir)
-    stylesheet = utils.load_stylesheet("table_extraction.xsl")
-    all_coords = []
-    n_articles, n_with_coords = 0, 0
-    for subdir in sorted([f for f in articles_dir.glob("*") if f.is_dir()]):
-        _LOG.info(f"Processing directory: {subdir.name}")
-        for article_file in subdir.glob("pmcid_*.xml"):
-            n_articles += 1
-            _LOG.debug(
-                f"In directory {subdir.name} "
-                f"({int(subdir.name, 16) / int('fff', 16):.0%}), "
-                f"processing article: {article_file.name}"
-            )
-            coords = _extract_coordinates_from_article(
-                article_file, stylesheet
-            )
-            if coords is not None:
-                coords_found = False
-                for table_coords in coords:
-                    if table_coords["coordinates"].shape[0]:
-                        all_coords.append(table_coords["coordinates"])
-                        coords_found = True
-            n_with_coords += coords_found
-            _LOG.info(
-                f"Processed in total {n_articles} articles, {n_with_coords} "
-                f"({n_with_coords / n_articles:.0%}) had coordinates"
-            )
-    return pd.concat(all_coords)
+class CoordinateExtractor:
+    def __init__(self):
+        self._stylesheet = _utils.load_stylesheet("table_extraction.xsl")
+
+    def __call__(self, article):
+        return _extract_coordinates_from_article(article, self._stylesheet)
 
 
-def _extract_coordinates_from_article(article_file, stylesheet):
+def _extract_coordinates_from_article(article, stylesheet):
     try:
-        transformed = stylesheet(etree.parse(str(article_file)))
+        transformed = stylesheet(article)
     except Exception:
-        _LOG.exception(
-            f"failed to transform {article_file.name}:"
-            f" {stylesheet.error_log}"
-        )
+        _LOG.exception(f"failed to transform article: {stylesheet.error_log}")
         return None
     try:
         coordinates = _extract_coordinates_from_article_tables(transformed)
         return coordinates
     except Exception:
-        _LOG.exception(f"failed to extract coords from {article_file.name}")
+        _LOG.exception("failed to extract coords from article")
 
 
 def _extract_coordinates_from_article_tables(article_tables):
