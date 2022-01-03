@@ -12,7 +12,7 @@ _LOG = logging.getLogger(__name__)
 
 _TRIPLET = r"""(?ix)
     ^{prefix}
-    [[({{]?
+    [\[({{]?
     \s*(?P<x>{x_pat})\s*(?:,|;|\s)\s*
     (?P<y>{y_pat})\s*(?:,|;|\s)\s*
     (?P<z>{z_pat})\s*
@@ -56,16 +56,30 @@ def extract_coordinates(articles_dir):
     articles_dir = Path(articles_dir)
     stylesheet = utils.load_stylesheet("table_extraction.xsl")
     all_coords = []
+    n_articles, n_with_coords = 0, 0
     for subdir in sorted([f for f in articles_dir.glob("*") if f.is_dir()]):
+        _LOG.info(f"Processing directory: {subdir.name}")
         for article_file in subdir.glob("pmcid_*.xml"):
-            _LOG.debug(f"Processing article: {article_file.name}")
+            n_articles += 1
+            _LOG.debug(
+                f"In directory {subdir.name} "
+                f"({int(subdir.name, 16) / int('fff', 16):.0%}), "
+                f"processing article: {article_file.name}"
+            )
             coords = _extract_coordinates_from_article(
                 article_file, stylesheet
             )
             if coords is not None:
+                coords_found = False
                 for table_coords in coords:
                     if table_coords["coordinates"].shape[0]:
                         all_coords.append(table_coords["coordinates"])
+                        coords_found = True
+            n_with_coords += coords_found
+            _LOG.info(
+                f"Processed in total {n_articles} articles, {n_with_coords} "
+                f"({n_with_coords / n_articles:.0%}) had coordinates"
+            )
     return pd.concat(all_coords)
 
 
@@ -99,15 +113,18 @@ def _extract_coordinates_from_article_tables(article_tables):
                     ).decode("utf-8")
                 ),
                 thousands=None,
+                flavor="lxml",
             )[0]
         except Exception:
-            _LOG.exception(f"Failed to read table # {i} in PMCID {pmcid}")
+            _LOG.debug(f"Failed to read table # {i} in PMCID {pmcid}")
+            continue
         try:
             coordinates = _extract_coordinates_from_table(table_data)
         except Exception:
             _LOG.exception(
                 f"Failed to extract coordinates from table {table_id}"
             )
+            continue
         coordinates["pmcid"] = pmcid
         coordinates["table_id"] = table_id
         coordinates["table_label"] = table_label
@@ -145,7 +162,7 @@ def _extract_coordinates_from_table(table, copy=False):
     xyz_indices = _find_xyz(table.columns)
     if not xyz_indices:
         return pd.DataFrame(columns=["x", "y", "z"])
-    table.fillna("", inplace=True)
+    table = table.fillna("")
     result = pd.concat(
         [
             pd.DataFrame(

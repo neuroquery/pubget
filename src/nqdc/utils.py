@@ -85,6 +85,10 @@ def get_config():
     return config
 
 
+def configure_logging():
+    get_config()
+
+
 def get_data_dir():
     return Path(get_config()["data_dir"])
 
