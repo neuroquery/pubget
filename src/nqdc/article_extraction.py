@@ -41,7 +41,8 @@ def _extract_from_articleset(batch_file, output_dir):
             try:
                 pmcid = int(
                     article.xpath(
-                        "front/article-meta/article-id[@pub-id-type='pmc']/text()"
+                        "front/article-meta/"
+                        "article-id[@pub-id-type='pmc']/text()"
                     )[0]
                 )
             except Exception:

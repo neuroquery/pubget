@@ -9,6 +9,7 @@ import hashlib
 
 import configobj
 import validate
+from lxml import etree
 
 
 def _configure_logging():
@@ -60,7 +61,7 @@ def get_config():
     if getattr(get_config, "config", None) is not None:
         return get_config.config
     src_dir = Path(__file__).parent
-    config_spec = str(src_dir / "nqdc_spec.conf")
+    config_spec = str(src_dir / "data" / "nqdc_spec.conf")
     default_config_path = str(Path.home().joinpath(".nqdc.conf"))
     config_path = os.environ.get("NQDC_CONFIG", default_config_path)
     config = configobj.ConfigObj(
@@ -88,7 +89,18 @@ def get_data_dir():
     return Path(get_config()["data_dir"])
 
 
+def get_package_data_dir():
+    return Path(__file__).parent / "data"
+
+
 def hash(value):
     if isinstance(value, str):
         value = value.encode("utf-8")
     return hashlib.md5(value).hexdigest()
+
+
+def load_stylesheet(stylesheet_name):
+    stylesheet_path = get_package_data_dir() / "stylesheets" / stylesheet_name
+    stylesheet_xml = etree.parse(str(stylesheet_path))
+    transform = etree.XSLT(stylesheet_xml)
+    return transform
