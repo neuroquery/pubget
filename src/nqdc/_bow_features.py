@@ -1,8 +1,10 @@
 from pathlib import Path
 import logging
+import json
 
 import numpy as np
 from scipy import sparse
+from sklearn.preprocessing import normalize
 
 import pandas as pd
 from neuroquery.tokenization import TextVectorizer
@@ -17,22 +19,26 @@ def vectorize_corpus_to_npz(corpus_file, vocabulary_file, output_dir):
     )
     output_dir = Path(output_dir)
     output_dir.mkdir(exist_ok=True, parents=True)
-    vectorized_fields, vectorizer = vectorize_corpus(
-        corpus_file, vocabulary_file
-    )
-    for field, vectorized in vectorized_fields.items():
-        output_file = output_dir / f"{field}.npz"
-        sparse.save_npz(str(output_file), vectorized)
-    voc_file = output_dir / "vocabulary.csv"
-    pd.Series(vectorizer.get_feature_names()).to_csv(
-        voc_file, index=False, header=None
+    extraction_result = vectorize_corpus(corpus_file, vocabulary_file)
+    for feature_kind in "counts", "tfidf":
+        for field, vectorized in extraction_result[feature_kind].items():
+            output_file = output_dir / f"{field}_{feature_kind}.npz"
+            sparse.save_npz(str(output_file), vectorized)
+    for voc_name in "feature_names", "vocabulary":
+        voc_file = output_dir / f"{voc_name}.csv"
+        extraction_result[f"document_frequencies_{voc_name}"].to_csv(
+            voc_file, header=None
+        )
+    voc_mapping_file = output_dir / "vocabulary.csv_voc_mapping_identity.json"
+    voc_mapping_file.write_text(
+        json.dumps(extraction_result["voc_mapping"]), "utf-8"
     )
     _LOG.info(f"Done creating BOW features .npz files in {output_dir}")
 
 
-def vectorize_corpus(corpus_file, vocabulary_file):
+def _extract_word_counts(corpus_file, vocabulary_file):
     vectorizer = TextVectorizer.from_vocabulary_file(
-        vocabulary_file, use_idf=False, norm=None
+        vocabulary_file, use_idf=False, norm=None, voc_mapping={}
     ).fit()
     vectorized_chunks = {
         "title": [],
@@ -59,11 +65,62 @@ def vectorize_corpus(corpus_file, vocabulary_file):
     return vectorized_fields, vectorizer
 
 
+def _load_voc_mapping(vocabulary_file):
+    voc_mapping_file = Path(f"{vocabulary_file}_voc_mapping_identity.json")
+    if voc_mapping_file.is_file():
+        voc_mapping = json.loads(voc_mapping_file.read_text("utf-8"))
+    else:
+        voc_mapping = {}
+    return voc_mapping
+
+
+def vectorize_corpus(corpus_file, vocabulary_file):
+    voc_mapping = _load_voc_mapping(vocabulary_file)
+    counts, vectorizer = _extract_word_counts(corpus_file, vocabulary_file)
+    n_docs = counts["body"].shape[0]
+    frequencies = {
+        k: normalize(v, norm="l1", axis=1, copy=True)
+        for k, v in counts.items()
+    }
+    freq_sum = np.sum(list(frequencies.values()))
+    frequencies["merged"] = freq_sum / len(frequencies)
+    doc_counts_full_voc = np.asarray((freq_sum > 0).sum(axis=0)).squeeze()
+    doc_freq_full_voc = (doc_counts_full_voc + 1) / (n_docs + 1)
+    voc = vectorizer.get_feature_names()
+    voc_map_mat = _voc_mapping_matrix(voc, voc_mapping)
+    counts = {k: v.dot(voc_map_mat.T) for k, v in counts.items()}
+    frequencies = {k: v.dot(voc_map_mat.T) for k, v in frequencies.items()}
+    doc_freq = voc_map_mat.dot(doc_freq_full_voc)
+    idf = -np.log(doc_freq) + 1
+    n_terms = len(idf)
+    idf_mat = sparse.spdiags(
+        idf,
+        diags=0,
+        m=n_terms,
+        n=n_terms,
+        format="csr",
+    )
+    tfidf = {k: v.dot(idf_mat) for k, v in frequencies.items()}
+    return {
+        "counts": counts,
+        "tfidf": tfidf,
+        "document_frequencies_vocabulary": pd.Series(
+            doc_freq_full_voc, index=voc
+        ),
+        "document_frequencies_feature_names": pd.Series(
+            doc_freq, index=sorted(set(voc).difference(voc_mapping.keys()))
+        ),
+        "voc_mapping": voc_mapping,
+    }
+
+
 def _voc_mapping_matrix(vocabulary, voc_mapping):
     word_to_idx = pd.Series(np.arange(len(vocabulary)), index=vocabulary)
     form = sparse.eye(len(vocabulary), format="lil")
+    keep = np.ones(len(vocabulary), dtype=bool)
     for source, target in voc_mapping.items():
         s_idx, t_idx = word_to_idx[source], word_to_idx[target]
-        form[s_idx, s_idx] = 0
+        keep[s_idx] = False
         form[t_idx, s_idx] = 1
+    form = form[keep, :]
     return form.tocsr()
