@@ -9,27 +9,29 @@ from neuroquery.tokenization import TextVectorizer
 _LOG = logging.getLogger(__name__)
 
 
-def vectorize_corpus_to_npz(
-    corpus_file, vocabulary_file, output_dir, use_idf=False, norm=None
-):
+def vectorize_corpus_to_npz(corpus_file, vocabulary_file, output_dir):
     _LOG.info(
         f"vectorizing {corpus_file} using vocabulary "
         f"{vocabulary_file} to {output_dir}"
     )
     output_dir = Path(output_dir)
     output_dir.mkdir(exist_ok=True, parents=True)
-    vectorized_fields = vectorize_corpus(
-        corpus_file, vocabulary_file, use_idf=False, norm=None
+    vectorized_fields, vectorizer = vectorize_corpus(
+        corpus_file, vocabulary_file
     )
     for field, vectorized in vectorized_fields.items():
         output_file = output_dir / f"{field}.npz"
         sparse.save_npz(str(output_file), vectorized)
-    _LOG.info("Done creating BOW features .npz files")
+    voc_file = output_dir / "vocabulary.csv"
+    pd.Series(vectorizer.get_feature_names()).to_csv(
+        voc_file, index=False, header=None
+    )
+    _LOG.info(f"Done creating BOW features .npz files in {output_dir}")
 
 
-def vectorize_corpus(corpus_file, vocabulary_file, use_idf=False, norm=None):
+def vectorize_corpus(corpus_file, vocabulary_file):
     vectorizer = TextVectorizer.from_vocabulary_file(
-        vocabulary_file, use_idf=use_idf, norm=norm
+        vocabulary_file, use_idf=False, norm=None
     ).fit()
     vectorized_chunks = {
         "title": [],
@@ -53,4 +55,4 @@ def vectorize_corpus(corpus_file, vocabulary_file, use_idf=False, norm=None):
         vectorized_fields[field] = sparse.vstack(
             vectorized_chunks[field], format="csr"
         )
-    return vectorized_fields
+    return vectorized_fields, vectorizer
