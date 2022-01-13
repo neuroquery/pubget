@@ -1,6 +1,7 @@
 from pathlib import Path
 import logging
 
+import numpy as np
 from scipy import sparse
 
 import pandas as pd
@@ -56,3 +57,13 @@ def vectorize_corpus(corpus_file, vocabulary_file):
             vectorized_chunks[field], format="csr"
         )
     return vectorized_fields, vectorizer
+
+
+def _voc_mapping_matrix(vocabulary, voc_mapping):
+    word_to_idx = pd.Series(np.arange(len(vocabulary)), index=vocabulary)
+    form = sparse.eye(len(vocabulary), format="lil")
+    for source, target in voc_mapping.items():
+        s_idx, t_idx = word_to_idx[source], word_to_idx[target]
+        form[s_idx, s_idx] = 0
+        form[t_idx, s_idx] = 1
+    return form.tocsr()
