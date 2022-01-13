@@ -2,6 +2,7 @@ import logging
 import re
 import html
 
+from scipy import stats
 import pandas as pd
 from lxml import etree
 
@@ -52,11 +53,16 @@ _COORD_DATA_TRIPLET = _TRIPLET.format(
 
 
 class CoordinateExtractor:
+    fields = ("pmcid", "table_id", "table_label", "x", "y", "z")
+
     def __init__(self):
         self._stylesheet = _utils.load_stylesheet("table_extraction.xsl")
 
     def __call__(self, article):
-        return _extract_coordinates_from_article(article, self._stylesheet)
+        coords = _extract_coordinates_from_article(article, self._stylesheet)
+        if coords is None:
+            pd.DataFrame(columns=self.fields)
+        return coords.loc[:, self.fields]
 
 
 def _extract_coordinates_from_article(article, stylesheet):
@@ -74,6 +80,7 @@ def _extract_coordinates_from_article(article, stylesheet):
 
 
 def _extract_coordinates_from_article_tables(article_tables):
+    pmcid = int(article_tables.find("pmcid").text)
     all_coordinates = []
     for i, table in enumerate(article_tables.iterfind("//extracted-table")):
         try:
@@ -98,12 +105,15 @@ def _extract_coordinates_from_article_tables(article_tables):
                 f"Failed to extract coordinates from table {table_id}"
             )
             continue
+        coordinates["pmcid"] = pmcid
         coordinates["table_id"] = table_id
         coordinates["table_label"] = table_label
         all_coordinates.append(coordinates)
     if all_coordinates:
         return pd.concat(all_coordinates)
-    return pd.DataFrame(columns=["x", "y", "z", "table_id", "table_label"])
+    return pd.DataFrame(
+        columns=["x", "y", "z", "pmcid", "table_id", "table_label"]
+    )
 
 
 def _map_chars(text):
@@ -140,6 +150,9 @@ def _extract_coordinates_from_table(table, copy=False):
     for column in result:
         result[column] = _to_numeric(result[column])
     result.dropna(inplace=True)
+    if not _check_table(result):
+        return pd.DataFrame(columns=["x", "y", "z"])
+    result = _filter_coordinates(result)
     result.reset_index(inplace=True, drop=True)
     return result
 
@@ -207,3 +220,20 @@ def _find_xyz(tr):
             pos += 2
         pos += 1
     return found
+
+
+def _filter_coordinates(coordinates):
+    xyz = coordinates.loc[:, ("x", "y", "z")]
+    outside_brain = (xyz.abs() >= 150).any(axis=1)
+    not_coord = (-1 <= xyz).all(axis=1) & (xyz <= 1).all(axis=1)
+    max_2_positions = (xyz.round(2) == xyz).all(axis=1)
+    filtered = coordinates[~outside_brain & ~not_coord & max_2_positions]
+    return filtered
+
+
+def _check_table(values, tol=-400):
+    if not values.shape[0]:
+        return True
+    distrib = stats.multivariate_normal(mean=[0, 0, 0], cov=1.5)
+    avg_ll = distrib.logpdf(values).mean()
+    return avg_ll < tol
