@@ -1,0 +1,2492 @@
+<?xml version='1.0' encoding='ASCII'?>
+<pmc-articleset><article xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink" dtd-version="1.3" xml:lang="en" article-type="research-article">
+  <!--The publisher of this article does not allow downloading of the full text in XML form.-->
+  <?properties manuscript?>
+  <processing-meta base-tagset="archiving" mathml-version="3.0" table-model="xhtml" tagset-family="jats">
+    <restricted-by>pmc</restricted-by>
+  </processing-meta>
+  <front>
+    <journal-meta>
+      <journal-id journal-id-type="nlm-journal-id">101763872</journal-id>
+      <journal-id journal-id-type="pubmed-jr-id">49274</journal-id>
+      <journal-id journal-id-type="nlm-ta">Annu Int Conf IEEE Eng Med Biol Soc</journal-id>
+      <journal-id journal-id-type="iso-abbrev">Annu Int Conf IEEE Eng Med Biol Soc</journal-id>
+      <journal-title-group>
+        <journal-title>Annual International Conference of the IEEE Engineering in Medicine and Biology Society. IEEE Engineering in Medicine and Biology Society. Annual International Conference</journal-title>
+      </journal-title-group>
+      <issn pub-type="ppub">2375-7477</issn>
+      <issn pub-type="epub">2694-0604</issn>
+    </journal-meta>
+    <article-meta>
+      <article-id pub-id-type="pmid">34892092</article-id>
+      <article-id pub-id-type="pmc">8758404</article-id>
+      <article-id pub-id-type="doi">10.1109/EMBC46164.2021.9630110</article-id>
+      <article-id pub-id-type="manuscript">NIHMS1767405</article-id>
+      <article-categories>
+        <subj-group subj-group-type="heading">
+          <subject>Article</subject>
+        </subj-group>
+      </article-categories>
+      <title-group>
+        <article-title>3D Neural Networks for Visceral and Subcutaneous Adipose Tissue Segmentation using Volumetric Multi-Contrast MRI</article-title>
+      </title-group>
+      <contrib-group>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Kafali</surname>
+            <given-names>Sevgi Gokce</given-names>
+          </name>
+          <xref rid="A1" ref-type="aff">1</xref>
+          <xref rid="CR1" ref-type="corresp">*</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Shih</surname>
+            <given-names>Shu-Fu</given-names>
+          </name>
+          <xref rid="A1" ref-type="aff">1</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Li</surname>
+            <given-names>Xinzhou</given-names>
+          </name>
+          <xref rid="A1" ref-type="aff">1</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Chowdhury</surname>
+            <given-names>Shilpy</given-names>
+          </name>
+          <xref rid="A2" ref-type="aff">2</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Loong</surname>
+            <given-names>Spencer</given-names>
+          </name>
+          <xref rid="A3" ref-type="aff">3</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Barnes</surname>
+            <given-names>Samuel</given-names>
+          </name>
+          <xref rid="A2" ref-type="aff">2</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Li</surname>
+            <given-names>Zhaoping</given-names>
+          </name>
+          <xref rid="A4" ref-type="aff">4</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Wu</surname>
+            <given-names>Holden H.</given-names>
+          </name>
+          <xref rid="A1" ref-type="aff">1</xref>
+          <xref rid="FN1" ref-type="author-notes">&#8224;</xref>
+        </contrib>
+      </contrib-group>
+      <aff id="A1"><label>1</label>Departments of Radiological Sciences and Bioengineering, University of California, Los Angeles, CA, USA</aff>
+      <aff id="A2"><label>2</label>Department of Radiology, Loma Linda University Medical Center, CA, USA</aff>
+      <aff id="A3"><label>3</label>Department of Psychology, Loma Linda University School of Behavioral Health, CA, USA</aff>
+      <aff id="A4"><label>4</label>Department of Medicine, University of California, Los Angeles, CA, USA</aff>
+      <author-notes>
+        <fn fn-type="other" id="FN1">
+          <label>&#8224;</label>
+          <p id="P1">For the Habitual Diet and Avocado Trial (HAT) investigators</p>
+        </fn>
+        <corresp id="CR1"><label>*</label>Correspondence to: <email>skafali@mednet.ucla.edu</email></corresp>
+      </author-notes>
+      <pub-date pub-type="nihms-submitted">
+        <day>1</day>
+        <month>1</month>
+        <year>2022</year>
+      </pub-date>
+      <pub-date pub-type="ppub">
+        <month>11</month>
+        <year>2021</year>
+      </pub-date>
+      <pub-date pub-type="pmc-release">
+        <day>14</day>
+        <month>1</month>
+        <year>2022</year>
+      </pub-date>
+      <volume>2021</volume>
+      <fpage>3933</fpage>
+      <lpage>3937</lpage>
+      <abstract id="ABS1">
+        <p id="P2">Individuals with obesity have larger amounts of visceral (VAT) and subcutaneous adipose tissue (SAT) in their body, increasing the risk for cardiometabolic diseases. The reference standard to quantify SAT and VAT uses manual annotations of magnetic resonance images (MRI), which requires expert knowledge and is time-consuming. Although there have been studies investigating deep learning-based methods for automated SAT and VAT segmentation, the performance for VAT remains suboptimal (Dice scores of 0.43 to 0.89). Previous work had key limitations of not fully considering the multi-contrast information from MRI and the 3D anatomical context, which are critical for addressing the complex spatially varying structure of VAT. An additional challenge is the imbalance between the number and distribution of pixels representing SAT/VAT. This work proposes a network based on 3D U-Net that utilizes the full field-of-view volumetric T<sub>1</sub>-weighted, water, and fat images from dual-echo Dixon MRI as the multi-channel input to automatically segment SAT and VAT in adults with overweight/obesity. In addition, this work extends the 3D U-Net to a new Attention-based Competitive Dense 3D U-Net (ACD 3D U-Net) trained with a class frequency-balancing Dice loss (FBDL). In an initial testing dataset, the proposed 3D U-Net and ACD 3D U-Net with FBDL achieved 3D Dice scores of (mean&#177;standard deviation) 0.99&#177;0.01 and 0.99&#177;0.01 for SAT, and 0.95&#177;0.04 and 0.96&#177;0.04 for VAT, respectively, compared to manual annotations. The proposed 3D networks had rapid inference time (&lt;60 ms/slice) and can enable automated segmentation of SAT and VAT.</p>
+      </abstract>
+    </article-meta>
+  </front>
+</article>
+<article xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink" dtd-version="1.3" xml:lang="en" article-type="case-report">
+  <?properties open_access?>
+  <processing-meta base-tagset="archiving" mathml-version="3.0" table-model="xhtml" tagset-family="jats">
+    <restricted-by>pmc</restricted-by>
+  </processing-meta>
+  <front>
+    <journal-meta>
+      <journal-id journal-id-type="nlm-ta">Case Rep Med</journal-id>
+      <journal-id journal-id-type="iso-abbrev">Case Rep Med</journal-id>
+      <journal-id journal-id-type="publisher-id">CRIM</journal-id>
+      <journal-title-group>
+        <journal-title>Case Reports in Medicine</journal-title>
+      </journal-title-group>
+      <issn pub-type="ppub">1687-9627</issn>
+      <issn pub-type="epub">1687-9635</issn>
+      <publisher>
+        <publisher-name>Hindawi</publisher-name>
+      </publisher>
+    </journal-meta>
+    <article-meta>
+      <article-id pub-id-type="pmc">8758325</article-id>
+      <article-id pub-id-type="doi">10.1155/2022/3099750</article-id>
+      <article-categories>
+        <subj-group subj-group-type="heading">
+          <subject>Case Report</subject>
+        </subj-group>
+      </article-categories>
+      <title-group>
+        <article-title>A Case of Metastatic CNS Melanoma of Unknown Primary Presenting with Seizures</article-title>
+      </title-group>
+      <contrib-group>
+        <contrib contrib-type="author" corresp="yes">
+          <contrib-id contrib-id-type="orcid" authenticated="false">https://orcid.org/0000-0002-8971-5197</contrib-id>
+          <name>
+            <surname>Nguyen</surname>
+            <given-names>Viva</given-names>
+          </name>
+          <email>vhn5@miami.edu</email>
+          <xref rid="I1" ref-type="aff">
+<sup>1</sup>
+</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Aboulenain</surname>
+            <given-names>Samar</given-names>
+          </name>
+          <xref rid="I1" ref-type="aff">
+<sup>1</sup>
+</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Mohammed</surname>
+            <given-names>Shawn</given-names>
+          </name>
+          <xref rid="I2" ref-type="aff">
+<sup>2</sup>
+</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Perez Parra</surname>
+            <given-names>Sahyli</given-names>
+          </name>
+          <xref rid="I2" ref-type="aff">
+<sup>2</sup>
+</xref>
+        </contrib>
+      </contrib-group>
+      <aff id="I1">
+<sup>1</sup>Internal Medicine Resident, University of Miami JFK GME, Atlantis, FL, USA</aff>
+      <aff id="I2">
+<sup>2</sup>Medical Specialists of the Palm Beaches Neurology, JFK Medical Center, Atlantis, FL, USA</aff>
+      <author-notes>
+        <fn fn-type="other">
+          <p>Academic Editor: Simon Ching Shun Kao</p>
+        </fn>
+      </author-notes>
+      <pub-date pub-type="collection">
+        <year>2022</year>
+      </pub-date>
+      <pub-date pub-type="epub">
+        <day>6</day>
+        <month>1</month>
+        <year>2022</year>
+      </pub-date>
+      <volume>2022</volume>
+      <elocation-id>3099750</elocation-id>
+      <history>
+        <date date-type="received">
+          <day>17</day>
+          <month>5</month>
+          <year>2021</year>
+        </date>
+        <date date-type="accepted">
+          <day>10</day>
+          <month>12</month>
+          <year>2021</year>
+        </date>
+      </history>
+      <permissions>
+        <copyright-statement>Copyright &#169; 2022 Viva Nguyen et al.</copyright-statement>
+        <copyright-year>2022</copyright-year>
+        <license>
+          <ali:license_ref xmlns:ali="http://www.niso.org/schemas/ali/1.0/" specific-use="textmining" content-type="ccbylicense">https://creativecommons.org/licenses/by/4.0/</ali:license_ref>
+          <license-p>This is an open access article distributed under the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original work is properly cited.</license-p>
+        </license>
+      </permissions>
+      <abstract>
+        <p>Seizures are a common occurrence. The goal of evaluating a seizure is to identify the etiology and to determine the likelihood of recurrence as well as guide management. We present a unique presentation of a 47-year-old female that presented with late onset seizures admitted due to status epilepticus. Brain magnetic resonance indicated diffuse supratentorial hemorrhagic lesions. Neurological workup including brain vessel imaging, CT chest, abdomen, and pelvis as well as CSF and serological workup for vasculitis failed to demonstrate the cause of her brain lesions. Ultimately, a brain biopsy showed metastatic melanoma of unknown primary origin.</p>
+      </abstract>
+    </article-meta>
+  </front>
+  <body>The text of the article</body>
+  <back>
+    <ack>
+      <title>Acknowledgments</title>
+      <p>The authors thank Ramos, Carlos, MD, Pathologist, JFK Medical Center, Florida, USA for brain biopsy images and descriptions.</p>
+    </ack>
+    <sec sec-type="data-availability">
+      <title>Data Availability</title>
+      <p>The data used to support the findings of this study are available from the corresponding author upon request.</p>
+    </sec>
+    <sec>
+      <title>Consent</title>
+      <p>Written informed consent for patient information and images was provided by the patient.</p>
+    </sec>
+    <sec sec-type="COI-statement">
+      <title>Conflicts of Interest</title>
+      <p>The authors declare that they have no conflicts of interest.</p>
+    </sec>
+    <ref-list>
+      <ref id="B1" content-type="article">
+        <label>1</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Annegers</surname><given-names>J. F.</given-names></name>
+<name><surname>Hauser</surname><given-names>W. A.</given-names></name>
+<name><surname>Lee</surname><given-names>J. R.-J.</given-names></name>
+<name><surname>Rocca</surname><given-names>W. A.</given-names></name>
+</person-group>
+          <article-title>Incidence of acute symptomatic seizures in Rochester, Minnesota, 1935&#8211;1984</article-title>
+          <source>
+<italic toggle="yes">Epilepsia</italic>
+</source>
+          <year>1995</year>
+          <volume>36</volume>
+          <issue>4</issue>
+          <fpage>327</fpage>
+          <lpage>333</lpage>
+          <pub-id pub-id-type="doi">10.1111/j.1528-1157.1995.tb01005.x</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-0028915209</pub-id>
+          <pub-id pub-id-type="pmid">7607110</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B2" content-type="article">
+        <label>2</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Scheffer</surname><given-names>I. E.</given-names></name>
+<name><surname>Berkovic</surname><given-names>S.</given-names></name>
+<name><surname>Capovilla</surname><given-names>G.</given-names></name>
+<etal/>
+</person-group>
+          <article-title>ILAE classification of the epilepsies: position paper of the ILAE commission for classification and terminology</article-title>
+          <source>
+<italic toggle="yes">Epilepsia</italic>
+</source>
+          <year>2017</year>
+          <volume>58</volume>
+          <issue>4</issue>
+          <fpage>512</fpage>
+          <lpage>521</lpage>
+          <pub-id pub-id-type="doi">10.1111/epi.13709</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-85014773832</pub-id>
+          <pub-id pub-id-type="pmid">28276062</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B3" content-type="misc">
+        <label>3</label>
+        <element-citation publication-type="other">
+          <comment>Vasculitis Syndromes of the Central and Peripheral Nervous Systems Fact Sheet, National Institute of Neurological Disorders and Stroke, U.S. Department of Health and Human Services, 2017, <ext-link xlink:href="https://www.ninds.nih.gov/disorders/patient-caregiver-education/fact-sheets/vasculitis-syndromes-central-and-peripheral#:~:text=Primary%20angiitis%20of%20the%20CNS%20(or%20granulomatous%20angiitis%29&amp;text=Stroke%2C%20transient%20ischemic%20attack%2C%20multiple,is%20fatal%20if%20left%20untreated" ext-link-type="uri">https://www.ninds.nih.gov/disorders/patient-caregiver-education/fact-sheets/vasculitis-syndromes-central-and-peripheral#:&#8764;:text=Primary%20angiitis%20of%20the%20CNS%20(or%20granulomatous%20angiitis%29&amp;text=Stroke%2C%20transient%20ischemic%20attack%2C%20multiple,is%20fatal%20if%20left%20untreated</ext-link></comment>
+        </element-citation>
+      </ref>
+      <ref id="B4" content-type="article">
+        <label>4</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Ferreri</surname><given-names>A. J. M.</given-names></name>
+<name><surname>Campo</surname><given-names>E.</given-names></name>
+<name><surname>Seymour</surname><given-names>J. F.</given-names></name>
+<etal/>
+</person-group>
+          <article-title>Intravascular lymphoma: clinical presentation, natural history, management and prognostic factors in a series of 38 cases, with special emphasis on the &#8220;cutaneous variant&#8221;</article-title>
+          <source>
+<italic toggle="yes">British Journal of Haematology</italic>
+</source>
+          <year>2004</year>
+          <volume>127</volume>
+          <issue>2</issue>
+          <fpage>173</fpage>
+          <lpage>183</lpage>
+          <pub-id pub-id-type="doi">10.1111/j.1365-2141.2004.05177.x</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-5644239684</pub-id>
+          <pub-id pub-id-type="pmid">15461623</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B5" content-type="article">
+        <label>5</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Van Etten</surname><given-names>E. S.</given-names></name>
+<name><surname>Gurol</surname><given-names>M. E.</given-names></name>
+<name><surname>Van Der Grond</surname><given-names>J.</given-names></name>
+<etal/>
+</person-group>
+          <article-title>Recurrent hemorrhage risk and mortality in hereditary and sporadic cerebral amyloid angiopathy</article-title>
+          <source>
+<italic toggle="yes">Neurology</italic>
+</source>
+          <year>2016</year>
+          <volume>87</volume>
+          <issue>14</issue>
+          <fpage>1482</fpage>
+          <lpage>1487</lpage>
+          <pub-id pub-id-type="doi">10.1212/WNL.0000000000003181</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-84989934727</pub-id>
+          <pub-id pub-id-type="pmid">27590282</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B6" content-type="article">
+        <label>6</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Molloy</surname><given-names>E. S.</given-names></name>
+<name><surname>Langford</surname><given-names>C. A.</given-names></name>
+</person-group>
+          <article-title>Vasculitis mimics</article-title>
+          <source>
+<italic toggle="yes">Current Opinion in Rheumatology</italic>
+</source>
+          <year>2008</year>
+          <volume>20</volume>
+          <issue>1</issue>
+          <fpage>29</fpage>
+          <lpage>34</lpage>
+          <pub-id pub-id-type="doi">10.1097/BOR.0b013e3282f1dcf2</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-40349101821</pub-id>
+          <pub-id pub-id-type="pmid">18281854</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B7" content-type="article">
+        <label>7</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Cohen</surname><given-names>N.</given-names></name>
+<name><surname>Strauss</surname><given-names>G.</given-names></name>
+<name><surname>Lew</surname><given-names>R.</given-names></name>
+<name><surname>Silver</surname><given-names>D.</given-names></name>
+<name><surname>Recht</surname><given-names>L.</given-names></name>
+</person-group>
+          <article-title>Should prophylactic anticonvulsants be administered to patients with newly-diagnosed cerebral metastases? a retrospective analysis</article-title>
+          <source>
+<italic toggle="yes">Journal of Clinical Oncology</italic>
+</source>
+          <year>1988</year>
+          <volume>6</volume>
+          <issue>10</issue>
+          <fpage>1621</fpage>
+          <lpage>1624</lpage>
+          <pub-id pub-id-type="doi">10.1200/JCO.1988.6.10.1621</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-0024240622</pub-id>
+          <pub-id pub-id-type="pmid">3171627</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B8" content-type="incollection">
+        <label>8</label>
+        <element-citation publication-type="book">
+          <person-group person-group-type="author">
+<name><surname>Scott</surname><given-names>J. F.</given-names></name>
+<name><surname>Gerstenblith</surname><given-names>M. R.</given-names></name>
+</person-group>
+          <person-group person-group-type="editor">
+<name><surname>Scott</surname><given-names>J. F.</given-names></name>
+<name><surname>Gerstenblith</surname><given-names>M. R.</given-names></name>
+</person-group>
+          <article-title>Melanoma of unknown primary (Chapter 7)</article-title>
+          <source>
+<italic toggle="yes">Noncutaneous Melanoma [Internet]</italic>
+</source>
+          <year>2018</year>
+          <publisher-loc>Brisbane, Australia</publisher-loc>
+          <publisher-name>Codon Publications</publisher-name>
+        </element-citation>
+      </ref>
+      <ref id="B9" content-type="article">
+        <label>9</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Kamposioras</surname><given-names>K.</given-names></name>
+<name><surname>Pentheroudakis</surname><given-names>G.</given-names></name>
+<name><surname>Pectasides</surname><given-names>D.</given-names></name>
+<name><surname>Pavlidis</surname><given-names>N.</given-names></name>
+</person-group>
+          <article-title>Malignant melanoma of unknown primary site: to make the long story short: a systematic review of the literature</article-title>
+          <source>
+<italic toggle="yes">Critical Reviews in Oncology/Hematology</italic>
+</source>
+          <year>2011</year>
+          <volume>78</volume>
+          <issue>2</issue>
+          <fpage>112</fpage>
+          <lpage>126</lpage>
+          <pub-id pub-id-type="doi">10.1016/j.critrevonc.2010.04.007</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-79953322223</pub-id>
+          <pub-id pub-id-type="pmid">20570171</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B10" content-type="article">
+        <label>10</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Primka</surname><given-names>E. J.</given-names><suffix>III</suffix></name>
+<name><surname>King</surname><given-names>C.</given-names></name>
+<name><surname>O&#8217;Keefe</surname><given-names>E. J.</given-names></name>
+</person-group>
+          <article-title>Malignant melanoma of unkown origin presenting as a systemic vasculitis</article-title>
+          <source>
+<italic toggle="yes">Archives of Dermatology</italic>
+</source>
+          <year>1993</year>
+          <volume>129</volume>
+          <issue>9</issue>
+          <fpage>1205</fpage>
+          <lpage>1207</lpage>
+          <pub-id pub-id-type="doi">10.1001/archderm.1993.01680300135029</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-0027268699</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B11" content-type="article">
+        <label>11</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Pfeil</surname><given-names>A. F.</given-names></name>
+<name><surname>Leiter</surname><given-names>U.</given-names></name>
+<name><surname>Buettner</surname><given-names>P. G.</given-names></name>
+<etal/>
+</person-group>
+          <article-title>Melanoma of unknown primary is correctly classified by the AJCC melanoma classification from 2009</article-title>
+          <source>
+<italic toggle="yes">Melanoma Research</italic>
+</source>
+          <year>2011</year>
+          <volume>21</volume>
+          <issue>3</issue>
+          <fpage>228</fpage>
+          <lpage>234</lpage>
+          <pub-id pub-id-type="doi">10.1097/cmr.0b013e32834577ec</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-79955596600</pub-id>
+          <pub-id pub-id-type="pmid">21502902</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B12" content-type="article">
+        <label>12</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Lee</surname><given-names>C. C.</given-names></name>
+<name><surname>Faries</surname><given-names>M. B.</given-names></name>
+<name><surname>Wanek</surname><given-names>L. A.</given-names></name>
+<name><surname>Morton</surname><given-names>D. L.</given-names></name>
+</person-group>
+          <article-title>Improved survival for stage IV melanoma from an unknown primary site</article-title>
+          <source>
+<italic toggle="yes">Journal of Clinical Oncology</italic>
+</source>
+          <year>2009</year>
+          <volume>27</volume>
+          <issue>21</issue>
+          <fpage>3489</fpage>
+          <lpage>3495</lpage>
+          <pub-id pub-id-type="doi">10.1200/jco.2008.18.9845</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-70249101800</pub-id>
+          <pub-id pub-id-type="pmid">19451446</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B13" content-type="article">
+        <label>13</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Sloot</surname><given-names>S.</given-names></name>
+<name><surname>Chen</surname><given-names>Y. A.</given-names></name>
+<name><surname>Zhao</surname><given-names>X.</given-names></name>
+<etal/>
+</person-group>
+          <article-title>Improved survival of patients with melanoma brain metastases in the era of targeted BRAF and immune checkpoint therapies</article-title>
+          <source>
+<italic toggle="yes">Cancer</italic>
+</source>
+          <year>2018</year>
+          <volume>124</volume>
+          <issue>2</issue>
+          <fpage>297</fpage>
+          <lpage>305</lpage>
+          <pub-id pub-id-type="doi">10.1002/cncr.30946</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-85031328406</pub-id>
+          <pub-id pub-id-type="pmid">29023643</pub-id>
+        </element-citation>
+      </ref>
+    </ref-list>
+  </back>
+  <floats-group>
+    <fig position="float" id="fig1">
+      <label>Figure 1</label>
+      <caption>
+        <p>MRI brain. Innumerable foci of parenchymal hemorrhage throughout the bilateral cerebral hemispheres as well as left frontal subarachnoid hemorrhage, with mild edema and minimal local mass effect at these sites. Images (a), (c), and (e) are from a previous MRI brain (12/2020) and images (b), (d), and (f) are from the current MRI (02/2021).</p>
+      </caption>
+      <graphic xlink:href="CRIM2022-3099750.001" position="float"/>
+    </fig>
+    <fig position="float" id="fig2">
+      <label>Figure 2</label>
+      <caption>
+        <p>Brain biopsy procedure image.</p>
+      </caption>
+      <graphic xlink:href="CRIM2022-3099750.002" position="float"/>
+    </fig>
+    <fig position="float" id="fig3">
+      <label>Figure 3</label>
+      <caption>
+        <p>Brain biopsy. Glial tissue infiltrated by neoplastic melanocytic cells showing focally a perivascular pattern (see arrows). These cells show moderate pleomorphism, few mitoses, and focal melanin pigmentation.</p>
+      </caption>
+      <graphic xlink:href="CRIM2022-3099750.003" position="float"/>
+    </fig>
+    <fig position="float" id="fig4">
+      <label>Figure 4</label>
+      <caption>
+        <p>PET scan. Postsurgical changes are present in the left frontal parietal lobe. Punctate hypermetabolic foci are present in both cerebral hemispheres and cerebellum compatible metastatic lesions. There is a 1.2&#8201;cm hypermetabolic nodule in the right upper lobe with a max SUV of 4.3.</p>
+      </caption>
+      <graphic xlink:href="CRIM2022-3099750.004" position="float"/>
+    </fig>
+    <table-wrap position="float" id="tab1">
+      <label>Table 1</label>
+      <caption>
+        <p>Vasculitis workup.</p>
+      </caption>
+      <table frame="hsides" rules="groups">
+        <thead>
+          <tr>
+            <th align="left" rowspan="1" colspan="1">Test</th>
+            <th align="center" rowspan="1" colspan="1">Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">HIV antigen/antibody</td>
+            <td align="center" rowspan="1" colspan="1">Nonreactive</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">ESR</td>
+            <td align="center" rowspan="1" colspan="1">15 (normal 0&#8211;20 mm/hr)</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">CRP</td>
+            <td align="center" rowspan="1" colspan="1">1.3 (normal 0&#8211;1.0&#8201;mg/dL)</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">Lyme disease antibody (CSF)</td>
+            <td align="center" rowspan="1" colspan="1">Negative</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">Varicella zoster antibody (CSF)</td>
+            <td align="center" rowspan="1" colspan="1">Negative</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">Herpes virus 1 and 2 DNA PCR</td>
+            <td align="center" rowspan="1" colspan="1">Negative</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">Toxoplasmosis IgG CSF</td>
+            <td align="center" rowspan="1" colspan="1">Negative</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">VDRL (CSF)</td>
+            <td align="center" rowspan="1" colspan="1">Nonreactive</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">Rheumatoid factor</td>
+            <td align="center" rowspan="1" colspan="1">Negative</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">ANA</td>
+            <td align="center" rowspan="1" colspan="1">Negative</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">Anti-SSA/SSB</td>
+            <td align="center" rowspan="1" colspan="1">Negative</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">RNP antibody</td>
+            <td align="center" rowspan="1" colspan="1">Negative</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">SM antibody</td>
+            <td align="center" rowspan="1" colspan="1">Negative</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">Syphilis</td>
+            <td align="center" rowspan="1" colspan="1">Negative</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">C-ANCA</td>
+            <td align="center" rowspan="1" colspan="1">Negative</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">P-ANCA</td>
+            <td align="center" rowspan="1" colspan="1">Negative</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">Toxoplasma IgM and IgG</td>
+            <td align="center" rowspan="1" colspan="1">Negative</td>
+          </tr>
+        </tbody>
+      </table>
+    </table-wrap>
+  </floats-group>
+</article>
+<article xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink" dtd-version="1.3" xml:lang="en" article-type="research-article">
+  <?properties open_access?>
+  <processing-meta base-tagset="archiving" mathml-version="3.0" table-model="xhtml" tagset-family="jats">
+    <restricted-by>pmc</restricted-by>
+  </processing-meta>
+  <front>
+    <journal-meta>
+      <journal-id journal-id-type="nlm-ta">Dis Markers</journal-id>
+      <journal-id journal-id-type="iso-abbrev">Dis Markers</journal-id>
+      <journal-id journal-id-type="publisher-id">DM</journal-id>
+      <journal-title-group>
+        <journal-title>Disease Markers</journal-title>
+      </journal-title-group>
+      <issn pub-type="ppub">0278-0240</issn>
+      <issn pub-type="epub">1875-8630</issn>
+      <publisher>
+        <publisher-name>Hindawi</publisher-name>
+      </publisher>
+    </journal-meta>
+    <article-meta>
+      <article-id pub-id-type="pmc">8758296</article-id>
+      <article-id pub-id-type="doi">10.1155/2022/2731007</article-id>
+      <article-categories>
+        <subj-group subj-group-type="heading">
+          <subject>Research Article</subject>
+        </subj-group>
+      </article-categories>
+      <title-group>
+        <article-title>Brain Functional Network Analysis of Patients with Primary Angle-Closure Glaucoma</article-title>
+      </title-group>
+      <contrib-group>
+        <contrib contrib-type="author" equal-contrib="yes">
+          <name>
+            <surname>Liu</surname>
+            <given-names>Dan</given-names>
+          </name>
+          <xref rid="I1" ref-type="aff">
+<sup>1</sup>
+</xref>
+        </contrib>
+        <contrib contrib-type="author" equal-contrib="yes">
+          <name>
+            <surname>Gao</surname>
+            <given-names>Junwei</given-names>
+          </name>
+          <xref rid="I2" ref-type="aff">
+<sup>2</sup>
+</xref>
+        </contrib>
+        <contrib contrib-type="author" equal-contrib="yes">
+          <name>
+            <surname>You</surname>
+            <given-names>Tao</given-names>
+          </name>
+          <xref rid="I3" ref-type="aff">
+<sup>3</sup>
+</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Li</surname>
+            <given-names>Shenghong</given-names>
+          </name>
+          <xref rid="I2" ref-type="aff">
+<sup>2</sup>
+</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Cai</surname>
+            <given-names>Fengqin</given-names>
+          </name>
+          <xref rid="I2" ref-type="aff">
+<sup>2</sup>
+</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Pei</surname>
+            <given-names>Chonggang</given-names>
+          </name>
+          <xref rid="I4" ref-type="aff">
+<sup>4</sup>
+</xref>
+        </contrib>
+        <contrib contrib-type="author" corresp="yes">
+          <contrib-id contrib-id-type="orcid" authenticated="false">https://orcid.org/0000-0003-4089-1568</contrib-id>
+          <name>
+            <surname>Zeng</surname>
+            <given-names>Xianjun</given-names>
+          </name>
+          <email>ndyfy00930@ncu.edu.cn</email>
+          <xref rid="I2" ref-type="aff">
+<sup>2</sup>
+</xref>
+        </contrib>
+      </contrib-group>
+      <aff id="I1">
+<sup>1</sup>Department of Radiology, Hubei Cancer Hospital, Tongji Medical College, Huazhong University of Science and Technology, Wuhan, 430079 Hubei Province, China</aff>
+      <aff id="I2">
+<sup>2</sup>Department of Radiology, The First Affiliated Hospital of Nanchang University, Nanchang, 330006 Jiangxi Province, China</aff>
+      <aff id="I3">
+<sup>3</sup>Department of Radiology, Chinese PLA General Hospital of Central Theater Command, Wuhan, 430070 Hubei Province, China</aff>
+      <aff id="I4">
+<sup>4</sup>Department of Ophthalmology, The First Affiliated Hospital of Nanchang University, Nanchang, 330006 Jiangxi Province, China</aff>
+      <author-notes>
+        <fn fn-type="other">
+          <p>Academic Editor: Shih-Ping Hsu</p>
+        </fn>
+      </author-notes>
+      <pub-date pub-type="collection">
+        <year>2022</year>
+      </pub-date>
+      <pub-date pub-type="epub">
+        <day>6</day>
+        <month>1</month>
+        <year>2022</year>
+      </pub-date>
+      <volume>2022</volume>
+      <elocation-id>2731007</elocation-id>
+      <history>
+        <date date-type="received">
+          <day>16</day>
+          <month>6</month>
+          <year>2021</year>
+        </date>
+        <date date-type="rev-recd">
+          <day>12</day>
+          <month>11</month>
+          <year>2021</year>
+        </date>
+        <date date-type="accepted">
+          <day>30</day>
+          <month>11</month>
+          <year>2021</year>
+        </date>
+      </history>
+      <permissions>
+        <copyright-statement>Copyright &#169; 2022 Dan Liu et al.</copyright-statement>
+        <copyright-year>2022</copyright-year>
+        <license>
+          <ali:license_ref xmlns:ali="http://www.niso.org/schemas/ali/1.0/" specific-use="textmining" content-type="ccbylicense">https://creativecommons.org/licenses/by/4.0/</ali:license_ref>
+          <license-p>This is an open access article distributed under the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original work is properly cited.</license-p>
+        </license>
+      </permissions>
+      <abstract>
+        <sec>
+          <title>Objectives</title>
+          <p> Recent resting-state functional magnetic resonance imaging (fMRI) studies have focused on glaucoma-related neuronal degeneration in structural and spontaneous functional brain activity. However, there are limited studies regarding the differences in the topological organization of the functional brain network in patients with glaucoma. In this study, we aimed to assess both potential alterations and the network efficiency in the functional brain networks of patients with primary angle-closure glaucoma (PACG). </p>
+        </sec>
+        <sec>
+          <title>Methods</title>
+          <p> We applied resting-state fMRI data to construct the functional connectivity network of 33 patients with PACG (54.21 &#177; 7.21&#8201;years) and 33 gender- and age-matched healthy controls (52.42 &#177; 7.80&#8201;years). The differences in the global and regional topological brain network properties between the two groups were assessed using graph theoretical analysis. Partial correlations between the altered regional values and clinical parameters were computed for patients with PACG. </p>
+        </sec>
+        <sec>
+          <title>Results</title>
+          <p> No significant differences in global topological measures were identified between the two groups. However, significant regional alterations were identified in the patients with PACG, including differences within visual and nonvisual (somatomotor and cognition-emotion) regions. The normalized clustering coefficient and normalized local efficiency of the right superior parietal gyrus were significantly correlated with the retinal fiber layer thickness (RNFLT) and the vertical cup to disk ratio (V C/D). In addition, the normalized node betweenness of the left middle frontal gyrus (orbital portion) was significantly correlated with the V C/D in the patients with PACG. </p>
+        </sec>
+        <sec>
+          <title>Conclusions</title>
+          <p> Our results suggest that regional inefficiency with decrease and compensatory increase in local functional properties of visual and nonvisual nodes preserved the brain network of the PACG at the global level.</p>
+        </sec>
+      </abstract>
+      <funding-group>
+        <award-group>
+          <funding-source xlink:href="http://dx.doi.org/10.13039/501100001809">National Natural Science Foundation of China</funding-source>
+          <award-id>81760307</award-id>
+        </award-group>
+      </funding-group>
+    </article-meta>
+  </front>
+  <body>The text of the article</body>
+  <back>
+    <ack>
+      <title>Acknowledgments</title>
+      <p>The authors would like to thank all the patients and volunteers in the study for their helpful participation. This study was supported by the Natural Science Foundation of China (No. 81760307).</p>
+    </ack>
+    <sec sec-type="data-availability">
+      <title>Data Availability</title>
+      <p>The raw/processed data required to reproduce these findings cannot be shared at this time as the data also forms part of an ongoing study.</p>
+    </sec>
+    <sec sec-type="COI-statement">
+      <title>Conflicts of Interest</title>
+      <p>The authors declare that there is no conflict of interest regarding the publication of this paper.</p>
+    </sec>
+    <sec>
+      <title>Authors' Contributions</title>
+      <p>Dan Liu, Junwei Gao and Tao You are co-authors and contributed equally to this work.</p>
+    </sec>
+    <sec sec-type="supplementary-material" id="supplementary-material-1">
+      <title>Supplementary Materials</title>
+      <supplementary-material id="supp-1" position="float" content-type="local-data">
+        <label>Supplementary Materials</label>
+        <caption>
+          <p>1: the definitions and calculations of network measures.</p>
+        </caption>
+        <media xlink:href="2731007.f1.docx">
+          <caption>
+            <p>Click here for additional data file.</p>
+          </caption>
+        </media>
+      </supplementary-material>
+    </sec>
+    <ref-list>
+      <ref id="B1" content-type="article">
+        <label>1</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>He</surname><given-names>J. N.</given-names></name>
+<name><surname>Lu</surname><given-names>S.</given-names></name>
+<name><surname>Chen</surname><given-names>L. J.</given-names></name>
+<etal/>
+</person-group>
+          <article-title>Coding region mutation screening in optineurin in Chinese normal-tension glaucoma patients</article-title>
+          <source>
+<italic toggle="yes">Disease Markers</italic>
+</source>
+          <year>2019</year>
+          <volume>2019</volume>
+          <fpage>5</fpage>
+          <pub-id pub-id-type="doi">10.1155/2019/5820537</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-85068145092</pub-id>
+          <pub-id pub-id-type="publisher-id">5820537</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B2" content-type="article">
+        <label>2</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Kong</surname><given-names>X.</given-names></name>
+<name><surname>Liu</surname><given-names>X.</given-names></name>
+<name><surname>Huang</surname><given-names>X.</given-names></name>
+<name><surname>Mao</surname><given-names>Z.</given-names></name>
+<name><surname>Zhong</surname><given-names>Y.</given-names></name>
+<name><surname>Chi</surname><given-names>W.</given-names></name>
+</person-group>
+          <article-title>Damage to the blood-aqueous barrier in eyes with primary angle closure glaucoma</article-title>
+          <source>
+<italic toggle="yes">Molecular Vision</italic>
+</source>
+          <year>2010</year>
+          <volume>16</volume>
+          <fpage>2026</fpage>
+          <lpage>2032</lpage>
+          <pub-id pub-id-type="pmid">21042429</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B3" content-type="article">
+        <label>3</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Foster</surname><given-names>P. J.</given-names></name>
+<name><surname>Johnson</surname><given-names>G. J.</given-names></name>
+</person-group>
+          <article-title>Glaucoma in China: how big is the problem?</article-title>
+          <source>
+<italic toggle="yes">The British Journal of Ophthalmology</italic>
+</source>
+          <year>2001</year>
+          <volume>85</volume>
+          <issue>11</issue>
+          <fpage>1277</fpage>
+          <lpage>1282</lpage>
+          <pub-id pub-id-type="doi">10.1136/bjo.85.11.1277</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-0034747762</pub-id>
+          <pub-id pub-id-type="pmid">11673287</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B4" content-type="article">
+        <label>4</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Mckinnon</surname><given-names>S. J.</given-names></name>
+</person-group>
+          <article-title>The cell and molecular biology of glaucoma: common neurodegenerative pathways and relevance to glaucoma</article-title>
+          <source>
+<italic toggle="yes">Investigative Ophthalmology &amp; Visual Science</italic>
+</source>
+          <year>2012</year>
+          <volume>53</volume>
+          <issue>5</issue>
+          <fpage>2485</fpage>
+          <lpage>2487</lpage>
+          <pub-id pub-id-type="doi">10.1167/iovs.12-9483j</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-84860644655</pub-id>
+          <pub-id pub-id-type="pmid">22562847</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B5" content-type="article">
+        <label>5</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Wostyn</surname><given-names>P.</given-names></name>
+<name><surname>Audenaert</surname><given-names>K.</given-names></name>
+<name><surname>De Deyn</surname><given-names>P. P.</given-names></name>
+</person-group>
+          <article-title>Alzheimer's disease: Cerebral glaucoma?</article-title>
+          <source>
+<italic toggle="yes">Medical Hypotheses</italic>
+</source>
+          <year>2010</year>
+          <volume>74</volume>
+          <issue>6</issue>
+          <fpage>973</fpage>
+          <lpage>977</lpage>
+          <pub-id pub-id-type="doi">10.1016/j.mehy.2009.12.019</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-77951620756</pub-id>
+          <pub-id pub-id-type="pmid">20056337</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B6" content-type="article">
+        <label>6</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Brown</surname><given-names>H. D.</given-names></name>
+<name><surname>Woodall</surname><given-names>R. L.</given-names></name>
+<name><surname>Kitching</surname><given-names>R. E.</given-names></name>
+<name><surname>Baseler</surname><given-names>H. A.</given-names></name>
+<name><surname>Morland</surname><given-names>A. B.</given-names></name>
+</person-group>
+          <article-title>Using magnetic resonance imaging to assess visual deficits: a review</article-title>
+          <source>
+<italic toggle="yes">Ophthalmic &amp; Physiological Optics</italic>
+</source>
+          <year>2016</year>
+          <volume>36</volume>
+          <issue>3</issue>
+          <fpage>240</fpage>
+          <lpage>265</lpage>
+          <pub-id pub-id-type="doi">10.1111/opo.12293</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-84964240558</pub-id>
+          <pub-id pub-id-type="pmid">27112223</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B7" content-type="article">
+        <label>7</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Borucki</surname><given-names>D. M.</given-names></name>
+<name><surname>Toutonji</surname><given-names>A.</given-names></name>
+<name><surname>Couch</surname><given-names>C.</given-names></name>
+<name><surname>Mallah</surname><given-names>K.</given-names></name>
+<name><surname>Rohrer</surname><given-names>B.</given-names></name>
+<name><surname>Tomlinson</surname><given-names>S.</given-names></name>
+</person-group>
+          <article-title>Complement-mediated microglial phagocytosis and pathological changes in the development and degeneration of the visual system</article-title>
+          <source>
+<italic toggle="yes">Frontiers in Immunology</italic>
+</source>
+          <year>2020</year>
+          <volume>11, article 566892</volume>
+          <pub-id pub-id-type="doi">10.3389/fimmu.2020.566892</pub-id>
+          <pub-id pub-id-type="pmid">33072106</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B8" content-type="article">
+        <label>8</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Danesh-Meyer</surname><given-names>H. V.</given-names></name>
+<name><surname>Levin</surname><given-names>L. A.</given-names></name>
+</person-group>
+          <article-title>Glaucoma as a neurodegenerative disease</article-title>
+          <source>
+<italic toggle="yes">Journal of Neuro-Ophthalmology</italic>
+</source>
+          <year>2015</year>
+          <volume>35</volume>
+          <issue>Supplement 1</issue>
+          <fpage>S22</fpage>
+          <lpage>S28</lpage>
+          <pub-id pub-id-type="doi">10.1097/WNO.0000000000000293</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-84975484469</pub-id>
+          <pub-id pub-id-type="pmid">26274833</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B9" content-type="article">
+        <label>9</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Wang</surname><given-names>Q.</given-names></name>
+<name><surname>Chen</surname><given-names>W.</given-names></name>
+<name><surname>Wang</surname><given-names>H.</given-names></name>
+<etal/>
+</person-group>
+          <article-title>Reduced functional and anatomic interhemispheric homotopic connectivity in primary open-angle glaucoma: a combined resting state-fMRI and DTI study</article-title>
+          <source>
+<italic toggle="yes">Investigative Ophthalmology &amp; Visual Science</italic>
+</source>
+          <year>2018</year>
+          <volume>59</volume>
+          <issue>5</issue>
+          <fpage>1861</fpage>
+          <lpage>1868</lpage>
+          <pub-id pub-id-type="doi">10.1167/iovs.17-23291</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-85045087230</pub-id>
+          <pub-id pub-id-type="pmid">29677346</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B10" content-type="article">
+        <label>10</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Gracitelli</surname><given-names>C. P. B.</given-names></name>
+<name><surname>Gerente</surname><given-names>V. M.</given-names></name>
+<name><surname>Furlanetto</surname><given-names>R. L.</given-names></name>
+<name><surname>Amaro</surname><given-names>E.</given-names></name>
+<name><surname>Paranhos</surname><given-names>A.</given-names></name>
+</person-group>
+          <article-title>Magnetic resonance imaging for glaucoma evaluation</article-title>
+          <source>
+<italic toggle="yes">Journal of Glaucoma</italic>
+</source>
+          <year>2020</year>
+          <volume>29</volume>
+          <issue>8</issue>
+          <fpage>622</fpage>
+          <lpage>626</lpage>
+          <pub-id pub-id-type="doi">10.1097/IJG.0000000000001558</pub-id>
+          <pub-id pub-id-type="pmid">32459691</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B11" content-type="article">
+        <label>11</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Wu</surname><given-names>Y. Y.</given-names></name>
+<name><surname>Wang</surname><given-names>S. F.</given-names></name>
+<name><surname>Zhu</surname><given-names>P. W.</given-names></name>
+<etal/>
+</person-group>
+          <article-title>Altered intrinsic functional connectivity of the primary visual cortex in patients with neovascular glaucoma: a resting-state functional magnetic resonance imaging study</article-title>
+          <source>
+<italic toggle="yes">Neuropsychiatric Disease and Treatment</italic>
+</source>
+          <year>2020</year>
+          <volume>Volume 16</volume>
+          <fpage>25</fpage>
+          <lpage>33</lpage>
+          <pub-id pub-id-type="doi">10.2147/NDT.S228606</pub-id>
+          <pub-id pub-id-type="pmid">32021196</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B12" content-type="article">
+        <label>12</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Peng</surname><given-names>Z. Y.</given-names></name>
+<name><surname>Liu</surname><given-names>Y. X.</given-names></name>
+<name><surname>Li</surname><given-names>B.</given-names></name>
+</person-group>
+          <article-title>Altered spontaneous brain activity patterns in patients with neovascular glaucoma using amplitude of low-frequency fluctuations: a functional magnetic resonance imaging study</article-title>
+          <source>
+<italic toggle="yes">Brain and Behavior: A Cognitive Neuroscience Perspective</italic>
+</source>
+          <year>2021</year>
+          <volume>11</volume>
+          <issue>3, article e02018</issue>
+        </element-citation>
+      </ref>
+      <ref id="B13" content-type="article">
+        <label>13</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Dai</surname><given-names>H.</given-names></name>
+<name><surname>Morelli</surname><given-names>J. N.</given-names></name>
+<name><surname>Ai</surname><given-names>F.</given-names></name>
+<etal/>
+</person-group>
+          <article-title>Resting-state functional MRI: functional connectivity analysis of the visual cortex in primary open-angle glaucoma patients</article-title>
+          <source>
+<italic toggle="yes">Human Brain Mapping</italic>
+</source>
+          <year>2013</year>
+          <volume>34</volume>
+          <issue>10</issue>
+          <fpage>2455</fpage>
+          <lpage>2463</lpage>
+          <pub-id pub-id-type="doi">10.1002/hbm.22079</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-84883813044</pub-id>
+          <pub-id pub-id-type="pmid">22461380</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B14" content-type="article">
+        <label>14</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Li</surname><given-names>T.</given-names></name>
+<name><surname>Liu</surname><given-names>Z.</given-names></name>
+<name><surname>Li</surname><given-names>J.</given-names></name>
+<etal/>
+</person-group>
+          <article-title>Altered amplitude of low-frequency fluctuation in primary open-angle glaucoma: a resting-state FMRI study</article-title>
+          <source>
+<italic toggle="yes">Investigative Ophthalmology &amp; Visual Science</italic>
+</source>
+          <year>2014</year>
+          <volume>56</volume>
+          <issue>1</issue>
+          <fpage>322</fpage>
+          <lpage>329</lpage>
+          <pub-id pub-id-type="doi">10.1167/iovs.14-14974</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-84921313340</pub-id>
+          <pub-id pub-id-type="pmid">25525176</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B15" content-type="article">
+        <label>15</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Song</surname><given-names>Y.</given-names></name>
+<name><surname>Mu</surname><given-names>K.</given-names></name>
+<name><surname>Wang</surname><given-names>J.</given-names></name>
+<etal/>
+</person-group>
+          <article-title>Altered spontaneous brain activity in primary open angle glaucoma: a resting-state functional magnetic resonance imaging study</article-title>
+          <source>
+<italic toggle="yes">PLoS One</italic>
+</source>
+          <year>2014</year>
+          <volume>9</volume>
+          <issue>2, article e89493</issue>
+          <pub-id pub-id-type="doi">10.1371/journal.pone.0089493</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-84896099037</pub-id>
+          <pub-id pub-id-type="pmid">24586822</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B16" content-type="article">
+        <label>16</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Frezzotti</surname><given-names>P.</given-names></name>
+<name><surname>Giorgio</surname><given-names>A.</given-names></name>
+<name><surname>Toto</surname><given-names>F.</given-names></name>
+<name><surname>de Leucio</surname><given-names>A.</given-names></name>
+<name><surname>de Stefano</surname><given-names>N.</given-names></name>
+</person-group>
+          <article-title>Early changes of brain connectivity in primary open angle glaucoma</article-title>
+          <source>
+<italic toggle="yes">Human Brain Mapping</italic>
+</source>
+          <year>2016</year>
+          <volume>37</volume>
+          <issue>12</issue>
+          <fpage>4581</fpage>
+          <lpage>4596</lpage>
+          <pub-id pub-id-type="doi">10.1002/hbm.23330</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-84982965829</pub-id>
+          <pub-id pub-id-type="pmid">27503699</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B17" content-type="article">
+        <label>17</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Frezzotti</surname><given-names>P.</given-names></name>
+<name><surname>Giorgio</surname><given-names>A.</given-names></name>
+<name><surname>Motolese</surname><given-names>I.</given-names></name>
+<etal/>
+</person-group>
+          <article-title>Structural and functional brain changes beyond visual system in patients with advanced glaucoma</article-title>
+          <source>
+<italic toggle="yes">PLoS One</italic>
+</source>
+          <year>2014</year>
+          <volume>9</volume>
+          <issue>8, article e105931</issue>
+          <pub-id pub-id-type="doi">10.1371/journal.pone.0105931</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-84928817381</pub-id>
+          <pub-id pub-id-type="pmid">25162716</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B18" content-type="article">
+        <label>18</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Wang</surname><given-names>Q.</given-names></name>
+<name><surname>Qu</surname><given-names>X.</given-names></name>
+<name><surname>Chen</surname><given-names>W.</given-names></name>
+<etal/>
+</person-group>
+          <article-title>Altered coupling of cerebral blood flow and functional connectivity strength in visual and higher order cognitive cortices in primary open angle glaucoma</article-title>
+          <source>
+<italic toggle="yes">Journal of Cerebral Blood Flow and Metabolism</italic>
+</source>
+          <year>2021</year>
+          <volume>41</volume>
+          <issue>4</issue>
+          <fpage>901</fpage>
+          <lpage>913</lpage>
+          <pub-id pub-id-type="doi">10.1177/0271678X20935274</pub-id>
+          <pub-id pub-id-type="pmid">32580669</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B19" content-type="article">
+        <label>19</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Bullmore</surname><given-names>E.</given-names></name>
+<name><surname>Sporns</surname><given-names>O.</given-names></name>
+</person-group>
+          <article-title>Complex brain networks: graph theoretical analysis of structural and functional systems</article-title>
+          <source>
+<italic toggle="yes">Nature Reviews. Neuroscience</italic>
+</source>
+          <year>2009</year>
+          <volume>10</volume>
+          <issue>3</issue>
+          <fpage>186</fpage>
+          <lpage>198</lpage>
+          <pub-id pub-id-type="doi">10.1038/nrn2575</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-60549103853</pub-id>
+          <pub-id pub-id-type="pmid">19190637</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B20" content-type="article">
+        <label>20</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Lo</surname><given-names>C. Y.</given-names></name>
+<name><surname>He</surname><given-names>Y.</given-names></name>
+<name><surname>Lin</surname><given-names>C. P.</given-names></name>
+</person-group>
+          <article-title>Graph theoretical analysis of human brain structural networks</article-title>
+          <source>
+<italic toggle="yes">Reviews in the Neurosciences</italic>
+</source>
+          <year>2011</year>
+          <volume>22</volume>
+          <issue>5</issue>
+          <fpage>551</fpage>
+          <lpage>563</lpage>
+          <pub-id pub-id-type="doi">10.1515/RNS.2011.039</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-80053616198</pub-id>
+          <pub-id pub-id-type="pmid">21861783</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B21" content-type="article">
+        <label>21</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Lee</surname><given-names>W. H.</given-names></name>
+<name><surname>Bullmore</surname><given-names>E.</given-names></name>
+<name><surname>Frangou</surname><given-names>S.</given-names></name>
+</person-group>
+          <article-title>Quantitative evaluation of simulated functional brain networks in graph theoretical analysis</article-title>
+          <source>
+<italic toggle="yes">NeuroImage</italic>
+</source>
+          <year>2017</year>
+          <volume>146</volume>
+          <fpage>724</fpage>
+          <lpage>733</lpage>
+          <pub-id pub-id-type="doi">10.1016/j.neuroimage.2016.08.050</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-85012231818</pub-id>
+          <pub-id pub-id-type="pmid">27568060</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B22" content-type="article">
+        <label>22</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Yuan</surname><given-names>W.</given-names></name>
+<name><surname>Holland</surname><given-names>S. K.</given-names></name>
+<name><surname>Shimony</surname><given-names>J. S.</given-names></name>
+<etal/>
+</person-group>
+          <article-title>Abnormal structural connectivity in the brain networks of children with hydrocephalus</article-title>
+          <source>
+<italic toggle="yes">NeuroImage: Clinical</italic>
+</source>
+          <year>2015</year>
+          <volume>8</volume>
+          <fpage>483</fpage>
+          <lpage>492</lpage>
+          <pub-id pub-id-type="doi">10.1016/j.nicl.2015.04.015</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-84930670386</pub-id>
+          <pub-id pub-id-type="pmid">26106573</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B23" content-type="article">
+        <label>23</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Lv</surname><given-names>H.</given-names></name>
+<name><surname>Wang</surname><given-names>Z.</given-names></name>
+<name><surname>Tong</surname><given-names>E.</given-names></name>
+<etal/>
+</person-group>
+          <article-title>Resting-state functional MRI: everything that nonexperts have always wanted to know</article-title>
+          <source>
+<italic toggle="yes">AJNR. American Journal of Neuroradiology</italic>
+</source>
+          <year>2018</year>
+          <volume>39</volume>
+          <issue>8</issue>
+          <fpage>1390</fpage>
+          <lpage>1399</lpage>
+          <pub-id pub-id-type="doi">10.3174/ajnr.A5527</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-85049117711</pub-id>
+          <pub-id pub-id-type="pmid">29348136</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B24" content-type="article">
+        <label>24</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Chen</surname><given-names>Z.</given-names></name>
+<name><surname>Liu</surname><given-names>M.</given-names></name>
+<name><surname>Gross</surname><given-names>D. W.</given-names></name>
+<name><surname>Beaulieu</surname><given-names>C.</given-names></name>
+</person-group>
+          <article-title>Graph theoretical analysis of developmental patterns of the white matter network</article-title>
+          <source>
+<italic toggle="yes">Frontiers in Human Neuroscience</italic>
+</source>
+          <year>2013</year>
+          <volume>7</volume>
+          <fpage>p. 716</fpage>
+          <pub-id pub-id-type="doi">10.3389/fnhum.2013.00716</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-84888112359</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B25" content-type="article">
+        <label>25</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Wang</surname><given-names>J.</given-names></name>
+<name><surname>Wang</surname><given-names>X.</given-names></name>
+<name><surname>Xia</surname><given-names>M.</given-names></name>
+<name><surname>Liao</surname><given-names>X.</given-names></name>
+<name><surname>Evans</surname><given-names>A.</given-names></name>
+<name><surname>He</surname><given-names>Y.</given-names></name>
+</person-group>
+          <article-title>GRETNA: a graph theoretical network analysis toolbox for imaging connectomics</article-title>
+          <source>
+<italic toggle="yes">Frontiers in Human Neuroscience</italic>
+</source>
+          <year>2015</year>
+          <volume>9</volume>
+          <fpage>p. 386</fpage>
+          <pub-id pub-id-type="doi">10.3389/fnhum.2015.00386</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-84936942070</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B26" content-type="article">
+        <label>26</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Kuang</surname><given-names>L.</given-names></name>
+<name><surname>Gao</surname><given-names>Y.</given-names></name>
+<name><surname>Chen</surname><given-names>Z.</given-names></name>
+<name><surname>Xing</surname><given-names>J.</given-names></name>
+<name><surname>Xiong</surname><given-names>F.</given-names></name>
+<name><surname>Han</surname><given-names>X.</given-names></name>
+</person-group>
+          <article-title>White matter brain network research in Alzheimer&#8217;s disease using persistent features</article-title>
+          <source>
+<italic toggle="yes">Molecules</italic>
+</source>
+          <year>2020</year>
+          <volume>25</volume>
+          <issue>11</issue>
+          <fpage>p. 2472</fpage>
+          <pub-id pub-id-type="doi">10.3390/molecules25112472</pub-id>
+          <pub-id pub-id-type="pmid">32471036</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B27" content-type="article">
+        <label>27</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Lin</surname><given-names>S. Y.</given-names></name>
+<name><surname>Lin</surname><given-names>C. P.</given-names></name>
+<name><surname>Hsieh</surname><given-names>T. J.</given-names></name>
+<etal/>
+</person-group>
+          <article-title>Multiparametric graph theoretical analysis reveals altered structural and functional network topology in Alzheimer's disease</article-title>
+          <source>
+<italic toggle="yes">NeuroImage: Clinical</italic>
+</source>
+          <year>2019</year>
+          <volume>22, article ???</volume>
+          <pub-id pub-id-type="doi">10.1016/j.nicl.2019.101680</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-85060729622</pub-id>
+          <pub-id pub-id-type="pmid">30710870</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B28" content-type="article">
+        <label>28</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Finotelli</surname><given-names>P.</given-names></name>
+<name><surname>Forlim</surname><given-names>C. G.</given-names></name>
+<name><surname>Klock</surname><given-names>L.</given-names></name>
+<etal/>
+</person-group>
+          <article-title>New graph-theoretical-multimodal approach using temporal and structural correlations reveals disruption in the thalamo-cortical network in patients with schizophrenia</article-title>
+          <source>
+<italic toggle="yes">Brain Connectivity</italic>
+</source>
+          <year>2019</year>
+          <volume>9</volume>
+          <issue>10</issue>
+          <fpage>760</fpage>
+          <lpage>769</lpage>
+          <pub-id pub-id-type="doi">10.1089/brain.2018.0654</pub-id>
+          <pub-id pub-id-type="pmid">31232080</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B29" content-type="article">
+        <label>29</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Fadda</surname><given-names>G.</given-names></name>
+<name><surname>Brown</surname><given-names>R. A.</given-names></name>
+<name><surname>Longoni</surname><given-names>G.</given-names></name>
+<etal/>
+</person-group>
+          <article-title>MRI and laboratory features and the performance of international criteria in the diagnosis of multiple sclerosis in children and adolescents: a prospective cohort study</article-title>
+          <source>
+<italic toggle="yes">Lancet Child Adolesc Health</italic>
+</source>
+          <year>2018</year>
+          <volume>2</volume>
+          <issue>3</issue>
+          <fpage>191</fpage>
+          <lpage>204</lpage>
+          <pub-id pub-id-type="doi">10.1016/S2352-4642(18)30026-9</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-85042019279</pub-id>
+          <pub-id pub-id-type="pmid">30169254</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B30" content-type="article">
+        <label>30</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Cai</surname><given-names>F.</given-names></name>
+<name><surname>Gao</surname><given-names>L.</given-names></name>
+<name><surname>Gong</surname><given-names>H.</given-names></name>
+<etal/>
+</person-group>
+          <article-title>Network centrality of resting-state fMRI in primary angle-closure glaucoma before and after surgery</article-title>
+          <source>
+<italic toggle="yes">PLoS One</italic>
+</source>
+          <year>2015</year>
+          <volume>10</volume>
+          <issue>10, article e0141389</issue>
+          <pub-id pub-id-type="doi">10.1371/journal.pone.0141389</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-84949595508</pub-id>
+          <pub-id pub-id-type="pmid">26506229</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B31" content-type="article">
+        <label>31</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Rupprechter</surname><given-names>S.</given-names></name>
+<name><surname>Romaniuk</surname><given-names>L.</given-names></name>
+<name><surname>Series</surname><given-names>P.</given-names></name>
+<etal/>
+</person-group>
+          <article-title>Blunted medial prefrontal cortico-limbic reward-related effective connectivity and depression</article-title>
+          <source>
+<italic toggle="yes">Brain</italic>
+</source>
+          <year>2020</year>
+          <volume>143</volume>
+          <issue>6</issue>
+          <fpage>1946</fpage>
+          <lpage>1956</lpage>
+          <pub-id pub-id-type="doi">10.1093/brain/awaa106</pub-id>
+          <pub-id pub-id-type="pmid">32385498</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B32" content-type="article">
+        <label>32</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Chang</surname><given-names>J.</given-names></name>
+<name><surname>Yu</surname><given-names>R.</given-names></name>
+</person-group>
+          <article-title>Hippocampal connectivity in the aftermath of acute social stress</article-title>
+          <source>
+<italic toggle="yes">Neurobiol Stress</italic>
+</source>
+          <year>2019</year>
+          <volume>11, article 100195</volume>
+        </element-citation>
+      </ref>
+      <ref id="B33" content-type="article">
+        <label>33</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Chen</surname><given-names>X.</given-names></name>
+<name><surname>He</surname><given-names>X.</given-names></name>
+<name><surname>Tao</surname><given-names>L.</given-names></name>
+<etal/>
+</person-group>
+          <article-title>The working memory and dorsolateral prefrontal-hippocampal functional connectivity changes in long-term survival breast cancer patients treated with tamoxifen</article-title>
+          <source>
+<italic toggle="yes">The International Journal of Neuropsychopharmacology</italic>
+</source>
+          <year>2017</year>
+          <volume>20</volume>
+          <issue>5</issue>
+          <fpage>374</fpage>
+          <lpage>382</lpage>
+          <pub-id pub-id-type="doi">10.1093/ijnp/pyx008</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-85026466012</pub-id>
+          <pub-id pub-id-type="pmid">28177081</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B34" content-type="article">
+        <label>34</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Tzourio-Mazoyer</surname><given-names>N.</given-names></name>
+<name><surname>Landeau</surname><given-names>B.</given-names></name>
+<name><surname>Papathanassiou</surname><given-names>D.</given-names></name>
+<etal/>
+</person-group>
+          <article-title>Automated anatomical labeling of activations in SPM using a macroscopic anatomical parcellation of the MNI MRI single-subject brain</article-title>
+          <source>
+<italic toggle="yes">NeuroImage</italic>
+</source>
+          <year>2002</year>
+          <volume>15</volume>
+          <issue>1</issue>
+          <fpage>273</fpage>
+          <lpage>289</lpage>
+          <pub-id pub-id-type="doi">10.1006/nimg.2001.0978</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-0036322886</pub-id>
+          <pub-id pub-id-type="pmid">11771995</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B35" content-type="article">
+        <label>35</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Chen</surname><given-names>X.</given-names></name>
+<name><surname>Chen</surname><given-names>L.</given-names></name>
+<name><surname>Zheng</surname><given-names>S.</given-names></name>
+<etal/>
+</person-group>
+          <article-title>Disrupted brain connectivity networks in aphasia revealed by resting-state fMRI</article-title>
+          <source>
+<italic toggle="yes">Frontiers in Aging Neuroscience</italic>
+</source>
+          <year>2021</year>
+          <volume>13, article 666301</volume>
+        </element-citation>
+      </ref>
+      <ref id="B36" content-type="article">
+        <label>36</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Su</surname><given-names>Q.</given-names></name>
+<name><surname>Yao</surname><given-names>D.</given-names></name>
+<name><surname>Jiang</surname><given-names>M.</given-names></name>
+<etal/>
+</person-group>
+          <article-title>Decreased interhemispheric functional connectivity in insula and angular gyrus/supramarginal gyrus: significant findings in first-episode, drug-naive somatization disorder</article-title>
+          <source>
+<italic toggle="yes">Psychiatry Research: Neuroimaging</italic>
+</source>
+          <year>2016</year>
+          <volume>248</volume>
+          <fpage>48</fpage>
+          <lpage>54</lpage>
+          <pub-id pub-id-type="pmid">26826895</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B37" content-type="article">
+        <label>37</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Wen</surname><given-names>W.</given-names></name>
+<name><surname>Zhu</surname><given-names>W.</given-names></name>
+<name><surname>He</surname><given-names>Y.</given-names></name>
+<etal/>
+</person-group>
+          <article-title>Discrete neuroanatomical networks are associated with specific cognitive abilities in old age</article-title>
+          <source>
+<italic toggle="yes">The Journal of Neuroscience</italic>
+</source>
+          <year>2011</year>
+          <volume>31</volume>
+          <issue>4</issue>
+          <fpage>1204</fpage>
+          <lpage>1212</lpage>
+          <pub-id pub-id-type="doi">10.1523/JNEUROSCI.4085-10.2011</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-79251538908</pub-id>
+          <pub-id pub-id-type="pmid">21273405</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B38" content-type="article">
+        <label>38</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>for the Alzheimer&#8217;s Disease Neuroimaging Initiative</surname></name>
+<name><surname>Chen</surname><given-names>H.</given-names></name>
+<name><surname>Sheng</surname><given-names>X.</given-names></name>
+<etal/>
+</person-group>
+          <article-title>The compensatory phenomenon of the functional connectome related to pathological biomarkers in individuals with subjective cognitive decline</article-title>
+          <source>
+<italic toggle="yes">Translational Neurodegeneration</italic>
+</source>
+          <year>2020</year>
+          <volume>9</volume>
+          <issue>1</issue>
+          <fpage>p. 21</fpage>
+          <pub-id pub-id-type="doi">10.1186/s40035-020-00201-6</pub-id>
+          <pub-id pub-id-type="pmid">32460888</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B39" content-type="article">
+        <label>39</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Zou</surname><given-names>T. X.</given-names></name>
+<name><surname>She</surname><given-names>L.</given-names></name>
+<name><surname>Zhan</surname><given-names>C.</given-names></name>
+<name><surname>Gao</surname><given-names>Y. Q.</given-names></name>
+<name><surname>Chen</surname><given-names>H. J.</given-names></name>
+</person-group>
+          <article-title>Altered topological properties of gray matter structural covariance networks in minimal hepatic encephalopathy</article-title>
+          <source>
+<italic toggle="yes">Frontiers in Neuroanatomy</italic>
+</source>
+          <year>2018</year>
+          <volume>12</volume>
+          <fpage>p. 101</fpage>
+          <pub-id pub-id-type="doi">10.3389/fnana.2018.00101</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-85059030389</pub-id>
+          <pub-id pub-id-type="pmid">30555305</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B40" content-type="article">
+        <label>40</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Watts</surname><given-names>D. J.</given-names></name>
+<name><surname>Strogatz</surname><given-names>S. H.</given-names></name>
+</person-group>
+          <article-title>Collective dynamics of 'small-world' networks</article-title>
+          <source>
+<italic toggle="yes">Nature</italic>
+</source>
+          <year>1998</year>
+          <volume>393</volume>
+          <issue>6684</issue>
+          <fpage>440</fpage>
+          <lpage>442</lpage>
+          <pub-id pub-id-type="doi">10.1038/30918</pub-id>
+          <pub-id pub-id-type="pmid">9623998</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B41" content-type="article">
+        <label>41</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Gao</surname><given-names>Z.</given-names></name>
+<name><surname>Liu</surname><given-names>X.</given-names></name>
+<name><surname>Zhang</surname><given-names>D.</given-names></name>
+<name><surname>Liu</surname><given-names>M.</given-names></name>
+<name><surname>Hao</surname><given-names>N.</given-names></name>
+</person-group>
+          <article-title>The indispensable role of the cerebellum in visual divergent thinking</article-title>
+          <source>
+<italic toggle="yes">Scientific Reports</italic>
+</source>
+          <year>2020</year>
+          <volume>10</volume>
+          <issue>1</issue>
+          <fpage>p. 16552</fpage>
+          <pub-id pub-id-type="doi">10.1038/s41598-020-73679-9</pub-id>
+          <pub-id pub-id-type="pmid">33024190</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B42" content-type="article">
+        <label>42</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Wang</surname><given-names>J.</given-names></name>
+<name><surname>Li</surname><given-names>T.</given-names></name>
+<name><surname>Wang</surname><given-names>N.</given-names></name>
+<name><surname>Xian</surname><given-names>J.</given-names></name>
+<name><surname>He</surname><given-names>H.</given-names></name>
+</person-group>
+          <article-title>Graph theoretical analysis reveals the reorganization of the brain network pattern in primary open angle glaucoma patients</article-title>
+          <source>
+<italic toggle="yes">European Radiology</italic>
+</source>
+          <year>2016</year>
+          <volume>26</volume>
+          <issue>11</issue>
+          <fpage>3957</fpage>
+          <lpage>3967</lpage>
+          <pub-id pub-id-type="doi">10.1007/s00330-016-4221-x</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-84957681594</pub-id>
+          <pub-id pub-id-type="pmid">26868498</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B43" content-type="article">
+        <label>43</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Wang</surname><given-names>J.</given-names></name>
+<name><surname>Wang</surname><given-names>X.</given-names></name>
+<name><surname>Xia</surname><given-names>M.</given-names></name>
+<name><surname>Liao</surname><given-names>X.</given-names></name>
+<name><surname>Evans</surname><given-names>A.</given-names></name>
+<name><surname>He</surname><given-names>Y.</given-names></name>
+</person-group>
+          <article-title>Corrigendum: GRETNA: a graph theoretical network analysis toolbox for imaging connectomics</article-title>
+          <source>
+<italic toggle="yes">Frontiers in Human Neuroscience</italic>
+</source>
+          <year>2015</year>
+          <volume>9</volume>
+          <fpage>p. 458</fpage>
+          <pub-id pub-id-type="doi">10.3389/fnhum.2015.00458</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-84940190716</pub-id>
+          <pub-id pub-id-type="pmid">26347640</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B44" content-type="article">
+        <label>44</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Wang</surname><given-names>Q.</given-names></name>
+<name><surname>Chen</surname><given-names>W.</given-names></name>
+<name><surname>Qu</surname><given-names>X.</given-names></name>
+<etal/>
+</person-group>
+          <article-title>Reduced cerebral blood flow in the visual cortex and its correlation with glaucomatous structural damage to the retina in patients with mild to moderate primary open-angle glaucoma</article-title>
+          <source>
+<italic toggle="yes">Journal of Glaucoma</italic>
+</source>
+          <year>2018</year>
+          <volume>27</volume>
+          <issue>9</issue>
+          <fpage>816</fpage>
+          <lpage>822</lpage>
+          <pub-id pub-id-type="doi">10.1097/IJG.0000000000001017</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-85049160783</pub-id>
+          <pub-id pub-id-type="pmid">29952821</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B45" content-type="article">
+        <label>45</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Gracitelli</surname><given-names>C. P. B.</given-names></name>
+<name><surname>Duque-Chica</surname><given-names>G. L.</given-names></name>
+<name><surname>Sanches</surname><given-names>L. G.</given-names></name>
+<etal/>
+</person-group>
+          <article-title>Structural analysis of glaucoma brain and its association with ocular parameters</article-title>
+          <source>
+<italic toggle="yes">Journal of Glaucoma</italic>
+</source>
+          <year>2020</year>
+          <volume>29</volume>
+          <issue>5</issue>
+          <fpage>393</fpage>
+          <lpage>400</lpage>
+          <pub-id pub-id-type="doi">10.1097/IJG.0000000000001470</pub-id>
+          <pub-id pub-id-type="pmid">32079996</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B46" content-type="article">
+        <label>46</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Kitsos</surname><given-names>G.</given-names></name>
+<name><surname>Zikou</surname><given-names>A. K.</given-names></name>
+<name><surname>Bagli</surname><given-names>E.</given-names></name>
+<name><surname>Kosta</surname><given-names>P.</given-names></name>
+<name><surname>Argyropoulou</surname><given-names>M. I.</given-names></name>
+</person-group>
+          <article-title>Conventional MRI and magnetisation transfer imaging of the brain and optic pathway in primary open-angle glaucoma</article-title>
+          <source>
+<italic toggle="yes">The British Journal of Radiology</italic>
+</source>
+          <year>2009</year>
+          <volume>82</volume>
+          <issue>983</issue>
+          <fpage>896</fpage>
+          <lpage>900</lpage>
+          <pub-id pub-id-type="doi">10.1259/bjr/55866125</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-73349089375</pub-id>
+          <pub-id pub-id-type="pmid">19433483</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B47" content-type="article">
+        <label>47</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Jiang</surname><given-names>F.</given-names></name>
+<name><surname>Yu</surname><given-names>C.</given-names></name>
+<name><surname>Zuo</surname><given-names>M. J.</given-names></name>
+<etal/>
+</person-group>
+          <article-title>Frequency-dependent neural activity in primary angle-closure glaucoma</article-title>
+          <source>
+<italic toggle="yes">Neuropsychiatric Disease and Treatment</italic>
+</source>
+          <year>2019</year>
+          <volume>Volume 15</volume>
+          <fpage>271</fpage>
+          <lpage>282</lpage>
+          <pub-id pub-id-type="doi">10.2147/NDT.S187367</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-85062646948</pub-id>
+          <pub-id pub-id-type="pmid">30697052</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B48" content-type="article">
+        <label>48</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Wang</surname><given-names>Y.</given-names></name>
+<name><surname>Wang</surname><given-names>J.</given-names></name>
+<name><surname>Jia</surname><given-names>Y.</given-names></name>
+<etal/>
+</person-group>
+          <article-title>Shared and specific intrinsic functional connectivity patterns in unmedicated bipolar disorder and major depressive disorder</article-title>
+          <source>
+<italic toggle="yes">Scientific Reports</italic>
+</source>
+          <year>2017</year>
+          <volume>7</volume>
+          <issue>1</issue>
+          <fpage>p. 3570</fpage>
+          <pub-id pub-id-type="doi">10.1038/s41598-017-03777-8</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-85020907155</pub-id>
+          <pub-id pub-id-type="pmid">28620239</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B49" content-type="article">
+        <label>49</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Zhang</surname><given-names>J.</given-names></name>
+<name><surname>Wu</surname><given-names>Y. L.</given-names></name>
+<name><surname>Su</surname><given-names>J.</given-names></name>
+<etal/>
+</person-group>
+          <article-title>Assessment of gray and white matter structural alterations in migraineurs without aura</article-title>
+          <source>
+<italic toggle="yes">The Journal of Headache and Pain</italic>
+</source>
+          <year>2017</year>
+          <volume>18</volume>
+          <issue>1</issue>
+          <fpage>p. 74</fpage>
+          <pub-id pub-id-type="doi">10.1186/s10194-017-0783-5</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-85025462598</pub-id>
+          <pub-id pub-id-type="pmid">28733941</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B50" content-type="article">
+        <label>50</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Huang</surname><given-names>X.</given-names></name>
+<name><surname>Zhong</surname><given-names>Y. L.</given-names></name>
+<name><surname>Zeng</surname><given-names>X. J.</given-names></name>
+<etal/>
+</person-group>
+          <article-title>Disturbed spontaneous brain activity pattern in patients with primary angle-closure glaucoma using amplitude of low-frequency fluctuation: a fMRI study</article-title>
+          <source>
+<italic toggle="yes">Neuropsychiatric Disease and Treatment</italic>
+</source>
+          <year>2015</year>
+          <volume>11</volume>
+          <fpage>1877</fpage>
+          <lpage>1883</lpage>
+          <pub-id pub-id-type="doi">10.2147/NDT.S87596</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-84938282405</pub-id>
+          <pub-id pub-id-type="pmid">26251603</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B51" content-type="article">
+        <label>51</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Plange</surname><given-names>N.</given-names></name>
+<name><surname>Kaup</surname><given-names>M.</given-names></name>
+<name><surname>Arend</surname><given-names>O.</given-names></name>
+<name><surname>Remky</surname><given-names>A.</given-names></name>
+</person-group>
+          <article-title>Asymmetric visual field loss and retrobulbar haemodynamics in primary open-angle glaucoma</article-title>
+          <source>
+<italic toggle="yes">Graefe's Archive for Clinical and Experimental Ophthalmology</italic>
+</source>
+          <year>2006</year>
+          <volume>244</volume>
+          <issue>8</issue>
+          <fpage>978</fpage>
+          <lpage>983</lpage>
+          <pub-id pub-id-type="doi">10.1007/s00417-005-0227-9</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-33746887741</pub-id>
+          <pub-id pub-id-type="pmid">16411100</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B52" content-type="article">
+        <label>52</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Sullivan-Mee</surname><given-names>M.</given-names></name>
+<name><surname>Karin Tran</surname><given-names>M. T.</given-names></name>
+<name><surname>Pensyl</surname><given-names>D.</given-names></name>
+<name><surname>Tsan</surname><given-names>G.</given-names></name>
+<name><surname>Katiyar</surname><given-names>S.</given-names></name>
+</person-group>
+          <article-title>Prevalence, features, and severity of glaucomatous visual field loss measured with the 10-2 achromatic threshold visual field test</article-title>
+          <source>
+<italic toggle="yes">American Journal of Ophthalmology</italic>
+</source>
+          <year>2016</year>
+          <volume>168</volume>
+          <fpage>40</fpage>
+          <lpage>51</lpage>
+          <pub-id pub-id-type="doi">10.1016/j.ajo.2016.05.003</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-84971414171</pub-id>
+          <pub-id pub-id-type="pmid">27173372</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B53" content-type="article">
+        <label>53</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Gennari</surname><given-names>S. P.</given-names></name>
+<name><surname>Millman</surname><given-names>R. E.</given-names></name>
+<name><surname>Hymers</surname><given-names>M.</given-names></name>
+<name><surname>Mattys</surname><given-names>S. L.</given-names></name>
+</person-group>
+          <article-title>Anterior paracingulate and cingulate cortex mediates the effects of cognitive load on speech sound discrimination</article-title>
+          <source>
+<italic toggle="yes">NeuroImage</italic>
+</source>
+          <year>2018</year>
+          <volume>178</volume>
+          <fpage>735</fpage>
+          <lpage>743</lpage>
+          <pub-id pub-id-type="doi">10.1016/j.neuroimage.2018.06.035</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-85048741518</pub-id>
+          <pub-id pub-id-type="pmid">29902588</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B54" content-type="article">
+        <label>54</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Zhang</surname><given-names>D.</given-names></name>
+<name><surname>Fan</surname><given-names>Z.</given-names></name>
+<name><surname>Gao</surname><given-names>X.</given-names></name>
+<etal/>
+</person-group>
+          <article-title>Illness uncertainty, anxiety and depression in Chinese patients with glaucoma or cataract</article-title>
+          <source>
+<italic toggle="yes">Scientific Reports</italic>
+</source>
+          <year>2018</year>
+          <volume>8</volume>
+          <issue>1</issue>
+          <fpage>p. 11671</fpage>
+          <pub-id pub-id-type="doi">10.1038/s41598-018-29489-1</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-85051066732</pub-id>
+          <pub-id pub-id-type="pmid">30076311</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B55" content-type="article">
+        <label>55</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Han</surname><given-names>C.</given-names></name>
+<name><surname>Li</surname><given-names>F.</given-names></name>
+<name><surname>Ma</surname><given-names>J.</given-names></name>
+<etal/>
+</person-group>
+          <article-title>Distinct behavioral and brain changes after different durations of the modified multiple platform method on rats: an animal model of central fatigue</article-title>
+          <source>
+<italic toggle="yes">PLoS One</italic>
+</source>
+          <year>2017</year>
+          <volume>12</volume>
+          <issue>5, article e0176850</issue>
+          <pub-id pub-id-type="doi">10.1371/journal.pone.0176850</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-85018863253</pub-id>
+          <pub-id pub-id-type="pmid">28493899</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B56" content-type="article">
+        <label>56</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Schlaffke</surname><given-names>L.</given-names></name>
+<name><surname>Leemans</surname><given-names>A.</given-names></name>
+<name><surname>Schweizer</surname><given-names>L. M.</given-names></name>
+<name><surname>Ocklenburg</surname><given-names>S.</given-names></name>
+<name><surname>Schmidt-Wilcke</surname><given-names>T.</given-names></name>
+</person-group>
+          <article-title>Learning Morse code alters microstructural properties in the inferior longitudinal fasciculus: a DTI study</article-title>
+          <source>
+<italic toggle="yes">Frontiers in Human Neuroscience</italic>
+</source>
+          <year>2017</year>
+          <volume>11</volume>
+          <fpage>p. 383</fpage>
+          <pub-id pub-id-type="doi">10.3389/fnhum.2017.00383</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-85027871839</pub-id>
+          <pub-id pub-id-type="pmid">28798672</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B57" content-type="article">
+        <label>57</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Achard</surname><given-names>S.</given-names></name>
+<name><surname>Bullmore</surname><given-names>E.</given-names></name>
+</person-group>
+          <article-title>Efficiency and cost of economical brain functional networks</article-title>
+          <source>
+<italic toggle="yes">PLoS Computational Biology</italic>
+</source>
+          <year>2007</year>
+          <volume>3</volume>
+          <issue>2, article e17</issue>
+          <pub-id pub-id-type="doi">10.1371/journal.pcbi.0030017</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-33847283332</pub-id>
+          <pub-id pub-id-type="pmid">17274684</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B58" content-type="article">
+        <label>58</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Giorgio</surname><given-names>A.</given-names></name>
+<name><surname>Zhang</surname><given-names>J.</given-names></name>
+<name><surname>Costantino</surname><given-names>F.</given-names></name>
+<name><surname>de Stefano</surname><given-names>N.</given-names></name>
+<name><surname>Frezzotti</surname><given-names>P.</given-names></name>
+</person-group>
+          <article-title>Diffuse brain damage in normal tension glaucoma</article-title>
+          <source>
+<italic toggle="yes">Human Brain Mapping</italic>
+</source>
+          <year>2018</year>
+          <volume>39</volume>
+          <issue>1</issue>
+          <fpage>532</fpage>
+          <lpage>541</lpage>
+          <pub-id pub-id-type="doi">10.1002/hbm.23862</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-85037141883</pub-id>
+          <pub-id pub-id-type="pmid">29064608</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="B59" content-type="article">
+        <label>59</label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+<name><surname>Chen</surname><given-names>W.</given-names></name>
+<name><surname>Zhang</surname><given-names>L.</given-names></name>
+<name><surname>Xu</surname><given-names>Y. G.</given-names></name>
+<name><surname>Zhu</surname><given-names>K.</given-names></name>
+<name><surname>Luo</surname><given-names>M.</given-names></name>
+</person-group>
+          <article-title>Primary angle-closure glaucomas disturb regional spontaneous brain activity in the visual pathway: an fMRI study</article-title>
+          <source>
+<italic toggle="yes">Neuropsychiatric Disease and Treatment</italic>
+</source>
+          <year>2017</year>
+          <volume>Volume 13</volume>
+          <fpage>1409</fpage>
+          <lpage>1417</lpage>
+          <pub-id pub-id-type="doi">10.2147/NDT.S134258</pub-id>
+          <pub-id pub-id-type="other">2-s2.0-85019739723</pub-id>
+          <pub-id pub-id-type="pmid">28579788</pub-id>
+        </element-citation>
+      </ref>
+    </ref-list>
+  </back>
+  <floats-group>
+    <fig position="float" id="fig1">
+      <label>Figure 1</label>
+      <caption>
+        <p>Changes in global network property measures as a function of network sparsity (from 0.1 to 0.6). The normalized clustering coefficient <italic toggle="yes">&#947;</italic> (a), normalized characteristic path length <italic toggle="yes">&#955;</italic> (b), small-world index <italic toggle="yes">&#963;</italic> (c), and global efficiency (d) of both the PACG and HC networks. Both networks follow a small-world organization.</p>
+      </caption>
+      <graphic xlink:href="DM2022-2731007.001" position="float"/>
+    </fig>
+    <fig position="float" id="fig2">
+      <label>Figure 2</label>
+      <caption>
+        <p>Between-group differences in global network measures as a function of small-world network sparsity (from 0.32 to 0.42). The 95% confidence intervals and between-group differences for the normalized clustering coefficient <italic toggle="yes">&#947;</italic> (a), normalized path length <italic toggle="yes">&#955;</italic> (b), small-world index <italic toggle="yes">&#963;</italic> (c), and global efficiency (d). Compared with the HC network, the global network normalized clustering coefficient and small-world index in the PACG network were slightly different across the small-world network sparsity range.</p>
+      </caption>
+      <graphic xlink:href="DM2022-2731007.002" position="float"/>
+    </fig>
+    <fig position="float" id="fig3">
+      <label>Figure 3</label>
+      <caption>
+        <p>Regional alterations in normalized clustering coefficiencies and normalized local efficiencies in functional brain networks at a minimum sparsity of 0.32. Statistical graphs of each node are presented on the left (a, b), and a three-dimensional view of the corresponding significant nodes are shown on the right (c, d). The significantly increased regional nodal parameters (normalized clustering coefficient and local efficiency) of patients with PACG are indicated by the red spheres, and significantly increased regional nodal parameters of the HC group are indicated by the blue spheres. The sphere sizes represent the significance values (<italic toggle="yes">p</italic> &lt; 0.05, FDR correction); larger spheres indicate greater significance and smaller <italic toggle="yes">p</italic> values.</p>
+      </caption>
+      <graphic xlink:href="DM2022-2731007.003" position="float"/>
+    </fig>
+    <fig position="float" id="fig4">
+      <label>Figure 4</label>
+      <caption>
+        <p>Regional alterations in normalized node degree and normalized node betweenness in functional brain networks at the minimum sparsity of 0.32. Graphs of each node are presented on the left (a, b), and a three-dimensional view of the corresponding significant brain regions are shown on the right (c, d). The significantly increased regional nodal parameters (normalized node degree and normalized node betweenness) of the patients with PACG are indicated by the red spheres, and the significantly increased regional nodal parameters of the HC group are indicated by the blue spheres. The sphere size represents significance (<italic toggle="yes">p</italic> &lt; 0.05); a larger sphere size indicates greater significance and a smaller <italic toggle="yes">p</italic> value.</p>
+      </caption>
+      <graphic xlink:href="DM2022-2731007.004" position="float"/>
+    </fig>
+    <fig position="float" id="fig5">
+      <label>Figure 5</label>
+      <caption>
+        <p>Correlation between altered regional values in patients with PACG and clinical parameters. The right superior parietal gyrus of the normalized clustering coefficient is correlated with the RNFL and V C/D (a), the right superior parietal gyrus normalized local efficiency is correlated with the RNFL and V C/D (b), and the left middle frontal gyrus (orbital portion) normalized node betweenness is correlated with the V C/D (c).</p>
+      </caption>
+      <graphic xlink:href="DM2022-2731007.005" position="float"/>
+    </fig>
+    <table-wrap position="float" id="tab1">
+      <label>Table 1</label>
+      <caption>
+        <p>Brief description of network properties in this study.</p>
+      </caption>
+      <table frame="hsides" rules="groups">
+        <tbody>
+          <tr>
+            <td align="left" colspan="2" rowspan="1">Global network properties.</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="2" colspan="1">&#8195;Clustering coefficient <italic toggle="yes">C</italic><sub><italic toggle="yes">p</italic></sub></td>
+            <td align="center" rowspan="1" colspan="1">
+<italic toggle="yes">C</italic>
+<sub>
+<italic toggle="yes">i</italic>
+</sub> is formed by a direct connection to the nearest neighbours of the node <italic toggle="yes">i</italic>, which measures the segregation of the network [<xref rid="B39" ref-type="bibr">39</xref>].</td>
+          </tr>
+          <tr>
+            <td align="center" rowspan="1" colspan="1">The <italic toggle="yes">C</italic><sub><italic toggle="yes">p</italic></sub> of a network is the average of <italic toggle="yes">C</italic><sub><italic toggle="yes">i</italic></sub> over all nodes [<xref rid="B39" ref-type="bibr">39</xref>].</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">&#8195;Characteristic path length <italic toggle="yes">L</italic><sub><italic toggle="yes">p</italic></sub></td>
+            <td align="center" rowspan="1" colspan="1">
+<italic toggle="yes">L</italic>
+<sub>
+<italic toggle="yes">p</italic>
+</sub> is the average of all of the shortest path lengths between two pairs of nodes, which may be regarded as a measurement of network integration [<xref rid="B40" ref-type="bibr">40</xref>].</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">&#8195;Normalized clustering coefficient <italic toggle="yes">&#947;</italic></td>
+            <td align="center" rowspan="1" colspan="1">
+<italic toggle="yes">&#947;</italic> is the average of <italic toggle="yes">C</italic><sub><italic toggle="yes">p</italic></sub>, which is further normalized by comparing to 1000 matched random networks [<xref rid="B40" ref-type="bibr">40</xref>].</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">&#8195;Normalized characteristic path length <italic toggle="yes">&#955;</italic></td>
+            <td align="center" rowspan="1" colspan="1">
+<italic toggle="yes">&#955;</italic> is the average of <italic toggle="yes">L</italic><sub><italic toggle="yes">p</italic></sub>, which is further normalized by comparing to 1000 matched random networks [<xref rid="B40" ref-type="bibr">40</xref>].</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">&#8195;Small-worldness <italic toggle="yes">&#963;</italic></td>
+            <td align="center" rowspan="1" colspan="1">
+<italic toggle="yes">&#963;</italic> is the ratio of <italic toggle="yes">&#947;</italic> to <italic toggle="yes">&#955;</italic>. The network topology may be considered to correspond to a &#8220;small world&#8221; if <italic toggle="yes">&#947;</italic> &gt; 1, <italic toggle="yes">&#955;</italic> &#8776; 1, or if <italic toggle="yes">&#963;</italic> &gt; 1 [<xref rid="B39" ref-type="bibr">39</xref>].</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">&#8195;Global efficiency <italic toggle="yes">E</italic><sub>glob</sub></td>
+            <td align="center" rowspan="2" colspan="1">
+<italic toggle="yes">E</italic>
+<sub>glob</sub> and <italic toggle="yes">E</italic><sub>loc</sub> are the biologically sensible topological features of the brain networks, which describe the global and local efficiency of information transmission of the network [<xref rid="B24" ref-type="bibr">24</xref>].</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">&#8195;Local efficiency <italic toggle="yes">E</italic><sub>loc</sub></td>
+          </tr>
+          <tr>
+            <td align="center" colspan="2" rowspan="1">
+<hr/>
+</td>
+          </tr>
+          <tr>
+            <td align="left" colspan="2" rowspan="1">Regional network properties</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">Normalized degree, Deg(<italic toggle="yes">i</italic>)</td>
+            <td align="center" rowspan="1" colspan="1">Normalized Deg(<italic toggle="yes">i</italic>) is the mean Deg(<italic toggle="yes">i</italic>) of 1000 matched random networks. Deg(<italic toggle="yes">i</italic>) is the number of connections of node <italic toggle="yes">i</italic> that connect it to the rest of the network.</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">Normalized node betweenness, NB(<italic toggle="yes">i</italic>)</td>
+            <td align="center" rowspan="1" colspan="1">Normalized NB(<italic toggle="yes">i</italic>) is the mean NB(<italic toggle="yes">i</italic>) of 1000 matched random networks. NB(<italic toggle="yes">i</italic>) may be used to compute the effects node <italic toggle="yes">i</italic> that has over the stream of information between all other nodes in the network.</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">Normalized local efficiency <italic toggle="yes">E</italic><sub>loc</sub>(<italic toggle="yes">i</italic>)</td>
+            <td align="center" rowspan="1" colspan="1">Normalized <italic toggle="yes">E</italic><sub>loc</sub>(<italic toggle="yes">i</italic>) is the mean <italic toggle="yes">E</italic><sub>loc</sub>(<italic toggle="yes">i</italic>) of 1000 matched random networks. <italic toggle="yes">E</italic><sub>loc</sub>(<italic toggle="yes">i</italic>) is defined as the inverse of the average shortest path length between node <italic toggle="yes">i</italic> and all other nodes. This variable is a measure of information transfer from node <italic toggle="yes">i</italic> to all other nodes of a network [<xref rid="B41" ref-type="bibr">41</xref>].</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">Normalized clustering coefficient <italic toggle="yes">&#947;</italic>(<italic toggle="yes">i</italic>)</td>
+            <td align="center" rowspan="1" colspan="1">
+<italic toggle="yes">&#947;</italic>(<italic toggle="yes">i</italic>) is the mean <italic toggle="yes">&#947;</italic> of 1000 matched random networks.</td>
+          </tr>
+        </tbody>
+      </table>
+    </table-wrap>
+    <table-wrap position="float" id="tab2">
+      <label>Table 2</label>
+      <caption>
+        <p>Demographics and clinical characteristics of patients with PACG and controls.</p>
+      </caption>
+      <table frame="hsides" rules="groups">
+        <thead>
+          <tr>
+            <th rowspan="1" colspan="1"/>
+            <th align="center" rowspan="1" colspan="1">PACG</th>
+            <th align="center" rowspan="1" colspan="1">HCs</th>
+            <th align="center" rowspan="1" colspan="1">
+<italic toggle="yes">p</italic> value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">Age (years old)</td>
+            <td align="center" rowspan="1" colspan="1">54.21 &#177; 7.21</td>
+            <td align="center" rowspan="1" colspan="1">52.42 &#177; 7.80</td>
+            <td align="center" rowspan="1" colspan="1">0.337</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">Sex (M/F)</td>
+            <td align="center" rowspan="1" colspan="1">13/20</td>
+            <td align="center" rowspan="1" colspan="1">13/20</td>
+            <td align="center" rowspan="1" colspan="1">0.999</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">Handedness</td>
+            <td align="center" rowspan="1" colspan="1">33R</td>
+            <td align="center" rowspan="1" colspan="1">33R</td>
+            <td align="center" rowspan="1" colspan="1">0.999</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">RNFL (<italic toggle="yes">&#956;</italic>m)</td>
+            <td align="center" rowspan="1" colspan="1">80.83 &#177; 17.69</td>
+            <td rowspan="1" colspan="1"/>
+            <td rowspan="1" colspan="1"/>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">Vision</td>
+            <td align="center" rowspan="1" colspan="1">0.46 &#177; 0.34</td>
+            <td rowspan="1" colspan="1"/>
+            <td rowspan="1" colspan="1"/>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">V C/D</td>
+            <td align="center" rowspan="1" colspan="1">0.68 &#177; 0.17</td>
+            <td rowspan="1" colspan="1"/>
+            <td rowspan="1" colspan="1"/>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">IOP (mmHg)</td>
+            <td align="center" rowspan="1" colspan="1">26.86 &#177; 9.44</td>
+            <td rowspan="1" colspan="1"/>
+            <td rowspan="1" colspan="1"/>
+          </tr>
+        </tbody>
+      </table>
+      <table-wrap-foot>
+        <fn>
+          <p>RNFL: retina nerve fiber layer; RNFLT: retina nerve fiber layer thickness; V C/D: vertical cup to disc ratio; IOP: intraocular pressure; M: male; F: female; R: right.</p>
+        </fn>
+      </table-wrap-foot>
+    </table-wrap>
+    <table-wrap position="float" id="tab3">
+      <label>Table 3</label>
+      <caption>
+        <p>Between-group comparisons of PACG vs. HCs in regional network properties at a minimum sparsity of 0.32.</p>
+      </caption>
+      <table frame="hsides" rules="groups">
+        <thead>
+          <tr>
+            <th align="left" colspan="2" rowspan="1">Normalized node betweenness</th>
+            <th align="center" colspan="2" rowspan="1">Normalized degree</th>
+          </tr>
+          <tr>
+            <th align="left" rowspan="1" colspan="1">Regions</th>
+            <th align="center" rowspan="1" colspan="1">
+<italic toggle="yes">p</italic> value</th>
+            <th align="center" rowspan="1" colspan="1">Regions</th>
+            <th align="center" rowspan="1" colspan="1">
+<italic toggle="yes">p</italic> value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">PACG &gt; HCs</td>
+            <td rowspan="1" colspan="1"/>
+            <td align="center" rowspan="1" colspan="1">PACG &gt; HCs</td>
+            <td rowspan="1" colspan="1"/>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">L. inferior frontal gyrus (opercular portion), IFGoperc.L</td>
+            <td align="center" rowspan="1" colspan="1">0.040</td>
+            <td align="center" rowspan="1" colspan="1">R. inferior frontal gyrus (opercular portion), IFGoperc.R</td>
+            <td align="center" rowspan="1" colspan="1">0.042</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">R. inferior frontal gyrus (opercular portion), IFGoperc.R</td>
+            <td align="center" rowspan="1" colspan="1">0.024</td>
+            <td align="center" rowspan="1" colspan="1">L. supplementary motor area, SMA.L</td>
+            <td align="center" rowspan="1" colspan="1">0.013</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">R. parahippocampal gyrus, PHG.R</td>
+            <td align="center" rowspan="1" colspan="1">0.013</td>
+            <td align="center" rowspan="1" colspan="1">R. supplementary motor area, SMA.R</td>
+            <td align="center" rowspan="1" colspan="1">0.041</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">L. supramarginal gyrus, SMG.L</td>
+            <td align="center" rowspan="1" colspan="1">0.036</td>
+            <td align="center" rowspan="1" colspan="1">R. parahippocampal gyrus, PHG.R</td>
+            <td align="center" rowspan="1" colspan="1">0.012</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">R. supramarginal gyrus, SMG.R</td>
+            <td align="center" rowspan="1" colspan="1">0.003</td>
+            <td align="center" rowspan="1" colspan="1">R. paracentral lobule, PCL.R</td>
+            <td align="center" rowspan="1" colspan="1">0.002</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">R. paracentral lobule, PCL.R</td>
+            <td align="center" rowspan="1" colspan="1">&#8804;0.001</td>
+            <td align="center" rowspan="1" colspan="1">R. thalamus, THA.R</td>
+            <td align="center" rowspan="1" colspan="1">0.044</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">R. middle temporal gyrus, MTG.R</td>
+            <td align="center" rowspan="1" colspan="1">0.025</td>
+            <td align="center" rowspan="1" colspan="1">R. middle temporal gyrus, MTG.R</td>
+            <td align="center" rowspan="1" colspan="1">0.047</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">R. temporal pole:middle temporal gyrus, TPOmid.R</td>
+            <td align="center" rowspan="1" colspan="1">0.040</td>
+            <td align="center" rowspan="1" colspan="1">L. temporal pole:middle temporal gyrus, TPOmid.L</td>
+            <td align="center" rowspan="1" colspan="1">0.018</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">L. inferior temporal gyrus, ITG.L</td>
+            <td align="center" rowspan="1" colspan="1">0.012</td>
+            <td align="center" rowspan="1" colspan="1">R. temporal pole:middle temporal gyrus, TPOmid.R</td>
+            <td align="center" rowspan="1" colspan="1">0.038</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">PACG &lt; HCs</td>
+            <td rowspan="1" colspan="1"/>
+            <td align="center" rowspan="1" colspan="1">PACG &lt; HCs</td>
+            <td rowspan="1" colspan="1"/>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">L. dorsal lateral superior frontal gyrus, SFGdor.</td>
+            <td align="center" rowspan="1" colspan="1">0.043</td>
+            <td align="center" rowspan="1" colspan="1">L. calcarine, CAL.L</td>
+            <td align="center" rowspan="1" colspan="1">0.007</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">L. superior frontal gyrus (orbital portion), ORBsup.L</td>
+            <td align="center" rowspan="1" colspan="1">0.049</td>
+            <td align="center" rowspan="1" colspan="1">R. calcarine, CAL.R</td>
+            <td align="center" rowspan="1" colspan="1">0.032</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">L. middle frontal gyrus (orbital portion), ORBmid.L</td>
+            <td align="center" rowspan="1" colspan="1">0.049</td>
+            <td align="center" rowspan="1" colspan="1">L. cuneus, CUN.L</td>
+            <td align="center" rowspan="1" colspan="1">&#8804;0.001</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">L. hippocampus, HIP.L</td>
+            <td align="center" rowspan="1" colspan="1">0.009</td>
+            <td align="center" rowspan="1" colspan="1">R. cuneus, CUN.R</td>
+            <td align="center" rowspan="1" colspan="1">0.004</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">L. cuneus, CUN.L</td>
+            <td align="center" rowspan="1" colspan="1">0.004</td>
+            <td align="center" rowspan="1" colspan="1">L. superior occipital gyrus, SOG.L</td>
+            <td align="center" rowspan="1" colspan="1">0.040</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">R. cuneus, CUN.R</td>
+            <td align="center" rowspan="1" colspan="1">&#8804;0.001</td>
+            <td align="center" rowspan="1" colspan="1">R. inferior occipital gyrus, IOG.R</td>
+            <td align="center" rowspan="1" colspan="1">0.042</td>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">L. lingual gyrus, LING.L</td>
+            <td align="center" rowspan="1" colspan="1">0.014</td>
+            <td rowspan="1" colspan="1"/>
+            <td rowspan="1" colspan="1"/>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">L. superior occipital gyrus, SOG.L</td>
+            <td align="center" rowspan="1" colspan="1">0.012</td>
+            <td rowspan="1" colspan="1"/>
+            <td rowspan="1" colspan="1"/>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">L. inferior occipital gyrus, IOG.L</td>
+            <td align="center" rowspan="1" colspan="1">0.047</td>
+            <td rowspan="1" colspan="1"/>
+            <td rowspan="1" colspan="1"/>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">L. putamen, PUT.L</td>
+            <td align="center" rowspan="1" colspan="1">0.007</td>
+            <td rowspan="1" colspan="1"/>
+            <td rowspan="1" colspan="1"/>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">L. cerebellum 6, CRBL6.L</td>
+            <td align="center" rowspan="1" colspan="1">0.026</td>
+            <td rowspan="1" colspan="1"/>
+            <td rowspan="1" colspan="1"/>
+          </tr>
+          <tr>
+            <td align="left" rowspan="1" colspan="1">Vermis 6, Vermis6</td>
+            <td align="center" rowspan="1" colspan="1">0.015</td>
+            <td rowspan="1" colspan="1"/>
+            <td rowspan="1" colspan="1"/>
+          </tr>
+        </tbody>
+      </table>
+      <table-wrap-foot>
+        <fn>
+          <p>L: left; R: right; PACG &gt; HCs: increased regional network properties in PACG compared with HCs; PACG &lt; HCs: decreased regional network properties in PACG compared with HCs.</p>
+        </fn>
+      </table-wrap-foot>
+    </table-wrap>
+  </floats-group>
+</article>
+</pmc-articleset>

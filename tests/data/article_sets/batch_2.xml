@@ -1,0 +1,1361 @@
+<?xml version='1.0' encoding='ASCII'?>
+<pmc-articleset><article xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink" dtd-version="1.3" xml:lang="en" article-type="review-article">
+  <?properties open_access?>
+  <processing-meta base-tagset="archiving" mathml-version="3.0" table-model="xhtml" tagset-family="jats">
+    <restricted-by>pmc</restricted-by>
+  </processing-meta>
+  <front>
+    <journal-meta>
+      <journal-id journal-id-type="nlm-ta">Med Educ Online</journal-id>
+      <journal-id journal-id-type="iso-abbrev">Med Educ Online</journal-id>
+      <journal-title-group>
+        <journal-title>Medical Education Online</journal-title>
+      </journal-title-group>
+      <issn pub-type="epub">1087-2981</issn>
+      <publisher>
+        <publisher-name>Taylor &amp; Francis</publisher-name>
+      </publisher>
+    </journal-meta>
+    <article-meta>
+      <article-id pub-id-type="pmid">35012424</article-id>
+      <article-id pub-id-type="pmc">8757598</article-id>
+      <article-id pub-id-type="doi">10.1080/10872981.2021.2016357</article-id>
+      <article-id pub-id-type="publisher-id">2016357</article-id>
+      <article-version vocab="JAV" vocab-identifier="http://www.niso.org/publications/rp/RP-8-2008.pdf" vocab-term="Version of Record" article-version-type="VoR">Version of Record</article-version>
+      <article-categories>
+        <subj-group subj-group-type="article-type">
+          <subject>Review Article</subject>
+        </subj-group>
+        <subj-group subj-group-type="heading">
+          <subject>Review Article</subject>
+        </subj-group>
+      </article-categories>
+      <title-group>
+        <article-title>Use of neuroimaging to measure neurocognitive engagement in health professions education: a scoping review</article-title>
+        <alt-title alt-title-type="left-running-head">S. TOY ET AL.</alt-title>
+        <alt-title alt-title-type="right-running-head">MEDICAL EDUCATION ONLINE</alt-title>
+      </title-group>
+      <contrib-group>
+        <contrib contrib-type="author">
+          <contrib-id contrib-id-type="orcid" authenticated="false">https://orcid.org/0000-0001-7758-257X</contrib-id>
+          <name>
+            <surname>Toy</surname>
+            <given-names>Serkan</given-names>
+          </name>
+          <xref rid="aff0001" ref-type="aff">
+<sup>a</sup>
+</xref>
+          <xref rid="an0001" ref-type="corresp"/>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Huh</surname>
+            <given-names>Dana D</given-names>
+          </name>
+          <xref rid="aff0002" ref-type="aff">
+<sup>b</sup>
+</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Materi</surname>
+            <given-names>Joshua</given-names>
+          </name>
+          <xref rid="aff0002" ref-type="aff">
+<sup>b</sup>
+</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <contrib-id contrib-id-type="orcid" authenticated="false">https://orcid.org/0000-0002-8356-0278</contrib-id>
+          <name>
+            <surname>Nanavati</surname>
+            <given-names>Julie</given-names>
+          </name>
+          <xref rid="aff0003" ref-type="aff">
+<sup>c</sup>
+</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <contrib-id contrib-id-type="orcid" authenticated="false">https://orcid.org/0000-0002-7876-425X</contrib-id>
+          <name>
+            <surname>Schwengel</surname>
+            <given-names>Deborah A.</given-names>
+          </name>
+          <xref rid="aff0001" ref-type="aff">
+<sup>a</sup>
+</xref>
+        </contrib>
+        <aff id="aff0001"><label>a</label>Department of Anesthesiology &amp; Critical Care Medicine, <institution-wrap><institution>The Johns Hopkins University School of Medicine</institution></institution-wrap>, <city>Baltimore</city>, <state>Maryland</state>, <country>USA</country></aff>
+        <aff id="aff0002"><label>b</label>The Johns Hopkins School of Medicine, <city>Baltimore</city>, <state>Maryland</state>, <country>USA</country></aff>
+        <aff id="aff0003"><label>c</label>Welch Medical Library, <institution-wrap><institution>The Johns Hopkins School of Medicine</institution></institution-wrap>, <city>Baltimore</city>, <state>Maryland</state>, <country>USA</country></aff>
+      </contrib-group>
+      <author-notes>
+        <corresp id="an0001">CONTACT Serkan Toy <email xlink:href="mailto:stoy1@jhmi.edu">stoy1@jhmi.edu</email> Department of Anesthesiology &amp; Critical Care Medicine, <institution-wrap><institution>Johns Hopkins University School of Medicine</institution></institution-wrap>
+<addr-line>Osler 296, 1800 Orleans St</addr-line>. <city>Baltimore</city>, <state>MD</state>
+<postal-code>21287</postal-code>, <country>USA</country></corresp>
+      </author-notes>
+      <pub-date date-type="pub" publication-format="electronic">
+        <day>10</day>
+        <month>1</month>
+        <year>2022</year>
+      </pub-date>
+      <pub-date date-type="collection" publication-format="electronic">
+        <year>2022</year>
+      </pub-date>
+      <pub-date pub-type="pmc-release">
+        <day>10</day>
+        <month>1</month>
+        <year>2022</year>
+      </pub-date>
+      <volume>27</volume>
+      <issue>1</issue>
+      <elocation-id seq="18">2016357</elocation-id>
+      <pub-history>
+        <event event-type="tagger">
+          <event-desc>Integra</event-desc>
+          <date>
+            <day>10</day>
+            <month>1</month>
+            <year>2022</year>
+          </date>
+        </event>
+        <event event-type="final">
+          <event-desc>Integra</event-desc>
+          <date>
+            <day>10</day>
+            <month>1</month>
+            <year>2022</year>
+          </date>
+        </event>
+        <event event-type="received">
+          <date>
+            <day>15</day>
+            <month>5</month>
+            <year>2021</year>
+          </date>
+        </event>
+        <event event-type="revised">
+          <date>
+            <day>19</day>
+            <month>11</month>
+            <year>2021</year>
+          </date>
+        </event>
+        <event event-type="accepted">
+          <date>
+            <day>07</day>
+            <month>12</month>
+            <year>2021</year>
+          </date>
+        </event>
+      </pub-history>
+      <permissions>
+        <copyright-statement>&#169; 2022 The Author(s). Published by Informa UK Limited, trading as Taylor &amp; Francis Group.</copyright-statement>
+        <copyright-year>2022</copyright-year>
+        <copyright-holder>The Author(s)</copyright-holder>
+        <license>
+          <ali:license_ref xmlns:ali="http://www.niso.org/schemas/ali/1.0/" specific-use="textmining" content-type="ccbylicense">https://creativecommons.org/licenses/by/4.0/</ali:license_ref>
+          <license-p>This is an Open Access article distributed under the terms of the Creative Commons Attribution License (<ext-link ext-link-type="uri" xlink:href="https://creativecommons.org/licenses/by/4.0/">http://creativecommons.org/licenses/by/4.0/</ext-link>), which permits unrestricted use, distribution, and reproduction in any medium, provided the original work is properly cited.</license-p>
+        </license>
+      </permissions>
+      <self-uri content-type="pdf" xlink:href="ZMEO_27_2016357.pdf"/>
+      <abstract>
+        <title>ABSTRACT</title>
+        <sec id="s2001">
+          <title>Purpose</title>
+          <p>To map the current literature on functional neuroimaging use in medical education research as a novel measurement modality for neurocognitive engagement, learning, and expertise development.</p>
+        </sec>
+        <sec id="s2002">
+          <title>Method</title>
+          <p>We searched PubMed, Embase, Cochrane, ERIC, and Web of Science, and hand-searched reference lists of relevant articles on April 4, 2019, and updated the search on July 7, 2020. Two authors screened the abstracts and then full-text articles for eligibility based on inclusion criteria. The data were then charted, synthesized, and analyzed descriptively.</p>
+        </sec>
+        <sec id="s2003">
+          <title>Results</title>
+          <p>Sixty-seven articles published between 2007 and 2020 were included in this scoping review. These studies used three main neuroimaging modalities: functional magnetic resonance imaging, functional near-infrared spectroscopy, and electroencephalography. Most of the publications (90%, n = 60) were from the last 10 years (2011&#8211;2020). Although these studies were conducted in 16 countries, 68.7% (n = 46) were from three countries: the USA (n = 21), UK (n = 15), and Canada (n = 10). These studies were mainly non-experimental (74.6%, n = 50). Most used neuroimaging techniques to examine psychomotor skill development (57%, n = 38), but several investigated neurocognitive correlates of clinical reasoning skills (22%, n = 15).</p>
+        </sec>
+        <sec id="s2004">
+          <title>Conclusion</title>
+          <p>This scoping review maps the available literature on functional neuroimaging use in medical education. Despite the heterogeneity in research questions, study designs, and outcome measures, we identified a few common themes. Included studies are encouraging of the potential for neuroimaging to complement commonly used measures in education research and may help validate/challenge established theoretical assumptions and provide insight into training methods. This review highlighted several areas for further research. The use of these emerging technologies appears ripe for developing precision education, establishing viable study protocols for realistic operational settings, examining team dynamics, and exploring applications for real-time monitoring/intervention during critical clinical tasks.</p>
+        </sec>
+      </abstract>
+      <kwd-group kwd-group-type="author">
+        <title>KEYWORDS</title>
+        <kwd>Electroencephalography</kwd>
+        <kwd>functional magnetic resonance imaging</kwd>
+        <kwd>functional near-infrared spectroscopy</kwd>
+        <kwd>health professions education</kwd>
+        <kwd>medical education</kwd>
+        <kwd>neurocognitive engagement</kwd>
+        <kwd>neuroimaging</kwd>
+      </kwd-group>
+      <support-group>
+        <funding-group>
+          <award-group>
+            <funding-source>
+<institution-wrap><institution>no funding associated</institution></institution-wrap>
+</funding-source>
+          </award-group>
+          <funding-statement>The author(s) reported there is no funding associated with the work featured in this article.</funding-statement>
+        </funding-group>
+      </support-group>
+      <counts>
+        <fig-count count="2"/>
+        <table-count count="3"/>
+        <ref-count count="90"/>
+        <page-count count="1"/>
+      </counts>
+    </article-meta>
+  </front>
+  <body>The text of the article</body>
+  <back>
+    <ack>
+      <title>Acknowledgments</title>
+      <p>The authors wish to thank Claire Levine, MS, ELS, Scientific Editor, Department of Anesthesiology and Critical Care Medicine, Johns Hopkins University, for her expert editing of the manuscript.</p>
+    </ack>
+    <sec sec-type="COI-statement" disp-level="1" id="s0006">
+      <title>Disclosure statement</title>
+      <p>No potential conflict of interest was reported by the author(s).</p>
+    </sec>
+    <ref-list>
+      <title>References</title>
+      <ref id="cit0001">
+        <label>[1]</label>
+        <mixed-citation publication-type="book"><person-group person-group-type="author"><string-name><surname>Antonenko</surname>
+<given-names>PD</given-names></string-name>, <string-name><surname>van Gog</surname>
+<given-names>T</given-names></string-name>, <string-name><surname>Paas</surname>
+<given-names>F.</given-names></string-name></person-group>
+<source><italic toggle="yes">Implications of neuroimaging for educational research</italic>, in <italic toggle="yes">Handbook of research on educational communications and technology</italic></source>. New York, NY: <publisher-name>Springer</publisher-name>; <year>2014</year>. <comment>51&#8211;63</comment>.</mixed-citation>
+      </ref>
+      <ref id="cit0002">
+        <label>[2]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Aggarwal</surname>
+<given-names>R</given-names></string-name></person-group>, Leong J, Leff D, et al. <article-title>New technologies for the surgical curriculum</article-title>. <source>World J Surg</source>. <year>2008</year>;<volume>32</volume>(<issue>2</issue>):<fpage>213</fpage>&#8211;<lpage>18</lpage>.<pub-id pub-id-type="pmid">18167022</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0003">
+        <label>[3]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Bhatt</surname>
+<given-names>N</given-names></string-name>, <string-name><surname>Morris</surname>
+<given-names>M</given-names></string-name>, <string-name><surname>O&#8217;Neil</surname>
+<given-names>A</given-names></string-name>, et al</person-group>. <article-title>When should surgeons retire?</article-title>
+<source>Br J Surg</source>. <year>2016</year>;<volume>103</volume>(<issue>1</issue>):<fpage>35</fpage>&#8211;<lpage>42</lpage>.<pub-id pub-id-type="pmid">26577951</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0004">
+        <label>[4]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Modi</surname>
+<given-names>HN</given-names></string-name>, <string-name><surname>Singh</surname>
+<given-names>H</given-names></string-name>, <string-name><surname>Yang</surname>
+<given-names>G-Z</given-names></string-name>, et al</person-group>. <article-title>A decade of imaging surgeons&#8217; brain function (part I): terminology, techniques, and clinical translation</article-title>. <source>Surgery</source>. <year>2017</year>;<volume>162</volume>(<issue>5</issue>):<fpage>1121</fpage>&#8211;<lpage>1130</lpage>.<pub-id pub-id-type="pmid">28807409</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0005">
+        <label>[5]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Modi</surname>
+<given-names>HN</given-names></string-name></person-group>, Singh H, Yang GZ, et al. <article-title>A decade of imaging surgeons&#8217; brain function (part II): a systematic review of applications for technical and nontechnical skills assessment</article-title>. <source>Surgery (USA)</source>. <year>2017</year>;<volume>162</volume>(<issue>5</issue>):<fpage>1130</fpage>&#8211;<lpage>1139</lpage>.</mixed-citation>
+      </ref>
+      <ref id="cit0006">
+        <label>[6]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Leff</surname>
+<given-names>DR</given-names></string-name>, <string-name><surname>Leong</surname>
+<given-names>JJH</given-names></string-name>, <string-name><surname>Aggarwal</surname>
+<given-names>R</given-names></string-name>, et al</person-group>. <article-title>Could variations in technical skills acquisition in surgery be explained by differences in cortical plasticity?</article-title>
+<source>Ann Surg</source>. <year>2008</year>;<volume>247</volume>(<issue>3</issue>):<fpage>540</fpage>&#8211;<lpage>543</lpage>.<pub-id pub-id-type="pmid">18376201</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0007">
+        <label>[7]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Thomas</surname>
+<given-names>A</given-names></string-name></person-group>, Lubarsky S, Varpio L, et al. <article-title>Scoping reviews in health professions education: challenges, considerations and lessons learned about epistemology and methodology</article-title>. <source>Adv Health Sci Educ</source>. <year>2019</year>;<volume>24</volume>(<issue>1</issue>):<fpage>1</fpage>&#8211;<lpage>14</lpage>.</mixed-citation>
+      </ref>
+      <ref id="cit0008">
+        <label>[8]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Arksey</surname>
+<given-names>H</given-names></string-name>, <string-name><surname>O&#8217;Malley</surname>
+<given-names>L</given-names></string-name></person-group>. <article-title>Scoping studies: towards a methodological framework</article-title>. <source>Int J Soc Res Methodol</source>. <year>2005</year>;<volume>8</volume>(<issue>1</issue>):<fpage>19</fpage>&#8211;<lpage>32</lpage>.</mixed-citation>
+      </ref>
+      <ref id="cit0009">
+        <label>[9]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Levac</surname>
+<given-names>D</given-names></string-name>, <string-name><surname>Colquhoun</surname>
+<given-names>H</given-names></string-name>, <string-name><surname>O&#8217;Brien</surname>
+<given-names>KK</given-names></string-name></person-group>. <article-title>Scoping studies: advancing the methodology</article-title>. <source>Implement Sci</source>. <year>2010</year>;<volume>5</volume>(<issue>1</issue>):<fpage>69</fpage>.<pub-id pub-id-type="pmid">20854677</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0010">
+        <label>[10]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Peters</surname>
+<given-names>Md</given-names></string-name>, <string-name><surname>Godfrey</surname>
+<given-names>CM</given-names></string-name>, <string-name><surname>Khalil</surname>
+<given-names>H</given-names></string-name>, et al</person-group>. <article-title>Guidance for conducting systematic scoping reviews</article-title>. <source>Int J Evid Based Healthc</source>. <year>2015</year>;<volume>13</volume>(<issue>3</issue>):<fpage>141</fpage>&#8211;<lpage>146</lpage>.<pub-id pub-id-type="pmid">26134548</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0011">
+        <label>[11]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Tricco</surname>
+<given-names>AC</given-names></string-name>, <string-name><surname>Lillie</surname>
+<given-names>E</given-names></string-name>, <string-name><surname>Zarin</surname>
+<given-names>W</given-names></string-name>, et al</person-group>. <article-title>PRISMA extension for scoping reviews (PRISMA-ScR): checklist and explanation</article-title>. <source>Ann Intern Med</source>. <year>2018</year>;<volume>169</volume>(<issue>7</issue>):<fpage>467</fpage>&#8211;<lpage>473</lpage>.<pub-id pub-id-type="pmid">30178033</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0012">
+        <label>[12]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Wanzel</surname>
+<given-names>KR</given-names></string-name>, <string-name><surname>Anastakis</surname>
+<given-names>DJ</given-names></string-name>, <string-name><surname>McAndrews</surname>
+<given-names>MP</given-names></string-name>, et al</person-group>. <article-title>Visual-spatial ability and fMRI cortical activation in surgery residents</article-title>. <source>Am J Surg</source>. <year>2007</year>;<volume>193</volume>(<issue>4</issue>):<fpage>507</fpage>&#8211;<lpage>510</lpage>.<pub-id pub-id-type="pmid">17368300</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0013">
+        <label>[13]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Leff</surname>
+<given-names>DR</given-names></string-name>, <string-name><surname>Elwell</surname>
+<given-names>CE</given-names></string-name>, <string-name><surname>Orihuela-Espina</surname>
+<given-names>F</given-names></string-name>, et al</person-group>. <article-title>Changes in prefrontal cortical behaviour depend upon familiarity on a bimanual co-ordination task: an fNIRS study</article-title>. <source>Neuroimage</source>. <year>2008</year>;<volume>39</volume>(<issue>2</issue>):<fpage>805</fpage>&#8211;<lpage>813</lpage>.<pub-id pub-id-type="pmid">17964187</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0014">
+        <label>[14]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Leff</surname>
+<given-names>DR</given-names></string-name>, <string-name><surname>Orihuela-Espina</surname>
+<given-names>F</given-names></string-name>, <string-name><surname>Atallah</surname>
+<given-names>L</given-names></string-name>, et al</person-group>. <article-title>Functional prefrontal reorganization accompanies learning-associated refinements in surgery: a manifold embedding approach</article-title>. <source>Comput Aided Surg</source>. <year>2008</year>;<volume>13</volume>(<issue>6</issue>):<fpage>325</fpage>&#8211;<lpage>339</lpage>.<pub-id pub-id-type="pmid">18991082</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0015">
+        <label>[15]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Ohuchida</surname>
+<given-names>K</given-names></string-name></person-group>, Kenmotsu H, Yamamoto A, et al. <article-title>The frontal cortex is activated during learning of endoscopic procedures</article-title>. <source>Surg Endosc</source>. <year>2009</year>;<volume>23</volume>(<issue>10</issue>):<fpage>2296</fpage>&#8211;<lpage>2301</lpage>.<pub-id pub-id-type="pmid">19172351</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0016">
+        <label>[16]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Leff</surname>
+<given-names>DR</given-names></string-name></person-group>, Orihuela-Espina F, Athanasiou T, et al. <article-title>&#8220;Circadian cortical compensation&#8221;: a longitudinal study of brain function during technical and cognitive skills in acutely sleep-deprived surgical residents</article-title>. <source>Ann Surg</source>. <year>2010</year>;<volume>252</volume>(<issue>6</issue>):<fpage>1082</fpage>&#8211;<lpage>1090</lpage>.<pub-id pub-id-type="pmid">21107119</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0017">
+        <label>[17]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Bahrami</surname>
+<given-names>P</given-names></string-name>, <string-name><surname>Schweizer</surname>
+<given-names>TA</given-names></string-name>, <string-name><surname>Tam</surname>
+<given-names>F</given-names></string-name>, et al</person-group>. <article-title>Functional MRI-compatible laparoscopic surgery training simulator</article-title>. <source>Magn Reson Med</source>. <year>2011</year>;<volume>65</volume>(<issue>3</issue>):<fpage>873</fpage>&#8211;<lpage>881</lpage>.<pub-id pub-id-type="pmid">21337414</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0018">
+        <label>[18]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Downar</surname>
+<given-names>J</given-names></string-name>, <string-name><surname>Bhatt</surname>
+<given-names>M</given-names></string-name>, <string-name><surname>Montague</surname>
+<given-names>PR</given-names></string-name></person-group>. <article-title>Neural correlates of effective learning in experienced medical decision-makers</article-title>. <source>PLoS One</source>. <year>2011</year>;<volume>6</volume>(<issue>11</issue>):<fpage>e27768</fpage>.<pub-id pub-id-type="pmid">22132137</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0019">
+        <label>[19]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>James</surname>
+<given-names>DR</given-names></string-name>, <string-name><surname>Orihuela-Espina</surname>
+<given-names>F</given-names></string-name>, <string-name><surname>Leff</surname>
+<given-names>DR</given-names></string-name>, et al</person-group>. <article-title>The ergonomics of natural orifice translumenal endoscopic surgery (NOTES) navigation in terms of performance, stress, and cognitive behavior</article-title>. <source>Surgery</source>. <year>2011</year>;<volume>149</volume>(<issue>4</issue>):<fpage>525</fpage>&#8211;<lpage>533</lpage>.<pub-id pub-id-type="pmid">21295807</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0020">
+        <label>[20]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Kahol</surname>
+<given-names>K</given-names></string-name>, <string-name><surname>Smith</surname>
+<given-names>M</given-names></string-name>, <string-name><surname>Brandenberger</surname>
+<given-names>J</given-names></string-name>, et al</person-group>. <article-title>Impact of fatigue on neurophysiologic measures of surgical residents</article-title>. <source>J Am Coll Surg</source>. <year>2011</year>;<volume>213</volume>(<issue>1</issue>):<fpage>29</fpage>&#8211;<lpage>34</lpage>. <comment>discussion 34</comment>. <pub-id pub-id-type="doi">10.1016/j.jamcollsurg.2011.03.028</pub-id>.<pub-id pub-id-type="pmid">21515080</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0021">
+        <label>[21]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Zhu</surname>
+<given-names>FF</given-names></string-name></person-group>, Poolton JM, Wilson MR, et al. <article-title>Implicit motor learning promotes neural efficiency during laparoscopy</article-title>. <source>Surg Endosc</source>. <year>2011</year>;<volume>25</volume>(<issue>9</issue>):<fpage>2950</fpage>&#8211;<lpage>2955</lpage>.<pub-id pub-id-type="pmid">21455805</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0022">
+        <label>[22]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Durning</surname>
+<given-names>SJ</given-names></string-name>, <string-name><surname>Graner</surname>
+<given-names>J</given-names></string-name>, <string-name><surname>Artino</surname>
+<given-names>AR</given-names></string-name>, et al</person-group>. <article-title>Using functional neuroimaging combined with a think-aloud protocol to explore clinical reasoning expertise in internal medicine</article-title>. <source>Mil Med</source>. <year>2012</year>;<volume>177</volume>(<issue>9 Suppl</issue>):<fpage>72</fpage>&#8211;<lpage>78</lpage>.<pub-id pub-id-type="pmid">23029866</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0023">
+        <label>[23]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Duty</surname>
+<given-names>B</given-names></string-name>, <string-name><surname>Andonian</surname>
+<given-names>S</given-names></string-name>, <string-name><surname>Ma</surname>
+<given-names>Y</given-names></string-name>, et al</person-group>. <article-title>Correlation of laparoscopic experience with differential functional brain activation: a positron emission tomography study with oxygen 15&#8211;labeled water</article-title>. <source>Arch Surg</source>. <year>2012</year>;<volume>147</volume>(<issue>7</issue>):<fpage>627</fpage>&#8211;<lpage>632</lpage>.<pub-id pub-id-type="pmid">22802056</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0024">
+        <label>[24]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Bocci</surname>
+<given-names>T</given-names></string-name>, <string-name><surname>Moretto</surname>
+<given-names>C</given-names></string-name>, <string-name><surname>Tognazzi</surname>
+<given-names>S</given-names></string-name>, et al</person-group>. <article-title>How does a surgeon&#8217;s brain buzz? An EEG coherence study on the interaction between humans and robot</article-title>. <source>Behavioral and Brain Functions</source>. <year>2013</year>;<volume>9</volume>(<issue>1</issue>):<fpage>1</fpage>&#8211;<lpage>13</lpage>.<pub-id pub-id-type="pmid">23295062</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0025">
+        <label>[25]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Durning</surname>
+<given-names>SJ</given-names></string-name></person-group>, Artino Jr AR, Beckman TJ, et al. <article-title>Does the think-aloud protocol reflect thinking? Exploring functional neuroimaging differences with thinking (answering multiple choice questions) versus thinking aloud</article-title>. <source>Med Teach</source>. <year>2013</year>;<volume>35</volume>(<issue>9</issue>):<fpage>720</fpage>&#8211;<lpage>726</lpage>.<pub-id pub-id-type="pmid">23805999</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0026">
+        <label>[26]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Durning</surname>
+<given-names>SJ</given-names></string-name>, <string-name><surname>Costanzo</surname>
+<given-names>M</given-names></string-name>, <string-name><surname>Artino</surname>
+<given-names>AR</given-names></string-name>, et al</person-group>. <article-title>Functional neuroimaging correlates of burnout among internal medicine residents and faculty members</article-title>. <source>Front Psychiatry</source>. <year>2013</year>;<volume>4</volume>:<fpage>131</fpage>.<pub-id pub-id-type="pmid">24133462</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0027">
+        <label>[27]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Veroude</surname>
+<given-names>K</given-names></string-name>, <string-name><surname>Jolles</surname>
+<given-names>J</given-names></string-name>, <string-name><surname>Kne&#382;evi&#263;</surname>
+<given-names>M</given-names></string-name>, et al</person-group>. <article-title>Anterior cingulate activation during cognitive control relates to academic performance in medical students</article-title>. <source>Trends in Neuroscience and Education</source>. <year>2013</year>;<volume>2</volume>(<issue>3&#8211;4</issue>):<fpage>100</fpage>&#8211;<lpage>106</lpage>.</mixed-citation>
+      </ref>
+      <ref id="cit0028">
+        <label>[28]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Bahrami</surname>
+<given-names>P</given-names></string-name>, <string-name><surname>Graham</surname>
+<given-names>SJ</given-names></string-name>, <string-name><surname>Grantcharov</surname>
+<given-names>TP</given-names></string-name>, et al</person-group>. <article-title>Neuroanatomical correlates of laparoscopic surgery training</article-title>. <source>Surg Endosc</source>. <year>2014</year>;<volume>28</volume>(<issue>7</issue>):<fpage>2189</fpage>&#8211;<lpage>2198</lpage>.<pub-id pub-id-type="pmid">24570013</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0029">
+        <label>[29]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Durning</surname>
+<given-names>SJ</given-names></string-name>, <string-name><surname>Capaldi II</surname>
+<given-names>VF</given-names></string-name>, <string-name><surname>Artino</surname>
+<given-names>AR</given-names></string-name>, et al</person-group>. <article-title>A pilot study exploring the relationship between internists&#8217; self-reported sleepiness, performance on multiple-choice exam items and prefrontal cortex activity</article-title>. <source>Med Teach</source>. <year>2014</year>;<volume>36</volume>(<issue>5</issue>):<fpage>434</fpage>&#8211;<lpage>440</lpage>.<pub-id pub-id-type="pmid">24593696</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0030">
+        <label>[30]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Akimoto</surname>
+<given-names>S</given-names></string-name>, <string-name><surname>Ohdaira</surname>
+<given-names>T</given-names></string-name>, <string-name><surname>Nakamura</surname>
+<given-names>S</given-names></string-name>, et al</person-group>. <article-title>The efficiency of a modified real-time wireless brain electric activity calculator to reveal the subliminal psychological instability of surgeons that possibly leads to errors in surgical procedures</article-title>. <source>Surg Technol Int</source>. <year>2015</year>;<volume>26</volume>:<fpage>25</fpage>&#8211;<lpage>30</lpage>.<pub-id pub-id-type="pmid">26054987</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0031">
+        <label>[31]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Durning</surname>
+<given-names>SJ</given-names></string-name></person-group>, Costanzo ME, Artino AR, et al. <article-title>Neural basis of nonanalytical reasoning expertise during clinical evaluation</article-title>. <source>Brain Behav</source>. <year>2015</year>;<volume>5</volume>(<issue>3</issue>):<fpage>e00309</fpage>.<pub-id pub-id-type="pmid">25798328</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0032">
+        <label>[32]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Durning</surname>
+<given-names>SJ</given-names></string-name></person-group>, Kelly W, Costanzo ME, et al. <article-title>Relationship of neuroimaging to typical sleep times during a clinical reasoning task: a pilot study</article-title>. <source>Mil Med</source>. <year>2015</year>;<volume>180</volume>(<issue>4 Suppl</issue>):<fpage>129</fpage>&#8211;<lpage>135</lpage>.<pub-id pub-id-type="pmid">25850139</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0033">
+        <label>[33]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Guru</surname>
+<given-names>KA</given-names></string-name>, et al</person-group>. <article-title>Cognitive skills assessment during robot&#8208;assisted surgery: separating the wheat from the chaff</article-title>. <source>BJU Int</source>. <year>2015</year>;<volume>115</volume>(<issue>1</issue>):<fpage>166</fpage>&#8211;<lpage>174</lpage>.<pub-id pub-id-type="pmid">24467726</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0034">
+        <label>[34]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Guru</surname>
+<given-names>KA</given-names></string-name>, <string-name><surname>Shafiei</surname>
+<given-names>SB</given-names></string-name>, <string-name><surname>Khan</surname>
+<given-names>A</given-names></string-name>, et al</person-group>. <article-title>Understanding cognitive performance during robot-assisted surgery</article-title>. <source>Urology</source>. <year>2015</year>;<volume>86</volume>(<issue>4</issue>):<fpage>751</fpage>&#8211;<lpage>757</lpage>.<pub-id pub-id-type="pmid">26255037</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0035">
+        <label>[35]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Leff</surname>
+<given-names>DR</given-names></string-name>, <string-name><surname>James</surname>
+<given-names>DRC</given-names></string-name>, <string-name><surname>Orihuela-Espina</surname>
+<given-names>F</given-names></string-name>, et al</person-group>. <article-title>The impact of expert visual guidance on trainee visual search strategy, visual attention and motor skills</article-title>. <source>Front Hum Neurosci</source>. <year>2015</year>;<volume>9</volume>:<fpage>526</fpage>.<pub-id pub-id-type="pmid">26528160</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0036">
+        <label>[36]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Maddox</surname>
+<given-names>MM</given-names></string-name>, <string-name><surname>Lopez</surname>
+<given-names>A</given-names></string-name>, <string-name><surname>Mandava</surname>
+<given-names>SH</given-names></string-name>, et al</person-group>. <article-title>Electroencephalographic monitoring of brain wave activity during laparoscopic surgical simulation to measure surgeon concentration and stress: can the student become the master?</article-title>
+<source>J Endourol</source>. <year>2015</year>;<volume>29</volume>(<issue>12</issue>):<fpage>1329</fpage>&#8211;<lpage>1333</lpage>.<pub-id pub-id-type="pmid">26414353</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0037">
+        <label>[37]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Miura</surname>
+<given-names>S</given-names></string-name>, <string-name><surname>Kobayashi</surname>
+<given-names>Y</given-names></string-name>, <string-name><surname>Kawamura</surname>
+<given-names>K</given-names></string-name>, et al</person-group>. <article-title>Brain activation in parietal area during manipulation with a surgical robot simulator</article-title>. <source>Int J Comput Assist Radiol Surg</source>. <year>2015</year>;<volume>10</volume>(<issue>6</issue>):<fpage>783</fpage>&#8211;<lpage>790</lpage>.<pub-id pub-id-type="pmid">25847665</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0038">
+        <label>[38]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Morris</surname>
+<given-names>MC</given-names></string-name>, <string-name><surname>Frodl</surname>
+<given-names>T</given-names></string-name>, <string-name><surname>D&#8217;Souza</surname>
+<given-names>A</given-names></string-name>, et al</person-group>. <article-title>Assessment of competence in surgical skills using functional magnetic resonance imaging: a feasibility study</article-title>. <source>J Surg Educ</source>. <year>2015</year>;<volume>72</volume>(<issue>2</issue>):<fpage>198</fpage>&#8211;<lpage>204</lpage>.<pub-id pub-id-type="pmid">25439177</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0039">
+        <label>[39]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Andreu-Perez</surname>
+<given-names>J</given-names></string-name></person-group>, Leff DR, Shetty K, et al. <article-title>Disparity in frontal lobe connectivity on a complex bimanual motor task aids in classification of operator skill level</article-title>. <source>Brain Connect</source>. <year>2016</year>;<volume>6</volume>(<issue>5</issue>):<fpage>375</fpage>&#8211;<lpage>388</lpage>.<pub-id pub-id-type="pmid">26899241</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0040">
+        <label>[40]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Bernier</surname>
+<given-names>M</given-names></string-name></person-group>, Gauvreau C, Theriault D, et al. <article-title>Increased BOLD activation in the left parahippocampal cortex after 1 year of medical school: an association with cumulative verbal memory learning</article-title>. <source>Neuroreport</source>. <year>2016</year>;<volume>27</volume>(<issue>1</issue>):<fpage>45</fpage>&#8211;<lpage>49</lpage>.<pub-id pub-id-type="pmid">26606418</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0041">
+        <label>[41]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Brod</surname>
+<given-names>G</given-names></string-name>, <string-name><surname>Lindenberger</surname>
+<given-names>U</given-names></string-name>, <string-name><surname>Wagner</surname>
+<given-names>AD</given-names></string-name>, et al</person-group>. <article-title>Knowledge acquisition during exam preparation improves memory and modulates memory formation</article-title>. <source>J Neurosci</source>. <year>2016</year>;<volume>36</volume>(<issue>31</issue>):<fpage>8103</fpage>&#8211;<lpage>8111</lpage>.<pub-id pub-id-type="pmid">27488631</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0042">
+        <label>[42]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Chang</surname>
+<given-names>HJ</given-names></string-name>, <string-name><surname>Kang</surname>
+<given-names>J</given-names></string-name>, <string-name><surname>Ham</surname>
+<given-names>B-J</given-names></string-name>, et al</person-group>. <article-title>A functional neuroimaging study of the clinical reasoning of medical students</article-title>. <source>Adv Health Sci Educ Theory Pract</source>. <year>2016</year>;<volume>21</volume>(<issue>5</issue>):<fpage>969</fpage>&#8211;<lpage>982</lpage>.<pub-id pub-id-type="pmid">27230543</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0043">
+        <label>[43]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Crewther</surname>
+<given-names>BT</given-names></string-name>, <string-name><surname>Shetty</surname>
+<given-names>K</given-names></string-name>, <string-name><surname>Jarchi</surname>
+<given-names>D</given-names></string-name>, et al</person-group>. <article-title>Skill acquisition and stress adaptations following laparoscopic surgery training and detraining in novice surgeons</article-title>. <source>Surg Endosc</source>. <year>2016</year>;<volume>30</volume>(<issue>7</issue>):<fpage>2961</fpage>&#8211;<lpage>2968</lpage>.<pub-id pub-id-type="pmid">26487239</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0044">
+        <label>[44]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>de Andrade</surname>
+<given-names>AP</given-names></string-name>, <string-name><surname>Amaro</surname>
+<given-names>E</given-names></string-name>, <string-name><surname>Farhat</surname>
+<given-names>SCL</given-names></string-name>, et al</person-group>. <article-title>Higher burnout scores in paediatric residents are associated with increased brain activity during attentional functional magnetic resonance imaging task</article-title>. <source>Acta Paediatr</source>. <year>2016</year>;<volume>105</volume>(<issue>6</issue>):<fpage>705</fpage>&#8211;<lpage>713</lpage>.<pub-id pub-id-type="pmid">26896193</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0045">
+        <label>[45]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Durning</surname>
+<given-names>SJ</given-names></string-name>, <string-name><surname>Costanzo</surname>
+<given-names>ME</given-names></string-name>, <string-name><surname>Beckman</surname>
+<given-names>TJ</given-names></string-name>, et al</person-group>. <article-title>Functional neuroimaging correlates of thinking flexibility and knowledge structure in memory: exploring the relationships between clinical reasoning and diagnostic thinking</article-title>. <source>Med Teach</source>. <year>2016</year>;<volume>38</volume>(<issue>6</issue>):<fpage>570</fpage>&#8211;<lpage>577</lpage>.<pub-id pub-id-type="pmid">26079668</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0046">
+        <label>[46]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Hruska</surname>
+<given-names>P</given-names></string-name>, <string-name><surname>Hecker</surname>
+<given-names>KG</given-names></string-name>, <string-name><surname>Coderre</surname>
+<given-names>S</given-names></string-name>, et al</person-group>. <article-title>Hemispheric activation differences in novice and expert clinicians during clinical decision making</article-title>. <source>Adv Health Sci Educ Theory Pract</source>. <year>2016</year>;<volume>21</volume>(<issue>5</issue>):<fpage>921</fpage>&#8211;<lpage>933</lpage>.<pub-id pub-id-type="pmid">26530736</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0047">
+        <label>[47]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Hruska</surname>
+<given-names>P</given-names></string-name>, <string-name><surname>Krigolson</surname>
+<given-names>O</given-names></string-name>, <string-name><surname>Coderre</surname>
+<given-names>S</given-names></string-name>, et al</person-group>. <article-title>Working memory, reasoning, and expertise in medicine&#8212;insights into their relationship using functional neuroimaging</article-title>. <source>Adv Health Sci Educ</source>. <year>2016</year>;<volume>21</volume>(<issue>5</issue>):<fpage>935</fpage>&#8211;<lpage>952</lpage>.</mixed-citation>
+      </ref>
+      <ref id="cit0048">
+        <label>[48]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Hussein</surname>
+<given-names>AA</given-names></string-name></person-group>, Shafiei SB, Sharif M, et al. <article-title>Technical mentorship during robot-assisted surgery: a cognitive analysis</article-title>. <source>BJU Int</source>. <year>2016</year>;<volume>118</volume>(<issue>3</issue>):<fpage>429</fpage>&#8211;<lpage>436</lpage>.<pub-id pub-id-type="pmid">26864145</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0049">
+        <label>[49]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Mazur</surname>
+<given-names>LM</given-names></string-name></person-group>, Mosaly PR, Moore C, et al. <article-title>Toward a better understanding of task demands, workload, and performance during physician-computer interactions</article-title>. <source>J Am Med Inform Assoc</source>. <year>2016</year>;<volume>23</volume>(<issue>6</issue>):<fpage>1113</fpage>&#8211;<lpage>1120</lpage>.<pub-id pub-id-type="pmid">27026617</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0050">
+        <label>[50]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Rourke</surname>
+<given-names>L</given-names></string-name>, <string-name><surname>Cruikshank</surname>
+<given-names>LC</given-names></string-name>, <string-name><surname>Shapke</surname>
+<given-names>L</given-names></string-name>, et al</person-group>. <article-title>A neural marker of medical visual expertise: implications for training</article-title>. <source>Adv Health Sci Educ Theory Pract</source>. <year>2016</year>;<volume>21</volume>(<issue>5</issue>):<fpage>953</fpage>&#8211;<lpage>966</lpage>.<pub-id pub-id-type="pmid">27663867</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0051">
+        <label>[51]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Shetty</surname>
+<given-names>K</given-names></string-name>, <string-name><surname>Leff</surname>
+<given-names>DR</given-names></string-name>, <string-name><surname>Orihuela-Espina</surname>
+<given-names>F</given-names></string-name>, et al</person-group>. <article-title>Persistent prefrontal engagement despite improvements in laparoscopic technical skill</article-title>. <source>JAMA Surg</source>. <year>2016</year>;<volume>151</volume>(<issue>7</issue>):<fpage>682</fpage>&#8211;<lpage>684</lpage>.<pub-id pub-id-type="pmid">27028901</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0052">
+        <label>[52]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Leff</surname>
+<given-names>DR</given-names></string-name>, <string-name><surname>Yongue</surname>
+<given-names>G</given-names></string-name>, <string-name><surname>Vlaev</surname>
+<given-names>I</given-names></string-name>, et al</person-group>. <article-title>&#8220;Contemplating the next maneuver&#8221;: functional neuroimaging reveals intraoperative decision-making strategies</article-title>. <source>Ann Surg</source>. <year>2017</year>;<volume>265</volume>(<issue>2</issue>):<fpage>320</fpage>&#8211;<lpage>330</lpage>.<pub-id pub-id-type="pmid">28059960</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0053">
+        <label>[53]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Mazur</surname>
+<given-names>LM</given-names></string-name>, <string-name><surname>Campbell</surname>
+<given-names>A</given-names></string-name>, <string-name><surname>Comitz</surname>
+<given-names>E</given-names></string-name>, et al</person-group>. <article-title>Positive effects of neurofeedback intervention on radiation oncology physicians&#8217; workload during go/no-go performance test</article-title>. <source>Le travail humain</source>. <year>2017</year>;<volume>80</volume>(<issue>1</issue>):<fpage>113</fpage>&#8211;<lpage>132</lpage>.</mixed-citation>
+      </ref>
+      <ref id="cit0054">
+        <label>[54]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Nishida</surname>
+<given-names>M</given-names></string-name>, <string-name><surname>Kikuchi</surname>
+<given-names>S</given-names></string-name>, <string-name><surname>Miwakeichi</surname>
+<given-names>F</given-names></string-name>, et al</person-group>. <article-title>Night duty and decreased brain activity of medical residents: a wearable optical topography study</article-title>. <source>Med Educ Online</source>. <year>2017</year>;<volume>22</volume>(<issue>1</issue>):<fpage>1379345</fpage>.<pub-id pub-id-type="pmid">28954586</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0055">
+        <label>[55]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Shewokis</surname>
+<given-names>PA</given-names></string-name></person-group>, Shariff FU, Liu Y, et al. <article-title>Acquisition, retention and transfer of simulated laparoscopic tasks using fNIR and a contextual interference paradigm</article-title>. <source>Am J Surg</source>. <year>2017</year>;<volume>213</volume>(<issue>2</issue>):<fpage>336</fpage>&#8211;<lpage>345</lpage>.<pub-id pub-id-type="pmid">28041606</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0056">
+        <label>[56]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Modi</surname>
+<given-names>HN</given-names></string-name></person-group>, Singh H, Orihuela-Espina F, et al. <article-title>Temporal stress in the operating room: brain engagement promotes &#8220;Coping&#8221; and disengagement prompts &#8220;Choking&#8221;</article-title>. <source>Ann Surg</source>. <year>2018</year>;<volume>267</volume>(<issue>4</issue>):<fpage>683</fpage>&#8211;<lpage>691</lpage>.<pub-id pub-id-type="pmid">28489681</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0057">
+        <label>[57]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Ndaro</surname>
+<given-names>NZ</given-names></string-name>, <string-name><surname>Wang</surname>
+<given-names>SY</given-names></string-name></person-group>. <article-title>Effects of fatigue based on electroencephalography signal during laparoscopic surgical simulation</article-title>. <source>Minim Invasive Surg</source>. <year>2018</year>;<volume>2018</volume>:<fpage>2389158</fpage>.<pub-id pub-id-type="pmid">29854453</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0058">
+        <label>[58]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Shafiei</surname>
+<given-names>SB</given-names></string-name>, <string-name><surname>Hussein</surname>
+<given-names>AA</given-names></string-name>, <string-name><surname>Muldoon</surname>
+<given-names>SF</given-names></string-name>, et al</person-group>. <article-title>Functional brain states measure mentor-trainee trust during robot-assisted surgery</article-title>. <source>Sci Rep</source>. <year>2018</year>;<volume>8</volume>(<issue>1</issue>):<fpage>3667</fpage>.<pub-id pub-id-type="pmid">29483564</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0059">
+        <label>[59]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Turk</surname>
+<given-names>KW</given-names></string-name>, <string-name><surname>Elshaar</surname>
+<given-names>AA</given-names></string-name>, <string-name><surname>Deason</surname>
+<given-names>RG</given-names></string-name>, et al</person-group>. <article-title>Late positive component event-related potential amplitude predicts long-term classroom-based learning</article-title>. <source>J Cogn Neurosci</source>. <year>2018</year>;<volume>30</volume>(<issue>9</issue>):<fpage>1323</fpage>&#8211;<lpage>1329</lpage>.<pub-id pub-id-type="pmid">29791297</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0060">
+        <label>[60]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Xu</surname>
+<given-names>YY</given-names></string-name>, <string-name><surname>Feng</surname>
+<given-names>Z-Q</given-names></string-name>, <string-name><surname>Xie</surname>
+<given-names>Y-J</given-names></string-name>, et al</person-group>. <article-title>Frontal alpha EEG asymmetry before and after positive psychological interventions for medical students</article-title>. <source>Front Psychiatry</source>. <year>2018</year>;<volume>9</volume>:<fpage>432</fpage>.<pub-id pub-id-type="pmid">30254589</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0061">
+        <label>[61]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Aksoy</surname>
+<given-names>E</given-names></string-name></person-group>, Izzetoglu K, Baysoy E, et al. <article-title>performance monitoring via functional near infrared spectroscopy for virtual reality based basic life support training</article-title>. <source>Front Neurosci</source>. <year>2019</year>;<volume>13</volume>:<fpage>1336</fpage>.<pub-id pub-id-type="pmid">31920503</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0062">
+        <label>[62]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Anderson</surname>
+<given-names>SJ</given-names></string-name></person-group>, Jamniczky HA, Krigolson OE, et al. <article-title>Quantifying two-dimensional and three-dimensional stereoscopic learning in anatomy using electroencephalography</article-title>. <source>NPJ Sci Learn</source>. <year>2019</year>;<volume>4</volume>(<issue>1</issue>):<fpage>10</fpage>.<pub-id pub-id-type="pmid">31341638</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0063">
+        <label>[63]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Ciechanski</surname>
+<given-names>P</given-names></string-name>, <string-name><surname>Kirton</surname>
+<given-names>A</given-names></string-name>, <string-name><surname>Wilson</surname>
+<given-names>B</given-names></string-name>, et al</person-group>. <article-title>Electroencephalography correlates of transcranial direct-current stimulation enhanced surgical skill learning: a replication and extension study</article-title>. <source>Brain Res</source>. <year>2019</year>;<volume>1725</volume>:<fpage>146445</fpage>.<pub-id pub-id-type="pmid">31520611</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0064">
+        <label>[64]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Karabanov</surname>
+<given-names>AN</given-names></string-name>, <string-name><surname>Irmen</surname>
+<given-names>F</given-names></string-name>, <string-name><surname>Madsen</surname>
+<given-names>KH</given-names></string-name>, et al</person-group>. <article-title>Getting to grips with endoscopy - learning endoscopic surgical skills induces bi-hemispheric plasticity of the grasping network</article-title>. <source>Neuroimage</source>. <year>2019</year>;<volume>189</volume>:<fpage>32</fpage>&#8211;<lpage>44</lpage>.<pub-id pub-id-type="pmid">30583066</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0065">
+        <label>[65]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Modi</surname>
+<given-names>HN</given-names></string-name>, <string-name><surname>Singh</surname>
+<given-names>H</given-names></string-name>, <string-name><surname>Fiorentino</surname>
+<given-names>F</given-names></string-name>, et al</person-group>. <article-title>Association of residents&#8217; neural signatures with stress resilience during surgery</article-title>. <source>JAMA Surg</source>. <year>2019</year>;<volume>154</volume>(<issue>10</issue>):<fpage>e192552</fpage>.<pub-id pub-id-type="pmid">31389994</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0066">
+        <label>[66]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Morales</surname>
+<given-names>JM</given-names></string-name>, <string-name><surname>Ruiz-Rabelo</surname>
+<given-names>JF</given-names></string-name>, <string-name><surname>Diaz-Piedra</surname>
+<given-names>C</given-names></string-name>, et al</person-group>. <article-title>Detecting mental workload in surgical teams using a wearable single-channel electroencephalographic device</article-title>. <source>J Surg Educ</source>. <year>2019</year>;<volume>76</volume>(<issue>4</issue>):<fpage>1107</fpage>&#8211;<lpage>1115</lpage>.<pub-id pub-id-type="pmid">30691989</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0067">
+        <label>[67]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Nemani</surname>
+<given-names>A</given-names></string-name>, <string-name><surname>Kruger</surname>
+<given-names>U</given-names></string-name>, <string-name><surname>Cooper</surname>
+<given-names>CA</given-names></string-name>, et al</person-group>. <article-title>Objective assessment of surgical skill transfer using non-invasive brain imaging</article-title>. <source>Surg Endosc</source>. <year>2019</year>;<volume>33</volume>(<issue>8</issue>):<fpage>2485</fpage>&#8211;<lpage>2494</lpage>.<pub-id pub-id-type="pmid">30334166</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0068">
+        <label>[68]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Rotgans</surname>
+<given-names>JI</given-names></string-name></person-group>, Schmidt HG, Rosby LV, et al. <article-title>Evidence supporting dual-process theory of medical diagnosis: a functional near-infrared spectroscopy study</article-title>. <source>Med Educ</source>. <year>2019</year>;<volume>53</volume>(<issue>2</issue>):<fpage>143</fpage>&#8211;<lpage>152</lpage>.<pub-id pub-id-type="pmid">30417416</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0069">
+        <label>[69]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Xu</surname>
+<given-names>J</given-names></string-name>, <string-name><surname>Slagle</surname>
+<given-names>JM</given-names></string-name>, <string-name><surname>Banerjee</surname>
+<given-names>A</given-names></string-name>, et al</person-group>. <article-title>Use of a portable functional near-infrared spectroscopy (fnirs) system to examine team experience during crisis event management in clinical simulations</article-title>. <source>Front Hum Neurosci</source>. <year>2019</year>;<volume>13</volume>:<fpage>85</fpage>.<pub-id pub-id-type="pmid">30890926</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0070">
+        <label>[70]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Garbens</surname>
+<given-names>A</given-names></string-name>, <string-name><surname>Armstrong</surname>
+<given-names>BA</given-names></string-name>, <string-name><surname>Louridas</surname>
+<given-names>M</given-names></string-name>, et al</person-group>. <article-title>Brain activation during laparoscopic tasks in high- and low-performing medical students: a pilot fMRI study</article-title>. <source>Surg Endosc</source>. <year>2020</year>;<volume>34</volume>(<issue>11</issue>):<fpage>4837</fpage>&#8211;<lpage>4845</lpage>.<pub-id pub-id-type="pmid">31754848</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0071">
+        <label>[71]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Khoe</surname>
+<given-names>HCH</given-names></string-name></person-group>, Low JW, Wijerathne S, et al. <article-title>Use of prefrontal cortex activity as a measure of learning curve in surgical novices: results of a single blind randomised controlled trial</article-title>. <source>Surg Endosc</source>. <year>2020</year>;<volume>34</volume>(<issue>12</issue>):<fpage>5604</fpage>&#8211;<lpage>5615</lpage>.<pub-id pub-id-type="pmid">31953730</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0072">
+        <label>[72]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Pelizzo</surname>
+<given-names>G</given-names></string-name>, <string-name><surname>Cardinali</surname>
+<given-names>L</given-names></string-name>, <string-name><surname>Bonanno</surname>
+<given-names>L</given-names></string-name>, et al</person-group>. <article-title>Training skills in minimally invasive, robotic and open surgery: brain activation as an opportunity for learning</article-title>. <source>Eur Surg Res</source>. <year>2020</year>;<volume>61</volume>(<issue>1</issue>):<fpage>34</fpage>&#8211;<lpage>50</lpage>.<pub-id pub-id-type="pmid">32585673</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0073">
+        <label>[73]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Li</surname>
+<given-names>G</given-names></string-name></person-group>, Li H, Pu J, et al. <article-title>Effect of brain alpha oscillation on the performance in laparoscopic skills simulator training</article-title>. <source>Surg Endosc</source>. <year>2021</year>;<volume>35</volume>(<issue>2</issue>):<fpage>584</fpage>&#8211;<lpage>592</lpage>.<pub-id pub-id-type="pmid">32076854</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0074">
+        <label>[74]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Bocci</surname>
+<given-names>T</given-names></string-name>, <string-name><surname>Moretto</surname>
+<given-names>C</given-names></string-name>, <string-name><surname>Tognazzi</surname>
+<given-names>S</given-names></string-name>, et al</person-group>. <article-title>How does a surgeon&#8217;s brain buzz? An EEG coherence study on the interaction between humans and robot</article-title>. <source>Behav Brain Funct</source>. <year>2013</year>;<volume>9</volume>(<issue>1</issue>):<fpage>14</fpage>. <pub-id pub-id-type="doi">10.1186/1744-9081-9-14</pub-id>.<pub-id pub-id-type="pmid">23607324</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0075">
+        <label>[75]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Li</surname>
+<given-names>G</given-names></string-name></person-group>, Li H, Pu J, et al. <article-title>Effect of brain alpha oscillation on the performance in laparoscopic skills simulator training</article-title>. <source>Surg Endosc</source>. <year>2020</year>.</mixed-citation>
+      </ref>
+      <ref id="cit0076">
+        <label>[76]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Pelizzo</surname>
+<given-names>G</given-names></string-name></person-group>, Cardinali L, Bonanno L, et al. <article-title>Training skills in minimally invasive, robotic and open surgery: brain activation as an opportunity for learning</article-title>. <source>Eur Surg Res</source>. <year>2020</year>;<fpage>1</fpage>&#8211;<lpage>16</lpage>.<pub-id pub-id-type="pmid">32353852</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0077">
+        <label>[77]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Cox</surname>
+<given-names>RW</given-names></string-name></person-group>. <article-title>AFNI: software for analysis and visualization of functional magnetic resonance neuroimages</article-title>. <source>Comp Biomed Res</source>. <year>1996</year>;<volume>29</volume>(<issue>3</issue>):<fpage>162</fpage>&#8211;<lpage>173</lpage>.</mixed-citation>
+      </ref>
+      <ref id="cit0078">
+        <label>[78]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Woolrich</surname>
+<given-names>MW</given-names></string-name>, <string-name><surname>Ripley</surname>
+<given-names>BD</given-names></string-name>, <string-name><surname>Brady</surname>
+<given-names>M</given-names></string-name>, et al</person-group>. <article-title>Temporal autocorrelation in univariate linear modeling of FMRI data</article-title>. <source>Neuroimage</source>. <year>2001</year>;<volume>14</volume>(<issue>6</issue>):<fpage>1370</fpage>&#8211;<lpage>1386</lpage>.<pub-id pub-id-type="pmid">11707093</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0079">
+        <label>[79]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Woolrich</surname>
+<given-names>MW</given-names></string-name>, <string-name><surname>Behrens</surname>
+<given-names>TEJ</given-names></string-name>, <string-name><surname>Beckmann</surname>
+<given-names>CF</given-names></string-name>, et al</person-group>. <article-title>Multilevel linear modelling for FMRI group analysis using Bayesian inference</article-title>. <source>Neuroimage</source>. <year>2004</year>;<volume>21</volume>(<issue>4</issue>):<fpage>1732</fpage>&#8211;<lpage>1747</lpage>.<pub-id pub-id-type="pmid">15050594</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0080">
+        <label>[80]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Jenkinson</surname>
+<given-names>M</given-names></string-name>, <string-name><surname>Bannister</surname>
+<given-names>P</given-names></string-name>, <string-name><surname>Brady</surname>
+<given-names>M</given-names></string-name>, et al</person-group>. <article-title>Improved optimization for the robust and accurate linear registration and motion correction of brain images</article-title>. <source>Neuroimage</source>. <year>2002</year>;<volume>17</volume>(<issue>2</issue>):<fpage>825</fpage>&#8211;<lpage>841</lpage>.<pub-id pub-id-type="pmid">12377157</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0081">
+        <label>[81]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Huppert</surname>
+<given-names>TJ</given-names></string-name>, <string-name><surname>Diamond</surname>
+<given-names>SG</given-names></string-name>, <string-name><surname>Franceschini</surname>
+<given-names>MA</given-names></string-name>, et al</person-group>. <article-title>HomER: a review of time-series analysis methods for near-infrared spectroscopy of the brain</article-title>. <source>Appl Opt</source>. <year>2009</year>;<volume>48</volume>(<issue>10</issue>):<fpage>D280</fpage>&#8211;<lpage>D298</lpage>.<pub-id pub-id-type="pmid">19340120</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0082">
+        <label>[82]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Koh</surname>
+<given-names>PH</given-names></string-name>, <string-name><surname>Glaser</surname>
+<given-names>DE</given-names></string-name>, <string-name><surname>Flandin</surname>
+<given-names>G</given-names></string-name>, et al</person-group>. <article-title>Functional optical signal analysis: a software tool for near-infrared spectroscopy data processing incorporating statistical parametric mapping</article-title>. <source>J Biomed Opt</source>. <year>2007</year>;<volume>12</volume>(<issue>6</issue>):<fpage>64010</fpage>.</mixed-citation>
+      </ref>
+      <ref id="cit0083">
+        <label>[83]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Orihuela-Espina</surname>
+<given-names>F</given-names></string-name></person-group>, Leff DR, James DA, et al. <article-title>ICNA: a software tool for manifold embedded based analysis of functional near infrared spectroscopy data</article-title>. <source>Neuroimage</source>. <year>2009</year>;<volume>47</volume>(<issue>47</issue>):<fpage>S59</fpage>.</mixed-citation>
+      </ref>
+      <ref id="cit0084">
+        <label>[84]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Orihuela-Espina</surname>
+<given-names>F</given-names></string-name>, <string-name><surname>Leff</surname>
+<given-names>DR</given-names></string-name>, <string-name><surname>James</surname>
+<given-names>DRC</given-names></string-name>, et al</person-group>. <article-title>Imperial college near infrared spectroscopy neuroimaging analysis framework</article-title>. <source>Neurophotonics</source>. <year>2017</year>;<volume>5</volume>(<issue>1</issue>):<fpage>11011</fpage>.</mixed-citation>
+      </ref>
+      <ref id="cit0085">
+        <label>[85]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Delorme</surname>
+<given-names>A</given-names></string-name>, <string-name><surname>Makeig</surname>
+<given-names>S</given-names></string-name></person-group>. <article-title>EEGLAB: an open source toolbox for analysis of single-trial EEG dynamics including independent component analysis</article-title>. <source>J Neurosci Methods</source>. <year>2004</year>;<volume>134</volume>(<issue>1</issue>):<fpage>9</fpage>&#8211;<lpage>21</lpage>.<pub-id pub-id-type="pmid">15102499</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0086">
+        <label>[86]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Glover</surname>
+<given-names>GH</given-names></string-name></person-group>. <article-title>Overview of functional magnetic resonance imaging</article-title>. <source>Neurosurg Clinics</source>. <year>2011</year>;<volume>22</volume>(<issue>2</issue>):<fpage>133</fpage>&#8211;<lpage>139</lpage>.</mixed-citation>
+      </ref>
+      <ref id="cit0087">
+        <label>[87]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Smith</surname>
+<given-names>EE</given-names></string-name>, <string-name><surname>Jonides</surname>
+<given-names>J</given-names></string-name></person-group>. <article-title>Storage and executive processes in the frontal lobes</article-title>. <source>Science</source>. <year>1999</year>;<volume>283</volume>(<issue>5408</issue>):<fpage>1657</fpage>&#8211;<lpage>1661</lpage>.<pub-id pub-id-type="pmid">10073923</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0088">
+        <label>[88]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Neubauer</surname>
+<given-names>AC</given-names></string-name>, <string-name><surname>Fink</surname>
+<given-names>A</given-names></string-name></person-group>. <article-title>Intelligence and neural efficiency</article-title>. <source>Neurosci Biobehav Rev</source>. <year>2009</year>;<volume>33</volume>(<issue>7</issue>):<fpage>1004</fpage>&#8211;<lpage>1023</lpage>.<pub-id pub-id-type="pmid">19580915</pub-id></mixed-citation>
+      </ref>
+      <ref id="cit0089">
+        <label>[89]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Kahneman</surname>
+<given-names>D</given-names></string-name>, <string-name><surname>Frederick</surname>
+<given-names>S</given-names></string-name></person-group>. <article-title>Representativeness revisited: attribute substitution in intuitive judgment</article-title>. <source>Heuristics and biases: the psychology of intuitive judgment</source>. <year>2002</year>;<volume>49</volume>:<fpage>81</fpage>.</mixed-citation>
+      </ref>
+      <ref id="cit0090">
+        <label>[90]</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Pusic</surname>
+<given-names>MV</given-names></string-name>, <string-name><surname>Boutis</surname>
+<given-names>K</given-names></string-name>, <string-name><surname>Pecaric</surname>
+<given-names>MR</given-names></string-name>, et al</person-group>. <article-title>A primer on the statistical modelling of learning curves in health professions education</article-title>. <source>Adv Health Sci Educ</source>. <year>2017</year>;<volume>22</volume>(<issue>3</issue>):<fpage>741</fpage>&#8211;<lpage>759</lpage>.</mixed-citation>
+      </ref>
+    </ref-list>
+    <app-group>
+      <app id="app0001">
+        <label>AppendicesAppendix 1- Search Strategy conducted on 4/4/2019 and updated on 7/7/2020</label>
+        <p>
+<table-wrap position="anchor" id="ut0001"><!--OASIS TABLE HERE--><table frame="hsides" rules="groups"><colgroup><col width="1*" align="left"/><col width="1*" align="left"/></colgroup><tbody><tr><td align="left">
+<bold>PubMed</bold>
+</td><td align="left">&#160;</td></tr><tr><td align="left">#1</td><td align="left">(&#8216;Neuroimaging&#8217;[Mesh] OR &#8216;Electroencephalography&#8217;[Mesh] OR FMRI[tiab] OR EEG[tiab] OR ERP[tiab] OR fnirs[tiab] OR neuroimag*[tiab] OR &#8216;brain imaging&#8217;[tiab] OR &#8216;functional mri&#8217;[tiab] OR &#8216;functional magnetic resonance spectroscopy&#8217;[tiab] OR electroencephalography[tiab] OR &#8216;event related potentials&#8217;[tiab] OR &#8216;functional neuroimaging&#8217;[tiab] OR &#8216;Functional near infrared spectroscopy&#8217;[tiab])</td></tr><tr><td align="left">
+<sub>#2</sub>
+</td><td align="left">(&#8216;Clinical Competence&#8217;[Mesh] OR &#8216;Psychomotor Performance&#8217;[Mesh] OR &#8216;Burnout, Psychological&#8217;[Mesh] OR &#8216;Burnout, Professional&#8217;[Mesh] OR &#8216;Sleepiness&#8217;[Mesh] OR &#8216;cognitive load&#8217;[tiab] OR clinical skill*[tiab] OR &#8216;clinical expertise&#8217;[tiab] OR &#8216;skills learning&#8217;[tiab] OR &#8216;skill acquisition&#8217;[tiab] OR surgical skill*[tiab] OR &#8216;clinical reasoning&#8217;[tiab] OR psychomotor skill*[tiab] OR procedural skill*[tiab] OR technical skill*[tiab] OR &#8216;diagnostic thinking&#8217;[tiab] OR &#8216;diagnostic reasoning&#8217;[tiab] OR &#8216;visual expertise&#8217;[tiab] OR burnout[tiab] OR sleepiness[tiab] OR fatigue[tiab] OR performance[tiab] OR competenc*[tiab] OR &#8216;mental workload&#8217;[tiab] OR memory[tiab] OR &#8216;problem solving&#8217;[tiab] OR medical error*[tiab] OR &#8216;patient safety&#8217;[tiab])</td></tr><tr><td align="left">#3</td><td align="left">(&#8216;Surgeons&#8217;[MeSH] OR &#8216;Physicians&#8217;[MeSH] OR &#8216;Students, Medical&#8217;[Mesh] OR &#8216;Internship and Residency&#8217;[Mesh] OR &#8216;Clinical Clerkship&#8217;[Mesh] OR &#8216;premedical&#8217;[tiab] OR &#8216;pre-medical&#8217;[tiab] OR &#8216;clinical clerkship&#8217;[tiab] OR &#8216;resident&#8217;[tiab] OR &#8216;residents&#8217;[tiab] OR &#8216;residency&#8217;[tiab] OR PGY*[tiab] OR &#8216;post graduate year&#8217;[tiab] OR &#8216;postgraduate year&#8217;[tiab] OR &#8216;trainee&#8217;[tiab] OR &#8216;intern&#8217;[tiab] OR &#8216;</td></tr><tr><td align="left">#4</td><td align="left">(&#8216;Education, Medical&#8217;[Mesh] OR &#8216;Education&#8217;[Mesh] OR educate[tiab] or education[tiab] OR educated[tiab] OR educational[tiab] OR curricula*[tiab] OR curriculum[tiab] OR train*[tiab] OR teach*[tiab] OR instruct*[tiab] OR mentor*[tiab] OR program*[tiab] OR pedagog*[tiab] OR workshop*[tiab] OR initiative*[tiab] OR seminar*[tiab] OR electives[tiab] OR &#8216;CME&#8217;[tiab] OR &#8216;faculty development&#8217;[tiab])</td></tr><tr><td align="left">#5</td><td align="left">#1 AND #2 AND #3 AND #4</td></tr><tr><td align="left">
+<bold>Cochrane</bold>
+</td><td align="left">&#160;</td></tr><tr><td align="left">#1</td><td align="left">(&#8216;Neuroimaging&#8217;[Mesh] OR &#8216;Electroencephalography&#8217;[Mesh] OR FMRI OR EEG OR ERP OR fnirs OR neuroimag* OR &#8216;brain imaging&#8217; OR &#8216;functional mri&#8217; OR &#8216;functional magnetic resonance spectroscopy&#8217; OR electroencephalography OR &#8216;event related potentials&#8217; OR &#8216;functional neuroimaging&#8217; OR &#8216;Functional near infrared spectroscopy&#8217;)</td></tr><tr><td align="left">#2</td><td align="left">(&#8216;Clinical Competence&#8217;[Mesh] OR &#8216;Psychomotor Performance&#8217;[Mesh] OR &#8216;Burnout, Psychological&#8217;[Mesh] OR &#8216;Burnout, Professional&#8217;[Mesh] OR &#8216;Sleepiness&#8217;[Mesh] OR &#8216;cognitive load&#8217; OR clinical skill* OR &#8216;clinical expertise&#8217; OR &#8216;skills learning&#8217; OR &#8216;skill acquisition&#8217; OR surgical skill* OR &#8216;clinical reasoning&#8217; OR psychomotor skill* OR procedural skill* OR technical skill* OR &#8216;diagnostic thinking&#8217; OR &#8216;diagnostic reasoning&#8217; OR &#8216;visual expertise&#8217; OR burnout OR sleepiness OR fatigue OR performance OR competenc* OR &#8216;mental workload&#8217; OR memory OR &#8216;problem solving&#8217; OR medical error* OR &#8216;patient safety&#8217;)</td></tr><tr><td align="left">#3</td><td align="left">(&#8216;Surgeons&#8217;[MeSH] OR &#8216;Physicians&#8217;[MeSH] OR &#8216;Students, Medical&#8217;[Mesh] OR &#8216;Internship and Residency&#8217;[Mesh] OR &#8216;Clinical Clerkship&#8217;[Mesh] OR &#8216;premedical&#8217; OR &#8216;pre-medical&#8217; OR &#8216;clinical clerkship&#8217; OR &#8216;resident&#8217; OR &#8216;residents&#8217; OR &#8216;residency&#8217; OR PGY* OR &#8216;post graduate year&#8217; OR &#8216;postgraduate year&#8217; OR &#8216;trainee&#8217; OR &#8216;intern&#8217; OR &#8216;interns&#8217; OR &#8216;internship&#8217; OR &#8216;house officer&#8217; OR &#8216;house officers&#8217; OR &#8216;houseofficer&#8217; OR &#8216;house staff&#8217; OR &#8216;housestaff&#8217; OR &#8216;fellowship&#8217; OR &#8216;fellow&#8217; OR &#8216;fellows&#8217; OR &#8216;undergraduate medical&#8217; OR &#8216;medical student&#8217; OR &#8216;medical students&#8217; OR &#8216;Schools, Medical&#8217;[Mesh] OR medical school* OR health science* OR clinician* OR surgeon* OR physician OR physicians OR &#8216;health profession&#8217; OR &#8216;health professionals&#8217; OR &#8216;health professions&#8217; OR doctor OR doctors)</td></tr><tr><td align="left">#4</td><td align="left">(&#8216;Education, Medical&#8217;[Mesh] OR &#8216;Education&#8217;[Mesh] OR educate or education OR educated OR educational OR curricula* OR curriculum OR train* OR teach* OR instruct* OR mentor* OR program* OR pedagog* OR workshop* OR initiative* OR seminar* OR electives OR &#8216;CME&#8217; OR &#8216;faculty development&#8217;)</td></tr><tr><td align="left">#5</td><td align="left">#1 AND #2 AND #3 AND #4</td></tr><tr><td align="left">
+<bold>Web of Science</bold>
+</td><td align="left">&#160;</td></tr><tr><td align="left">#1</td><td align="left">TS&#160;=&#160;(FMRI OR EEG OR ERP OR fnirs OR neuroimag* OR &#8216;brain imaging&#8217; OR &#8216;functional mri&#8217; OR &#8216;functional magnetic resonance spectroscopy&#8217; OR electroencephalography OR &#8216;event related potentials&#8217; OR &#8216;functional neuroimaging&#8217; OR &#8216;Functional near infrared spectroscopy&#8217;)</td></tr><tr><td align="left">#2</td><td align="left">TS&#160;=&#160;(&#8216;cognitive load&#8217; OR clinical skill* OR &#8216;clinical expertise&#8217; OR &#8216;skills learning&#8217; OR &#8216;skill acquisition&#8217; OR surgical skill* OR &#8216;clinical reasoning&#8217; OR psychomotor skill* OR procedural skill* OR technical skill* OR &#8216;diagnostic thinking&#8217; OR &#8216;diagnostic reasoning&#8217; OR &#8216;visual expertise&#8217; OR burnout OR sleepiness OR fatigue OR performance OR competenc* OR &#8216;mental workload&#8217; OR memory OR &#8216;problem solving&#8217; OR medical error* OR &#8216;patient safety&#8217;)</td></tr><tr><td align="left">#3</td><td align="left">TS&#160;=&#160;(&#8216;premedical&#8217; OR &#8216;pre-medical&#8217; OR &#8216;clinical clerkship&#8217; OR &#8216;resident&#8217; OR &#8216;residents&#8217; OR &#8216;residency&#8217; OR PGY* OR &#8216;post graduate year&#8217; OR &#8216;postgraduate year&#8217; OR &#8216;trainee&#8217; OR &#8216;intern&#8217; OR &#8216;interns&#8217; OR &#8216;internship&#8217; OR &#8216;house officer&#8217; OR &#8216;house officers&#8217; OR &#8216;houseofficer&#8217; OR &#8216;house staff&#8217; OR &#8216;housestaff&#8217; OR &#8216;fellowship&#8217; OR &#8216;fellow&#8217; OR &#8216;fellows&#8217; OR &#8216;undergraduate medical&#8217; OR &#8216;medical student&#8217; OR &#8216;medical students&#8217; OR &#8216;medical school*&#8217; OR &#8216;health science*&#8217; OR clinician* OR surgeon* OR physician OR physicians OR &#8216;health profession&#8217; OR &#8216;health professionals&#8217; OR &#8216;health professions&#8217; OR doctor OR doctors)</td></tr><tr><td align="left">#4</td><td align="left">TS&#160;=&#160;(educate OR education OR educated OR educational OR curricula* OR curriculum OR train* OR teach* OR instruct* OR mentor* OR program* OR pedagog* OR workshop* OR initiative* OR seminar* OR electives OR CME OR &#8216;faculty development&#8217;)</td></tr><tr><td align="left">#5</td><td align="left">#1 AND #2 AND #3 AND #4</td></tr><tr><td align="left">
+<bold>Embase</bold>
+</td><td align="left">&#160;</td></tr><tr><td align="left">#1</td><td align="left">&#8216;neuroimaging&#8217;/exp OR &#8216;electroencephalography&#8217;/exp OR (FMRI OR EEG OR ERP OR fnirs OR neuroimag* OR &#8216;brain imaging&#8217; OR &#8216;functional mri&#8217; OR &#8216;functional magnetic resonance spectroscopy&#8217; OR electroencephalography OR &#8216;event related potentials&#8217; OR &#8216;functional neuroimaging&#8217; OR &#8216;Functional near infrared spectroscopy&#8217;):ti,ab</td></tr><tr><td align="left">#2</td><td align="left">&#8216;clinical competence&#8217;/exp OR &#8216;psychomotor performance&#8217;/exp OR &#8216;burnout&#8217;/exp OR (&#8216;cognitive load&#8217; OR &#8216;clinical skill*&#8217; OR &#8216;clinical expertise&#8217; OR &#8216;skills learning&#8217; OR &#8216;skill acquisition&#8217; OR &#8216;surgical skill*&#8217; OR &#8216;clinical reasoning&#8217; OR &#8216;psychomotor skill*&#8217; OR &#8216;procedural skill*&#8217; OR &#8216;technical skill*&#8217; OR &#8216;diagnostic thinking&#8217; OR &#8216;diagnostic reasoning&#8217; OR &#8216;visual expertise&#8217; OR burnout OR sleepiness OR fatigue OR performance OR competenc* OR &#8216;mental workload&#8217; OR memory OR &#8216;problem solving&#8217; OR &#8216;medical error*&#8217; OR &#8216;patient safety&#8217;):ti,ab</td></tr><tr><td align="left">#3</td><td align="left">&#8216;medical education&#8217;/exp OR &#8216;surgeon&#8217;/exp OR &#8216;physician&#8217;/exp OR &#8216;health student&#8217;/exp OR &#8216;resident&#8217;/exp OR (premedical OR pre-medical OR &#8216;clinical clerkship&#8217; OR resident OR residents OR residency OR PGY* OR &#8216;post graduate year&#8217; OR &#8216;postgraduate year&#8217; OR trainee OR intern OR interns OR internship OR &#8216;house officer&#8217; OR &#8216;house officers&#8217; OR &#8216;houseofficer&#8217; OR &#8216;house staff&#8217; OR housestaff OR fellowship OR fellow OR fellows OR &#8216;undergraduate medical&#8217; OR &#8216;medical student&#8217; OR &#8216;medical students&#8217; OR &#8216;medical school*&#8217; OR &#8216;health science*&#8217; OR clinician* OR surgeon* OR physician OR physicians OR &#8216;health profession&#8217; OR &#8216;health professionals&#8217; OR &#8216;health professions&#8217; OR doctor OR doctors):ti,ab</td></tr><tr><td align="left">#4</td><td align="left">&#8216;medical education&#8217;/exp OR &#8216;education&#8217;/exp OR (educate OR education OR educated OR educational OR curricula* OR curriculum OR train* OR teach* OR instruct* OR mentor* OR program* OR pedagog* OR workshop* OR initiative* OR seminar* OR electives OR CME OR &#8216;faculty development&#8217;):ti,ab</td></tr><tr><td align="left">#5</td><td align="left">#1 AND #2 AND #3 AND #4</td></tr><tr><td align="left">
+<bold>ERIC</bold>
+</td><td align="left">&#160;</td></tr><tr><td align="left">#1</td><td align="left">(FMRI OR EEG OR ERP OR fnirs OR neuroimag* OR &#8216;brain imaging&#8217; OR &#8216;functional mri&#8217; OR &#8216;functional magnetic resonance spectroscopy&#8217; OR electroencephalography OR &#8216;event related potentials&#8217; OR &#8216;functional neuroimaging&#8217; OR &#8216;Functional near infrared spectroscopy&#8217;)</td></tr><tr><td align="left">#2</td><td align="left">(DE &#8216;Medical Evaluation&#8217;) OR (DE &#8216;Psychomotor Skills&#8217;) OR (DE &#8216;Burnout&#8217;) OR &#8216;cognitive load&#8217; OR &#8216;clinical skill*&#8217; OR &#8216;clinical expertise&#8217; OR &#8216;skills learning&#8217; OR &#8216;skill acquisition&#8217; OR &#8216;surgical skill*&#8217; OR &#8216;clinical reasoning&#8217; OR &#8216;psychomotor skill*&#8217; OR &#8216;procedural skill*&#8217; OR &#8216;technical skill*&#8217; OR &#8216;diagnostic thinking&#8217; OR &#8216;diagnostic reasoning&#8217; OR &#8216;visual expertise&#8217; OR burnout OR sleepiness OR fatigue OR performance OR competenc* OR &#8216;mental workload&#8217; OR memory OR &#8216;problem solving&#8217; OR &#8216;medical error*&#8217; OR &#8216;patient safety&#8217;)</td></tr><tr><td align="left">#3</td><td align="left">(DE &#8216;Medical Education&#8217;) OR (DE &#8216;Medical Schools&#8217;) OR (DE &#8216;Physicians&#8217;) OR (DE &#8216;Medical Students&#8217;) OR &#8216;premedical&#8217; OR &#8216;pre-medical&#8217; OR &#8216;clinical clerkship&#8217; OR resident OR residents OR residency OR PGY* OR &#8216;post graduate year&#8217; OR &#8216;postgraduate year&#8217; OR trainee OR intern OR interns OR internship OR &#8216;house officer&#8217; OR &#8216;house officers&#8217; OR houseofficer OR &#8216;house staff&#8217; OR housestaff OR fellowship OR fellow OR fellows OR &#8216;undergraduate medical&#8217; OR &#8216;medical student&#8217; OR &#8216;medical students&#8217; OR &#8216;medical school*&#8217; OR &#8216;health science*&#8217; OR clinician* OR surgeon* OR physician OR physicians OR &#8216;health profession&#8217; OR &#8216;health professionals&#8217; OR &#8216;health professions&#8217; OR doctor OR doctors)</td></tr><tr><td align="left">#4</td><td align="left">(DE &#8216;Medical Education&#8217;) OR (DE &#8216;Education&#8217;) OR educate or education OR educated OR educational OR curricula* OR curriculum OR train* OR teach* OR instruct* OR mentor* OR program* OR pedagog* OR workshop* OR initiative* OR seminar* OR electives OR &#8216;CME&#8217; OR &#8216;faculty development&#8217;)</td></tr><tr><td align="left">#5</td><td align="left">#1 AND #2 AND #3 AND #4</td></tr></tbody></table></table-wrap>
+</p>
+      </app>
+      <app id="app0002">
+        <label>Appendix 2: Summary table for included studies in alphabetical order by first author</label>
+        <p>
+<table-wrap position="anchor" id="ut0002"><!--OASIS TABLE HERE--><table frame="hsides" rules="groups"><colgroup><col width="1*" align="left"/><col width="1*" align="char" char="."/><col width="1*" align="left"/><col width="1*" align="left"/><col width="1*" align="left"/><col width="1*" align="left"/><col width="1*" align="left"/><col width="1*" align="left"/></colgroup><thead><tr><th align="left">Authors</th><th align="center" char=".">Year</th><th align="center">
+<bold>Country</bold>
+</th><th align="center">Primary Author Institution</th><th align="center">Design</th><th align="center">Neuroimaging Modality</th><th align="center">Specialty</th><th align="center">Skill</th></tr></thead><tbody><tr><td align="left">Aggarwal et al.</td><td align="char" char=".">2008</td><td align="left">
+<bold>UK</bold>
+</td><td align="left">Department of Biosurgery &amp; Surgical Technology, Imperial College London</td><td align="left">Review</td><td align="left">N/A</td><td align="left">surgery</td><td align="left">REVIEW<break/>psychomotor skill</td></tr><tr><td align="left">Akimoto et al.</td><td align="char" char=".">2015</td><td align="left">
+<bold>Japan</bold>
+</td><td align="left">Center for Advanced Medical Initiatives, Kyushu University</td><td align="left">Non-experimental</td><td align="left">Other *</td><td align="left">surgery</td><td align="left">psychomotor skill</td></tr><tr><td align="left">Aksoy et al.</td><td align="char" char=".">2019</td><td align="left">
+<bold>Turkey</bold>
+</td><td align="left">Department of Biomedical Device Technology, Ac&#305;badem Mehmet Ali Ayd&#305;nlar University</td><td align="left">Non-experimental</td><td align="left">fNIRS</td><td align="left">healthcare professionals</td><td align="left">psychomotor skill</td></tr><tr><td align="left">Anderson et al.</td><td align="char" char=".">2019</td><td align="left">
+<bold>Canada</bold>
+</td><td align="left">Department of Community Health Sciences, Cumming School of Medicine, University of Calgary</td><td align="left">RCT</td><td align="left">EEG</td><td align="left">health sciences students</td><td align="left">declarative clinical knowledge</td></tr><tr><td align="left">Andreu-Perez et al.</td><td align="char" char=".">2016</td><td align="left">
+<bold>UK</bold>
+</td><td align="left">The Hamlyn Centre, Imperial College London</td><td align="left">Non-experimental</td><td align="left">fNIRS/OT</td><td align="left">surgery</td><td align="left">psychomotor skill</td></tr><tr><td align="left">Bahrami et al.</td><td align="char" char=".">2014</td><td align="left">
+<bold>Canada</bold>
+</td><td align="left">Institute of Biomaterials and Biomedical Engineering, University of Toronto</td><td align="left">Non-experimental</td><td align="left">fMRI</td><td align="left">surgery</td><td align="left">psychomotor skill</td></tr><tr><td align="left">Bahrami et al.</td><td align="char" char=".">2011</td><td align="left">
+<bold>Canada</bold>
+</td><td align="left">Institute of Biomaterials and Biomedical Engineering, University of Toronto, and Keenan Research Centre of the Li Ka Shing Knowledge Institute at St. Michael&#8217;s Hospital, Toronto</td><td align="left">Non-experimental</td><td align="left">fMRI</td><td align="left">surgery</td><td align="left">psychomotor skill</td></tr><tr><td align="left">Bernier et al.</td><td align="char" char=".">2016</td><td align="left">
+<bold>Canada</bold>
+</td><td align="left">Sherbrooke University Hospital Center (CHUS)</td><td align="left">Non-experimental</td><td align="left">fMRI</td><td align="left">medical students</td><td align="left">declarative clinical knowledge</td></tr><tr><td align="left">Bhatt et al.</td><td align="char" char=".">2016</td><td align="left">
+<bold>Ireland</bold>
+</td><td align="left">Department of Surgery, University of Dublin, Trinity College, at the Adelaide and Meath Hospital</td><td align="left">Review</td><td align="left">N/A</td><td align="left">surgery</td><td align="left">REVIEW<break/>effects of aging on surgeons</td></tr><tr><td align="left">Bocci et al.</td><td align="char" char=".">2013</td><td align="left">
+<bold>Italy</bold>
+</td><td align="left">Department of Neuroscience, Unit of Neurology, Pisa University Medical School</td><td align="left">Non-experimental</td><td align="left">EEG</td><td align="left">surgery</td><td align="left">psychomotor skill</td></tr><tr><td align="left">Brod et al.</td><td align="char" char=".">2016</td><td align="left">
+<bold>Germany</bold>
+</td><td align="left">The Center for Lifespan Psychology, Max Planck Institute for Human Development</td><td align="left">Non-experimental</td><td align="left">fMRI</td><td align="left">medical students</td><td align="left">declarative clinical knowledge</td></tr><tr><td align="left">Chang et al.</td><td align="char" char=".">2016</td><td align="left">
+<bold>South Korea</bold>
+</td><td align="left">Department of Medical Humanities, Korea University College of Medicine</td><td align="left">Non-experimental</td><td align="left">fMRI</td><td align="left">medical students</td><td align="left">clinical reasoning</td></tr><tr><td align="left">Ciechanski et al.</td><td align="char" char=".">2019</td><td align="left">
+<bold>Canada</bold>
+</td><td align="left">Faculty of Medicine and Dentistry, University of Alberta</td><td align="left">RCT</td><td align="left">EEG</td><td align="left">surgery</td><td align="left">psychomotor skill</td></tr><tr><td align="left">Crewther et al.</td><td align="char" char=".">2016</td><td align="left">
+<bold>UK</bold>
+</td><td align="left">The Hamlyn Centre for Robotic Surgery, Imperial College London</td><td align="left">Non-experimental</td><td align="left">fNIRS</td><td align="left">surgery</td><td align="left">psychomotor skill</td></tr><tr><td align="left">De Andrade et al.</td><td align="char" char=".">2016</td><td align="left">
+<bold>Brazil</bold>
+</td><td align="left">Faculty of Medicine, Department of Paediatric, University of Sao Paulo</td><td align="left">Non-experimental</td><td align="left">fMRI</td><td align="left">pediatrics</td><td align="left">well-being</td></tr><tr><td align="left">Downar et al.</td><td align="char" char=".">2011</td><td align="left">
+<bold>USA</bold>
+</td><td align="left">Human Neuroimaging Laboratory, Virginia Tech Carilion Research Institute and Department of Physics, Virginia Tech</td><td align="left">Non-experimental</td><td align="left">fMRI</td><td align="left">non-surgical physicians</td><td align="left">clinical reasoning</td></tr><tr><td align="left">Durning et al.</td><td align="char" char=".">2013</td><td align="left">
+<bold>USA</bold>
+</td><td align="left">Department of Medicine, Uniformed Services University of the Health Sciences</td><td align="left">Non-experimental</td><td align="left">fMRI</td><td align="left">internal medicine</td><td align="left">clinical reasoning</td></tr><tr><td align="left">Durning et al.</td><td align="char" char=".">2014</td><td align="left">
+<bold>USA</bold>
+</td><td align="left">Department of Medicine, Uniformed Services University of the Health Sciences</td><td align="left">Non-experimental</td><td align="left">fMRI</td><td align="left">internal medicine</td><td align="left">clinical reasoning</td></tr><tr><td align="left">Durning et al.</td><td align="char" char=".">2015</td><td align="left">
+<bold>USA</bold>
+</td><td align="left">Department of Medicine, Uniformed Services University of the Health Sciences</td><td align="left">Non-experimental</td><td align="left">fMRI</td><td align="left">internal medicine</td><td align="left">clinical reasoning</td></tr><tr><td align="left">Durning et al.</td><td align="char" char=".">2016</td><td align="left">
+<bold>USA</bold>
+</td><td align="left">Department of Medicine, Uniformed Services University of the Health Sciences</td><td align="left">Non-experimental</td><td align="left">fMRI</td><td align="left">internal medicine</td><td align="left">clinical reasoning</td></tr><tr><td align="left">Durning et al.</td><td align="char" char=".">2013</td><td align="left">
+<bold>USA</bold>
+</td><td align="left">Department of Medicine, Uniformed Services University of the Health Sciences</td><td align="left">Non-experimental</td><td align="left">fMRI</td><td align="left">internal medicine</td><td align="left">clinical reasoning</td></tr><tr><td align="left">Durning et al.</td><td align="char" char=".">2012</td><td align="left">
+<bold>USA</bold>
+</td><td align="left">Department of Medicine, Uniformed Services University of the Health Sciences</td><td align="left">Non-experimental</td><td align="left">fMRI</td><td align="left">internal medicine</td><td align="left">clinical reasoning</td></tr><tr><td align="left">Durning et al.</td><td align="char" char=".">2015</td><td align="left">
+<bold>USA</bold>
+</td><td align="left">Department of Medicine, Uniformed Services University of the Health Sciences</td><td align="left">Non-experimental</td><td align="left">fMRI</td><td align="left">internal medicine</td><td align="left">clinical reasoning</td></tr><tr><td align="left">Duty et al.</td><td align="char" char=".">2012</td><td align="left">
+<bold>USA</bold>
+</td><td align="left">Institute for Urology and Center of Neurosciences, Feinstein Institute for Medical Research North Shore&#8211;Long Island Jewish Health System</td><td align="left">Non-experimental</td><td align="left">PET</td><td align="left">surgery</td><td align="left">psychomotor skill</td></tr><tr><td align="left">Garbens et al.</td><td align="char" char=".">2019</td><td align="left">
+<bold>Canada</bold>
+</td><td align="left">Department of Surgery, St. Michael&#8217;s Hospital, University of Toronto</td><td align="left">Non-experimental</td><td align="left">fMRI</td><td align="left">surgery</td><td align="left">psychomotor skill</td></tr><tr><td align="left">Guru et al.</td><td align="char" char=".">2015</td><td align="left">
+<bold>USA</bold>
+</td><td align="left">Department of Urology, Roswell Park Cancer Institute, Brain Computer Interface Laboratory, Department of Mechanical &amp; Aerospace Engineering, University at Buffalo</td><td align="left">Non-experimental</td><td align="left">EEG</td><td align="left">surgery</td><td align="left">psychomotor skill</td></tr><tr><td align="left">Guru et al.</td><td align="char" char=".">2015</td><td align="left">
+<bold>USA</bold>
+</td><td align="left">Department of Urology, Applied Technology Laboratory for Advanced Surgery (ATLAS) Program at Roswell Park Cancer Institute</td><td align="left">Non-experimental</td><td align="left">EEG</td><td align="left">surgery</td><td align="left">psychomotor skill</td></tr><tr><td align="left">Hruska et al.</td><td align="char" char=".">2015</td><td align="left">
+<bold>Canada</bold>
+</td><td align="left">Department of Community Health Sciences, Cumming School of Medicine, University of Calgary</td><td align="left">Non-experimental</td><td align="left">fMRI</td><td align="left">gastroenterology</td><td align="left">diagnostic thinking</td></tr><tr><td align="left">Hruska et al.</td><td align="char" char=".">2015</td><td align="left">
+<bold>Canada</bold>
+</td><td align="left">Department of Community Health Sciences, Cumming School of Medicine, University of Calgary</td><td align="left">Non-experimental</td><td align="left">fMRI</td><td align="left">gastroenterology</td><td align="left">diagnostic thinking</td></tr><tr><td align="left">Hussein et al.</td><td align="char" char=".">2016</td><td align="left">
+<bold>USA</bold>
+</td><td align="left">Applied Technology Laboratory for Advanced Surgery (ATLAS) Program, Roswell Park Cancer Institute, Buffalo</td><td align="left">Non-experimental</td><td align="left">EEG</td><td align="left">surgery</td><td align="left">psychomotor skill</td></tr><tr><td align="left">James et al.</td><td align="char" char=".">2011</td><td align="left">
+<bold>UK</bold>
+</td><td align="left">Department of Surgery and Cancer &amp; Hamlyn Centre for Robotic Surgery, Imperial College</td><td align="left">Non-experimental</td><td align="left">fNIRS</td><td align="left">gastroenterology</td><td align="left">visuospatial skill</td></tr><tr><td align="left">Kahol et al.</td><td align="char" char=".">2011</td><td align="left">
+<bold>USA</bold>
+</td><td align="left">Human Machine Symbiosis Laboratory, School of Biological and Health Systems Engineering, Arizona State University</td><td align="left">Non-experimental</td><td align="left">EEG</td><td align="left">surgery</td><td align="left">psychomotor skill</td></tr><tr><td align="left">Karabanov et al.</td><td align="char" char=".">2019</td><td align="left">
+<bold>Denmark</bold>
+</td><td align="left">Danish Research Centre for Magnetic Resonance, Centre for Functional and Diagnostic Imaging and Research, Copenhagen University Hospital</td><td align="left">RCT</td><td align="left">fMRI</td><td align="left">surgery</td><td align="left">psychomotor skill</td></tr><tr><td align="left">Khoe et al.</td><td align="char" char=".">2020</td><td align="left">
+<bold>Singapore</bold>
+</td><td align="left">Yong Loo Lin School of Medicine, National University of Singapore</td><td align="left">RCT</td><td align="left">fNIRS</td><td align="left">surgery</td><td align="left">psychomotor skill</td></tr><tr><td align="left">Leff et al.</td><td align="char" char=".">2008</td><td align="left">
+<bold>UK</bold>
+</td><td align="left">Royal Wolfson Image Computing Laboratory and Department of Biosurgery and Surgical Technology, Imperial College London</td><td align="left">Non-experimental</td><td align="left">fNIRS</td><td align="left">surgery</td><td align="left">psychomotor skill</td></tr><tr><td align="left">Leff et al.</td><td align="char" char=".">2015</td><td align="left">
+<bold>UK</bold>
+</td><td align="left">Hamlyn Centre for Robotic Surgery, Imperial College London</td><td align="left">Randomized crossover</td><td align="left">fNIRS/OT</td><td align="left">surgery</td><td align="left">visuospatial skill</td></tr><tr><td align="left">Leff et al.</td><td align="char" char=".">2008</td><td align="left">
+<bold>UK</bold>
+</td><td align="left">Royal Wolfson Image Computing Laboratory and Department of Biosurgery and Surgical Technology, Imperial College London</td><td align="left">Review</td><td align="left">N/A</td><td align="left">surgery</td><td align="left">REVIEW psychomotor skill</td></tr><tr><td align="left">Leff et al.</td><td align="char" char=".">2008</td><td align="left">
+<bold>UK</bold>
+</td><td align="left">Royal Wolfson Image Computing Laboratory and Department of Biosurgery and Surgical Technology, Imperial College London</td><td align="left">Non-experimental</td><td align="left">fNIRS</td><td align="left">surgery</td><td align="left">psychomotor skill</td></tr><tr><td align="left">Leff et al.</td><td align="char" char=".">2010</td><td align="left">
+<bold>UK</bold>
+</td><td align="left">Royal Wolfson Image Computing Laboratory and Department of Biosurgery and Surgical Technology, Imperial College London</td><td align="left">Non-experimental</td><td align="left">fNIRS</td><td align="left">surgery</td><td align="left">fatigue</td></tr><tr><td align="left">Leff et al.</td><td align="char" char=".">2017</td><td align="left">
+<bold>UK</bold>
+</td><td align="left">Hamlyn Centre for Robotic Surgery, Department of Biosurgery and Surgical Technology, Imperial College London</td><td align="left">Non-experimental</td><td align="left">fNIRS/OT</td><td align="left">surgery</td><td align="left">clinical reasoning</td></tr><tr><td align="left">Li et al.</td><td align="char" char=".">2020</td><td align="left">
+<bold>China</bold>
+</td><td align="left">Spinal Division of Orthopedic and Traumatology Center, Affiliated Hospital of Guangdong Medical University</td><td align="left">Non-experimental</td><td align="left">EEG</td><td align="left">surgery</td><td align="left">psychomotor skill</td></tr><tr><td align="left">Maddox et al.</td><td align="char" char=".">2015</td><td align="left">
+<bold>USA</bold>
+</td><td align="left">Department of Urology, Tulane University School of Medicine</td><td align="left">Non-experimental</td><td align="left">EEG</td><td align="left">surgery</td><td align="left">psychomotor skill</td></tr><tr><td align="left">Mazur et al.</td><td align="char" char=".">2017</td><td align="left">
+<bold>USA</bold>
+</td><td align="left">Department of Radiation Oncology, University of North Carolina</td><td align="left">Non-experimental</td><td align="left">EEG</td><td align="left">radiation oncology</td><td align="left">clinical reasoning</td></tr><tr><td align="left">Mazur et al.</td><td align="char" char=".">2016</td><td align="left">
+<bold>USA</bold>
+</td><td align="left">Department of Radiation Oncology, University of North Carolina</td><td align="left">Non-experimental</td><td align="left">EEG</td><td align="left">medical trainees</td><td align="left">psychomotor skill</td></tr><tr><td align="left">Miura et al.</td><td align="char" char=".">2015</td><td align="left">
+<bold>Japan</bold>
+</td><td align="left">Department of Modern Mechanical Engineering, Waseda University</td><td align="left">Non-experimental</td><td align="left">fNIRS</td><td align="left">surgery</td><td align="left">visuospatial skill</td></tr><tr><td align="left">Modi et al.</td><td align="char" char=".">2019</td><td align="left">
+<bold>UK</bold>
+</td><td align="left">Department of Surgery and Cancer &amp; Hamlyn Centre for Robotic Surgery, Imperial College London</td><td align="left">Non-experimental</td><td align="left">fNIRS</td><td align="left">surgery</td><td align="left">psychomotor skill</td></tr><tr><td align="left">Modi et al.</td><td align="char" char=".">2018</td><td align="left">
+<bold>UK</bold>
+</td><td align="left">Department of Surgery and Cancer &amp; Hamlyn Centre for Robotic Surgery, Imperial College London</td><td align="left">Non-experimental</td><td align="left">fNIRS</td><td align="left">surgery</td><td align="left">psychomotor skill</td></tr><tr><td align="left">Modi et al.</td><td align="char" char=".">2017</td><td align="left">
+<bold>UK</bold>
+</td><td align="left">Department of Surgery and Cancer &amp; Hamlyn Centre for Robotic Surgery, Imperial College London</td><td align="left">Review</td><td align="left">N/A</td><td align="left">surgery</td><td align="left">REVIEW psychomotor skill</td></tr><tr><td align="left">Modi et al.</td><td align="char" char=".">2017</td><td align="left">
+<bold>UK</bold>
+</td><td align="left">Department of Surgery and Cancer &amp; Hamlyn Centre for Robotic Surgery, Imperial College London</td><td align="left">Review</td><td align="left">N/A</td><td align="left">surgery</td><td align="left">REVIEW psychomotor skill</td></tr><tr><td align="left">Morales et al.</td><td align="char" char=".">2019</td><td align="left">
+<bold>Spain</bold>
+</td><td align="left">Mind, Brain, and Behavior Research Center, University of Granada</td><td align="left">Non-experimental</td><td align="left">EEG</td><td align="left">surgery</td><td align="left">psychomotor skill</td></tr><tr><td align="left">Morris et al.</td><td align="char" char=".">2015</td><td align="left">
+<bold>Ireland</bold>
+</td><td align="left">Education Division and Department of Surgery, School of Medicine, Trinity College</td><td align="left">Non-experimental</td><td align="left">fMRI</td><td align="left">surgery</td><td align="left">psychomotor skill</td></tr><tr><td align="left">Ndaro et al.</td><td align="char" char=".">2018</td><td align="left">
+<bold>China</bold>
+</td><td align="left">Department of Biomedical Engineering, School of Medical Instrument and Food Engineering, University of Shanghai for Science and Technology</td><td align="left">Non-experimental</td><td align="left">EEG</td><td align="left">surgery</td><td align="left">psychomotor skill</td></tr><tr><td align="left">Nemani et al.</td><td align="char" char=".">2018</td><td align="left">
+<bold>USA</bold>
+</td><td align="left">Rensselaer Polytechnic Institute</td><td align="left">RCT</td><td align="left">fNIRS</td><td align="left">surgery</td><td align="left">psychomotor skill</td></tr><tr><td align="left">Nishida et al.</td><td align="char" char=".">2017</td><td align="left">
+<bold>Japan</bold>
+</td><td align="left">Department of Psychiatry, Jichi Medical University &amp; Faculty of Sports Science, Waseda University</td><td align="left">Randomized crossover</td><td align="left">fNIRS</td><td align="left">psychiatry</td><td align="left">fatigue</td></tr><tr><td align="left">Ohuchida et al.</td><td align="char" char=".">2009</td><td align="left">
+<bold>Japan</bold>
+</td><td align="left">Department of Advanced Medical Initiatives, Faculty of Medical Sciences, Kyushu University</td><td align="left">Non-experimental</td><td align="left">fNIRS</td><td align="left">surgery</td><td align="left">psychomotor skill</td></tr><tr><td align="left">Pelizzo et al.</td><td align="char" char=".">2020</td><td align="left">
+<bold>Italy</bold>
+</td><td align="left">Department of Pediatric Surgery, &#8216;Vittore Buzzi&#8217; Children&#8217;s Hospital, University of Milano</td><td align="left">RCT</td><td align="left">fMRI</td><td align="left">surgery</td><td align="left">psychomotor skill</td></tr><tr><td align="left">Rotgans et al.</td><td align="char" char=".">2019</td><td align="left">
+<bold>Netherlands</bold>
+</td><td align="left">Institute of Medical Education Research Rotterdam, Erasmus Medical Center, Rotterdam</td><td align="left">Non-experimental</td><td align="left">fNIRS</td><td align="left">medical students &#8211;</td><td align="left">clinical reasoning</td></tr><tr><td align="left">Rourke et al.</td><td align="char" char=".">2016</td><td align="left">
+<bold>Canada</bold>
+</td><td align="left">Department of Medicine, University of Alberta</td><td align="left">Non-randomized<break/>controlled</td><td align="left">EEG</td><td align="left">cardiology and pulmonology</td><td align="left">clinical reasoning</td></tr><tr><td align="left">Shafiei et al.</td><td align="char" char=".">2018</td><td align="left">
+<bold>USA</bold>
+</td><td align="left">Department of Urology, Applied Technology Laboratory for Advanced Surgery (ATLAS) Program at Roswell Park Cancer Institute</td><td align="left">Non-experimental</td><td align="left">EEG</td><td align="left">surgery</td><td align="left">psychomotor skill</td></tr><tr><td align="left">Shetty et al.</td><td align="char" char=".">2016</td><td align="left">
+<bold>UK</bold>
+</td><td align="left">Hamlyn Centre for Robotic Surgery, Imperial College London</td><td align="left">Non-experimental</td><td align="left">fNIRS</td><td align="left">surgery</td><td align="left">psychomotor skill development</td></tr><tr><td align="left">Shewokis et al.</td><td align="char" char=".">2017</td><td align="left">
+<bold>USA</bold>
+</td><td align="left">Nutrition Sciences Department, College of Nursing and Health Professions, School of Biomedical Engineering, Science and Health Systems, Drexel University</td><td align="left">RCT</td><td align="left">fNIRS</td><td align="left">surgery</td><td align="left">psychomotor skill</td></tr><tr><td align="left">Turk et al.</td><td align="char" char=".">2018</td><td align="left">
+<bold>USA</bold>
+</td><td align="left">VA Boston Healthcare System &amp;<break/>Boston University School of Medicine</td><td align="left">Non-experimental</td><td align="left">EEG</td><td align="left">medical students</td><td align="left">declarative clinical knowledge</td></tr><tr><td align="left">Veroude et al.</td><td align="char" char=".">2013</td><td align="left">
+<bold>Netherlands</bold>
+</td><td align="left">Department of Educational Neuroscience, Faculty of Psychology and Education VU University Amsterdam</td><td align="left">Non-experimental</td><td align="left">fMRI</td><td align="left">medical students</td><td align="left">cognitive/emotional control</td></tr><tr><td align="left">Wanzel et al.</td><td align="char" char=".">2007</td><td align="left">
+<bold>Canada</bold>
+</td><td align="left">Department of Surgery, University of Toronto</td><td align="left">Non-experimental</td><td align="left">fMRI</td><td align="left">surgery</td><td align="left">visuospatial skill</td></tr><tr><td align="left">Xu et al.</td><td align="char" char=".">2018</td><td align="left">
+<bold>China</bold>
+</td><td align="left">Department of Military Psychology, Army Medical University, Chongqing, China.</td><td align="left">RCT</td><td align="left">EEG</td><td align="left">medical students</td><td align="left">well-being</td></tr><tr><td align="left">Xu et al.</td><td align="char" char=".">2019</td><td align="left">
+<bold>USA</bold>
+</td><td align="left">Center for Research and Innovation in Systems Safety, Vanderbilt University Medical Center</td><td align="left">Non-experimental</td><td align="left">fNIRS</td><td align="left">anesthesiology</td><td align="left">crisis event management team skills</td></tr><tr><td align="left">Zhu et al.</td><td align="char" char=".">2011</td><td align="left">
+<bold>Hong Kong</bold>
+</td><td align="left">Institute of Human Performance, The University of Hong Kong</td><td align="left">Non-randomized<break/>controlled</td><td align="left">EEG</td><td align="left">surgery</td><td align="left">psychomotor skill</td></tr></tbody></table><table-wrap-foot><fn id="tfn0007"><p>EEG, electroencephalogram; fMRI, functional magnetic resonance imaging; fNIRS, functional near-infrared spectroscopy; NA, not applicable; OT, optical topography; RCT, randomized controlled trial.</p></fn><fn id="tfn0008"><p>* Other: Brain electric activity monitoring system designed by the researchers</p></fn></table-wrap-foot></table-wrap>
+</p>
+      </app>
+    </app-group>
+  </back>
+</article>
+<article xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink" dtd-version="1.3" xml:lang="en" article-type="research-article">
+  <!--The publisher of this article does not allow downloading of the full text in XML form.-->
+  <?properties manuscript?>
+  <processing-meta base-tagset="archiving" mathml-version="3.0" table-model="xhtml" tagset-family="jats">
+    <restricted-by>pmc</restricted-by>
+  </processing-meta>
+  <front>
+    <journal-meta>
+      <journal-id journal-id-type="nlm-journal-id">101465400</journal-id>
+      <journal-id journal-id-type="pubmed-jr-id">34171</journal-id>
+      <journal-id journal-id-type="nlm-ta">Sci Signal</journal-id>
+      <journal-id journal-id-type="iso-abbrev">Sci Signal</journal-id>
+      <journal-title-group>
+        <journal-title>Science signaling</journal-title>
+      </journal-title-group>
+      <issn pub-type="ppub">1945-0877</issn>
+      <issn pub-type="epub">1937-9145</issn>
+    </journal-meta>
+    <article-meta>
+      <article-id pub-id-type="pmid">31164479</article-id>
+      <article-id pub-id-type="pmc">8757379</article-id>
+      <article-id pub-id-type="doi">10.1126/scisignal.aap7584</article-id>
+      <article-id pub-id-type="manuscript">NIHMS1571701</article-id>
+      <article-categories>
+        <subj-group subj-group-type="heading">
+          <subject>Article</subject>
+        </subj-group>
+      </article-categories>
+      <title-group>
+        <article-title>Design and evaluation of engineered protein biosensors for live-cell imaging of EGFR phosphorylation</article-title>
+      </title-group>
+      <contrib-group>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Tiruthani</surname>
+            <given-names>Karthik</given-names>
+          </name>
+          <xref rid="A1" ref-type="aff">1</xref>
+          <xref rid="FN1" ref-type="author-notes">&#8224;</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Mischler</surname>
+            <given-names>Adam</given-names>
+          </name>
+          <xref rid="A1" ref-type="aff">1</xref>
+          <xref rid="FN1" ref-type="author-notes">&#8224;</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Ahmed</surname>
+            <given-names>Shoeb</given-names>
+          </name>
+          <xref rid="A2" ref-type="aff">2</xref>
+          <xref rid="FN1" ref-type="author-notes">&#8224;</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Mahinthakumar</surname>
+            <given-names>Jessica</given-names>
+          </name>
+          <xref rid="A1" ref-type="aff">1</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Haugh</surname>
+            <given-names>Jason M.</given-names>
+          </name>
+          <xref rid="A1" ref-type="aff">1</xref>
+          <xref rid="CR1" ref-type="corresp">*</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Rao</surname>
+            <given-names>Balaji M.</given-names>
+          </name>
+          <xref rid="A1" ref-type="aff">1</xref>
+          <xref rid="CR1" ref-type="corresp">*</xref>
+        </contrib>
+      </contrib-group>
+      <aff id="A1"><label>1</label>Department of Chemical and Biomolecular Engineering, North Carolina State University, Raleigh, North Carolina 27695, USA</aff>
+      <aff id="A2"><label>2</label>Department of Chemical Engineering, Bangladesh University of Engineering and Technology, Dhaka-1000, Bangladesh</aff>
+      <author-notes>
+        <fn fn-type="equal" id="FN1">
+          <label>&#8224;</label>
+          <p id="P1">contributed equally to this study.</p>
+        </fn>
+        <fn fn-type="con" id="FN2">
+          <p id="P2"><bold>Author contributions:</bold> JMH and BMR conceived the study. KT, AM, SA, JMH, and BMR designed the experiments. KT, AM, and SA conducted the experiments. KT, AM, SA, JMH and BMR analyzed and interpreted the data. KT and BMR wrote the manuscript, with input from the rest of the authors.</p>
+        </fn>
+        <corresp id="CR1"><label>*</label>Corresponding authors. <email>jmhaugh@ncsu.edu</email> and <email>bmrao@ncsu.edu</email></corresp>
+      </author-notes>
+      <pub-date pub-type="nihms-submitted">
+        <day>4</day>
+        <month>1</month>
+        <year>2022</year>
+      </pub-date>
+      <pub-date pub-type="epub">
+        <day>04</day>
+        <month>6</month>
+        <year>2019</year>
+      </pub-date>
+      <pub-date pub-type="collection">
+        <day>04</day>
+        <month>6</month>
+        <year>2019</year>
+      </pub-date>
+      <pub-date pub-type="pmc-release">
+        <day>13</day>
+        <month>1</month>
+        <year>2022</year>
+      </pub-date>
+      <volume>12</volume>
+      <issue>584</issue>
+      <elocation-id>eaap7584</elocation-id>
+      <abstract id="ABS1">
+        <p id="P3">Live-cell fluorescence microscopy is broadly applied to study the dynamics of receptor-mediated cell signaling, but the availability of intracellular biosensors is limited. A biosensor based on the tandem SH2 domains from phospholipase C &#947;1 (PLC&#947;1), tSH2-WT, has been used to measure phosphorylation of the epidermal growth factor receptor (EGFR). Here, we found that tSH2-WT lacked specificity for phosphorylated EGFR, consistent with the known promiscuity of SH2 domains. Further, EGF-stimulated membrane recruitment of tSH2-WT differed qualitatively from the expected kinetics of EGFR phosphorylation. Analysis of a mathematical model suggested, and experiments confirmed, that the high avidity of tSH2-WT resulted in saturation of its target and interference with EGFR endocytosis. To overcome the apparent target specificity and saturation issues, we implemented two protein engineering strategies. In the first, we screened a combinatorial library generated by random mutagenesis of the C-terminal SH2 domain (cSH2) of PLC&#947;1 and isolated a mutant form (mSH2) with enhanced specificity for phosphorylated Tyr<sup>992</sup> (pTyr<sup>992</sup>) of EGFR. A biosensor based on mSH2 faithfully reported the kinetics of EGFR phosphorylation but retained cross-reactivity similar to tSH2-WT. In the second approach, we isolated a pTyr<sup>992</sup>-binding protein (SPY992) from a combinatorial library generated by mutagenesis of the Sso7d protein scaffold. Compared to tSH2-WT and mSH2, SPY992 exhibited superior performance as a specific, moderate-affinity biosensor. We extended this approach to isolate a biosensor for EGFR pTyr<sup>1148</sup> (SPY1148). This approach of integrating theoretical considerations with protein engineering strategies can be generalized to design and evaluate suitable biosensors for various phospho-specific targets.</p>
+      </abstract>
+    </article-meta>
+  </front>
+</article>
+<article xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink" dtd-version="1.3" xml:lang="en" article-type="research-article">
+  <!--The publisher of this article does not allow downloading of the full text in XML form.-->
+  <processing-meta base-tagset="archiving" mathml-version="3.0" table-model="xhtml" tagset-family="jats">
+    <restricted-by>pmc</restricted-by>
+  </processing-meta>
+  <front>
+    <journal-meta>
+      <journal-id journal-id-type="nlm-ta">Cereb Cortex</journal-id>
+      <journal-id journal-id-type="iso-abbrev">Cereb Cortex</journal-id>
+      <journal-id journal-id-type="publisher-id">cercor</journal-id>
+      <journal-title-group>
+        <journal-title>Cerebral Cortex (New York, NY)</journal-title>
+      </journal-title-group>
+      <issn pub-type="ppub">1047-3211</issn>
+      <issn pub-type="epub">1460-2199</issn>
+      <publisher>
+        <publisher-name>Oxford University Press</publisher-name>
+      </publisher>
+    </journal-meta>
+    <article-meta>
+      <article-id pub-id-type="pmid">33942058</article-id>
+      <article-id pub-id-type="pmc">8757323</article-id>
+      <article-id pub-id-type="doi">10.1093/cercor/bhab101</article-id>
+      <article-id pub-id-type="publisher-id">bhab101</article-id>
+      <article-categories>
+        <subj-group subj-group-type="heading">
+          <subject>Original Article</subject>
+        </subj-group>
+        <subj-group subj-group-type="category-taxonomy-collection">
+          <subject>AcademicSubjects/MED00310</subject>
+          <subject>AcademicSubjects/MED00385</subject>
+          <subject>AcademicSubjects/SCI01870</subject>
+        </subj-group>
+      </article-categories>
+      <title-group>
+        <article-title>Individual-Specific Areal-Level Parcellations Improve Functional Connectivity Prediction of Behavior</article-title>
+      </title-group>
+      <contrib-group>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Kong</surname>
+            <given-names>Ru</given-names>
+          </name>
+          <!--roo.cone@gmail.com-->
+          <aff><institution>Department of Electrical and Computer Engineering</institution>, <institution>National University of Singapore</institution>, Singapore 117583, <country country="SG">Singapore</country></aff>
+          <aff><institution>Centre for Sleep and Cognition (CSC) &amp; Centre for Translational Magnetic Resonance Research (TMR)</institution>, <institution>National University of Singapore</institution>, Singapore 117549, <country country="SG">Singapore</country></aff>
+          <aff><institution>N.1 Institute for Health and Institute for Digital Medicine (WisDM)</institution>, <institution>National University of Singapore</institution>, Singapore 117456, <country country="SG">Singapore</country></aff>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Yang</surname>
+            <given-names>Qing</given-names>
+          </name>
+          <!--yangqing.nicole@gmail.com-->
+          <aff><institution>Department of Electrical and Computer Engineering</institution>, <institution>National University of Singapore</institution>, Singapore 117583, <country country="SG">Singapore</country></aff>
+          <aff><institution>Centre for Sleep and Cognition (CSC) &amp; Centre for Translational Magnetic Resonance Research (TMR)</institution>, <institution>National University of Singapore</institution>, Singapore 117549, <country country="SG">Singapore</country></aff>
+          <aff><institution>N.1 Institute for Health and Institute for Digital Medicine (WisDM)</institution>, <institution>National University of Singapore</institution>, Singapore 117456, <country country="SG">Singapore</country></aff>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Gordon</surname>
+            <given-names>Evan</given-names>
+          </name>
+          <!--evan.gordon@gmail.com-->
+          <aff><institution>Department of Radiology</institution>, <institution>Washington University School of Medicine</institution>, St. Louis, MO 63130, <country country="US">USA</country></aff>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Xue</surname>
+            <given-names>Aihuiping</given-names>
+          </name>
+          <!--xueaihuiping@gmail.com-->
+          <aff><institution>Department of Electrical and Computer Engineering</institution>, <institution>National University of Singapore</institution>, Singapore 117583, <country country="SG">Singapore</country></aff>
+          <aff><institution>Centre for Sleep and Cognition (CSC) &amp; Centre for Translational Magnetic Resonance Research (TMR)</institution>, <institution>National University of Singapore</institution>, Singapore 117549, <country country="SG">Singapore</country></aff>
+          <aff><institution>N.1 Institute for Health and Institute for Digital Medicine (WisDM)</institution>, <institution>National University of Singapore</institution>, Singapore 117456, <country country="SG">Singapore</country></aff>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Yan</surname>
+            <given-names>Xiaoxuan</given-names>
+          </name>
+          <!--xiaoxuan.427@gmail.com-->
+          <aff><institution>Department of Electrical and Computer Engineering</institution>, <institution>National University of Singapore</institution>, Singapore 117583, <country country="SG">Singapore</country></aff>
+          <aff><institution>Centre for Sleep and Cognition (CSC) &amp; Centre for Translational Magnetic Resonance Research (TMR)</institution>, <institution>National University of Singapore</institution>, Singapore 117549, <country country="SG">Singapore</country></aff>
+          <aff><institution>N.1 Institute for Health and Institute for Digital Medicine (WisDM)</institution>, <institution>National University of Singapore</institution>, Singapore 117456, <country country="SG">Singapore</country></aff>
+          <aff><institution>Integrative Sciences and Engineering Programme (ISEP)</institution>, <institution>National University of Singapore</institution>, Singapore 119077, <country country="SG">Singapore</country></aff>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Orban</surname>
+            <given-names>Csaba</given-names>
+          </name>
+          <!--csaba.orban@gmail.com-->
+          <aff><institution>Department of Electrical and Computer Engineering</institution>, <institution>National University of Singapore</institution>, Singapore 117583, <country country="SG">Singapore</country></aff>
+          <aff><institution>Centre for Sleep and Cognition (CSC) &amp; Centre for Translational Magnetic Resonance Research (TMR)</institution>, <institution>National University of Singapore</institution>, Singapore 117549, <country country="SG">Singapore</country></aff>
+          <aff><institution>N.1 Institute for Health and Institute for Digital Medicine (WisDM)</institution>, <institution>National University of Singapore</institution>, Singapore 117456, <country country="SG">Singapore</country></aff>
+        </contrib>
+        <contrib contrib-type="author">
+          <contrib-id contrib-id-type="orcid" authenticated="false">https://orcid.org/0000-0001-9110-585X</contrib-id>
+          <name>
+            <surname>Zuo</surname>
+            <given-names>Xi-Nian</given-names>
+          </name>
+          <!--xinian.zuo@bnu.edu.cn-->
+          <aff><institution>State Key Laboratory of Cognitive Neuroscience and Learning/IDG McGovern Institute for Brain Research</institution>, <institution>Beijing Normal University</institution>, Beijing 100875, <country country="CN">China</country></aff>
+          <aff><institution>National Basic Public Science Data Center</institution>, <institution>Chinese Academy of Sciences</institution>, Beijing 100101, <country country="CN">China</country></aff>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Spreng</surname>
+            <given-names>Nathan</given-names>
+          </name>
+          <aff><institution>Laboratory of Brain and Cognition</institution>, Department of Neurology and Neurosurgery, McGill University, Montreal QC H3A 2B4, <country country="CA">Canada</country></aff>
+          <aff><institution>Departments of Psychiatry and Psychology</institution>, Neurological Institute, <institution>McGill University</institution>, Montreal QC H3A 2B4, <country country="CA">Canada</country></aff>
+          <aff><institution>McConnell Brain Imaging Centre</institution>, Montreal Neurological Institute (MNI), McGill University, Montreal QC H3A 2B4, <country country="CA">Canada</country></aff>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Ge</surname>
+            <given-names>Tian</given-names>
+          </name>
+          <!--tge1@mgh.harvard.edu-->
+          <aff><institution>Psychiatric &amp; Neurodevelopmental Genetics Unit</institution>, Center for Genomic Medicine, <institution>Massachusetts General Hospital</institution>, Boston, MA 02114, <country country="US">USA</country></aff>
+          <aff><institution>Martinos Center for Biomedical Imaging</institution>, <institution>Massachusetts General Hospital</institution>, Charlestown, MA 02129, <country country="US">USA</country></aff>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Holmes</surname>
+            <given-names>Avram</given-names>
+          </name>
+          <!--avram.holmes@yale.edu-->
+          <aff><institution>Department of Psychology</institution>, <institution>Yale University</institution>, New Haven, CT 06520, <country country="US">USA</country></aff>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Eickhoff</surname>
+            <given-names>Simon</given-names>
+          </name>
+          <aff><institution>Medical Faculty</institution>, Institute for Systems Neuroscience, <institution>Heinrich-Heine University D&#252;sseldorf</institution>, D&#252;sseldorf 40225, <country country="DE">Germany</country></aff>
+          <aff><institution>Institute of Neuroscience and Medicine</institution>, Brain &amp; Behaviour (INM-7), <institution>Research Center J&#252;lich</institution>, J&#252;lich 52425, <country country="DE">Germany</country></aff>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Yeo</surname>
+            <given-names>B T Thomas</given-names>
+          </name>
+          <!--thomas.yeo@nus.edu.sg-->
+          <aff><institution>Department of Electrical and Computer Engineering</institution>, <institution>National University of Singapore</institution>, Singapore 117583, <country country="SG">Singapore</country></aff>
+          <aff><institution>Centre for Sleep and Cognition (CSC) &amp; Centre for Translational Magnetic Resonance Research (TMR)</institution>, <institution>National University of Singapore</institution>, Singapore 117549, <country country="SG">Singapore</country></aff>
+          <aff><institution>N.1 Institute for Health and Institute for Digital Medicine (WisDM)</institution>, <institution>National University of Singapore</institution>, Singapore 117456, <country country="SG">Singapore</country></aff>
+          <aff><institution>Integrative Sciences and Engineering Programme (ISEP)</institution>, <institution>National University of Singapore</institution>, Singapore 119077, <country country="SG">Singapore</country></aff>
+          <aff><institution>Martinos Center for Biomedical Imaging</institution>, <institution>Massachusetts General Hospital</institution>, Charlestown, MA 02129, <country country="US">USA</country></aff>
+          <xref rid="cor1" ref-type="corresp"/>
+        </contrib>
+      </contrib-group>
+      <author-notes>
+        <corresp id="cor1">Address correspondence to B.T. Thomas Yeo, N.1 &amp; WISDM, National University of Singapore, Singapore. Email: <email>thomas.yeo@nus.edu.sg</email></corresp>
+      </author-notes>
+      <pub-date pub-type="collection">
+        <month>10</month>
+        <year>2021</year>
+      </pub-date>
+      <pub-date pub-type="epub" iso-8601-date="2021-05-04">
+        <day>04</day>
+        <month>5</month>
+        <year>2021</year>
+      </pub-date>
+      <pub-date pub-type="pmc-release">
+        <day>04</day>
+        <month>5</month>
+        <year>2021</year>
+      </pub-date>
+      <!--PMC Release delay is 0 months and 0 days and was based on the <pub-date pub-type="epub"/>.-->
+      <volume>31</volume>
+      <issue>10</issue>
+      <fpage>4477</fpage>
+      <lpage>4500</lpage>
+      <history>
+        <date date-type="received">
+          <day>9</day>
+          <month>1</month>
+          <year>2020</year>
+        </date>
+        <date date-type="rev-recd">
+          <day>3</day>
+          <month>3</month>
+          <year>2021</year>
+        </date>
+        <date date-type="accepted">
+          <day>12</day>
+          <month>3</month>
+          <year>2021</year>
+        </date>
+      </history>
+      <permissions>
+        <copyright-statement>&#169; The Author(s) 2021. Published by Oxford University Press. All rights reserved. For permissions, please e-mail: journals.permissions@oup.com</copyright-statement>
+        <copyright-year>2021</copyright-year>
+        <license>
+          <ali:license_ref xmlns:ali="http://www.niso.org/schemas/ali/1.0/">https://academic.oup.com/journals/pages/open_access/funder_policies/chorus/standard_publication_model</ali:license_ref>
+          <license-p>This article is published and distributed under the terms of the Oxford University Press, Standard Journals Publication Model (<ext-link ext-link-type="uri" xlink:href="https://academic.oup.com/journals/pages/open_access/funder_policies/chorus/standard_publication_model">https://academic.oup.com/journals/pages/open_access/funder_policies/chorus/standard_publication_model</ext-link>)</license-p>
+        </license>
+      </permissions>
+      <self-uri xlink:href="bhab101.pdf"/>
+      <abstract>
+        <title>Abstract</title>
+        <p>Resting-state functional magnetic resonance imaging (rs-fMRI) allows estimation of individual-specific cortical parcellations. We have previously developed a multi-session hierarchical Bayesian model (MS-HBM) for estimating high-quality individual-specific network-level parcellations. Here, we extend the model to estimate individual-specific areal-level parcellations. While network-level parcellations comprise spatially distributed networks spanning the cortex, the consensus is that areal-level parcels should be spatially localized, that is, should not span multiple lobes. There is disagreement about whether areal-level parcels should be strictly contiguous or comprise multiple noncontiguous components; therefore, we considered three areal-level MS-HBM variants spanning these range of possibilities. Individual-specific MS-HBM parcellations estimated using 10&#160;min of data generalized better than other approaches using 150&#160;min of data to out-of-sample rs-fMRI and task-fMRI from the same individuals. Resting-state functional connectivity derived from MS-HBM parcellations also achieved the best behavioral prediction performance. Among the three MS-HBM variants, the strictly contiguous MS-HBM exhibited the best resting-state homogeneity and most uniform within-parcel task activation. In terms of behavioral prediction, the gradient-infused MS-HBM was numerically the best, but differences among MS-HBM variants were not statistically significant. Overall, these results suggest that areal-level MS-HBMs can capture behaviorally meaningful individual-specific parcellation features beyond group-level parcellations. Multi-resolution trained models and parcellations are publicly available (<ext-link xlink:href="https://github.com/ThomasYeoLab/CBIG/tree/master/stable_projects/brain_parcellation/Kong2022_ArealMSHBM" ext-link-type="uri">https://github.com/ThomasYeoLab/CBIG/tree/master/stable_projects/brain_parcellation/Kong2022_ArealMSHBM</ext-link>).</p>
+      </abstract>
+      <kwd-group>
+        <kwd>behavioral prediction</kwd>
+        <kwd>brain parcellation</kwd>
+        <kwd>difference</kwd>
+        <kwd>individual</kwd>
+        <kwd>resting-state functional connectivity</kwd>
+      </kwd-group>
+      <funding-group>
+        <award-group award-type="grant">
+          <funding-source>
+<institution-wrap><institution>Singapore National Research Foundation</institution><institution-id institution-id-type="DOI">10.13039/501100001381</institution-id></institution-wrap>
+</funding-source>
+        </award-group>
+        <award-group award-type="grant">
+          <funding-source>
+<institution-wrap><institution>National University of Singapore</institution><institution-id institution-id-type="DOI">10.13039/501100001352</institution-id></institution-wrap>
+</funding-source>
+          <award-id>NUHSRO/2020/124/TMR/LOA</award-id>
+        </award-group>
+        <award-group award-type="grant">
+          <funding-source>
+<institution-wrap><institution>Massachusetts General Hospital</institution><institution-id institution-id-type="DOI">10.13039/100005294</institution-id></institution-wrap>
+</funding-source>
+          <award-id>1S10RR023401</award-id>
+          <award-id>1S10RR019307</award-id>
+          <award-id>1S10RR023043</award-id>
+        </award-group>
+        <award-group award-type="grant">
+          <funding-source>
+<institution-wrap><institution>National Research Foundation</institution><institution-id institution-id-type="DOI">10.13039/501100001321</institution-id></institution-wrap>
+</funding-source>
+        </award-group>
+        <award-group award-type="grant">
+          <funding-source>
+<institution-wrap><institution>Ministry of Defense</institution><institution-id institution-id-type="DOI">10.13039/501100008121</institution-id></institution-wrap>
+</funding-source>
+        </award-group>
+        <award-group award-type="grant">
+          <funding-source>
+<institution-wrap><institution>National Supercomputing Centre, Singapore</institution></institution-wrap>
+</funding-source>
+        </award-group>
+        <award-group award-type="grant">
+          <funding-source>
+<institution-wrap><institution>Center for Functional Neuroimaging Technologies</institution></institution-wrap>
+</funding-source>
+          <award-id>P41EB015896</award-id>
+        </award-group>
+        <award-group award-type="grant">
+          <funding-source>
+<institution-wrap><institution>Human Connectome Project</institution></institution-wrap>
+</funding-source>
+          <award-id>1U54MH091657</award-id>
+        </award-group>
+        <award-group award-type="grant">
+          <funding-source>
+<institution-wrap><institution>National Institutes of Health</institution><institution-id institution-id-type="DOI">10.13039/100000002</institution-id></institution-wrap>
+</funding-source>
+        </award-group>
+        <award-group award-type="grant">
+          <funding-source>
+<institution-wrap><institution>George Washington University</institution><institution-id institution-id-type="DOI">10.13039/100007108</institution-id></institution-wrap>
+</funding-source>
+        </award-group>
+      </funding-group>
+      <counts>
+        <page-count count="24"/>
+      </counts>
+    </article-meta>
+  </front>
+</article>
+</pmc-articleset>

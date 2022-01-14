@@ -13,7 +13,7 @@ _LOG = logging.getLogger(__name__)
 
 class EntrezClient:
     _default_timeout = 10
-    _entrez_base_url = "https://e_utils.ncbi.nlm.nih.gov/entrez/e_utils/"
+    _entrez_base_url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
     _esearch_base_url = urljoin(_entrez_base_url, "esearch.fcgi")
     _efetch_base_url = urljoin(_entrez_base_url, "efetch.fcgi")
 
@@ -62,9 +62,7 @@ class EntrezClient:
     def esearch(
         self,
         term: str,
-        web_env: Optional[str] = None,
-        query_key: Optional[str] = None,
-    ) -> Dict[str, Any]:
+    ) -> Dict[str, str]:
         search_params = {
             "db": "pmc",
             "term": term,
@@ -72,16 +70,13 @@ class EntrezClient:
             "retmode": "json",
             "retmax": 5,
         }
-        if web_env is not None and query_key is not None:
-            search_params["WebEnv"] = web_env
-            search_params["query_key"] = query_key
         resp = self._send_request(
             self._esearch_base_url, params=search_params, verb="POST"
         )
         if resp is None:
             return {}
         try:
-            search_info: Dict[str, Any] = resp.json()["esearchresult"]
+            search_info: Dict[str, str] = resp.json()["esearchresult"]
         except Exception:
             return {}
         if "ERROR" in search_info:
@@ -89,33 +84,24 @@ class EntrezClient:
         self.last_search_result = search_info
         return search_info
 
-    def _check_search_info(
-        self, search_info: Union[None, Mapping[str, Any]]
-    ) -> Mapping[str, Any]:
-        if search_info is not None:
-            needed_keys = {"count", "webenv", "querykey"}
-            if needed_keys.issubset(search_info.keys()):
-                return search_info
-            else:
-                raise ValueError(
-                    f"`search_info` should contain all of {needed_keys}"
-                )
-        try:
-            search_info = self.last_search_result
-        except AttributeError:
+    def _check_search_info(self) -> None:
+        needed_keys = {"count", "webenv", "querykey"}
+        if not hasattr(self, "last_search_result") or not needed_keys.issubset(
+            self.last_search_result.keys()
+        ):
             raise ValueError(
                 "Perform a search before calling `efetch`"
                 "or provide `search_info`"
             )
-        return search_info
 
     def efetch(
         self,
-        search_info: Optional[Mapping[str, Any]] = None,
+        search_info: Optional[Mapping[str, str]] = None,
         n_docs: Optional[int] = None,
         retmax: int = 500,
     ) -> Generator[bytes, None, None]:
-        search_info = self._check_search_info(search_info)
+        self._check_search_info()
+        search_info = self.last_search_result
         search_count = int(search_info["count"])
         if n_docs is None:
             n_docs = search_count

@@ -1,0 +1,1226 @@
+<?xml version='1.0' encoding='ASCII'?>
+<pmc-articleset><article xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink" dtd-version="1.3" xml:lang="en" article-type="research-article">
+  <!--The publisher of this article does not allow downloading of the full text in XML form.-->
+  <?properties manuscript?>
+  <processing-meta base-tagset="archiving" mathml-version="3.0" table-model="xhtml" tagset-family="jats">
+    <restricted-by>pmc</restricted-by>
+  </processing-meta>
+  <front>
+    <journal-meta>
+      <journal-id journal-id-type="nlm-journal-id">7603616</journal-id>
+      <journal-id journal-id-type="pubmed-jr-id">4036</journal-id>
+      <journal-id journal-id-type="nlm-ta">Int J Radiat Oncol Biol Phys</journal-id>
+      <journal-id journal-id-type="iso-abbrev">Int J Radiat Oncol Biol Phys</journal-id>
+      <journal-title-group>
+        <journal-title>International journal of radiation oncology, biology, physics</journal-title>
+      </journal-title-group>
+      <issn pub-type="ppub">0360-3016</issn>
+      <issn pub-type="epub">1879-355X</issn>
+    </journal-meta>
+    <article-meta>
+      <article-id pub-id-type="pmid">32470502</article-id>
+      <article-id pub-id-type="pmc">8758056</article-id>
+      <article-id pub-id-type="doi">10.1016/j.ijrobp.2020.05.027</article-id>
+      <article-id pub-id-type="manuscript">NIHMS1598447</article-id>
+      <article-categories>
+        <subj-group subj-group-type="heading">
+          <subject>Article</subject>
+        </subj-group>
+      </article-categories>
+      <title-group>
+        <article-title>Neuroinflammation After Stereotactic Radiosurgery-Induced Brain Tumor Disintegration Is Linked to Persistent Cognitive Decline in a Mouse Model of Metastatic Disease</article-title>
+      </title-group>
+      <contrib-group>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Chu</surname>
+            <given-names>Chengyan</given-names>
+          </name>
+          <degrees>MD</degrees>
+          <xref rid="A1" ref-type="aff">*</xref>
+          <xref rid="A2" ref-type="aff">&#8224;</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Davis</surname>
+            <given-names>Catherine M.</given-names>
+          </name>
+          <degrees>PhD</degrees>
+          <xref rid="A3" ref-type="aff">&#8225;</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Lan</surname>
+            <given-names>Xiaoyan</given-names>
+          </name>
+          <degrees>MD</degrees>
+          <xref rid="A1" ref-type="aff">*</xref>
+          <xref rid="A2" ref-type="aff">&#8224;</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Hienz</surname>
+            <given-names>Robert D.</given-names>
+          </name>
+          <degrees>PhD</degrees>
+          <xref rid="A3" ref-type="aff">&#8225;</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Jablonska</surname>
+            <given-names>Anna</given-names>
+          </name>
+          <degrees>PhD</degrees>
+          <xref rid="A1" ref-type="aff">*</xref>
+          <xref rid="A2" ref-type="aff">&#8224;</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Thomas</surname>
+            <given-names>Aline M.</given-names>
+          </name>
+          <degrees>PhD</degrees>
+          <xref rid="A2" ref-type="aff">&#8224;</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Velarde</surname>
+            <given-names>Esteban</given-names>
+          </name>
+          <degrees>BSc</degrees>
+          <xref rid="A4" ref-type="aff">&#167;</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Li</surname>
+            <given-names>Shen</given-names>
+          </name>
+          <degrees>MD, PhD</degrees>
+          <xref rid="A5" ref-type="aff">&#8741;</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Janowski</surname>
+            <given-names>Miroslaw</given-names>
+          </name>
+          <degrees>MD, PhD</degrees>
+          <xref rid="A1" ref-type="aff">*</xref>
+          <xref rid="A2" ref-type="aff">&#8224;</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Kai</surname>
+            <given-names>Mihoko</given-names>
+          </name>
+          <degrees>PhD</degrees>
+          <xref rid="A4" ref-type="aff">&#167;</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Walczak</surname>
+            <given-names>Piotr</given-names>
+          </name>
+          <degrees>MD, PhD</degrees>
+          <xref rid="A1" ref-type="aff">*</xref>
+          <xref rid="A2" ref-type="aff">&#8224;</xref>
+        </contrib>
+      </contrib-group>
+      <aff id="A1"><label>*</label>Department of Diagnostic Radiology and Nuclear Medicine, University of Maryland School of Medicine, Baltimore, Maryland;</aff>
+      <aff id="A2"><label>&#8224;</label>The Russell H. Morgan Department of Radiology and Radiological Science, Johns Hopkins University School of Medicine, Baltimore, Maryland;</aff>
+      <aff id="A3"><label>&#8225;</label>Division of Behavioral Biology, Department of Psychiatry and Behavioral Sciences, Johns Hopkins University School of Medicine, Baltimore, Maryland;</aff>
+      <aff id="A4"><label>&#167;</label>Department of Radiation Oncology, Johns Hopkins University, School of Medicine, Baltimore, Maryland;</aff>
+      <aff id="A5"><label>&#8741;</label>Department of Neurology, Dalian Municipal Central Hospital, Dalian, Liaoning, China</aff>
+      <author-notes>
+        <corresp id="CR1">Corresponding authors: Mihoko Kai, PhD; <email>mkai2@jhmi.edu</email> or Piotr Walczak, MD, PhD; <email>pwalczak@som.umaryland.edu</email></corresp>
+        <fn fn-type="COI-statement" id="FN1">
+          <p id="P35">Disclosures: The authors declare no conflict of interest related to this study.</p>
+        </fn>
+      </author-notes>
+      <pub-date pub-type="nihms-submitted">
+        <day>30</day>
+        <month>5</month>
+        <year>2020</year>
+      </pub-date>
+      <pub-date pub-type="ppub">
+        <day>01</day>
+        <month>11</month>
+        <year>2020</year>
+      </pub-date>
+      <pub-date pub-type="epub">
+        <day>26</day>
+        <month>5</month>
+        <year>2020</year>
+      </pub-date>
+      <pub-date pub-type="pmc-release">
+        <day>13</day>
+        <month>1</month>
+        <year>2022</year>
+      </pub-date>
+      <volume>108</volume>
+      <issue>3</issue>
+      <fpage>745</fpage>
+      <lpage>757</lpage>
+      <abstract id="ABS1">
+        <sec id="S1">
+          <title>Purpose:</title>
+          <p id="P1">Improved efficacy of anticancer therapy and a growing pool of survivors give rise to a question about their quality of life and return to premorbid status. Radiation is effective in brain metastasis eradication, although the optimal approach and long-term effects on brain function are largely unknown. We studied the effects of radiosurgery on brain function.</p>
+        </sec>
+        <sec id="S2">
+          <title>Methods and Materials:</title>
+          <p id="P2">Adult C57BL/6J mice with or without brain metastases (rat 9L gliosarcoma) were treated with cone beam single-arc stereotactic radiosurgery (SRS; 40 Gy). Tumor growth was monitored using bioluminescence, whereas longitudinal magnetic resonance imaging, behavioral studies, and histologic analysis were performed to evaluate brain response to the treatment for up to 18 months.</p>
+        </sec>
+        <sec id="S3">
+          <title>Results:</title>
+          <p id="P3">Stereotactic radiosurgery (SRS) resulted in 9L metastases eradication within 4 weeks with subsequent long-term survival of all treated animals, whereas all nontreated animals succumbed to the brain tumor. Behavioral impairment, as measured with a recognition memory test, was observed earlier in mice subjected to radiosurgery of tumors (6 weeks) in comparison to SRS of healthy brain tissue (10 weeks). Notably, the deficit resolved by 18 weeks only in mice not bearing a tumor, whereas tumor eradication was complicated by the persistent cognitive deficits. In addition, the results of magnetic resonance imaging were unremarkable in both groups, and histopathology revealed changes. SRS-induced tumor eradication triggered long-lasting and exacerbated neuroinflammatory response. No demyelination, neuronal loss, or hemorrhage was detected in any of the groups.</p>
+        </sec>
+        <sec id="S4">
+          <title>Conclusions:</title>
+          <p id="P4">Tumor disintegration by SRS leads to exacerbated neuroinflammation and persistent cognitive deficits; therefore, methods aiming at reducing inflammation after tumor eradication or other therapeutic methods should be sought.</p>
+        </sec>
+      </abstract>
+      <abstract id="ABS2" abstract-type="summary">
+        <title>Summary</title>
+        <p id="P5">Cancer treatment is becoming more effective with a growing number of long-term survivors. Therefore, the quality of life after treatment is becoming an increasingly important aspect. Brain metastases have been traditionally a major problem, but radiation-based approaches frequently lead to their cure, though there is no agreement regarding optimal approach. There is also a scarcity of data on long-term effects of therapy on brain function. Here, we studied long-term outcomes of radiosurgery-based eradication of brain metastases and compared its effects of radiosurgical dose of radiation on a healthy brain in the mouse model. We also focused on the cognitive aspect of behavior to specifically address the clinical problem. Notably, we found that radiosurgery had only transient effect on cognition in naive animals, while irradiation of brain tumors led to more severe neuroinflammation and permanent cognitive deficits. We conclude that more attention is needed to combat the consequences of neuroinflammation after eradicating brain metastases.</p>
+      </abstract>
+    </article-meta>
+  </front>
+</article>
+<article xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink" dtd-version="1.3" xml:lang="en" article-type="research-article">
+  <?properties open_access?>
+  <processing-meta base-tagset="archiving" mathml-version="3.0" table-model="xhtml" tagset-family="jats">
+    <restricted-by>pmc</restricted-by>
+  </processing-meta>
+  <front>
+    <journal-meta>
+      <journal-id journal-id-type="nlm-ta">PLoS One</journal-id>
+      <journal-id journal-id-type="iso-abbrev">PLoS One</journal-id>
+      <journal-id journal-id-type="publisher-id">plos</journal-id>
+      <journal-title-group>
+        <journal-title>PLoS ONE</journal-title>
+      </journal-title-group>
+      <issn pub-type="epub">1932-6203</issn>
+      <publisher>
+        <publisher-name>Public Library of Science</publisher-name>
+        <publisher-loc>San Francisco, CA USA</publisher-loc>
+      </publisher>
+    </journal-meta>
+    <article-meta>
+      <article-id pub-id-type="pmc">8757983</article-id>
+      <article-id pub-id-type="doi">10.1371/journal.pone.0261729</article-id>
+      <article-id pub-id-type="publisher-id">PONE-D-21-25221</article-id>
+      <article-categories>
+        <subj-group subj-group-type="heading">
+          <subject>Research Article</subject>
+        </subj-group>
+        <subj-group subj-group-type="Discipline-v3">
+          <subject>Medicine and Health Sciences</subject>
+          <subj-group>
+            <subject>Nephrology</subject>
+            <subj-group>
+              <subject>Renal Cancer</subject>
+            </subj-group>
+          </subj-group>
+        </subj-group>
+        <subj-group subj-group-type="Discipline-v3">
+          <subject>Medicine and Health Sciences</subject>
+          <subj-group>
+            <subject>Oncology</subject>
+            <subj-group>
+              <subject>Cancers and Neoplasms</subject>
+              <subj-group>
+                <subject>Carcinoma</subject>
+                <subj-group>
+                  <subject>Renal Cell Carcinoma</subject>
+                </subj-group>
+              </subj-group>
+            </subj-group>
+          </subj-group>
+        </subj-group>
+        <subj-group subj-group-type="Discipline-v3">
+          <subject>Medicine and Health Sciences</subject>
+          <subj-group>
+            <subject>Oncology</subject>
+            <subj-group>
+              <subject>Cancers and Neoplasms</subject>
+              <subj-group>
+                <subject>Genitourinary Tract Tumors</subject>
+                <subj-group>
+                  <subject>Renal Cell Carcinoma</subject>
+                </subj-group>
+              </subj-group>
+            </subj-group>
+          </subj-group>
+        </subj-group>
+        <subj-group subj-group-type="Discipline-v3">
+          <subject>Medicine and Health Sciences</subject>
+          <subj-group>
+            <subject>Oncology</subject>
+            <subj-group>
+              <subject>Cancer Treatment</subject>
+            </subj-group>
+          </subj-group>
+        </subj-group>
+        <subj-group subj-group-type="Discipline-v3">
+          <subject>Medicine and Health Sciences</subject>
+          <subj-group>
+            <subject>Surgical and Invasive Medical Procedures</subject>
+          </subj-group>
+        </subj-group>
+        <subj-group subj-group-type="Discipline-v3">
+          <subject>Medicine and Health Sciences</subject>
+          <subj-group>
+            <subject>Oncology</subject>
+            <subj-group>
+              <subject>Pediatric Oncology</subject>
+            </subj-group>
+          </subj-group>
+        </subj-group>
+        <subj-group subj-group-type="Discipline-v3">
+          <subject>Medicine and Health Sciences</subject>
+          <subj-group>
+            <subject>Pediatrics</subject>
+            <subj-group>
+              <subject>Pediatric Oncology</subject>
+            </subj-group>
+          </subj-group>
+        </subj-group>
+        <subj-group subj-group-type="Discipline-v3">
+          <subject>Medicine and Health Sciences</subject>
+          <subj-group>
+            <subject>Diagnostic Medicine</subject>
+            <subj-group>
+              <subject>Cancer Detection and Diagnosis</subject>
+            </subj-group>
+          </subj-group>
+        </subj-group>
+        <subj-group subj-group-type="Discipline-v3">
+          <subject>Medicine and Health Sciences</subject>
+          <subj-group>
+            <subject>Oncology</subject>
+            <subj-group>
+              <subject>Cancer Detection and Diagnosis</subject>
+            </subj-group>
+          </subj-group>
+        </subj-group>
+        <subj-group subj-group-type="Discipline-v3">
+          <subject>Biology and Life Sciences</subject>
+          <subj-group>
+            <subject>Anatomy</subject>
+            <subj-group>
+              <subject>Renal System</subject>
+              <subj-group>
+                <subject>Kidneys</subject>
+              </subj-group>
+            </subj-group>
+          </subj-group>
+        </subj-group>
+        <subj-group subj-group-type="Discipline-v3">
+          <subject>Medicine and Health Sciences</subject>
+          <subj-group>
+            <subject>Anatomy</subject>
+            <subj-group>
+              <subject>Renal System</subject>
+              <subj-group>
+                <subject>Kidneys</subject>
+              </subj-group>
+            </subj-group>
+          </subj-group>
+        </subj-group>
+        <subj-group subj-group-type="Discipline-v3">
+          <subject>Medicine and Health Sciences</subject>
+          <subj-group>
+            <subject>Oncology</subject>
+            <subj-group>
+              <subject>Cancers and Neoplasms</subject>
+              <subj-group>
+                <subject>Blastoma</subject>
+                <subj-group>
+                  <subject>Nephroblastoma</subject>
+                </subj-group>
+              </subj-group>
+            </subj-group>
+          </subj-group>
+        </subj-group>
+      </article-categories>
+      <title-group>
+        <article-title>Characteristics and outcome of children with renal tumors in the Netherlands: The first five-year&#8217;s experience of national centralization</article-title>
+        <alt-title alt-title-type="running-head">The first five years of national centralization for pediatric renal tumors in the Netherlands</alt-title>
+      </title-group>
+      <contrib-group>
+        <contrib contrib-type="author" equal-contrib="yes">
+          <contrib-id authenticated="true" contrib-id-type="orcid">https://orcid.org/0000-0003-0086-6691</contrib-id>
+          <name>
+            <surname>Roy</surname>
+            <given-names>Prakriti</given-names>
+          </name>
+          <role content-type="http://credit.niso.org/contributor-roles/conceptualization/">Conceptualization</role>
+          <role content-type="http://credit.niso.org/contributor-roles/data-curation/">Data curation</role>
+          <role content-type="http://credit.niso.org/contributor-roles/formal-analysis/">Formal analysis</role>
+          <role content-type="http://credit.niso.org/contributor-roles/investigation/">Investigation</role>
+          <role content-type="http://credit.niso.org/contributor-roles/methodology/">Methodology</role>
+          <role content-type="http://credit.niso.org/contributor-roles/project-administration/">Project administration</role>
+          <role content-type="http://credit.niso.org/contributor-roles/validation/">Validation</role>
+          <role content-type="http://credit.niso.org/contributor-roles/visualization/">Visualization</role>
+          <role content-type="http://credit.niso.org/contributor-roles/writing-original-draft/">Writing &#8211; original draft</role>
+          <role content-type="http://credit.niso.org/contributor-roles/writing-review-editing/">Writing &#8211; review &amp; editing</role>
+          <xref rid="aff001" ref-type="aff">
+<sup>1</sup>
+</xref>
+          <xref rid="cor001" ref-type="corresp">*</xref>
+        </contrib>
+        <contrib contrib-type="author" equal-contrib="yes">
+          <name>
+            <surname>van Peer</surname>
+            <given-names>Sophie E.</given-names>
+          </name>
+          <role content-type="http://credit.niso.org/contributor-roles/conceptualization/">Conceptualization</role>
+          <role content-type="http://credit.niso.org/contributor-roles/data-curation/">Data curation</role>
+          <role content-type="http://credit.niso.org/contributor-roles/formal-analysis/">Formal analysis</role>
+          <role content-type="http://credit.niso.org/contributor-roles/investigation/">Investigation</role>
+          <role content-type="http://credit.niso.org/contributor-roles/methodology/">Methodology</role>
+          <role content-type="http://credit.niso.org/contributor-roles/project-administration/">Project administration</role>
+          <role content-type="http://credit.niso.org/contributor-roles/validation/">Validation</role>
+          <role content-type="http://credit.niso.org/contributor-roles/visualization/">Visualization</role>
+          <role content-type="http://credit.niso.org/contributor-roles/writing-original-draft/">Writing &#8211; original draft</role>
+          <role content-type="http://credit.niso.org/contributor-roles/writing-review-editing/">Writing &#8211; review &amp; editing</role>
+          <xref rid="aff001" ref-type="aff">
+<sup>1</sup>
+</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>de Witte</surname>
+            <given-names>Martin M.</given-names>
+          </name>
+          <role content-type="http://credit.niso.org/contributor-roles/conceptualization/">Conceptualization</role>
+          <role content-type="http://credit.niso.org/contributor-roles/visualization/">Visualization</role>
+          <role content-type="http://credit.niso.org/contributor-roles/writing-original-draft/">Writing &#8211; original draft</role>
+          <role content-type="http://credit.niso.org/contributor-roles/writing-review-editing/">Writing &#8211; review &amp; editing</role>
+          <xref rid="aff001" ref-type="aff">
+<sup>1</sup>
+</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Tytgat</surname>
+            <given-names>Godelieve A. M.</given-names>
+          </name>
+          <role content-type="http://credit.niso.org/contributor-roles/writing-review-editing/">Writing &#8211; review &amp; editing</role>
+          <xref rid="aff001" ref-type="aff">
+<sup>1</sup>
+</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Karim-Kos</surname>
+            <given-names>Henrike E.</given-names>
+          </name>
+          <role content-type="http://credit.niso.org/contributor-roles/conceptualization/">Conceptualization</role>
+          <role content-type="http://credit.niso.org/contributor-roles/data-curation/">Data curation</role>
+          <role content-type="http://credit.niso.org/contributor-roles/formal-analysis/">Formal analysis</role>
+          <role content-type="http://credit.niso.org/contributor-roles/investigation/">Investigation</role>
+          <role content-type="http://credit.niso.org/contributor-roles/methodology/">Methodology</role>
+          <role content-type="http://credit.niso.org/contributor-roles/project-administration/">Project administration</role>
+          <role content-type="http://credit.niso.org/contributor-roles/supervision/">Supervision</role>
+          <role content-type="http://credit.niso.org/contributor-roles/validation/">Validation</role>
+          <role content-type="http://credit.niso.org/contributor-roles/writing-review-editing/">Writing &#8211; review &amp; editing</role>
+          <xref rid="aff001" ref-type="aff">
+<sup>1</sup>
+</xref>
+          <xref rid="aff002" ref-type="aff">
+<sup>2</sup>
+</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>van Grotel</surname>
+            <given-names>Martine</given-names>
+          </name>
+          <role content-type="http://credit.niso.org/contributor-roles/writing-review-editing/">Writing &#8211; review &amp; editing</role>
+          <xref rid="aff001" ref-type="aff">
+<sup>1</sup>
+</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>van de Ven</surname>
+            <given-names>Cees P.</given-names>
+          </name>
+          <role content-type="http://credit.niso.org/contributor-roles/writing-review-editing/">Writing &#8211; review &amp; editing</role>
+          <xref rid="aff001" ref-type="aff">
+<sup>1</sup>
+</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Mavinkurve-Groothuis</surname>
+            <given-names>Annelies M. C.</given-names>
+          </name>
+          <role content-type="http://credit.niso.org/contributor-roles/writing-review-editing/">Writing &#8211; review &amp; editing</role>
+          <xref rid="aff001" ref-type="aff">
+<sup>1</sup>
+</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Merks</surname>
+            <given-names>Johannes H. M.</given-names>
+          </name>
+          <role content-type="http://credit.niso.org/contributor-roles/writing-review-editing/">Writing &#8211; review &amp; editing</role>
+          <xref rid="aff001" ref-type="aff">
+<sup>1</sup>
+</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Kuiper</surname>
+            <given-names>Roland P.</given-names>
+          </name>
+          <role content-type="http://credit.niso.org/contributor-roles/writing-review-editing/">Writing &#8211; review &amp; editing</role>
+          <xref rid="aff001" ref-type="aff">
+<sup>1</sup>
+</xref>
+          <xref rid="aff003" ref-type="aff">
+<sup>3</sup>
+</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Hol</surname>
+            <given-names>Janna A.</given-names>
+          </name>
+          <role content-type="http://credit.niso.org/contributor-roles/data-curation/">Data curation</role>
+          <role content-type="http://credit.niso.org/contributor-roles/investigation/">Investigation</role>
+          <role content-type="http://credit.niso.org/contributor-roles/writing-review-editing/">Writing &#8211; review &amp; editing</role>
+          <xref rid="aff001" ref-type="aff">
+<sup>1</sup>
+</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Janssens</surname>
+            <given-names>Geert O. R.</given-names>
+          </name>
+          <role content-type="http://credit.niso.org/contributor-roles/validation/">Validation</role>
+          <role content-type="http://credit.niso.org/contributor-roles/writing-review-editing/">Writing &#8211; review &amp; editing</role>
+          <xref rid="aff001" ref-type="aff">
+<sup>1</sup>
+</xref>
+          <xref rid="aff004" ref-type="aff">
+<sup>4</sup>
+</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>de Krijger</surname>
+            <given-names>Ronald R.</given-names>
+          </name>
+          <role content-type="http://credit.niso.org/contributor-roles/validation/">Validation</role>
+          <role content-type="http://credit.niso.org/contributor-roles/writing-review-editing/">Writing &#8211; review &amp; editing</role>
+          <xref rid="aff001" ref-type="aff">
+<sup>1</sup>
+</xref>
+          <xref rid="aff005" ref-type="aff">
+<sup>5</sup>
+</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Jongmans</surname>
+            <given-names>Marjolijn C. J.</given-names>
+          </name>
+          <role content-type="http://credit.niso.org/contributor-roles/writing-review-editing/">Writing &#8211; review &amp; editing</role>
+          <xref rid="aff001" ref-type="aff">
+<sup>1</sup>
+</xref>
+          <xref rid="aff003" ref-type="aff">
+<sup>3</sup>
+</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Drost</surname>
+            <given-names>Jarno</given-names>
+          </name>
+          <role content-type="http://credit.niso.org/contributor-roles/writing-review-editing/">Writing &#8211; review &amp; editing</role>
+          <xref rid="aff001" ref-type="aff">
+<sup>1</sup>
+</xref>
+          <xref rid="aff006" ref-type="aff">
+<sup>6</sup>
+</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>van der Steeg</surname>
+            <given-names>Alida F. W.</given-names>
+          </name>
+          <role content-type="http://credit.niso.org/contributor-roles/writing-review-editing/">Writing &#8211; review &amp; editing</role>
+          <xref rid="aff001" ref-type="aff">
+<sup>1</sup>
+</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Littooij</surname>
+            <given-names>Annemieke S.</given-names>
+          </name>
+          <role content-type="http://credit.niso.org/contributor-roles/validation/">Validation</role>
+          <role content-type="http://credit.niso.org/contributor-roles/writing-review-editing/">Writing &#8211; review &amp; editing</role>
+          <xref rid="aff001" ref-type="aff">
+<sup>1</sup>
+</xref>
+          <xref rid="aff007" ref-type="aff">
+<sup>7</sup>
+</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Wijnen</surname>
+            <given-names>Marc H. W. A.</given-names>
+          </name>
+          <role content-type="http://credit.niso.org/contributor-roles/writing-review-editing/">Writing &#8211; review &amp; editing</role>
+          <xref rid="aff001" ref-type="aff">
+<sup>1</sup>
+</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <contrib-id authenticated="true" contrib-id-type="orcid">https://orcid.org/0000-0002-4626-8702</contrib-id>
+          <name>
+            <surname>van Tinteren</surname>
+            <given-names>Harm</given-names>
+          </name>
+          <role content-type="http://credit.niso.org/contributor-roles/supervision/">Supervision</role>
+          <role content-type="http://credit.niso.org/contributor-roles/writing-review-editing/">Writing &#8211; review &amp; editing</role>
+          <xref rid="aff001" ref-type="aff">
+<sup>1</sup>
+</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>van den Heuvel-Eibrink</surname>
+            <given-names>Marry M.</given-names>
+          </name>
+          <role content-type="http://credit.niso.org/contributor-roles/conceptualization/">Conceptualization</role>
+          <role content-type="http://credit.niso.org/contributor-roles/formal-analysis/">Formal analysis</role>
+          <role content-type="http://credit.niso.org/contributor-roles/investigation/">Investigation</role>
+          <role content-type="http://credit.niso.org/contributor-roles/methodology/">Methodology</role>
+          <role content-type="http://credit.niso.org/contributor-roles/project-administration/">Project administration</role>
+          <role content-type="http://credit.niso.org/contributor-roles/supervision/">Supervision</role>
+          <role content-type="http://credit.niso.org/contributor-roles/validation/">Validation</role>
+          <role content-type="http://credit.niso.org/contributor-roles/visualization/">Visualization</role>
+          <role content-type="http://credit.niso.org/contributor-roles/writing-original-draft/">Writing &#8211; original draft</role>
+          <role content-type="http://credit.niso.org/contributor-roles/writing-review-editing/">Writing &#8211; review &amp; editing</role>
+          <xref rid="aff001" ref-type="aff">
+<sup>1</sup>
+</xref>
+        </contrib>
+      </contrib-group>
+      <aff id="aff001"><label>1</label>
+<addr-line>Princess M&#225;xima Center for Pediatric Oncology, Utrecht, The Netherlands</addr-line></aff>
+      <aff id="aff002"><label>2</label>
+<addr-line>Department of Research and Development, Netherlands Comprehensive Cancer Organization (IKNL), Utrecht, The Netherlands</addr-line></aff>
+      <aff id="aff003"><label>3</label>
+<addr-line>Department of Clinical Genetics, University Medical Center Utrecht (UMCU), Utrecht, The Netherlands</addr-line></aff>
+      <aff id="aff004"><label>4</label>
+<addr-line>Department of Radiation Oncology, University Medical Center Utrecht (UMCU), Utrecht, The Netherlands</addr-line></aff>
+      <aff id="aff005"><label>5</label>
+<addr-line>Department of Pathology, University Medical Center Utrecht (UMCU), Utrecht, The Netherlands</addr-line></aff>
+      <aff id="aff006"><label>6</label>
+<addr-line>Oncode Institute, Utrecht, The Netherlands</addr-line></aff>
+      <aff id="aff007"><label>7</label>
+<addr-line>Department of Radiology and Nuclear Medicine, University Medical Center Utrecht/Wilhelmina Children&#8217;s Hospital (UMCU), Utrecht, The Netherlands</addr-line></aff>
+      <contrib-group>
+        <contrib contrib-type="editor">
+          <name>
+            <surname>Tiao</surname>
+            <given-names>Gregory</given-names>
+          </name>
+          <role>Editor</role>
+          <xref rid="edit1" ref-type="aff"/>
+        </contrib>
+      </contrib-group>
+      <aff id="edit1">
+<addr-line>Cincinnati Children&#8217;s Hospital Medical Center, UNITED STATES</addr-line>
+</aff>
+      <author-notes>
+        <fn fn-type="COI-statement" id="coi001">
+          <p><bold>Competing Interests: </bold>The authors have declared that no competing interests exist.</p>
+        </fn>
+        <corresp id="cor001">* E-mail: <email>p.roy-2@prinsesmaximacentrum.nl</email></corresp>
+      </author-notes>
+      <pub-date pub-type="epub">
+        <day>13</day>
+        <month>1</month>
+        <year>2022</year>
+      </pub-date>
+      <pub-date pub-type="collection">
+        <year>2022</year>
+      </pub-date>
+      <volume>17</volume>
+      <issue>1</issue>
+      <elocation-id>e0261729</elocation-id>
+      <history>
+        <date date-type="received">
+          <day>6</day>
+          <month>8</month>
+          <year>2021</year>
+        </date>
+        <date date-type="accepted">
+          <day>8</day>
+          <month>12</month>
+          <year>2021</year>
+        </date>
+      </history>
+      <permissions>
+        <copyright-statement>&#169; 2022 Roy et al</copyright-statement>
+        <copyright-year>2022</copyright-year>
+        <copyright-holder>Roy et al</copyright-holder>
+        <license>
+          <ali:license_ref xmlns:ali="http://www.niso.org/schemas/ali/1.0/" specific-use="textmining" content-type="ccbylicense">https://creativecommons.org/licenses/by/4.0/</ali:license_ref>
+          <license-p>This is an open access article distributed under the terms of the <ext-link ext-link-type="uri" xlink:href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution License</ext-link>, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.</license-p>
+        </license>
+      </permissions>
+      <self-uri content-type="pdf" xlink:href="pone.0261729.pdf"/>
+      <abstract>
+        <p>Around 6% of all childhood malignancies represent renal tumors, of which a majority includes Wilms tumor (WT). Although survival rates have improved over the last decades, specific patients are still at risk for adverse outcome. In the Netherlands, since 2015, pediatric oncology care for renal tumors has been centralized in the Princess M&#225;xima Center for Pediatric Oncology. Here, we describe experiences of the first 5 years of centralized care and explore whether this influences the epidemiological landscape by comparing data with the Netherlands Cancer Registry (NCR). We identified all patients &lt;19 years with a renal mass diagnosed between 01-01-2015 and 31-12-2019 in the Princess M&#225;xima Center. Epidemiology, characteristics and management were analyzed. We identified 164 patients (including 1 patient who refused consent for registration), in our center with a suspicion of a renal tumor. The remaining 163 cases included WT (n = 118)/cystic partially differentiated nephroblastoma (n = 2)/nephrogenic rests only (n = 6) and non-WT (n = 37). In this period, the NCR included 138 children, 1 17-year-old patient was not referred to the Princess M&#225;xima Center. Central radiology review (before starting treatment) was performed in 121/163 patients, and central pathology review in 148/152 patients that underwent surgery. Treatment stratification, according to SIOP/EpSSG protocols was pursued based on multidisciplinary consensus. Preoperative chemotherapy was administered in 133 patients, whereas 19 patients underwent upfront surgery. Surgery was performed in 152 patients, and from 133 biomaterial was stored. Centralization of care for children with renal tumors led to referral of all but 1 new renal tumor cases in the Netherlands, and leads to referral of very rare subtypes not registered in the NCR, that benefit from high quality diagnostics and multidisciplinary decision making. National centralization of care led to enhanced development of molecular diagnostics and other innovation-based treatments for the future.</p>
+      </abstract>
+      <funding-group>
+        <award-group id="award001">
+          <funding-source>
+<institution>Stichting Kinderen Kankervrij (KiKa)</institution>
+</funding-source>
+          <award-id>278</award-id>
+          <principal-award-recipient>
+<name><surname>van Peer</surname><given-names>Sophie E.</given-names></name>
+</principal-award-recipient>
+        </award-group>
+        <award-group id="award002">
+          <funding-source>
+<institution>Princess M&#225;xima Center Foundation</institution>
+</funding-source>
+          <principal-award-recipient>
+<name><surname>van Peer</surname><given-names>Sophie E.</given-names></name>
+</principal-award-recipient>
+        </award-group>
+        <funding-statement>SP is (partly) funded by Stichting Kinderen Kankervrij (KiKa), Amstelveen, The Netherlands with grant number 278 and the Princess M&#225;xima Center foundation. The funders had no role in study design, data collection and analysis, decision to publish, or preparation of the manuscript.</funding-statement>
+      </funding-group>
+      <counts>
+        <fig-count count="3"/>
+        <table-count count="2"/>
+        <page-count count="15"/>
+      </counts>
+      <custom-meta-group>
+        <custom-meta id="data-availability">
+          <meta-name>Data Availability</meta-name>
+          <meta-value>Following the institutional policy, data used in this study is maintained by the Biobank and Data Access Committee (BDAC) of Princess Maxima Centrum, registered under study ID PMCLAB2020.134. Due to the GDPR we are restricted to share our dataset, since it contains data of patients with a rare disease, treated in a single institution leading to possibly identifiable patient information. However, study data can be shared upon request via <email>datadesk@prinsesmaximacentrum.nl</email> or the corresponding author.</meta-value>
+        </custom-meta>
+      </custom-meta-group>
+    </article-meta>
+    <notes>
+      <title>Data Availability</title>
+      <p>Following the institutional policy, data used in this study is maintained by the Biobank and Data Access Committee (BDAC) of Princess Maxima Centrum, registered under study ID PMCLAB2020.134. Due to the GDPR we are restricted to share our dataset, since it contains data of patients with a rare disease, treated in a single institution leading to possibly identifiable patient information. However, study data can be shared upon request via <email>datadesk@prinsesmaximacentrum.nl</email> or the corresponding author.</p>
+    </notes>
+  </front>
+  <body>The text of the article</body>
+  <back>
+    <ack>
+      <p>We would like to thank all patients and families of Princess M&#225;xima Center for Pediatric Oncology.</p>
+    </ack>
+    <ref-list>
+      <title>References</title>
+      <ref id="pone.0261729.ref001">
+        <label>1</label>
+        <mixed-citation publication-type="journal"><name><surname>Pastore</surname><given-names>G</given-names></name>, <name><surname>Znaor</surname><given-names>A</given-names></name>, <name><surname>Spreafico</surname><given-names>F</given-names></name>, <name><surname>Graf</surname><given-names>N</given-names></name>, <name><surname>Pritchard-Jones</surname><given-names>K</given-names></name>, <name><surname>Steliarova-Foucher</surname><given-names>E</given-names></name>. <article-title>Malignant renal tumours incidence and survival in European children (1978&#8211;1997): report from the Automated Childhood Cancer Information System project</article-title>. <source>Eur J Cancer</source>. <year>2006</year>;<volume>42</volume>(<issue>13</issue>):<fpage>2103</fpage>&#8211;<lpage>14</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1016/j.ejca.2006.05.010</pub-id>
+<pub-id pub-id-type="pmid">16919774</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref002">
+        <label>2</label>
+        <mixed-citation publication-type="journal"><name><surname>van den Heuvel-Eibrink</surname><given-names>MM</given-names></name>, <name><surname>Hol</surname><given-names>JA</given-names></name>, <name><surname>Pritchard-Jones</surname><given-names>K</given-names></name>, <name><surname>van Tinteren</surname><given-names>H</given-names></name>, <name><surname>Furtwangler</surname><given-names>R</given-names></name>, <name><surname>Verschuur</surname><given-names>AC</given-names></name>, <etal>et al</etal>. <article-title>Position paper: Rationale for the treatment of Wilms tumour in the UMBRELLA SIOP-RTSG 2016 protocol</article-title>. <source>Nat Rev Urol</source>. <year>2017</year>;<volume>14</volume>(<issue>12</issue>):<fpage>743</fpage>&#8211;<lpage>52</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1038/nrurol.2017.163</pub-id>
+<pub-id pub-id-type="pmid">29089605</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref003">
+        <label>3</label>
+        <mixed-citation publication-type="journal"><name><surname>Nakata</surname><given-names>K</given-names></name>, <name><surname>Colombet</surname><given-names>M</given-names></name>, <name><surname>Stiller</surname><given-names>CA</given-names></name>, <name><surname>Pritchard-Jones</surname><given-names>K</given-names></name>, <name><surname>Steliarova-Foucher</surname><given-names>E</given-names></name>, <article-title>Contributors I-. Incidence of childhood renal tumours: An international population-based study</article-title>. <source>Int J Cancer</source>. <year>2020</year>;<volume>147</volume>(<issue>12</issue>):<fpage>3313</fpage>&#8211;<lpage>27</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1002/ijc.33147</pub-id>
+<pub-id pub-id-type="pmid">32902866</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref004">
+        <label>4</label>
+        <mixed-citation publication-type="journal"><name><surname>Gatta</surname><given-names>G</given-names></name>, <name><surname>Trama</surname><given-names>A</given-names></name>, <name><surname>Capocaccia</surname><given-names>R</given-names></name>, <name><surname>Group</surname><given-names>RAW</given-names></name>. <article-title>Epidemiology of rare cancers and inequalities in oncologic outcomes</article-title>. <source>Eur J Surg Oncol</source>. <year>2019</year>;<volume>45</volume>(<issue>1</issue>):<fpage>3</fpage>&#8211;<lpage>11</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1016/j.ejso.2017.08.018</pub-id>
+<pub-id pub-id-type="pmid">29032924</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref005">
+        <label>5</label>
+        <mixed-citation publication-type="journal"><name><surname>Vujanic</surname><given-names>GM</given-names></name>, <name><surname>Gessler</surname><given-names>M</given-names></name>, <name><surname>Ooms</surname><given-names>A</given-names></name>, <name><surname>Collini</surname><given-names>P</given-names></name>, <name><surname>Coulomb-l&#8217;Hermine</surname><given-names>A</given-names></name>, <name><surname>D&#8217;Hooghe</surname><given-names>E</given-names></name>, <etal>et al</etal>. <article-title>The UMBRELLA SIOP-RTSG 2016 Wilms tumour pathology and molecular biology protocol</article-title>. <source>Nat Rev Urol</source>. <year>2018</year>;<volume>15</volume>(<issue>11</issue>):<fpage>693</fpage>&#8211;<lpage>701</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1038/s41585-018-0100-3</pub-id>
+<pub-id pub-id-type="pmid">30310143</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref006">
+        <label>6</label>
+        <mixed-citation publication-type="journal"><name><surname>van den Heuvel-Eibrink</surname><given-names>MM</given-names></name>, <name><surname>Grundy</surname><given-names>P</given-names></name>, <name><surname>Graf</surname><given-names>N</given-names></name>, <name><surname>Pritchard-Jones</surname><given-names>K</given-names></name>, <name><surname>Bergeron</surname><given-names>C</given-names></name>, <name><surname>Patte</surname><given-names>C</given-names></name>, <etal>et al</etal>. <article-title>Characteristics and survival of 750 children diagnosed with a renal tumor in the first seven months of life: A collaborative study by the SIOP/GPOH/SFOP, NWTSG, and UKCCSG Wilms tumor study groups</article-title>. <source>Pediatr Blood Cancer</source>. <year>2008</year>;<volume>50</volume>(<issue>6</issue>):<fpage>1130</fpage>&#8211;<lpage>4</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1002/pbc.21389</pub-id>
+<pub-id pub-id-type="pmid">18095319</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref007">
+        <label>7</label>
+        <mixed-citation publication-type="journal"><name><surname>Gooskens</surname><given-names>SL</given-names></name>, <name><surname>Houwing</surname><given-names>ME</given-names></name>, <name><surname>Vujanic</surname><given-names>GM</given-names></name>, <name><surname>Dome</surname><given-names>JS</given-names></name>, <name><surname>Diertens</surname><given-names>T</given-names></name>, <name><surname>Coulomb-l&#8217;Hermine</surname><given-names>A</given-names></name>, <etal>et al</etal>. <article-title>Congenital mesoblastic nephroma 50 years after its recognition: A narrative review</article-title>. <source>Pediatr Blood Cancer</source>. <year>2017</year>;<volume>64</volume>(<issue>7</issue>). <comment>doi: </comment><pub-id pub-id-type="doi">10.1002/pbc.26437</pub-id>
+<pub-id pub-id-type="pmid">28124468</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref008">
+        <label>8</label>
+        <mixed-citation publication-type="journal"><name><surname>Hoot</surname><given-names>AC</given-names></name>, <name><surname>Russo</surname><given-names>P</given-names></name>, <name><surname>Judkins</surname><given-names>AR</given-names></name>, <name><surname>Perlman</surname><given-names>EJ</given-names></name>, <name><surname>Biegel</surname><given-names>JA</given-names></name>. <article-title>Immunohistochemical analysis of hSNF5/INI1 distinguishes renal and extra-renal malignant rhabdoid tumors from other pediatric soft tissue tumors</article-title>. <source>Am J Surg Pathol</source>. <year>2004</year>;<volume>28</volume>(<issue>11</issue>):<fpage>1485</fpage>&#8211;<lpage>91</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1097/01.pas.0000141390.14548.34</pub-id>
+<pub-id pub-id-type="pmid">15489652</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref009">
+        <label>9</label>
+        <mixed-citation publication-type="journal"><name><surname>Amar</surname><given-names>AM</given-names></name>, <name><surname>Tomlinson</surname><given-names>G</given-names></name>, <name><surname>Green</surname><given-names>DM</given-names></name>, <name><surname>Breslow</surname><given-names>NE</given-names></name>, <name><surname>de Alarcon</surname><given-names>PA</given-names></name>. <article-title>Clinical presentation of rhabdoid tumors of the kidney</article-title>. <source>J Pediatr Hematol Oncol</source>. <year>2001</year>;<volume>23</volume>(<issue>2</issue>):<fpage>105</fpage>&#8211;<lpage>8</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1097/00043426-200102000-00007</pub-id>
+<pub-id pub-id-type="pmid">11216700</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref010">
+        <label>10</label>
+        <mixed-citation publication-type="journal"><name><surname>van den Heuvel-Eibrink</surname><given-names>MM</given-names></name>, <name><surname>van Tinteren</surname><given-names>H</given-names></name>, <name><surname>Rehorst</surname><given-names>H</given-names></name>, <name><surname>Coulombe</surname><given-names>A</given-names></name>, <name><surname>Patte</surname><given-names>C</given-names></name>, <name><surname>de Camargo</surname><given-names>B</given-names></name>, <etal>et al</etal>. <article-title>Malignant rhabdoid tumours of the kidney (MRTKs), registered on recent SIOP protocols from 1993 to 2005: a report of the SIOP renal tumour study group</article-title>. <source>Pediatr Blood Cancer</source>. <year>2011</year>;<volume>56</volume>(<issue>5</issue>):<fpage>733</fpage>&#8211;<lpage>7</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1002/pbc.22922</pub-id>
+<pub-id pub-id-type="pmid">21370404</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref011">
+        <label>11</label>
+        <mixed-citation publication-type="journal"><name><surname>Ahmed</surname><given-names>HU</given-names></name>, <name><surname>Arya</surname><given-names>M</given-names></name>, <name><surname>Levitt</surname><given-names>G</given-names></name>, <name><surname>Duffy</surname><given-names>PG</given-names></name>, <name><surname>Mushtaq</surname><given-names>I</given-names></name>, <name><surname>Sebire</surname><given-names>NJ</given-names></name>. <article-title>Part I: Primary malignant non-Wilms&#8217; renal tumours in children</article-title>. <source>Lancet Oncol</source>. <year>2007</year>;<volume>8</volume>(<issue>8</issue>):<fpage>730</fpage>&#8211;<lpage>7</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1016/S1470-2045(07)70241-3</pub-id>
+<pub-id pub-id-type="pmid">17679083</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref012">
+        <label>12</label>
+        <mixed-citation publication-type="journal"><name><surname>Geller</surname><given-names>JI</given-names></name>, <name><surname>Ehrlich</surname><given-names>PF</given-names></name>, <name><surname>Cost</surname><given-names>NG</given-names></name>, <name><surname>Khanna</surname><given-names>G</given-names></name>, <name><surname>Mullen</surname><given-names>EA</given-names></name>, <name><surname>Gratias</surname><given-names>EJ</given-names></name>, <etal>et al</etal>. <article-title>Characterization of adolescent and pediatric renal cell carcinoma: A report from the Children&#8217;s Oncology Group study AREN03B2</article-title>. <source>Cancer</source>. <year>2015</year>;<volume>121</volume>(<issue>14</issue>):<fpage>2457</fpage>&#8211;<lpage>64</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1002/cncr.29368</pub-id>
+<pub-id pub-id-type="pmid">25845370</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref013">
+        <label>13</label>
+        <mixed-citation publication-type="journal"><name><surname>Bruder</surname><given-names>E</given-names></name>, <name><surname>Passera</surname><given-names>O</given-names></name>, <name><surname>Harms</surname><given-names>D</given-names></name>, <name><surname>Leuschner</surname><given-names>I</given-names></name>, <name><surname>Ladanyi</surname><given-names>M</given-names></name>, <name><surname>Argani</surname><given-names>P</given-names></name>, <etal>et al</etal>. <article-title>Morphologic and molecular characterization of renal cell carcinoma in children and young adults</article-title>. <source>Am J Surg Pathol</source>. <year>2004</year>;<volume>28</volume>(<issue>9</issue>):<fpage>1117</fpage>&#8211;<lpage>32</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1097/01.pas.0000131558.32412.40</pub-id>
+<pub-id pub-id-type="pmid">15316311</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref014">
+        <label>14</label>
+        <mixed-citation publication-type="journal"><name><surname>Gooskens</surname><given-names>SL</given-names></name>, <name><surname>Furtwangler</surname><given-names>R</given-names></name>, <name><surname>Vujanic</surname><given-names>GM</given-names></name>, <name><surname>Dome</surname><given-names>JS</given-names></name>, <name><surname>Graf</surname><given-names>N</given-names></name>, <name><surname>van den Heuvel-Eibrink</surname><given-names>MM</given-names></name>. <article-title>Clear cell sarcoma of the kidney: a review</article-title>. <source>Eur J Cancer</source>. <year>2012</year>;<volume>48</volume>(<issue>14</issue>):<fpage>2219</fpage>&#8211;<lpage>26</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1016/j.ejca.2012.04.009</pub-id>
+<pub-id pub-id-type="pmid">22579455</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref015">
+        <label>15</label>
+        <mixed-citation publication-type="journal"><name><surname>Furtw&#228;ngler</surname><given-names>R</given-names></name>, <name><surname>Gooskens</surname><given-names>SL</given-names></name>, <name><surname>van Tinteren</surname><given-names>H</given-names></name>, <name><surname>de Kraker</surname><given-names>J</given-names></name>, <name><surname>Schleiermacher</surname><given-names>G</given-names></name>, <name><surname>Bergeron</surname><given-names>C</given-names></name>, <etal>et al</etal>. <article-title>Clear cell sarcomas of the kidney registered on International Society of Pediatric Oncology (SIOP) 93&#8211;01 and SIOP 2001 protocols: a report of the SIOP Renal Tumour Study Group</article-title>. <source>Eur J Cancer</source>. <year>2013</year>;<volume>49</volume>(<issue>16</issue>):<fpage>3497</fpage>&#8211;<lpage>506</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1016/j.ejca.2013.06.036</pub-id>
+<pub-id pub-id-type="pmid">23880476</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref016">
+        <label>16</label>
+        <mixed-citation publication-type="journal"><name><surname>Argani</surname><given-names>P</given-names></name>, <name><surname>Perlman</surname><given-names>EJ</given-names></name>, <name><surname>Breslow</surname><given-names>NE</given-names></name>, <name><surname>Browning</surname><given-names>NG</given-names></name>, <name><surname>Green</surname><given-names>DM</given-names></name>, <name><surname>D&#8217;Angio</surname><given-names>GJ</given-names></name>, <etal>et al</etal>. <article-title>Clear cell sarcoma of the kidney: a review of 351 cases from the National Wilms Tumor Study Group Pathology Center</article-title>. <source>Am J Surg Pathol</source>. <year>2000</year>;<volume>24</volume>(<issue>1</issue>):<fpage>4</fpage>&#8211;<lpage>18</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1097/00000478-200001000-00002</pub-id>
+<pub-id pub-id-type="pmid">10632483</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref017">
+        <label>17</label>
+        <mixed-citation publication-type="journal"><name><surname>Vujanic</surname><given-names>GM</given-names></name>, <name><surname>Sandstedt</surname><given-names>B</given-names></name>, <name><surname>Harms</surname><given-names>D</given-names></name>, <name><surname>Kelsey</surname><given-names>A</given-names></name>, <name><surname>Leuschner</surname><given-names>I</given-names></name>, <name><surname>de Kraker</surname><given-names>J</given-names></name>, <etal>et al</etal>. <article-title>Revised International Society of Paediatric Oncology (SIOP) working classification of renal tumors of childhood</article-title>. <source>Med Pediatr Oncol</source>. <year>2002</year>;<volume>38</volume>(<issue>2</issue>):<fpage>79</fpage>&#8211;<lpage>82</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1002/mpo.1276</pub-id>
+<pub-id pub-id-type="pmid">11813170</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref018">
+        <label>18</label>
+        <mixed-citation publication-type="journal"><name><surname>Pritchard-Jones</surname><given-names>K</given-names></name>, <name><surname>Bergeron</surname><given-names>C</given-names></name>, <name><surname>de Camargo</surname><given-names>B</given-names></name>, <name><surname>van den Heuvel-Eibrink</surname><given-names>MM</given-names></name>, <name><surname>Acha</surname><given-names>T</given-names></name>, <name><surname>Godzinski</surname><given-names>J</given-names></name>, <etal>et al</etal>. <article-title>Omission of doxorubicin from the treatment of stage II-III, intermediate-risk Wilms&#8217; tumour (SIOP WT 2001): an open-label, non-inferiority, randomised controlled trial</article-title>. <source>Lancet</source>. <year>2015</year>;<volume>386</volume>(<issue>9999</issue>):<fpage>1156</fpage>&#8211;<lpage>64</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1016/S0140-6736(14)62395-3</pub-id>
+<pub-id pub-id-type="pmid">26164096</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref019">
+        <label>19</label>
+        <mixed-citation publication-type="journal"><name><surname>de Kraker</surname><given-names>J</given-names></name>, <name><surname>Graf</surname><given-names>N</given-names></name>, <name><surname>van Tinteren</surname><given-names>H</given-names></name>, <name><surname>Pein</surname><given-names>F</given-names></name>, <name><surname>Sandstedt</surname><given-names>B</given-names></name>, <name><surname>Godzinski</surname><given-names>J</given-names></name>, <etal>et al</etal>. <article-title>Reduction of postoperative chemotherapy in children with stage I intermediate-risk and anaplastic Wilms&#8217; tumour (SIOP 93&#8211;01 trial): a randomised controlled trial</article-title>. <source>Lancet</source>. <year>2004</year>;<volume>364</volume>(<issue>9441</issue>):<fpage>1229</fpage>&#8211;<lpage>35</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1016/S0140-6736(04)17139-0</pub-id>
+<pub-id pub-id-type="pmid">15464183</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref020">
+        <label>20</label>
+        <mixed-citation publication-type="journal"><name><surname>van Peer</surname><given-names>SE</given-names></name>, <name><surname>Pleijte</surname><given-names>CJH</given-names></name>, <name><surname>de Krijger</surname><given-names>RR</given-names></name>, <name><surname>Jongmans</surname><given-names>MCJ</given-names></name>, <name><surname>Kuiper</surname><given-names>RP</given-names></name>, <name><surname>Lilien</surname><given-names>MR</given-names></name>, <etal>et al</etal>. <article-title>Clinical and Molecular Characteristics and Outcome of Cystic Partially Differentiated Nephroblastoma and Cystic Nephroma: A Narrative Review of the Literature</article-title>. <source>Cancers (Basel)</source>. <year>2021</year>;<volume>13</volume>(<issue>5</issue>). <comment>doi: </comment><pub-id pub-id-type="doi">10.3390/cancers13050997</pub-id>
+<pub-id pub-id-type="pmid">33673661</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref021">
+        <label>21</label>
+        <mixed-citation publication-type="journal"><name><surname>Vokuhl</surname><given-names>C</given-names></name>, <name><surname>Nourkami-Tutdibi</surname><given-names>N</given-names></name>, <name><surname>Furtwangler</surname><given-names>R</given-names></name>, <name><surname>Gessler</surname><given-names>M</given-names></name>, <name><surname>Graf</surname><given-names>N</given-names></name>, <name><surname>Leuschner</surname><given-names>I</given-names></name>. <article-title>ETV6-NTRK3 in congenital mesoblastic nephroma: A report of the SIOP/GPOH nephroblastoma study</article-title>. <source>Pediatr Blood Cancer</source>. <year>2018</year>;<volume>65</volume>(<issue>4</issue>). <comment>doi: </comment><pub-id pub-id-type="doi">10.1002/pbc.26925</pub-id>
+<pub-id pub-id-type="pmid">29286563</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref022">
+        <label>22</label>
+        <mixed-citation publication-type="journal"><name><surname>Argani</surname><given-names>P</given-names></name>, <name><surname>Antonescu</surname><given-names>CR</given-names></name>, <name><surname>Couturier</surname><given-names>J</given-names></name>, <name><surname>Fournet</surname><given-names>JC</given-names></name>, <name><surname>Sciot</surname><given-names>R</given-names></name>, <name><surname>Debiec-Rychter</surname><given-names>M</given-names></name>, <etal>et al</etal>. <article-title>PRCC-TFE3 renal carcinomas: morphologic, immunohistochemical, ultrastructural, and molecular analysis of an entity associated with the t(X;1)(p11.2;q21)</article-title>. <source>Am J Surg Pathol</source>. <year>2002</year>;<volume>26</volume>(<issue>12</issue>):<fpage>1553</fpage>&#8211;<lpage>66</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1097/00000478-200212000-00003</pub-id>
+<pub-id pub-id-type="pmid">12459622</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref023">
+        <label>23</label>
+        <mixed-citation publication-type="journal"><name><surname>van der Beek</surname><given-names>JN</given-names></name>, <name><surname>Hol</surname><given-names>JA</given-names></name>, <name><surname>Coulomb-l&#8217;Hermine</surname><given-names>A</given-names></name>, <name><surname>Graf</surname><given-names>N</given-names></name>, <name><surname>van Tinteren</surname><given-names>H</given-names></name>, <name><surname>Pritchard-Jones</surname><given-names>K</given-names></name>, <etal>et al</etal>. <article-title>Characteristics and outcome of pediatric renal cell carcinoma patients registered in the International Society of Pediatric Oncology (SIOP) 93&#8211;01, 2001 and UK-IMPORT database: A report of the SIOP-Renal Tumor Study Group</article-title>. <source>Int J Cancer</source>. <year>2021</year>;<volume>148</volume>(<issue>11</issue>):<fpage>2724</fpage>&#8211;<lpage>35</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1002/ijc.33476</pub-id>
+<pub-id pub-id-type="pmid">33460450</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref024">
+        <label>24</label>
+        <mixed-citation publication-type="journal"><name><surname>Ray</surname><given-names>S</given-names></name>, <name><surname>Jones</surname><given-names>R</given-names></name>, <name><surname>Pritchard-Jones</surname><given-names>K</given-names></name>, <name><surname>Dzhuma</surname><given-names>K</given-names></name>, <name><surname>van den Heuvel-Eibrink</surname><given-names>M</given-names></name>, <name><surname>Tytgat</surname><given-names>G</given-names></name>, <etal>et al</etal>. <article-title>Pediatric and young adult renal cell carcinoma</article-title>. <source>Pediatr Blood Cancer</source>. <year>2020</year>;<volume>67</volume>(<issue>11</issue>):<fpage>e28675</fpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1002/pbc.28675</pub-id>
+<pub-id pub-id-type="pmid">32869954</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref025">
+        <label>25</label>
+        <mixed-citation publication-type="journal"><name><surname>van der Beek</surname><given-names>JN</given-names></name>, <name><surname>Geller</surname><given-names>JI</given-names></name>, <name><surname>de Krijger</surname><given-names>RR</given-names></name>, <name><surname>Graf</surname><given-names>N</given-names></name>, <name><surname>Pritchard-Jones</surname><given-names>K</given-names></name>, <name><surname>Drost</surname><given-names>J</given-names></name>, <etal>et al</etal>. <article-title>Characteristics and Outcome of Children with Renal Cell Carcinoma: A Narrative Review</article-title>. <source>Cancers (Basel)</source>. <year>2020</year>;<volume>12</volume>(<issue>7</issue>). <comment>doi: </comment><pub-id pub-id-type="doi">10.3390/cancers12071776</pub-id>
+<pub-id pub-id-type="pmid">32635225</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref026">
+        <label>26</label>
+        <mixed-citation publication-type="journal"><name><surname>Custers</surname><given-names>L</given-names></name>, <name><surname>Khabirova</surname><given-names>E</given-names></name>, <name><surname>Coorens</surname><given-names>THH</given-names></name>, <name><surname>Oliver</surname><given-names>TRW</given-names></name>, <name><surname>Calandrini</surname><given-names>C</given-names></name>, <name><surname>Young</surname><given-names>MD</given-names></name>, <etal>et al</etal>. <article-title>Somatic mutations and single-cell transcriptomes reveal the root of malignant rhabdoid tumours</article-title>. <source>Nat Commun</source>. <year>2021</year>;<volume>12</volume>(<issue>1</issue>):<fpage>1407</fpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1038/s41467-021-21675-6</pub-id>
+<pub-id pub-id-type="pmid">33658498</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref027">
+        <label>27</label>
+        <mixed-citation publication-type="journal"><name><surname>Wagner</surname><given-names>L</given-names></name>, <name><surname>Hill</surname><given-names>DA</given-names></name>, <name><surname>Fuller</surname><given-names>C</given-names></name>, <name><surname>Pedrosa</surname><given-names>M</given-names></name>, <name><surname>Bhakta</surname><given-names>M</given-names></name>, <name><surname>Perry</surname><given-names>A</given-names></name>, <etal>et al</etal>. <article-title>Treatment of metastatic rhabdoid tumor of the kidney</article-title>. <source>J Pediatr Hematol Oncol</source>. <year>2002</year>;<volume>24</volume>(<issue>5</issue>):<fpage>385</fpage>&#8211;<lpage>8</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1097/00043426-200206000-00012</pub-id>
+<pub-id pub-id-type="pmid">12142788</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref028">
+        <label>28</label>
+        <mixed-citation publication-type="journal"><name><surname>Rousseau-Merck</surname><given-names>MF</given-names></name>, <name><surname>Versteege</surname><given-names>I</given-names></name>, <name><surname>Legrand</surname><given-names>I</given-names></name>, <name><surname>Couturier</surname><given-names>J</given-names></name>, <name><surname>Mairal</surname><given-names>A</given-names></name>, <name><surname>Delattre</surname><given-names>O</given-names></name>, <etal>et al</etal>. <article-title>hSNF5/INI1 inactivation is mainly associated with homozygous deletions and mitotic recombinations in rhabdoid tumors</article-title>. <source>Cancer Res</source>. <year>1999</year>;<volume>59</volume>(<issue>13</issue>):<fpage>3152</fpage>&#8211;<lpage>6</lpage>. <pub-id pub-id-type="pmid">10397258</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref029">
+        <label>29</label>
+        <mixed-citation publication-type="journal"><name><surname>Biegel</surname><given-names>JA</given-names></name>, <name><surname>Zhou</surname><given-names>JY</given-names></name>, <name><surname>Rorke</surname><given-names>LB</given-names></name>, <name><surname>Stenstrom</surname><given-names>C</given-names></name>, <name><surname>Wainwright</surname><given-names>LM</given-names></name>, <name><surname>Fogelgren</surname><given-names>B</given-names></name>. <article-title>Germ-line and acquired mutations of INI1 in atypical teratoid and rhabdoid tumors</article-title>. <source>Cancer Res</source>. <year>1999</year>;<volume>59</volume>(<issue>1</issue>):<fpage>74</fpage>&#8211;<lpage>9</lpage>. <pub-id pub-id-type="pmid">9892189</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref030">
+        <label>30</label>
+        <mixed-citation publication-type="journal"><name><surname>Kalapurakal</surname><given-names>JA</given-names></name>, <name><surname>Perlman</surname><given-names>EJ</given-names></name>, <name><surname>Seibel</surname><given-names>NL</given-names></name>, <name><surname>Ritchey</surname><given-names>M</given-names></name>, <name><surname>Dome</surname><given-names>JS</given-names></name>, <name><surname>Grundy</surname><given-names>PE</given-names></name>. <article-title>Outcomes of patients with revised stage I clear cell sarcoma of kidney treated in National Wilms Tumor Studies 1&#8211;5</article-title>. <source>Int J Radiat Oncol Biol Phys</source>. <year>2013</year>;<volume>85</volume>(<issue>2</issue>):<fpage>428</fpage>&#8211;<lpage>31</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1016/j.ijrobp.2012.04.023</pub-id>
+<pub-id pub-id-type="pmid">22658515</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref031">
+        <label>31</label>
+        <mixed-citation publication-type="journal"><name><surname>Seibel</surname><given-names>NL</given-names></name>, <name><surname>Chi</surname><given-names>YY</given-names></name>, <name><surname>Perlman</surname><given-names>EJ</given-names></name>, <name><surname>Tian</surname><given-names>J</given-names></name>, <name><surname>Sun</surname><given-names>J</given-names></name>, <name><surname>Anderson</surname><given-names>JR</given-names></name>, <etal>et al</etal>. <article-title>Impact of cyclophosphamide and etoposide on outcome of clear cell sarcoma of the kidney treated on the National Wilms Tumor Study-5 (NWTS-5)</article-title>. <source>Pediatr Blood Cancer</source>. <year>2019</year>;<volume>66</volume>(<issue>1</issue>):<fpage>e27450</fpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1002/pbc.27450</pub-id>
+<pub-id pub-id-type="pmid">30255545</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref032">
+        <label>32</label>
+        <mixed-citation publication-type="journal"><name><surname>Pasqualini</surname><given-names>C</given-names></name>, <name><surname>Furtwangler</surname><given-names>R</given-names></name>, <name><surname>van Tinteren</surname><given-names>H</given-names></name>, <name><surname>Teixeira</surname><given-names>RAP</given-names></name>, <name><surname>Acha</surname><given-names>T</given-names></name>, <name><surname>Howell</surname><given-names>L</given-names></name>, <etal>et al</etal>. <article-title>Outcome of patients with stage IV high-risk Wilms tumour treated according to the SIOP2001 protocol: A report of the SIOP Renal Tumour Study Group</article-title>. <source>Eur J Cancer</source>. <year>2020</year>;<volume>128</volume>:<fpage>38</fpage>&#8211;<lpage>46</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1016/j.ejca.2020.01.001</pub-id>
+<pub-id pub-id-type="pmid">32109849</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref033">
+        <label>33</label>
+        <mixed-citation publication-type="journal"><name><surname>Karlsson</surname><given-names>J</given-names></name>, <name><surname>Valind</surname><given-names>A</given-names></name>, <name><surname>Gisselsson</surname><given-names>D</given-names></name>. <article-title>BCOR internal tandem duplication and YWHAE-NUTM2B/E fusion are mutually exclusive events in clear cell sarcoma of the kidney</article-title>. <source>Genes Chromosomes Cancer</source>. <year>2016</year>;<volume>55</volume>(<issue>2</issue>):<fpage>120</fpage>&#8211;<lpage>3</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1002/gcc.22316</pub-id>
+<pub-id pub-id-type="pmid">26493387</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref034">
+        <label>34</label>
+        <mixed-citation publication-type="journal"><name><surname>O&#8217;Meara</surname><given-names>E</given-names></name>, <name><surname>Stack</surname><given-names>D</given-names></name>, <name><surname>Lee</surname><given-names>CH</given-names></name>, <name><surname>Garvin</surname><given-names>AJ</given-names></name>, <name><surname>Morris</surname><given-names>T</given-names></name>, <name><surname>Argani</surname><given-names>P</given-names></name>, <etal>et al</etal>. <article-title>Characterization of the chromosomal translocation t(10;17)(q22;p13) in clear cell sarcoma of kidney</article-title>. <source>J Pathol</source>. <year>2012</year>;<volume>227</volume>(<issue>1</issue>):<fpage>72</fpage>&#8211;<lpage>80</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1002/path.3985</pub-id>
+<pub-id pub-id-type="pmid">22294382</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref035">
+        <label>35</label>
+        <mixed-citation publication-type="journal"><name><surname>Ueno-Yokohata</surname><given-names>H</given-names></name>, <name><surname>Okita</surname><given-names>H</given-names></name>, <name><surname>Nakasato</surname><given-names>K</given-names></name>, <name><surname>Akimoto</surname><given-names>S</given-names></name>, <name><surname>Hata</surname><given-names>J</given-names></name>, <name><surname>Koshinaga</surname><given-names>T</given-names></name>, <etal>et al</etal>. <article-title>Consistent in-frame internal tandem duplications of BCOR characterize clear cell sarcoma of the kidney</article-title>. <source>Nat Genet</source>. <year>2015</year>;<volume>47</volume>(<issue>8</issue>):<fpage>861</fpage>&#8211;<lpage>3</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1038/ng.3338</pub-id>
+<pub-id pub-id-type="pmid">26098867</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref036">
+        <label>36</label>
+        <mixed-citation publication-type="journal"><name><surname>Gooskens</surname><given-names>SL</given-names></name>, <name><surname>Furtwangler</surname><given-names>R</given-names></name>, <name><surname>Spreafico</surname><given-names>F</given-names></name>, <name><surname>van Tinteren</surname><given-names>H</given-names></name>, <name><surname>de Kraker</surname><given-names>J</given-names></name>, <name><surname>Vujanic</surname><given-names>GM</given-names></name>, <etal>et al</etal>. <article-title>Treatment and outcome of patients with relapsed clear cell sarcoma of the kidney: a combined SIOP and AIEOP study</article-title>. <source>Br J Cancer</source>. <year>2014</year>;<volume>111</volume>(<issue>2</issue>):<fpage>227</fpage>&#8211;<lpage>33</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1038/bjc.2014.291</pub-id>
+<pub-id pub-id-type="pmid">24937667</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref037">
+        <label>37</label>
+        <mixed-citation publication-type="journal"><name><surname>Gutierrez</surname><given-names>JC</given-names></name>, <name><surname>Cheung</surname><given-names>MC</given-names></name>, <name><surname>Zhuge</surname><given-names>Y</given-names></name>, <name><surname>Koniaris</surname><given-names>LG</given-names></name>, <name><surname>Sola</surname><given-names>JE</given-names></name>. <article-title>Does Children&#8217;s Oncology Group hospital membership improve survival for patients with neuroblastoma or Wilms tumor?</article-title>
+<source>Pediatr Blood Cancer</source>. <year>2010</year>;<volume>55</volume>(<issue>4</issue>):<fpage>621</fpage>&#8211;<lpage>8</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1002/pbc.22631</pub-id>
+<pub-id pub-id-type="pmid">20806361</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref038">
+        <label>38</label>
+        <mixed-citation publication-type="journal"><name><surname>Knops</surname><given-names>RRG</given-names></name>, <name><surname>van Dalen</surname><given-names>EC</given-names></name>, <name><surname>Mulder</surname><given-names>RL</given-names></name>, <name><surname>Leclercq</surname><given-names>E</given-names></name>, <name><surname>Knijnenburg</surname><given-names>SL</given-names></name>, <name><surname>Kaspers</surname><given-names>GJL</given-names></name>, <etal>et al</etal>. <article-title>The volume effect in paediatric oncology: a systematic review</article-title>. <source>Ann Oncol</source>. <year>2013</year>;<volume>24</volume>(<issue>7</issue>):<fpage>1749</fpage>&#8211;<lpage>53</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1093/annonc/mds656</pub-id>
+<pub-id pub-id-type="pmid">23378538</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref039">
+        <label>39</label>
+        <mixed-citation publication-type="journal"><name><surname>Aquina</surname><given-names>CT</given-names></name>, <name><surname>Probst</surname><given-names>CP</given-names></name>, <name><surname>Becerra</surname><given-names>AZ</given-names></name>, <name><surname>Iannuzzi</surname><given-names>JC</given-names></name>, <name><surname>Kelly</surname><given-names>KN</given-names></name>, <name><surname>Hensley</surname><given-names>BJ</given-names></name>, <etal>et al</etal>. <article-title>High volume improves outcomes: The argument for centralization of rectal cancer surgery</article-title>. <source>Surgery</source>. <year>2016</year>;<volume>159</volume>(<issue>3</issue>):<fpage>736</fpage>&#8211;<lpage>48</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1016/j.surg.2015.09.021</pub-id>
+<pub-id pub-id-type="pmid">26576696</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref040">
+        <label>40</label>
+        <mixed-citation publication-type="journal"><name><surname>Vujanic</surname><given-names>GM</given-names></name>, <name><surname>Gessler</surname><given-names>M</given-names></name>, <name><surname>Ooms</surname><given-names>A</given-names></name>, <name><surname>Collini</surname><given-names>P</given-names></name>, <name><surname>Coulomb-l&#8217;Hermine</surname><given-names>A</given-names></name>, <name><surname>D&#8217;Hooghe</surname><given-names>E</given-names></name>, <etal>et al</etal>. <article-title>Publisher Correction: The UMBRELLA SIOP-RTSG 2016 Wilms tumour pathology and molecular biology protocol</article-title>. <source>Nat Rev Urol</source>. <year>2019</year>;<volume>16</volume>(<issue>9</issue>):<fpage>563</fpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1038/s41585-019-0191-5</pub-id>
+<pub-id pub-id-type="pmid">31043716</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref041">
+        <label>41</label>
+        <mixed-citation publication-type="journal"><name><surname>Steliarova-Foucher</surname><given-names>E</given-names></name>, <name><surname>Stiller</surname><given-names>C</given-names></name>, <name><surname>Lacour</surname><given-names>B</given-names></name>, <name><surname>Kaatsch</surname><given-names>P</given-names></name>. <article-title>International Classification of Childhood Cancer, third edition</article-title>. <source>Cancer</source>. <year>2005</year>;<volume>103</volume>(<issue>7</issue>):<fpage>1457</fpage>&#8211;<lpage>67</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1002/cncr.20910</pub-id>
+<pub-id pub-id-type="pmid">15712273</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref042">
+        <label>42</label>
+        <mixed-citation publication-type="journal"><name><surname>Mul</surname><given-names>J</given-names></name>, <name><surname>van Grotel</surname><given-names>M</given-names></name>, <name><surname>Seravalli</surname><given-names>E</given-names></name>, <name><surname>Bosman</surname><given-names>ME</given-names></name>, <name><surname>van Tinteren</surname><given-names>H</given-names></name>, <name><surname>Roy</surname><given-names>P</given-names></name>, <etal>et al</etal>. <article-title>Locoregional control using highly conformal flank target volumes and Volumetric-Modulated Arc Therapy in pediatric renal tumors: results from the Dutch national cohort</article-title>. <source>Radiother Oncol</source>. <year>2021</year>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1016/j.radonc.2021.04.005</pub-id>
+<pub-id pub-id-type="pmid">33845042</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref043">
+        <label>43</label>
+        <mixed-citation publication-type="journal"><name><surname>Janssens</surname><given-names>GO</given-names></name>, <name><surname>Melchior</surname><given-names>P</given-names></name>, <name><surname>Mul</surname><given-names>J</given-names></name>, <name><surname>Saunders</surname><given-names>D</given-names></name>, <name><surname>Bolle</surname><given-names>S</given-names></name>, <name><surname>Cameron</surname><given-names>AL</given-names></name>, <etal>et al</etal>. <article-title>The SIOP-Renal Tumour Study Group consensus statement on flank target volume delineation for highly conformal radiotherapy</article-title>. <source>Lancet Child Adolesc Health</source>. <year>2020</year>;<volume>4</volume>(<issue>11</issue>):<fpage>846</fpage>&#8211;<lpage>52</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1016/S2352-4642(20)30183-8</pub-id>
+<pub-id pub-id-type="pmid">33068550</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref044">
+        <label>44</label>
+        <mixed-citation publication-type="journal"><name><surname>Hol</surname><given-names>JA</given-names></name>, <name><surname>Jongmans</surname><given-names>MCJ</given-names></name>, <name><surname>Littooij</surname><given-names>AS</given-names></name>, <name><surname>de Krijger</surname><given-names>RR</given-names></name>, <name><surname>Kuiper</surname><given-names>RP</given-names></name>, <name><surname>van Harssel</surname><given-names>JJT</given-names></name>, <etal>et al</etal>. <article-title>Renal cell carcinoma in young FH mutation carriers: case series and review of the literature</article-title>. <source>Fam Cancer</source>. <year>2020</year>;<volume>19</volume>(<issue>1</issue>):<fpage>55</fpage>&#8211;<lpage>63</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1007/s10689-019-00155-3</pub-id>
+<pub-id pub-id-type="pmid">31792767</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref045">
+        <label>45</label>
+        <mixed-citation publication-type="journal"><name><surname>Broecker</surname><given-names>B.</given-names></name>
+<article-title>Non-Wilms&#8217; renal tumors in children</article-title>. <source>Urol Clin North Am</source>. <year>2000</year>;<volume>27</volume>(<issue>3</issue>):<fpage>463</fpage>&#8211;9, <lpage>ix</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1016/s0094-0143(05)70094-x</pub-id>
+<pub-id pub-id-type="pmid">10985146</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref046">
+        <label>46</label>
+        <mixed-citation publication-type="journal"><name><surname>Qureshi</surname><given-names>SS</given-names></name>, <name><surname>Bhagat</surname><given-names>M</given-names></name>, <name><surname>Verma</surname><given-names>K</given-names></name>, <name><surname>Yadav</surname><given-names>S</given-names></name>, <name><surname>Prasad</surname><given-names>M</given-names></name>, <name><surname>Vora</surname><given-names>T</given-names></name>, <etal>et al</etal>. <article-title>Incidence, treatment, and outcomes of primary and recurrent Non-Wilms renal tumors in children: Report of 109 patients treated at a single institution</article-title>. <source>J Pediatr Urol</source>. <year>2020</year>;<volume>16</volume>(<issue>4</issue>):475 e1- e9.</mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref047">
+        <label>47</label>
+        <mixed-citation publication-type="journal"><name><surname>Segers</surname><given-names>H</given-names></name>, <name><surname>van den Heuvel-Eibrink</surname><given-names>MM</given-names></name>, <name><surname>Pritchard-Jones</surname><given-names>K</given-names></name>, <name><surname>Coppes</surname><given-names>MJ</given-names></name>, <name><surname>Aitchison</surname><given-names>M</given-names></name>, <name><surname>Bergeron</surname><given-names>C</given-names></name>, <etal>et al</etal>. <article-title>Management of adults with Wilms&#8217; tumor: recommendations based on international consensus</article-title>. <source>Expert Rev Anticancer Ther</source>. <year>2011</year>;<volume>11</volume>(<issue>7</issue>):<fpage>1105</fpage>&#8211;<lpage>13</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1586/era.11.76</pub-id>
+<pub-id pub-id-type="pmid">21806333</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref048">
+        <label>48</label>
+        <mixed-citation publication-type="journal"><name><surname>Joshi</surname><given-names>VV</given-names></name>, <name><surname>Kasznica</surname><given-names>J</given-names></name>, <name><surname>Walters</surname><given-names>TR</given-names></name>. <article-title>Atypical mesoblastic nephroma. Pathologic characterization of a potentially aggressive variant of conventional congenital mesoblastic nephroma</article-title>. <source>Arch Pathol Lab Med</source>. <year>1986</year>;<volume>110</volume>(<issue>2</issue>):<fpage>100</fpage>&#8211;<lpage>6</lpage>. <pub-id pub-id-type="pmid">3004371</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref049">
+        <label>49</label>
+        <mixed-citation publication-type="journal"><name><surname>Samim</surname><given-names>A</given-names></name>, <name><surname>Littooij</surname><given-names>AS</given-names></name>, <name><surname>van den Heuvel-Eibrink</surname><given-names>MM</given-names></name>, <name><surname>Wessels</surname><given-names>FJ</given-names></name>, <name><surname>Nievelstein</surname><given-names>RAJ</given-names></name>, <name><surname>de Jong</surname><given-names>PA</given-names></name>. <article-title>Frequency and characteristics of pulmonary nodules in children at computed tomography</article-title>. <source>Pediatr Radiol</source>. <year>2017</year>;<volume>47</volume>(<issue>13</issue>):<fpage>1751</fpage>&#8211;<lpage>8</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1007/s00247-017-3946-2</pub-id>
+<pub-id pub-id-type="pmid">28871322</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref050">
+        <label>50</label>
+        <mixed-citation publication-type="journal"><name><surname>McDonald</surname><given-names>K</given-names></name>, <name><surname>Duffy</surname><given-names>P</given-names></name>, <name><surname>Chowdhury</surname><given-names>T</given-names></name>, <name><surname>McHugh</surname><given-names>K</given-names></name>. <article-title>Added value of abdominal cross-sectional imaging (CT or MRI) in staging of Wilms&#8217; tumours</article-title>. <source>Clin Radiol</source>. <year>2013</year>;<volume>68</volume>(<issue>1</issue>):<fpage>16</fpage>&#8211;<lpage>20</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1016/j.crad.2012.05.006</pub-id>
+<pub-id pub-id-type="pmid">22892244</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref051">
+        <label>51</label>
+        <mixed-citation publication-type="journal"><name><surname>Kutikov</surname><given-names>A</given-names></name>, <name><surname>Uzzo</surname><given-names>RG</given-names></name>. <article-title>The R.E.N.A.L. nephrometry score: a comprehensive standardized system for quantitating renal tumor size, location and depth</article-title>. <source>J Urol</source>. <year>2009</year>;<volume>182</volume>(<issue>3</issue>):<fpage>844</fpage>&#8211;<lpage>53</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1016/j.juro.2009.05.035</pub-id>
+<pub-id pub-id-type="pmid">19616235</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref052">
+        <label>52</label>
+        <mixed-citation publication-type="journal"><name><surname>Vujanic</surname><given-names>GM</given-names></name>, <name><surname>Sandstedt</surname><given-names>B</given-names></name>, <name><surname>Kelsey</surname><given-names>A</given-names></name>, <name><surname>Sebire</surname><given-names>NJ</given-names></name>. <article-title>Central pathology review in multicenter trials and studies: lessons from the nephroblastoma trials</article-title>. <source>Cancer</source>. <year>2009</year>;<volume>115</volume>(<issue>9</issue>):<fpage>1977</fpage>&#8211;<lpage>83</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1002/cncr.24214</pub-id>
+<pub-id pub-id-type="pmid">19241454</pub-id></mixed-citation>
+      </ref>
+      <ref id="pone.0261729.ref053">
+        <label>53</label>
+        <mixed-citation publication-type="journal"><name><surname>Mul</surname><given-names>J</given-names></name>, <name><surname>Seravalli</surname><given-names>E</given-names></name>, <name><surname>Bosman</surname><given-names>ME</given-names></name>, <name><surname>van de Ven</surname><given-names>CP</given-names></name>, <name><surname>Littooij</surname><given-names>AS</given-names></name>, <name><surname>van Grotel</surname><given-names>M</given-names></name>, <etal>et al</etal>. <article-title>Estimated clinical benefit of combining highly conformal target volumes with Volumetric-Modulated Arc Therapy (VMAT) versus conventional flank irradiation in pediatric renal tumors</article-title>. <source>Clin Transl Radiat Oncol</source>. <year>2021</year>;<volume>29</volume>:<fpage>20</fpage>&#8211;<lpage>6</lpage>. <comment>doi: </comment><pub-id pub-id-type="doi">10.1016/j.ctro.2021.04.007</pub-id>
+<pub-id pub-id-type="pmid">34027140</pub-id></mixed-citation>
+      </ref>
+    </ref-list>
+  </back>
+</article>
+<article xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink" dtd-version="1.3" xml:lang="en" article-type="case-report">
+  <?properties open_access?>
+  <processing-meta base-tagset="archiving" mathml-version="3.0" table-model="xhtml" tagset-family="jats">
+    <restricted-by>pmc</restricted-by>
+  </processing-meta>
+  <front>
+    <journal-meta>
+      <journal-id journal-id-type="nlm-ta">Case Reports Plast Surg Hand Surg</journal-id>
+      <journal-id journal-id-type="iso-abbrev">Case Reports Plast Surg Hand Surg</journal-id>
+      <journal-title-group>
+        <journal-title>Case Reports in Plastic Surgery &amp; Hand Surgery</journal-title>
+      </journal-title-group>
+      <issn pub-type="epub">2332-0885</issn>
+      <publisher>
+        <publisher-name>Taylor &amp; Francis</publisher-name>
+      </publisher>
+    </journal-meta>
+    <article-meta>
+      <article-id pub-id-type="pmc">8757607</article-id>
+      <article-id pub-id-type="doi">10.1080/23320885.2021.2017779</article-id>
+      <article-id pub-id-type="publisher-id">2017779</article-id>
+      <article-version vocab="JAV" vocab-identifier="http://www.niso.org/publications/rp/RP-8-2008.pdf" vocab-term="Version of Record" article-version-type="VoR">Version of Record</article-version>
+      <article-categories>
+        <subj-group subj-group-type="article-type">
+          <subject>Case Report</subject>
+        </subj-group>
+        <subj-group subj-group-type="heading">
+          <subject>Case Report</subject>
+        </subj-group>
+      </article-categories>
+      <title-group>
+        <article-title>Rare case of Intraneural Lipoma of Digital Nerve</article-title>
+        <alt-title alt-title-type="left-running-head">Y.-J. Su and L. Bhandari</alt-title>
+      </title-group>
+      <contrib-group>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Su</surname>
+            <given-names>Yu-Jung</given-names>
+          </name>
+          <xref rid="AF0001" ref-type="aff"/>
+          <xref rid="FN0001" ref-type="author-notes"/>
+        </contrib>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Bhandari</surname>
+            <given-names>Laxminarayan</given-names>
+          </name>
+          <xref rid="AN0001" ref-type="corresp"/>
+          <xref rid="AF0001" ref-type="aff"/>
+        </contrib>
+        <aff id="AF0001"><institution>Christine M Kleinert Institute of Hand and Microsurgery</institution>, <city>Louisville</city>, <state>KY</state>, <country>USA</country></aff>
+      </contrib-group>
+      <author-notes>
+        <corresp id="AN0001">CONTACT Laxminarayan Bhandari <email xlink:href="mailto:lax321@gmail.com">lax321@gmail.com</email>, <email xlink:href="mailto:lbhandari@kleinertkutz.com">lbhandari@kleinertkutz.com</email>
+<institution>Kleinert Kutz Hand Care Center, Hand Surgery</institution>, <city>Louisville</city>, <state>KY</state>
+<postal-code>40202-3868</postal-code>, <country>USA</country></corresp>
+        <fn id="FN0001">
+          <label>*</label>
+          <p>Present address: Chi-Mei Medical Center, Taiwan</p>
+        </fn>
+      </author-notes>
+      <pub-date date-type="pub" publication-format="electronic">
+        <day>11</day>
+        <month>1</month>
+        <year>2022</year>
+      </pub-date>
+      <pub-date date-type="collection" publication-format="electronic">
+        <year>2022</year>
+      </pub-date>
+      <pub-date pub-type="pmc-release">
+        <day>11</day>
+        <month>1</month>
+        <year>2022</year>
+      </pub-date>
+      <volume>9</volume>
+      <issue>1</issue>
+      <fpage seq="6">30</fpage>
+      <lpage>32</lpage>
+      <pub-history>
+        <event event-type="received">
+          <date>
+            <day>19</day>
+            <month>10</month>
+            <year>2021</year>
+          </date>
+        </event>
+        <event event-type="accepted">
+          <date>
+            <day>8</day>
+            <month>12</month>
+            <year>2021</year>
+          </date>
+        </event>
+        <event event-type="tagger">
+          <event-desc>KnowledgeWorks Global Ltd.</event-desc>
+          <date>
+            <day>7</day>
+            <month>1</month>
+            <year>2022</year>
+          </date>
+        </event>
+        <event event-type="build-issue-online">
+          <event-desc>published online in a building issue</event-desc>
+          <date>
+            <day>7</day>
+            <month>1</month>
+            <year>2022</year>
+          </date>
+        </event>
+      </pub-history>
+      <permissions>
+        <copyright-statement>&#169; 2022 The Author(s). Published by Informa UK Limited, trading as Taylor &amp; Francis Group.</copyright-statement>
+        <copyright-year>2022</copyright-year>
+        <copyright-holder>The Author(s)</copyright-holder>
+        <license>
+          <ali:license_ref xmlns:ali="http://www.niso.org/schemas/ali/1.0/" specific-use="textmining" content-type="ccbylicense">https://creativecommons.org/licenses/by/4.0/</ali:license_ref>
+          <license-p>This is an Open Access article distributed under the terms of the Creative Commons Attribution License (<ext-link ext-link-type="uri" xlink:href="https://creativecommons.org/licenses/by/4.0/">http://creativecommons.org/licenses/by/4.0/</ext-link>), which permits unrestricted use, distribution, and reproduction in any medium, provided the original work is properly cited.</license-p>
+        </license>
+      </permissions>
+      <self-uri content-type="pdf" xlink:href="ICRP_9_2017779.pdf"/>
+      <abstract>
+        <title>Abstract</title>
+        <p>Lipomas, although ubiquitous, are extremely uncommon in digital nerves. We present a 68-year-old male patient with right ring finger radial digital nerve intraneural lipoma. The tumor was enucleated preserving all the nerve fascicles. We present this case to highlight the rare occurrence of lipomas within a digital nerve.</p>
+      </abstract>
+      <kwd-group kwd-group-type="author">
+        <title>Keywords</title>
+        <kwd>Lipoma</kwd>
+        <kwd>digital nerve</kwd>
+        <kwd>hand</kwd>
+      </kwd-group>
+      <counts>
+        <fig-count count="5"/>
+        <table-count count="0"/>
+        <page-count count="3"/>
+        <word-count count="1404"/>
+      </counts>
+    </article-meta>
+  </front>
+  <body>The text of the article</body>
+  <back>
+    <sec sec-type="COI-statement" disp-level="1" id="S0004">
+      <title>Disclosure statement</title>
+      <p>No potential conflict of interest was reported by the authors.</p>
+    </sec>
+    <ref-list>
+      <title>References</title>
+      <ref id="CIT0001">
+        <label>1</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Marek</surname>
+<given-names>T</given-names></string-name>, <string-name><surname>Amrami</surname>
+<given-names>KK</given-names></string-name>, <string-name><surname>Mahan</surname>
+<given-names>MA</given-names></string-name>, <etal>et&#160;al.</etal></person-group>
+<article-title>Intraneural lipomas: institutional and literature review</article-title>. <source>Acta Neurochir (Wien)</source>. <year>2018</year>;<volume>160</volume>(<issue>11</issue>):<fpage>2209</fpage>&#8211;<lpage>2218</lpage>.<pub-id pub-id-type="pmid">30242496</pub-id></mixed-citation>
+      </ref>
+      <ref id="CIT0002">
+        <label>2</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Teles</surname>
+<given-names>AR</given-names></string-name>, <string-name><surname>Finger</surname>
+<given-names>G</given-names></string-name>, <string-name><surname>Schuster</surname>
+<given-names>MN</given-names></string-name>, <etal>et&#160;al.</etal></person-group>
+<article-title>Peripheral nerve lipoma: case report of an intraneural lipoma of the median nerve and literature review</article-title>. <source>Asian J Neurosurg</source>. <year>2016</year>;<volume>11</volume>(<issue>4</issue>):<fpage>458</fpage>.</mixed-citation>
+      </ref>
+      <ref id="CIT0003">
+        <label>3</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Aydin</surname>
+<given-names>A.</given-names></string-name></person-group>
+<article-title>Carpal tunnel syndrome caused by intraneural lipoma of the median nerve and arteriovenous malformation</article-title>. <source>J Cutan Aesthet Surg</source>. <year>2018</year>;<volume>11</volume>(<issue>1</issue>):<fpage>29</fpage>.<pub-id pub-id-type="pmid">29731590</pub-id></mixed-citation>
+      </ref>
+      <ref id="CIT0004">
+        <label>4</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>DeSano</surname>
+<given-names>J</given-names>, <suffix>2nd</suffix></string-name>, <string-name><surname>Gardner</surname>
+<given-names>P</given-names></string-name>, <string-name><surname>Hart</surname>
+<given-names>JW</given-names></string-name>, <etal>et&#160;al.</etal></person-group>
+<article-title>Intraneural lipoma of the digital nerve: a case report and literature review</article-title>. <source>Cureus</source>. <year>2021</year>;<volume>13</volume>(<issue>2</issue>):<fpage>e13074</fpage>.<pub-id pub-id-type="pmid">33680616</pub-id></mixed-citation>
+      </ref>
+      <ref id="CIT0005">
+        <label>5</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Gundes</surname>
+<given-names>H</given-names></string-name>, <string-name><surname>Alici</surname>
+<given-names>T</given-names></string-name>, <string-name><surname>Sahin</surname>
+<given-names>M.</given-names></string-name></person-group>
+<article-title>Neural fibrolipoma of the digital nerve: a case report</article-title>. <source>J Orthop Surg (Hong Kong)</source>. <year>2011</year>;<volume>19</volume>(<issue>1</issue>):<fpage>123</fpage>.<pub-id pub-id-type="pmid">21519094</pub-id></mixed-citation>
+      </ref>
+      <ref id="CIT0006">
+        <label>6</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Kronberger</surname>
+<given-names>P</given-names></string-name>, <string-name><surname>Rainer</surname>
+<given-names>C</given-names></string-name>, <string-name><surname>Hittmair</surname>
+<given-names>A</given-names></string-name>, <etal>et&#160;al.</etal></person-group>
+<article-title>Lipofibromatous hamartoma (neural fibrolipoma) of a flexor nerve of the index finger</article-title>. <source>Scand J Plast Reconstr Surg Hand Surg</source>. <year>1998</year>;<volume>32</volume>(<issue>2</issue>):<fpage>237</fpage>.<pub-id pub-id-type="pmid">9646375</pub-id></mixed-citation>
+      </ref>
+      <ref id="CIT0007">
+        <label>7</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Marek</surname>
+<given-names>T</given-names></string-name>, <string-name><surname>Spinner</surname>
+<given-names>RJ</given-names></string-name>, <string-name><surname>Syal</surname>
+<given-names>A</given-names></string-name>, <etal>et&#160;al.</etal></person-group>
+<article-title>Strengthening the association of lipomatosis of nerve and nerve-territory overgrowth: a systematic review</article-title>. <source>J Neurosurg</source>. <year>2019</year>;<volume>132</volume>(<issue>4</issue>):<fpage>1286</fpage>.<pub-id pub-id-type="pmid">30925468</pub-id></mixed-citation>
+      </ref>
+      <ref id="CIT0008">
+        <label>8</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Balakrishnan</surname>
+<given-names>A</given-names></string-name>, <string-name><surname>Chang</surname>
+<given-names>YJ</given-names></string-name>, <string-name><surname>Elliott</surname>
+<given-names>DA</given-names></string-name>, <etal>et&#160;al.</etal></person-group>
+<article-title>Intraneural lipoma of the ulnar nerve at the elbow: a case report and literature review</article-title>. <source>Can J Plast Surg</source>. <year>2012</year>;l<volume>20</volume>(<issue>3</issue>):<fpage>e42</fpage>.<pub-id pub-id-type="pmid">23997597</pub-id></mixed-citation>
+      </ref>
+      <ref id="CIT0009">
+        <label>9</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Patel</surname>
+<given-names>AP</given-names></string-name>, <string-name><surname>Aoun</surname>
+<given-names>SG</given-names></string-name>, <string-name><surname>Al Tamimi</surname>
+<given-names>M.</given-names></string-name></person-group>
+<article-title>Intraneural posterior interosseous nerve lipoma with complete paralysis: case report and review of the literature</article-title>. <source>Cureus</source>. <year>2018</year>;<volume>10</volume>(<issue>5</issue>):<fpage>e2689</fpage>.<pub-id pub-id-type="pmid">30050744</pub-id></mixed-citation>
+      </ref>
+      <ref id="CIT0010">
+        <label>10</label>
+        <mixed-citation publication-type="journal"><person-group person-group-type="author"><string-name><surname>Krzywosinski</surname>
+<given-names>TB</given-names></string-name>, <string-name><surname>Bingham</surname>
+<given-names>AL</given-names></string-name>, <string-name><surname>Fallat</surname>
+<given-names>LM.</given-names></string-name></person-group>
+<article-title>Intraneural lipoma of the tibial nerve: a case report</article-title>. <source>J Foot Ankle Surg</source>. <year>2017</year>;<volume>56</volume>(<issue>1</issue>):<fpage>125</fpage>.<pub-id pub-id-type="pmid">27555352</pub-id></mixed-citation>
+      </ref>
+    </ref-list>
+  </back>
+</article>
+</pmc-articleset>
