@@ -77,14 +77,14 @@ def _load_voc_mapping(vocabulary_file):
 def vectorize_corpus(corpus_file, vocabulary_file):
     voc_mapping = _load_voc_mapping(vocabulary_file)
     counts, vectorizer = _extract_word_counts(corpus_file, vocabulary_file)
-    n_docs = counts["body"].shape[0]
     frequencies = {
         k: normalize(v, norm="l1", axis=1, copy=True)
         for k, v in counts.items()
     }
-    freq_sum = np.sum(list(frequencies.values()))
-    frequencies["merged"] = freq_sum / len(frequencies)
-    doc_counts_full_voc = np.asarray((freq_sum > 0).sum(axis=0)).squeeze()
+    freq_merged = np.sum(list(frequencies.values())) / len(frequencies)
+    frequencies["merged"] = freq_merged
+    doc_counts_full_voc = np.asarray((freq_merged > 0).sum(axis=0)).squeeze()
+    n_docs = counts["body"].shape[0]
     doc_freq_full_voc = (doc_counts_full_voc + 1) / (n_docs + 1)
     voc = vectorizer.get_feature_names()
     voc_map_mat = _voc_mapping_matrix(voc, voc_mapping)
