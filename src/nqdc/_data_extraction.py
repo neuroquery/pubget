@@ -1,6 +1,7 @@
 from pathlib import Path
 import logging
 import csv
+from typing import Generator, Dict, Union
 
 from lxml import etree
 import pandas as pd
@@ -8,12 +9,15 @@ import pandas as pd
 from nqdc._coordinates import CoordinateExtractor
 from nqdc._metadata import MetadataExtractor
 from nqdc._text import TextExtractor
+from nqdc._typing import PathLikeOrStr
 
 
 _LOG = logging.getLogger(__name__)
 
 
-def extract_data(articles_dir, articles_with_coords_only=True):
+def extract_data(
+    articles_dir: PathLikeOrStr, articles_with_coords_only: bool = True
+) -> Generator[Dict[str, pd.DataFrame], None, None]:
     articles_dir = Path(articles_dir)
     coord_extractor = CoordinateExtractor()
     metadata_extractor = MetadataExtractor()
@@ -29,6 +33,8 @@ def extract_data(articles_dir, articles_with_coords_only=True):
                 text_extractor,
                 coord_extractor,
             )
+            if article_data is None:
+                continue
             if article_data["coordinates"].shape[0]:
                 n_with_coords += 1
             _LOG.info(
@@ -43,8 +49,11 @@ def extract_data(articles_dir, articles_with_coords_only=True):
 
 
 def _extract_article_data(
-    article_file, metadata_extractor, text_extractor, coord_extractor
-):
+    article_file: Path,
+    metadata_extractor: MetadataExtractor,
+    text_extractor: TextExtractor,
+    coord_extractor: CoordinateExtractor,
+) -> Union[None, Dict[str, pd.DataFrame]]:
     _LOG.debug(f"processing article: {article_file.name}")
     try:
         article = etree.parse(str(article_file))
@@ -60,7 +69,11 @@ def _extract_article_data(
     return {"metadata": metadata, "text": text, "coordinates": coords}
 
 
-def extract_to_csv(articles_dir, output_dir, articles_with_coords_only=False):
+def extract_to_csv(
+    articles_dir: PathLikeOrStr,
+    output_dir: PathLikeOrStr,
+    articles_with_coords_only: bool = False,
+) -> None:
     output_dir = Path(output_dir)
     output_dir.mkdir(exist_ok=True, parents=True)
     metadata_csv = output_dir / "metadata.csv"

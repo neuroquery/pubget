@@ -1,7 +1,9 @@
 import logging
 import re
 import html
+from typing import Union, Tuple, Any, Sequence, List
 
+import numpy as np
 from scipy import stats
 import pandas as pd
 from lxml import etree
@@ -50,36 +52,39 @@ _COORD_DATA_TRIPLET = _TRIPLET.format(
     prefix=r"\s*",
     postfix=r"\s*",
 )
+_COORD_FIELDS = ("pmcid", "table_id", "table_label", "x", "y", "z")
 
 
 class CoordinateExtractor:
-    fields = ("pmcid", "table_id", "table_label", "x", "y", "z")
+    fields = _COORD_FIELDS
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._stylesheet = _utils.load_stylesheet("table_extraction.xsl")
 
-    def __call__(self, article):
+    def __call__(self, article: etree.ElementTree) -> pd.DataFrame:
         coords = _extract_coordinates_from_article(article, self._stylesheet)
-        if coords is None:
-            pd.DataFrame(columns=self.fields)
         return coords.loc[:, self.fields]
 
 
-def _extract_coordinates_from_article(article, stylesheet):
+def _extract_coordinates_from_article(
+    article: etree.ElementTree, stylesheet: etree.XSLT
+) -> pd.DataFrame:
     try:
         transformed = stylesheet(article)
     except Exception:
         _LOG.exception(f"failed to transform article: {stylesheet.error_log}")
-        return None
+        return pd.DataFrame(columns=_COORD_FIELDS)
     try:
         coordinates = _extract_coordinates_from_article_tables(transformed)
         return coordinates
     except Exception:
         _LOG.exception("failed to extract coords from article")
-        return None
+        return pd.DataFrame(columns=_COORD_FIELDS)
 
 
-def _extract_coordinates_from_article_tables(article_tables):
+def _extract_coordinates_from_article_tables(
+    article_tables: etree.Element,
+) -> pd.DataFrame:
     pmcid = int(article_tables.find("pmcid").text)
     all_coordinates = []
     for i, table in enumerate(article_tables.iterfind("//extracted-table")):
@@ -111,12 +116,10 @@ def _extract_coordinates_from_article_tables(article_tables):
         all_coordinates.append(coordinates)
     if all_coordinates:
         return pd.concat(all_coordinates)
-    return pd.DataFrame(
-        columns=["x", "y", "z", "pmcid", "table_id", "table_label"]
-    )
+    return pd.DataFrame(columns=_COORD_FIELDS)
 
 
-def _map_chars(text):
+def _map_chars(text: str) -> str:
     _char_map = {
         0x2212: "-",
         0x2796: "-",
@@ -128,7 +131,9 @@ def _map_chars(text):
     return html.unescape(text).translate(_char_map)
 
 
-def _extract_coordinates_from_table(table, copy=False):
+def _extract_coordinates_from_table(
+    table: pd.DataFrame, copy: bool = False
+) -> pd.DataFrame:
     if copy:
         table = table.copy()
     if isinstance(table.columns, pd.MultiIndex):
@@ -157,7 +162,7 @@ def _extract_coordinates_from_table(table, copy=False):
     return result
 
 
-def _expand_all_xyz_cols(table, start=0):
+def _expand_all_xyz_cols(table: pd.DataFrame, start: int = 0) -> pd.DataFrame:
     for pos in range(start, table.shape[1]):
         if re.match(_COORD_HEAD_TRIPLET, table.columns[pos]) or re.match(
             _COORD_HEAD_NAME, table.columns[pos]
@@ -167,7 +172,9 @@ def _expand_all_xyz_cols(table, start=0):
     return table
 
 
-def _expand_xyz_column(table, pos):
+def _expand_xyz_column(
+    table: pd.DataFrame, pos: int
+) -> Tuple[pd.DataFrame, int]:
     xyz = table.iloc[:, pos]
     as_numbers = _to_numeric(xyz)
     n_numbers = as_numbers.notnull().sum()
@@ -184,14 +191,14 @@ def _expand_xyz_column(table, pos):
     return expanded, pos + 3
 
 
-def _split_xyz(triplet):
+def _split_xyz(triplet: Any) -> pd.Series:
     found = re.match(_COORD_DATA_TRIPLET, str(triplet))
     if found is None:
         return pd.Series(["", "", ""])
     return pd.Series([found.group("x"), found.group("y"), found.group("z")])
 
 
-def _to_numeric(series):
+def _to_numeric(series: pd.Series) -> pd.Series:
     return pd.to_numeric(
         series.apply(
             lambda x: re.sub(r"(\+|\-)\s+", r"\g<1>", x)
@@ -202,7 +209,7 @@ def _to_numeric(series):
     )
 
 
-def _find_xyz(tr):
+def _find_xyz(tr: Sequence[str]) -> List[List[int]]:
     found = []
     pos = 0
     while pos < len(tr) - 2:
@@ -222,7 +229,7 @@ def _find_xyz(tr):
     return found
 
 
-def _filter_coordinates(coordinates):
+def _filter_coordinates(coordinates: pd.DataFrame) -> pd.DataFrame:
     xyz = coordinates.loc[:, ("x", "y", "z")]
     outside_brain = (xyz.abs() >= 150).any(axis=1)
     not_coord = (-1 <= xyz).all(axis=1) & (xyz <= 1).all(axis=1)
@@ -231,9 +238,9 @@ def _filter_coordinates(coordinates):
     return filtered
 
 
-def _check_table(values, tol=-400):
+def _check_table(values: np.ndarray, tol: float = -400) -> bool:
     if not values.shape[0]:
         return True
     distrib = stats.multivariate_normal(mean=[0, 0, 0], cov=1.5)
-    avg_ll = distrib.logpdf(values).mean()
+    avg_ll = float(distrib.logpdf(values).mean())
     return avg_ll < tol

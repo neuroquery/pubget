@@ -2,6 +2,7 @@ import logging
 from urllib.parse import urljoin
 import math
 import time
+from typing import Optional, Mapping, Union, Dict, Any, Generator
 
 import requests
 
@@ -16,19 +17,18 @@ class EntrezClient:
     _esearch_base_url = urljoin(_entrez_base_url, "esearch.fcgi")
     _efetch_base_url = urljoin(_entrez_base_url, "efetch.fcgi")
 
-    def __init__(self, request_period=None):
+    def __init__(self, request_period: Optional[float] = None) -> None:
         self._entrez_id = {"tool": "neuroquery_data_collection"}
         config = get_config()
         if config["email"] != "":
             self._entrez_id["email"] = config["email"]
         if request_period is None:
             self._request_period = 0.01 if "email" in self._entrez_id else 1
-        self._last_request_time = None
+        self._last_request_time: Union[None, float] = None
         self._session = requests.Session()
         self._session.params = self._entrez_id
-        self._session.timeout = self._default_timeout
 
-    def _wait_to_send_request(self):
+    def _wait_to_send_request(self) -> None:
         if self._last_request_time is None:
             self._last_request_time = time.time()
             return
@@ -38,13 +38,18 @@ class EntrezClient:
             time.sleep(wait)
         self._last_request_time = time.time()
 
-    def _send_request(self, url, params, verb="GET"):
+    def _send_request(
+        self,
+        url: str,
+        params: Mapping[str, Any],
+        verb: str = "GET",
+    ) -> Union[None, requests.Response]:
         req = requests.Request(verb, url, params=params)
         prepped = self._session.prepare_request(req)
         self._wait_to_send_request()
         _LOG.debug(f"sending request: {prepped.url}")
         try:
-            resp = self._session.send(prepped)
+            resp = self._session.send(prepped, timeout=self._default_timeout)
         except Exception:
             _LOG.exception(f"Request failed: {url}")
             return None
@@ -54,7 +59,12 @@ class EntrezClient:
         )
         return resp
 
-    def esearch(self, term, web_env=None, query_key=None):
+    def esearch(
+        self,
+        term: str,
+        web_env: Optional[str] = None,
+        query_key: Optional[str] = None,
+    ) -> Dict[str, Any]:
         search_params = {
             "db": "pmc",
             "term": term,
@@ -68,8 +78,10 @@ class EntrezClient:
         resp = self._send_request(
             self._esearch_base_url, params=search_params, verb="POST"
         )
+        if resp is None:
+            return {}
         try:
-            search_info = resp.json()["esearchresult"]
+            search_info: Dict[str, Any] = resp.json()["esearchresult"]
         except Exception:
             return {}
         if "ERROR" in search_info:
@@ -77,7 +89,9 @@ class EntrezClient:
         self.last_search_result = search_info
         return search_info
 
-    def _check_search_info(self, search_info):
+    def _check_search_info(
+        self, search_info: Union[None, Mapping[str, Any]]
+    ) -> Mapping[str, Any]:
         if search_info is not None:
             needed_keys = {"count", "webenv", "querykey"}
             if needed_keys.issubset(search_info.keys()):
@@ -95,7 +109,12 @@ class EntrezClient:
             )
         return search_info
 
-    def efetch(self, search_info=None, n_docs=None, retmax=500):
+    def efetch(
+        self,
+        search_info: Optional[Mapping[str, Any]] = None,
+        n_docs: Optional[int] = None,
+        retmax: int = 500,
+    ) -> Generator[bytes, None, None]:
         search_info = self._check_search_info(search_info)
         search_count = int(search_info["count"])
         if n_docs is None:

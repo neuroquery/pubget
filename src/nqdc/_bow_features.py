@@ -1,6 +1,7 @@
 from pathlib import Path
 import logging
 import json
+from typing import Tuple, Dict, Any, Sequence, List
 
 import numpy as np
 from scipy import sparse
@@ -9,10 +10,16 @@ from sklearn.preprocessing import normalize
 import pandas as pd
 from neuroquery.tokenization import TextVectorizer
 
+from nqdc._typing import PathLikeOrStr
+
 _LOG = logging.getLogger(__name__)
 
 
-def vectorize_corpus_to_npz(corpus_file, vocabulary_file, output_dir):
+def vectorize_corpus_to_npz(
+    corpus_file: PathLikeOrStr,
+    vocabulary_file: PathLikeOrStr,
+    output_dir: PathLikeOrStr,
+) -> None:
     _LOG.info(
         f"vectorizing {corpus_file} using vocabulary "
         f"{vocabulary_file} to {output_dir}"
@@ -36,7 +43,9 @@ def vectorize_corpus_to_npz(corpus_file, vocabulary_file, output_dir):
     _LOG.info(f"Done creating BOW features .npz files in {output_dir}")
 
 
-def _extract_word_counts(corpus_file, vocabulary_file):
+def _extract_word_counts(
+    corpus_file: PathLikeOrStr, vocabulary_file: PathLikeOrStr
+) -> Tuple[Dict[str, sparse.csr_matrix], TextVectorizer]:
     vectorizer = TextVectorizer.from_vocabulary_file(
         vocabulary_file, use_idf=False, norm=None, voc_mapping={}
     ).fit()
@@ -45,7 +54,7 @@ def _extract_word_counts(corpus_file, vocabulary_file):
         "keywords": [],
         "abstract": [],
         "body": [],
-    }
+    }  # type: Dict[str, List[sparse.csr_matrix]]
     for i, chunk in enumerate(
         pd.read_csv(corpus_file, encoding="utf-8", chunksize=1000)
     ):
@@ -65,16 +74,20 @@ def _extract_word_counts(corpus_file, vocabulary_file):
     return vectorized_fields, vectorizer
 
 
-def _load_voc_mapping(vocabulary_file):
+def _load_voc_mapping(vocabulary_file: PathLikeOrStr) -> Dict[str, str]:
     voc_mapping_file = Path(f"{vocabulary_file}_voc_mapping_identity.json")
     if voc_mapping_file.is_file():
-        voc_mapping = json.loads(voc_mapping_file.read_text("utf-8"))
+        voc_mapping: Dict[str, str] = json.loads(
+            voc_mapping_file.read_text("utf-8")
+        )
     else:
         voc_mapping = {}
     return voc_mapping
 
 
-def vectorize_corpus(corpus_file, vocabulary_file):
+def vectorize_corpus(
+    corpus_file: PathLikeOrStr, vocabulary_file: PathLikeOrStr
+) -> Dict[str, Any]:
     voc_mapping = _load_voc_mapping(vocabulary_file)
     counts, vectorizer = _extract_word_counts(corpus_file, vocabulary_file)
     frequencies = {
@@ -114,7 +127,9 @@ def vectorize_corpus(corpus_file, vocabulary_file):
     }
 
 
-def _voc_mapping_matrix(vocabulary, voc_mapping):
+def _voc_mapping_matrix(
+    vocabulary: Sequence[str], voc_mapping: Dict[str, str]
+) -> sparse.csr_matrix:
     word_to_idx = pd.Series(np.arange(len(vocabulary)), index=vocabulary)
     form = sparse.eye(len(vocabulary), format="lil")
     keep = np.ones(len(vocabulary), dtype=bool)

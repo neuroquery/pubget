@@ -1,3 +1,12 @@
 [build-system]
 requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[tool.mypy]
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[[tool.mypy.overrides]]
+module = ["sklearn.*", "lxml.*", "configobj.*", "validate.*", "scipy.*", "pandas.*", "neuroquery.*"]
+ignore_missing_imports = true

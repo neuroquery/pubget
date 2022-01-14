@@ -1,14 +1,16 @@
 import logging
 from pathlib import Path
+from typing import Generator, Tuple
 
 from lxml import etree
 
 from nqdc import _utils
+from nqdc._typing import PathLikeOrStr
 
 _LOG = logging.getLogger(__name__)
 
 
-def extract_articles(input_dir):
+def extract_articles(input_dir: PathLikeOrStr) -> Path:
     input_dir = Path(input_dir)
     data_dir = _utils.get_data_dir()
     output_dir = data_dir.joinpath("articles", input_dir.name)
@@ -16,9 +18,7 @@ def extract_articles(input_dir):
     n_articles = 0
     for batch_file in sorted(input_dir.glob("batch_*.xml")):
         _LOG.info(f"Processing {batch_file.name}")
-        for (pmcid, article) in _extract_from_articleset(
-            batch_file, output_dir
-        ):
+        for (pmcid, article) in _extract_from_articleset(batch_file):
             subdir = output_dir / _utils.hash(str(pmcid))[:3]
             subdir.mkdir(exist_ok=True, parents=True)
             target_file = subdir / f"pmcid_{pmcid}.xml"
@@ -31,7 +31,9 @@ def extract_articles(input_dir):
     return output_dir
 
 
-def _extract_from_articleset(batch_file, output_dir):
+def _extract_from_articleset(
+    batch_file: Path,
+) -> Generator[Tuple[int, etree.ElementTree], None, None]:
     with open(batch_file, "rb") as f:
         try:
             tree = etree.parse(f)
