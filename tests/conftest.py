@@ -1,16 +1,29 @@
 from pathlib import Path
 import json
 from urllib.parse import urlparse
+from unittest.mock import MagicMock
 
 from lxml import etree
 import pytest
 
 
 @pytest.fixture(autouse=True)
-def request_mocker(monkeypatch):
-    mock_entrez = MockEntrez()
-    monkeypatch.setattr("requests.sessions.Session.send", mock_entrez)
-    return mock_entrez
+def requests_mock(monkeypatch):
+    mock = MagicMock()
+    monkeypatch.setattr("requests.sessions.Session.send", mock)
+    return mock
+
+
+@pytest.fixture()
+def entrez_mock(monkeypatch):
+    mock = EntrezMock()
+    monkeypatch.setattr("requests.sessions.Session.send", mock)
+    return mock
+
+
+@pytest.fixture(scope="session")
+def test_data_dir():
+    return Path(__file__).parent.joinpath("data")
 
 
 class Response:
@@ -32,7 +45,12 @@ def _parse_query(query):
     return result
 
 
-class MockEntrez:
+class EntrezMock:
+    def __init__(self):
+        batch_file = Path(__file__).parent.joinpath("data", "articleset.xml")
+        self.article_set = etree.parse(str(batch_file))
+        self.count = len(self.article_set.getroot())
+
     def __call__(self, request, *args, **kwargs):
         if "esearch.fcgi" in request.url:
             return self._esearch(request)
@@ -56,11 +74,16 @@ class MockEntrez:
     def _efetch(self, request):
         parsed = urlparse(request.url)
         params = _parse_query(parsed.query)
-        batch_nb = int(params["retstart"]) // 3
-        batch_file = Path(__file__).parent.joinpath(
-            "data", "article_sets", f"batch_{batch_nb}.xml"
-        )
-        if not batch_file.exists():
+        retstart = int(params["retstart"])
+        retmax = int(params["retmax"])
+        if retstart >= self.count:
             return Response(status_code=400, reason="Bad Request")
-        content = batch_file.read_bytes()
+        result = etree.Element("pmc-articleset")
+        for article in self.article_set.getroot()[
+            retstart : retstart + retmax
+        ]:
+            result.append(article)
+        content = etree.tostring(
+            result, encoding="utf-8", xml_declaration=True
+        )
         return Response(request.url, content=content)

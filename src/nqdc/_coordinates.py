@@ -25,8 +25,7 @@ _COORD_HEAD_TRIPLET = _TRIPLET.format(
     x_pat="x", y_pat="y", z_pat="z", prefix=".*?", postfix=".*"
 )
 
-_COORD_HEAD_NAME = r"""
-    (?ix)
+_COORD_HEAD_NAME = r"""(?ix)
     .*
     (?:
     coordinate

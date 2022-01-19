@@ -47,7 +47,7 @@ def _extract_word_counts(
     corpus_file: PathLikeOrStr, vocabulary_file: PathLikeOrStr
 ) -> Tuple[Dict[str, sparse.csr_matrix], TextVectorizer]:
     vectorizer = TextVectorizer.from_vocabulary_file(
-        vocabulary_file, use_idf=False, norm=None, voc_mapping={}
+        str(vocabulary_file), use_idf=False, norm=None, voc_mapping={}
     ).fit()
     vectorized_chunks = {
         "title": [],
@@ -69,7 +69,7 @@ def _extract_word_counts(
     vectorized_fields = {}
     for field in vectorized_chunks:
         vectorized_fields[field] = sparse.vstack(
-            vectorized_chunks[field], format="csr"
+            vectorized_chunks[field], format="csr", dtype=int
         )
     return vectorized_fields, vectorizer
 
@@ -103,7 +103,8 @@ def vectorize_corpus(
     voc_map_mat = _voc_mapping_matrix(voc, voc_mapping)
     counts = {k: v.dot(voc_map_mat.T) for k, v in counts.items()}
     frequencies = {k: v.dot(voc_map_mat.T) for k, v in frequencies.items()}
-    doc_freq = voc_map_mat.dot(doc_freq_full_voc)
+    doc_counts = np.asarray((frequencies["merged"] > 0).sum(axis=0)).squeeze()
+    doc_freq = (doc_counts + 1) / (n_docs + 1)
     idf = -np.log(doc_freq) + 1
     n_terms = len(idf)
     idf_mat = sparse.spdiags(
@@ -131,7 +132,7 @@ def _voc_mapping_matrix(
     vocabulary: Sequence[str], voc_mapping: Dict[str, str]
 ) -> sparse.csr_matrix:
     word_to_idx = pd.Series(np.arange(len(vocabulary)), index=vocabulary)
-    form = sparse.eye(len(vocabulary), format="lil")
+    form = sparse.eye(len(vocabulary), format="lil", dtype=int)
     keep = np.ones(len(vocabulary), dtype=bool)
     for source, target in voc_mapping.items():
         s_idx, t_idx = word_to_idx[source], word_to_idx[target]

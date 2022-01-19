@@ -19,7 +19,7 @@ def download_articles_for_search_term(
     email: Optional[str] = None,
 ) -> Path:
     data_dir = Path(data_dir)
-    output_dir = data_dir.joinpath(f"download-{_utils.hash(term)}")
+    output_dir = data_dir.joinpath(f"query-{_utils.hash(term)}")
     if output_dir.is_dir():
         _LOG.warning(f"{output_dir} already exists")
     output_dir.mkdir(exist_ok=True, parents=True)
