@@ -6,8 +6,6 @@ from typing import Optional, Mapping, Union, Dict, Any, Generator
 
 import requests
 
-from nqdc._utils import get_config
-
 _LOG = logging.getLogger(__name__)
 
 
@@ -17,11 +15,14 @@ class EntrezClient:
     _esearch_base_url = urljoin(_entrez_base_url, "esearch.fcgi")
     _efetch_base_url = urljoin(_entrez_base_url, "efetch.fcgi")
 
-    def __init__(self, request_period: Optional[float] = None) -> None:
+    def __init__(
+        self,
+        request_period: Optional[float] = None,
+        email: Optional[str] = None,
+    ) -> None:
         self._entrez_id = {"tool": "neuroquery_data_collection"}
-        config = get_config()
-        if config["email"] != "":
-            self._entrez_id["email"] = config["email"]
+        if email is not None:
+            self._entrez_id["email"] = email
         if request_period is None:
             self._request_period = 0.01 if "email" in self._entrez_id else 1
         self._last_request_time: Union[None, float] = None
@@ -65,7 +66,7 @@ class EntrezClient:
     ) -> Dict[str, str]:
         search_params = {
             "db": "pmc",
-            "term": term,
+            "term": f"{term}&open+access[filter]",
             "usehistory": "y",
             "retmode": "json",
             "retmax": 5,

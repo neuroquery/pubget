@@ -10,10 +10,9 @@ from nqdc._typing import PathLikeOrStr
 _LOG = logging.getLogger(__name__)
 
 
-def extract_articles(input_dir: PathLikeOrStr) -> Path:
+def extract_articles(input_dir: PathLikeOrStr, output_dir: PathLikeOrStr):
     input_dir = Path(input_dir)
-    data_dir = _utils.get_data_dir()
-    output_dir = data_dir.joinpath("articles", input_dir.name)
+    output_dir = Path(output_dir)
     output_dir.mkdir(exist_ok=True, parents=True)
     n_articles = 0
     for batch_file in sorted(input_dir.glob("batch_*.xml")):
