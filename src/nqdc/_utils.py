@@ -38,10 +38,6 @@ def configure_logging() -> None:
     logging.captureWarnings(True)
 
 
-def get_package_data_dir() -> Path:
-    return Path(__file__).parent / "data"
-
-
 def hash(value: Union[str, bytes]) -> str:
     if isinstance(value, str):
         value = value.encode("utf-8")
@@ -49,7 +45,9 @@ def hash(value: Union[str, bytes]) -> str:
 
 
 def load_stylesheet(stylesheet_name: str) -> etree.XSLT:
-    stylesheet_path = get_package_data_dir() / "stylesheets" / stylesheet_name
+    stylesheet_path = Path(__file__).parent.joinpath(
+        "data", "stylesheets", stylesheet_name
+    )
     stylesheet_xml = etree.parse(str(stylesheet_path))
     transform = etree.XSLT(stylesheet_xml)
     return transform
