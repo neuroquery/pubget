@@ -10,7 +10,9 @@ from nqdc._typing import PathLikeOrStr
 _LOG = logging.getLogger(__name__)
 
 
-def extract_articles(input_dir: PathLikeOrStr, output_dir: PathLikeOrStr):
+def extract_articles(
+    input_dir: PathLikeOrStr, output_dir: PathLikeOrStr
+) -> Path:
     input_dir = Path(input_dir)
     output_dir = Path(output_dir)
     output_dir.mkdir(exist_ok=True, parents=True)
