@@ -1,11 +1,14 @@
+from pathlib import Path
 import re
 import logging
 from urllib.parse import urljoin
 import math
 import time
-from typing import Optional, Mapping, Union, Dict, Any, Generator
+from typing import Optional, Mapping, Union, Dict, Any, Generator, Tuple
 
 import requests
+
+from nqdc._typing import PathLikeOrStr
 
 _LOG = logging.getLogger(__name__)
 
@@ -30,6 +33,7 @@ class EntrezClient:
             )
         self._last_request_time: Union[None, float] = None
         self._session = requests.Session()
+        self.last_search_result: Optional[Mapping[str, str]] = None
 
     def _wait_to_send_request(self) -> None:
         if self._last_request_time is None:
@@ -81,60 +85,85 @@ class EntrezClient:
         if resp is None:
             return {}
         try:
-            search_info: Dict[str, str] = resp.json()["esearchresult"]
+            search_result: Dict[str, str] = resp.json()["esearchresult"]
         except Exception:
             return {}
-        if "ERROR" in search_info:
+        if "ERROR" in search_result:
             return {}
-        self.last_search_result = search_info
-        return search_info
+        self.last_search_result = search_result
+        _LOG.info(f"Search returned {search_result['count']} results")
+        return search_result
 
-    def _check_search_info(self) -> None:
+    def _check_search_result(
+        self,
+        search_result: Optional[Mapping[str, str]] = None,
+    ) -> Optional[Mapping[str, str]]:
+        if search_result is None:
+            search_result = self.last_search_result
+        if search_result is None:
+            return None
         needed_keys = {"count", "webenv", "querykey"}
-        if not hasattr(self, "last_search_result") or not needed_keys.issubset(
-            self.last_search_result.keys()
-        ):
-            raise ValueError(
+        if not needed_keys.issubset(search_result.keys()):
+            self.n_failures = 1
+            _LOG.error(
                 "Perform a search before calling `efetch`"
-                "or provide `search_info`"
+                "or provide `search_result`"
             )
+            return None
+        return search_result
 
     def efetch(
         self,
-        search_info: Optional[Mapping[str, str]] = None,
+        output_dir: PathLikeOrStr,
+        search_result: Optional[Mapping[str, str]] = None,
         n_docs: Optional[int] = None,
         retmax: int = 500,
-    ) -> Generator[bytes, None, None]:
-        self._check_search_info()
-        search_info = self.last_search_result
-        search_count = int(search_info["count"])
+    ) -> None:
+        output_dir = Path(output_dir)
+        search_result = self._check_search_result(search_result)
+        if search_result is None:
+            return
+        search_count = int(search_result["count"])
         if n_docs is None:
             n_docs = search_count
         else:
             n_docs = min(n_docs, search_count)
-        retmax = min(n_docs, retmax)
         retstart = 0
         params = {
-            "WebEnv": search_info["webenv"],
-            "query_key": search_info["querykey"],
+            "WebEnv": search_result["webenv"],
+            "query_key": search_result["querykey"],
             "retmax": retmax,
             "retstart": retstart,
             "db": "pmc",
             **self._entrez_id,
         }
         n_batches = math.ceil(n_docs / retmax)
-        n_failures = 0
+        self.n_failures = 0
+        batch_nb = 0
+        _LOG.info(f"Downloading {n_docs} articles (in {n_batches} batches)")
         while retstart < n_docs:
-            _LOG.debug(
-                f"getting batch {(retstart // retmax) + 1} / {n_batches}"
-            )
-            resp = self._send_request(
-                self._efetch_base_url, verb="POST", data=params
-            )
-            if resp is None or resp.status_code != 200:
-                n_failures += 1
-                _LOG.error(f"{n_failures} batches failed to download")
-            else:
-                yield resp.content
+            self._download_batch(output_dir, batch_nb, n_batches, params)
             retstart += retmax
+            batch_nb += 1
             params["retstart"] = retstart
+
+    def _download_batch(
+        self,
+        output_dir: Path,
+        batch_nb: int,
+        n_batches: int,
+        params: Dict[str, Any],
+    ) -> None:
+        batch_file = output_dir.joinpath(f"batch_{batch_nb:0>5}.xml")
+        if batch_file.is_file():
+            _LOG.info(f"batch {batch_nb} already downloaded, skipping")
+            return
+        _LOG.info(f"getting batch {batch_nb + 1} / {n_batches}")
+        resp = self._send_request(
+            self._efetch_base_url, verb="POST", data=params
+        )
+        if resp is None or resp.status_code != 200:
+            self.n_failures += 1
+            _LOG.error(f"{self.n_failures} batches failed to download")
+        else:
+            batch_file.write_bytes(resp.content)

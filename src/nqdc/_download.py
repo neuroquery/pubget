@@ -20,17 +20,40 @@ def download_articles_for_search_term(
 ) -> Path:
     data_dir = Path(data_dir)
     output_dir = data_dir.joinpath(f"query-{_utils.hash(term)}")
-    if output_dir.is_dir():
-        _LOG.warning(f"{output_dir} already exists")
-    output_dir.mkdir(exist_ok=True, parents=True)
-    info: Dict[str, Any] = {"term": term, "date": datetime.now().isoformat()}
+    info_file = output_dir.joinpath("info.json")
+    if info_file.is_file():
+        info = json.loads(info_file.read_text("utf-8"))
+        if info["download_complete"]:
+            _LOG.info("Download already complete, nothing to do")
+            return output_dir
+    else:
+        output_dir.mkdir(exist_ok=True, parents=True)
+        info = {
+            "term": term,
+            "retmax": retmax,
+            "download_complete": False,
+        }
     _LOG.info(f"Downloading data in {output_dir}")
     _LOG.info("Performing search")
     client = EntrezClient(api_key=api_key)
-    info["search_result"] = client.esearch(term)
-    output_dir.joinpath("info.json").write_text(json.dumps(info), "utf-8")
-    for i, batch in enumerate(client.efetch(n_docs=n_docs, retmax=retmax)):
-        with open(output_dir / f"batch_{i:0>5}.xml", "wb") as f:
-            f.write(batch)
+    if "search_result" in info:
+        _LOG.info(
+            "Found partial download, resuming download of webenv "
+            f"{info['search_result']['webenv']}, "
+            f"query key {info['search_result']['querykey']}"
+        )
+    else:
+        info["search_result"] = client.esearch(term)
+        info_file.write_text(json.dumps(info), "utf-8")
+    client.efetch(
+        output_dir,
+        search_result=info["search_result"],
+        n_docs=n_docs,
+        retmax=info["retmax"],
+    )
     _LOG.info("Finished downloading articles")
+    info["download_complete"] = client.n_failures == 0 and (
+        n_docs is None or n_docs >= int(info["search_result"]["count"])
+    )
+    info_file.write_text(json.dumps(info), "utf-8")
     return output_dir
