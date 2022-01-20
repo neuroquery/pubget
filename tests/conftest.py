@@ -1,6 +1,5 @@
 from pathlib import Path
 import json
-from urllib.parse import urlparse
 from unittest.mock import MagicMock
 
 from lxml import etree
@@ -72,8 +71,7 @@ class EntrezMock:
         return Response(request.url, json.dumps(response).encode("utf-8"))
 
     def _efetch(self, request):
-        parsed = urlparse(request.url)
-        params = _parse_query(parsed.query)
+        params = _parse_query(request.body)
         retstart = int(params["retstart"])
         retmax = int(params["retmax"])
         if retstart >= self.count:

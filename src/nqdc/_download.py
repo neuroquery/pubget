@@ -16,7 +16,7 @@ def download_articles_for_search_term(
     data_dir: PathLikeOrStr,
     n_docs: Optional[int] = None,
     retmax: int = 500,
-    email: Optional[str] = None,
+    api_key: Optional[str] = None,
 ) -> Path:
     data_dir = Path(data_dir)
     output_dir = data_dir.joinpath(f"query-{_utils.hash(term)}")
@@ -26,7 +26,7 @@ def download_articles_for_search_term(
     info: Dict[str, Any] = {"term": term, "date": datetime.now().isoformat()}
     _LOG.info(f"Downloading data in {output_dir}")
     _LOG.info("Performing search")
-    client = EntrezClient(email=email)
+    client = EntrezClient(api_key=api_key)
     info["search_result"] = client.esearch(term)
     output_dir.joinpath("info.json").write_text(json.dumps(info), "utf-8")
     for i, batch in enumerate(client.efetch(n_docs=n_docs, retmax=retmax)):

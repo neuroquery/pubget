@@ -1,3 +1,4 @@
+import re
 import logging
 from urllib.parse import urljoin
 import math
@@ -18,16 +19,17 @@ class EntrezClient:
     def __init__(
         self,
         request_period: Optional[float] = None,
-        email: Optional[str] = None,
+        api_key: Optional[str] = None,
     ) -> None:
-        self._entrez_id = {"tool": "neuroquery_data_collection"}
-        if email is not None:
-            self._entrez_id["email"] = email
+        self._entrez_id = {}
+        if api_key is not None:
+            self._entrez_id["api_key"] = api_key
         if request_period is None:
-            self._request_period = 0.01 if "email" in self._entrez_id else 1
+            self._request_period = (
+                0.15 if "api_key" in self._entrez_id else 1.05
+            )
         self._last_request_time: Union[None, float] = None
         self._session = requests.Session()
-        self._session.params = self._entrez_id
 
     def _wait_to_send_request(self) -> None:
         if self._last_request_time is None:
@@ -42,10 +44,11 @@ class EntrezClient:
     def _send_request(
         self,
         url: str,
-        params: Mapping[str, Any],
-        verb: str = "GET",
+        verb: str = "POST",
+        params: Optional[Mapping[str, Any]] = None,
+        data: Optional[Mapping[str, Any]] = None,
     ) -> Union[None, requests.Response]:
-        req = requests.Request(verb, url, params=params)
+        req = requests.Request(verb, url, params=params, data=data)
         prepped = self._session.prepare_request(req)
         self._wait_to_send_request()
         _LOG.debug(f"sending request: {prepped.url}")
@@ -71,8 +74,9 @@ class EntrezClient:
             "retmode": "json",
             "retmax": 5,
         }
+        data = {**search_params, **self._entrez_id}
         resp = self._send_request(
-            self._esearch_base_url, params=search_params, verb="POST"
+            self._esearch_base_url, data=data, verb="POST"
         )
         if resp is None:
             return {}
@@ -116,6 +120,7 @@ class EntrezClient:
             "retmax": retmax,
             "retstart": retstart,
             "db": "pmc",
+            **self._entrez_id,
         }
         n_batches = math.ceil(n_docs / retmax)
         n_failures = 0
@@ -123,7 +128,9 @@ class EntrezClient:
             _LOG.debug(
                 f"getting batch {(retstart // retmax) + 1} / {n_batches}"
             )
-            resp = self._send_request(self._efetch_base_url, params=params)
+            resp = self._send_request(
+                self._efetch_base_url, verb="POST", data=params
+            )
             if resp is None or resp.status_code != 200:
                 n_failures += 1
                 _LOG.error(f"{n_failures} batches failed to download")
