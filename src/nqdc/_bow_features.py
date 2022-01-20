@@ -55,11 +55,13 @@ def _extract_word_counts(
         "abstract": [],
         "body": [],
     }  # type: Dict[str, List[sparse.csr_matrix]]
+    chunksize = 200
     for i, chunk in enumerate(
-        pd.read_csv(corpus_file, encoding="utf-8", chunksize=1000)
+        pd.read_csv(corpus_file, encoding="utf-8", chunksize=chunksize)
     ):
         _LOG.debug(
-            f"transforming articles {i * 1000} to {i * 1000 + chunk.shape[0]}"
+            f"transforming articles {i * chunksize} to "
+            f"{i * chunksize + chunk.shape[0]}"
         )
         chunk.fillna("", inplace=True)
         for field in vectorized_chunks:
