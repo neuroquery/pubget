@@ -1,7 +1,8 @@
 from pathlib import Path
+import re
 import logging
 import json
-from typing import Tuple, Dict, Any, Sequence, List
+from typing import Tuple, Dict, Any, Sequence, List, Optional
 
 import numpy as np
 from scipy import sparse
@@ -16,17 +17,36 @@ from nqdc._typing import PathLikeOrStr
 _LOG = logging.getLogger(__name__)
 
 
+def _get_output_dir(
+    corpus_file: PathLikeOrStr,
+    vocabulary_file: PathLikeOrStr,
+    output_dir: Optional[PathLikeOrStr],
+) -> Path:
+    if output_dir is None:
+        data_dir = Path(corpus_file).parent
+        voc_checksum = checksum_vocabulary(vocabulary_file)
+        output_dir_name = re.sub(
+            r"^(.*?)(_extractedData)?$",
+            rf"\1-voc_{voc_checksum}_vectorizedText",
+            data_dir.name,
+        )
+        output_dir = data_dir.parent.joinpath(output_dir_name)
+    else:
+        output_dir = Path(output_dir)
+    output_dir.mkdir(exist_ok=True, parents=True)
+    return output_dir
+
+
 def vectorize_corpus_to_npz(
     corpus_file: PathLikeOrStr,
     vocabulary_file: PathLikeOrStr,
-    output_dir: PathLikeOrStr,
-) -> None:
+    output_dir: Optional[PathLikeOrStr] = None,
+) -> Tuple[Path, int]:
+    output_dir = _get_output_dir(corpus_file, vocabulary_file, output_dir)
     _LOG.info(
         f"vectorizing {corpus_file} using vocabulary "
         f"{vocabulary_file} to {output_dir}"
     )
-    output_dir = Path(output_dir)
-    output_dir.mkdir(exist_ok=True, parents=True)
     extraction_result = vectorize_corpus(corpus_file, vocabulary_file)
     for feature_kind in "counts", "tfidf":
         for field, vectorized in extraction_result[feature_kind].items():
@@ -42,6 +62,7 @@ def vectorize_corpus_to_npz(
         json.dumps(extraction_result["voc_mapping"]), "utf-8"
     )
     _LOG.info(f"Done creating BOW features .npz files in {output_dir}")
+    return output_dir, 0
 
 
 def _extract_word_counts(

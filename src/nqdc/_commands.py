@@ -1,14 +1,13 @@
 import argparse
 from pathlib import Path
 import os
-import re
 from typing import Optional
 
 from nqdc._utils import add_log_file
 from nqdc._download import download_articles_for_query
 from nqdc._articles import extract_articles
 from nqdc._data_extraction import extract_to_csv
-from nqdc._bow_features import vectorize_corpus_to_npz, checksum_vocabulary
+from nqdc._bow_features import vectorize_corpus_to_npz
 
 
 def _add_log_file_if_possible(args: argparse.Namespace, prefix: str) -> None:
@@ -38,7 +37,7 @@ def _get_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def download_command() -> None:
+def download_command() -> int:
     parser = _get_parser()
     parser.add_argument("data_dir")
     group = parser.add_mutually_exclusive_group(required=True)
@@ -50,56 +49,82 @@ def download_command() -> None:
     _add_log_file_if_possible(args, "download_")
     api_key = _get_api_key(args)
     query = _get_query(args)
-    download_articles_for_query(
+    _, code = download_articles_for_query(
         query=query,
         data_dir=args.data_dir,
         n_docs=args.n_docs,
         api_key=api_key,
     )
+    return code
 
 
-def extract_articles_command() -> None:
+def extract_articles_command() -> int:
     parser = _get_parser()
     parser.add_argument("articlesets_dir")
     args = parser.parse_args()
     _add_log_file_if_possible(args, "extract_articles_")
     download_dir = Path(args.articlesets_dir)
-    articles_dir = download_dir.parent.joinpath("articles")
-    extract_articles(download_dir, articles_dir)
+    _, code = extract_articles(download_dir)
+    return code
 
 
-def extract_data_command() -> None:
+def extract_data_command() -> int:
     parser = _get_parser()
     parser.add_argument("articles_dir")
     parser.add_argument("--articles_with_coords_only", action="store_true")
     args = parser.parse_args()
     _add_log_file_if_possible(args, "extract_data_")
-    articles_dir = Path(args.articles_dir)
-    subset_name = (
-        "articlesWithCoords"
-        if args.articles_with_coords_only
-        else "allArticles"
+    _, code = extract_to_csv(
+        args.articles_dir,
+        articles_with_coords_only=args.articles_with_coords_only,
     )
-    output_dir = articles_dir.parent.joinpath(
-        f"subset_{subset_name}_extractedData"
-    )
-    extract_to_csv(articles_dir, output_dir, args.articles_with_coords_only)
+    return code
 
 
-def vectorize_command() -> None:
+def vectorize_command() -> int:
     parser = _get_parser()
     parser.add_argument("extracted_data_dir")
     parser.add_argument("vocabulary_file")
     args = parser.parse_args()
     _add_log_file_if_possible(args, "vectorize_")
     data_dir = Path(args.extracted_data_dir)
-    voc_checksum = checksum_vocabulary(args.vocabulary_file)
-    output_dir_name = re.sub(
-        r"^(.*?)(_extractedData)?$",
-        rf"\1-voc_{voc_checksum}_vectorizedText",
-        data_dir.name,
+    _, code = vectorize_corpus_to_npz(
+        data_dir.joinpath("text.csv"), args.vocabulary_file
     )
-    output_dir = Path(args.extracted_data_dir).parent.joinpath(output_dir_name)
-    vectorize_corpus_to_npz(
-        data_dir.joinpath("text.csv"), args.vocabulary_file, output_dir
+    return code
+
+
+def full_pipeline_command() -> int:
+    parser = _get_parser()
+    parser.add_argument("data_dir")
+    parser.add_argument("vocabulary_file")
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument("-q", "--query", type=str, default=None)
+    group.add_argument("-f", "--query_file", type=str, default=None)
+    parser.add_argument("-n", "--n_docs", type=int, default=None)
+    parser.add_argument("--api_key", type=str, default=None)
+    parser.add_argument("--articles_with_coords_only", action="store_true")
+    args = parser.parse_args()
+    _add_log_file_if_possible(args, "full_pipeline_")
+    api_key = _get_api_key(args)
+    query = _get_query(args)
+    total_code = 0
+    download_dir, code = download_articles_for_query(
+        query=query,
+        data_dir=args.data_dir,
+        n_docs=args.n_docs,
+        api_key=api_key,
     )
+    total_code += code
+    articles_dir, code = extract_articles(download_dir)
+    total_code += code
+    extracted_data_dir, code = extract_to_csv(
+        articles_dir,
+        articles_with_coords_only=args.articles_with_coords_only,
+    )
+    total_code += code
+    _, code = vectorize_corpus_to_npz(
+        extracted_data_dir.joinpath("text.csv"), args.vocabulary_file
+    )
+    total_code += code
+    return total_code

@@ -6,9 +6,10 @@ from nqdc import _download, _articles, _data_extraction
 
 
 def test_extract_to_csv(tmp_path, entrez_mock):
-    download_dir = _download.download_articles_for_query(
+    download_dir, code = _download.download_articles_for_query(
         "fMRI[abstract]", tmp_path
     )
+    assert code == 0
     articles_dir = Path(f"{download_dir}-articles")
     _articles.extract_articles(download_dir, articles_dir)
     data_dir = Path(f"{download_dir}-extracted_data")

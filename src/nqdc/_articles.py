@@ -1,7 +1,7 @@
 import json
 import logging
 from pathlib import Path
-from typing import Generator, Tuple
+from typing import Generator, Tuple, Optional
 
 from lxml import etree
 
@@ -12,15 +12,19 @@ _LOG = logging.getLogger(__name__)
 
 
 def extract_articles(
-    input_dir: PathLikeOrStr, output_dir: PathLikeOrStr
-) -> Path:
+    input_dir: PathLikeOrStr, output_dir: Optional[PathLikeOrStr] = None
+) -> Tuple[Path, int]:
     input_dir = Path(input_dir)
-    _warn_if_incomplete_download(input_dir)
-    output_dir = Path(output_dir)
+    download_complete = _check_if_download_complete(input_dir)
+    if output_dir is None:
+        output_dir = input_dir.parent.joinpath("articles")
+    else:
+        output_dir = Path(output_dir)
+    _LOG.info(f"Extracting articles from {input_dir} to {output_dir}")
     output_dir.mkdir(exist_ok=True, parents=True)
     n_articles = 0
     for batch_file in sorted(input_dir.glob("batch_*.xml")):
-        _LOG.info(f"Processing {batch_file.name}")
+        _LOG.debug(f"Processing {batch_file.name}")
         for (pmcid, article) in _extract_from_articleset(batch_file):
             subdir = output_dir.joinpath(_utils.checksum(str(pmcid))[:3])
             subdir.mkdir(exist_ok=True, parents=True)
@@ -31,19 +35,20 @@ def extract_articles(
     _LOG.info(
         f"Extracted {n_articles} articles from {input_dir} to {output_dir}"
     )
-    return output_dir
+    return output_dir, int(not download_complete)
 
 
-def _warn_if_incomplete_download(download_dir: Path) -> None:
+def _check_if_download_complete(download_dir: Path) -> bool:
     try:
         complete = json.loads(
             download_dir.joinpath("info.json").read_text("utf-8")
         )["download_complete"]
         if complete:
-            return
+            return True
     except Exception:
         pass
     _LOG.warning("Not all articles for the query have been downloaded")
+    return False
 
 
 def _extract_from_articleset(

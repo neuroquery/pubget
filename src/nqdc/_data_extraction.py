@@ -1,7 +1,7 @@
 from pathlib import Path
 import logging
 import csv
-from typing import Generator, Dict, Union
+from typing import Generator, Dict, Union, Optional, Tuple
 
 from lxml import etree
 import pandas as pd
@@ -69,13 +69,38 @@ def _extract_article_data(
     return {"metadata": metadata, "text": text, "coordinates": coords}
 
 
+def _get_output_dir(
+    articles_dir: PathLikeOrStr,
+    output_dir: Optional[PathLikeOrStr],
+    articles_with_coords_only: bool,
+) -> Path:
+    if output_dir is None:
+        articles_dir = Path(articles_dir)
+        subset_name = (
+            "articlesWithCoords"
+            if articles_with_coords_only
+            else "allArticles"
+        )
+        output_dir = articles_dir.parent.joinpath(
+            f"subset_{subset_name}_extractedData"
+        )
+    else:
+        output_dir = Path(output_dir)
+    output_dir.mkdir(exist_ok=True, parents=True)
+    return output_dir
+
+
 def extract_to_csv(
     articles_dir: PathLikeOrStr,
-    output_dir: PathLikeOrStr,
+    output_dir: Optional[PathLikeOrStr] = None,
     articles_with_coords_only: bool = False,
-) -> None:
-    output_dir = Path(output_dir)
-    output_dir.mkdir(exist_ok=True, parents=True)
+) -> Tuple[Path, int]:
+    output_dir = _get_output_dir(
+        articles_dir, output_dir, articles_with_coords_only
+    )
+    _LOG.info(
+        f"Extracting data from articles in {articles_dir} to {output_dir}"
+    )
     metadata_csv = output_dir / "metadata.csv"
     text_csv = output_dir / "text.csv"
     coord_csv = output_dir / "coordinates.csv"
@@ -96,3 +121,5 @@ def extract_to_csv(
             coord_writer.writerows(
                 article_data["coordinates"].to_dict(orient="records")
             )
+    _LOG.info(f"Done extracting article data to csv files in {output_dir}")
+    return output_dir, 0

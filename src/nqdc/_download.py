@@ -2,7 +2,7 @@ import logging
 import json
 from datetime import datetime
 from pathlib import Path
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, Tuple
 
 from nqdc._entrez import EntrezClient
 from nqdc import _utils
@@ -17,7 +17,7 @@ def download_articles_for_query(
     n_docs: Optional[int] = None,
     retmax: int = 500,
     api_key: Optional[str] = None,
-) -> Path:
+) -> Tuple[Path, int]:
     data_dir = Path(data_dir)
     output_dir = data_dir.joinpath(
         f"query-{_utils.checksum(query)}", "articlesets"
@@ -27,7 +27,7 @@ def download_articles_for_query(
         info = json.loads(info_file.read_text("utf-8"))
         if info["download_complete"]:
             _LOG.info("Download already complete, nothing to do")
-            return output_dir
+            return output_dir, 0
     else:
         output_dir.mkdir(exist_ok=True, parents=True)
         info = {
@@ -53,9 +53,14 @@ def download_articles_for_query(
         n_docs=n_docs,
         retmax=info["retmax"],
     )
-    _LOG.info("Finished downloading articles")
+    _LOG.info("Finished downloading articles in {output_dir}")
     info["download_complete"] = client.n_failures == 0 and (
         n_docs is None or n_docs >= int(info["search_result"]["count"])
     )
+    if not info["download_complete"]:
+        _LOG.warning(
+            "Download is incomplete -- not all articles matching "
+            "the query have been downloaded"
+        )
     info_file.write_text(json.dumps(info), "utf-8")
-    return output_dir
+    return output_dir, int(client.n_failures != 0)
