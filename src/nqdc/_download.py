@@ -11,15 +11,17 @@ from nqdc._typing import PathLikeOrStr
 _LOG = logging.getLogger(__name__)
 
 
-def download_articles_for_search_term(
-    term: str,
+def download_articles_for_query(
+    query: str,
     data_dir: PathLikeOrStr,
     n_docs: Optional[int] = None,
     retmax: int = 500,
     api_key: Optional[str] = None,
 ) -> Path:
     data_dir = Path(data_dir)
-    output_dir = data_dir.joinpath(f"query-{_utils.hash(term)}")
+    output_dir = data_dir.joinpath(
+        f"query-{_utils.checksum(query)}", "articlesets"
+    )
     info_file = output_dir.joinpath("info.json")
     if info_file.is_file():
         info = json.loads(info_file.read_text("utf-8"))
@@ -29,7 +31,7 @@ def download_articles_for_search_term(
     else:
         output_dir.mkdir(exist_ok=True, parents=True)
         info = {
-            "term": term,
+            "query": query,
             "retmax": retmax,
             "download_complete": False,
         }
@@ -43,7 +45,7 @@ def download_articles_for_search_term(
             f"query key {info['search_result']['querykey']}"
         )
     else:
-        info["search_result"] = client.esearch(term)
+        info["search_result"] = client.esearch(query)
         info_file.write_text(json.dumps(info), "utf-8")
     client.efetch(
         output_dir,

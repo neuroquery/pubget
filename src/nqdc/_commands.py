@@ -1,13 +1,23 @@
 import argparse
 from pathlib import Path
-import re
 import os
+import re
 from typing import Optional
 
-from nqdc._download import download_articles_for_search_term
+from nqdc._utils import add_log_file
+from nqdc._download import download_articles_for_query
 from nqdc._articles import extract_articles
 from nqdc._data_extraction import extract_to_csv
-from nqdc._bow_features import vectorize_corpus_to_npz
+from nqdc._bow_features import vectorize_corpus_to_npz, checksum_vocabulary
+
+
+def _add_log_file_if_possible(args: argparse.Namespace, prefix: str) -> None:
+    log_dir = args.log_dir
+    if log_dir is None:
+        log_dir = os.environ.get("NQDC_LOG_DIR", None)
+    if log_dir is None:
+        return
+    add_log_file(log_dir, prefix)
 
 
 def _get_api_key(args: argparse.Namespace) -> Optional[str]:
@@ -16,59 +26,80 @@ def _get_api_key(args: argparse.Namespace) -> Optional[str]:
     return os.environ.get("NQDC_API_KEY", None)
 
 
-def download() -> None:
+def _get_query(args: argparse.Namespace) -> str:
+    if args.query is not None:
+        return str(args.query)
+    return Path(args.query_file).read_text("utf-8")
+
+
+def _get_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
+    parser.add_argument("--log_dir", type=str, default=None)
+    return parser
+
+
+def download_command() -> None:
+    parser = _get_parser()
     parser.add_argument("data_dir")
-    parser.add_argument("search_term")
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument("-q", "--query", type=str, default=None)
+    group.add_argument("-f", "--query_file", type=str, default=None)
     parser.add_argument("-n", "--n_docs", type=int, default=None)
     parser.add_argument("--api_key", type=str, default=None)
     args = parser.parse_args()
+    _add_log_file_if_possible(args, "download_")
     api_key = _get_api_key(args)
-    download_dir = download_articles_for_search_term(
-        term=args.search_term,
+    query = _get_query(args)
+    download_articles_for_query(
+        query=query,
         data_dir=args.data_dir,
         n_docs=args.n_docs,
         api_key=api_key,
     )
-    articles_dir = f"{download_dir}-articles"
+
+
+def extract_articles_command() -> None:
+    parser = _get_parser()
+    parser.add_argument("articlesets_dir")
+    args = parser.parse_args()
+    _add_log_file_if_possible(args, "extract_articles_")
+    download_dir = Path(args.articlesets_dir)
+    articles_dir = download_dir.parent.joinpath("articles")
     extract_articles(download_dir, articles_dir)
 
 
-def extract() -> None:
-    parser = argparse.ArgumentParser()
+def extract_data_command() -> None:
+    parser = _get_parser()
     parser.add_argument("articles_dir")
     parser.add_argument("--articles_with_coords_only", action="store_true")
-    parser.add_argument("-o", "--output_dir", type=str, default=None)
     args = parser.parse_args()
+    _add_log_file_if_possible(args, "extract_data_")
     articles_dir = Path(args.articles_dir)
-    if args.output_dir is None:
-        match = re.match(r"(query-[a-zA-Z0-9]+)-articles", articles_dir.name)
-        if match:
-            name = f"{match.group(1)}-extracted_data"
-        else:
-            name = f"{articles_dir.name}-extracted_data"
-        output_dir = articles_dir.parent.joinpath(name)
-    else:
-        output_dir = args.output_dir
+    subset_name = (
+        "articlesWithCoords"
+        if args.articles_with_coords_only
+        else "allArticles"
+    )
+    output_dir = articles_dir.parent.joinpath(
+        f"subset_{subset_name}_extractedData"
+    )
     extract_to_csv(articles_dir, output_dir, args.articles_with_coords_only)
 
 
-def vectorize() -> None:
-    parser = argparse.ArgumentParser()
+def vectorize_command() -> None:
+    parser = _get_parser()
     parser.add_argument("extracted_data_dir")
     parser.add_argument("vocabulary_file")
-    parser.add_argument("-o", "--output_dir", type=str, default=None)
     args = parser.parse_args()
+    _add_log_file_if_possible(args, "vectorize_")
     data_dir = Path(args.extracted_data_dir)
-    if args.output_dir is None:
-        match = re.match(r"(query-[a-zA-Z0-9]+)-extracted_data", data_dir.name)
-        if match:
-            name = f"{match.group(1)}-vectorized_text"
-        else:
-            name = f"{data_dir.name}-extracted_data"
-        output_dir = data_dir.parent.joinpath(name)
-    else:
-        output_dir = args.output_dir
+    voc_checksum = checksum_vocabulary(args.vocabulary_file)
+    output_dir_name = re.sub(
+        r"^(.*?)(_extractedData)?$",
+        rf"\1-voc_{voc_checksum}_vectorizedText",
+        data_dir.name,
+    )
+    output_dir = Path(args.extracted_data_dir).parent.joinpath(output_dir_name)
     vectorize_corpus_to_npz(
         data_dir.joinpath("text.csv"), args.vocabulary_file, output_dir
     )

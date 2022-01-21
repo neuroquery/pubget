@@ -1,3 +1,4 @@
+import json
 import logging
 from pathlib import Path
 from typing import Generator, Tuple
@@ -14,13 +15,14 @@ def extract_articles(
     input_dir: PathLikeOrStr, output_dir: PathLikeOrStr
 ) -> Path:
     input_dir = Path(input_dir)
+    _warn_if_incomplete_download(input_dir)
     output_dir = Path(output_dir)
     output_dir.mkdir(exist_ok=True, parents=True)
     n_articles = 0
     for batch_file in sorted(input_dir.glob("batch_*.xml")):
         _LOG.info(f"Processing {batch_file.name}")
         for (pmcid, article) in _extract_from_articleset(batch_file):
-            subdir = output_dir / _utils.hash(str(pmcid))[:3]
+            subdir = output_dir.joinpath(_utils.checksum(str(pmcid))[:3])
             subdir.mkdir(exist_ok=True, parents=True)
             target_file = subdir / f"pmcid_{pmcid}.xml"
             with open(target_file, "wb") as f:
@@ -30,6 +32,18 @@ def extract_articles(
         f"Extracted {n_articles} articles from {input_dir} to {output_dir}"
     )
     return output_dir
+
+
+def _warn_if_incomplete_download(download_dir: Path) -> None:
+    try:
+        complete = json.loads(
+            download_dir.joinpath("info.json").read_text("utf-8")
+        )["download_complete"]
+        if complete:
+            return
+    except Exception:
+        pass
+    _LOG.warning("Not all articles for the query have been downloaded")
 
 
 def _extract_from_articleset(

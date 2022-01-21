@@ -69,11 +69,11 @@ class EntrezClient:
 
     def esearch(
         self,
-        term: str,
+        query: str,
     ) -> Dict[str, str]:
         search_params = {
             "db": "pmc",
-            "term": f"{term}&open+access[filter]",
+            "term": f"{query}&open+access[filter]",
             "usehistory": "y",
             "retmode": "json",
             "retmax": 5,

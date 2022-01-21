@@ -5,8 +5,8 @@ import pandas as pd
 from nqdc import _download, _articles, _data_extraction
 
 
-def test_download_articles_for_search_term(tmp_path, entrez_mock):
-    download_dir = _download.download_articles_for_search_term(
+def test_extract_to_csv(tmp_path, entrez_mock):
+    download_dir = _download.download_articles_for_query(
         "fMRI[abstract]", tmp_path
     )
     articles_dir = Path(f"{download_dir}-articles")

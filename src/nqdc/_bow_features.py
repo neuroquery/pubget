@@ -10,6 +10,7 @@ from sklearn.preprocessing import normalize
 import pandas as pd
 from neuroquery.tokenization import TextVectorizer
 
+from nqdc._utils import checksum
 from nqdc._typing import PathLikeOrStr
 
 _LOG = logging.getLogger(__name__)
@@ -76,8 +77,20 @@ def _extract_word_counts(
     return vectorized_fields, vectorizer
 
 
+def get_voc_mapping_file(vocabulary_file: PathLikeOrStr) -> Path:
+    return Path(f"{vocabulary_file}_voc_mapping_identity.json")
+
+
+def checksum_vocabulary(vocabulary_file: PathLikeOrStr) -> str:
+    voc = Path(vocabulary_file).read_bytes()
+    voc_mapping_file = get_voc_mapping_file(vocabulary_file)
+    if voc_mapping_file.is_file():
+        voc += voc_mapping_file.read_bytes()
+    return checksum(voc)
+
+
 def _load_voc_mapping(vocabulary_file: PathLikeOrStr) -> Dict[str, str]:
-    voc_mapping_file = Path(f"{vocabulary_file}_voc_mapping_identity.json")
+    voc_mapping_file = get_voc_mapping_file(vocabulary_file)
     if voc_mapping_file.is_file():
         voc_mapping: Dict[str, str] = json.loads(
             voc_mapping_file.read_text("utf-8")

@@ -2,13 +2,33 @@ from pathlib import Path
 import logging
 import logging.config
 import hashlib
+from datetime import datetime
+import os
 from typing import Union
 
 from lxml import etree
 
+from nqdc._typing import PathLikeOrStr
+
+_LOG_FORMAT = "%(levelname)s\t%(asctime)s\t%(message)s"
+_LOG_DATE_FORMAT = "%Y-%m-%dT%H:%M:%S%z"
+
+
+def add_log_file(log_dir: PathLikeOrStr, prefix: str = "log_") -> None:
+    log_dir = Path(log_dir)
+    log_dir.mkdir(exist_ok=True, parents=True)
+    log_file = log_dir.joinpath(
+        f"{prefix}{datetime.now().isoformat()}_{os.getpid()}"
+    )
+    logger = logging.getLogger("")
+    handler = logging.FileHandler(log_file)
+    handler.setLevel(logging.DEBUG)
+    formatter = logging.Formatter(fmt=_LOG_FORMAT, datefmt=_LOG_DATE_FORMAT)
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+
 
 def configure_logging() -> None:
-    fmt_string = "%(levelname)s\t%(asctime)s\t%(message)s"
     config = {
         "version": 1,
         "incremental": False,
@@ -22,8 +42,8 @@ def configure_logging() -> None:
         },
         "formatters": {
             "formatter": {
-                "format": fmt_string,
-                "datefmt": "%Y-%m-%dT%H:%M:%S%z",
+                "format": _LOG_FORMAT,
+                "datefmt": _LOG_DATE_FORMAT,
             }
         },
         "root": {
@@ -38,7 +58,7 @@ def configure_logging() -> None:
     logging.captureWarnings(True)
 
 
-def hash(value: Union[str, bytes]) -> str:
+def checksum(value: Union[str, bytes]) -> str:
     if isinstance(value, str):
         value = value.encode("utf-8")
     return hashlib.md5(value).hexdigest()
