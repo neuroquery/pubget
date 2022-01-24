@@ -29,7 +29,7 @@ def test_data_dir():
 @pytest.fixture(autouse=True)
 def basic_nq_datasets_mock(monkeypatch):
     monkeypatch.setattr("neuroquery.datasets.fetch_neuroquery_model", Mock)
-    monkeypatch.setattr("nqdc._bow_features.fetch_neuroquery_model", Mock)
+    monkeypatch.setattr("nqdc._vectorization.fetch_neuroquery_model", Mock)
 
 
 @pytest.fixture()
@@ -51,7 +51,7 @@ def nq_datasets_mock(test_data_dir, tmp_path, monkeypatch):
         return str(nq_model_dir)
 
     monkeypatch.setattr("neuroquery.datasets.fetch_neuroquery_model", fetch)
-    monkeypatch.setattr("nqdc._bow_features.fetch_neuroquery_model", fetch)
+    monkeypatch.setattr("nqdc._vectorization.fetch_neuroquery_model", fetch)
 
 
 class Response:

@@ -5,7 +5,7 @@ import pandas as pd
 from scipy import sparse
 import pytest
 
-from nqdc import _bow_features
+from nqdc import _vectorization
 
 
 @pytest.mark.parametrize("with_voc", [True, False])
@@ -15,7 +15,7 @@ def test_vectorize_corpus_to_npz(
     kwargs = {}
     if with_voc:
         kwargs["vocabulary"] = test_data_dir.joinpath("vocabulary.csv")
-    _bow_features.vectorize_corpus_to_npz(
+    _vectorization.vectorize_corpus_to_npz(
         test_data_dir.joinpath("corpus.csv"), output_dir=tmp_path, **kwargs
     )
     _check_pmcids(tmp_path)
@@ -91,6 +91,6 @@ def _check_doc_frequencies(data_dir):
 def test_voc_mapping_matrix():
     voc = ["amygdala", "brain stem", "brainstem", "cortex"]
     mapping = {"brain stem": "brainstem"}
-    op = _bow_features._voc_mapping_matrix(voc, mapping)
+    op = _vectorization._voc_mapping_matrix(voc, mapping)
     assert np.allclose(op.A, [[1, 0, 0, 0], [0, 1, 1, 0], [0, 0, 0, 1]])
     assert np.allclose(op.dot(np.arange(1, len(voc) + 1)), [1, 5, 4])

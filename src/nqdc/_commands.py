@@ -7,7 +7,7 @@ from nqdc._utils import add_log_file
 from nqdc._download import download_articles_for_query
 from nqdc._articles import extract_articles
 from nqdc._data_extraction import extract_to_csv
-from nqdc._bow_features import vectorize_corpus_to_npz
+from nqdc._vectorization import vectorize_corpus_to_npz
 
 
 def _add_log_file_if_possible(args: argparse.Namespace, prefix: str) -> None:
