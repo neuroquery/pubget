@@ -1,3 +1,4 @@
+import os
 import shutil
 from pathlib import Path
 import json
@@ -5,6 +6,13 @@ from unittest.mock import Mock
 
 from lxml import etree
 import pytest
+
+
+@pytest.fixture(autouse=True)
+def erase_config(monkeypatch):
+    for variable in os.environ:
+        if variable.startswith("NQDC_"):
+            monkeypatch.delenv(variable)
 
 
 @pytest.fixture(autouse=True)
