@@ -1,7 +1,7 @@
 import logging
 import re
 import html
-from typing import Union, Tuple, Any, Sequence, List
+from typing import Tuple, Any, Sequence, List
 
 import numpy as np
 from scipy import stats

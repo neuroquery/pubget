@@ -1,8 +1,7 @@
 import logging
 import json
-from datetime import datetime
 from pathlib import Path
-from typing import Optional, Dict, Any, Tuple
+from typing import Optional, Tuple
 
 from nqdc._entrez import EntrezClient
 from nqdc import _utils

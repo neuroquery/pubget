@@ -82,7 +82,7 @@ def _get_output_dir(
             if articles_with_coords_only
             else "allArticles"
         )
-        output_dir = articles_dir.parent.joinpath(
+        output_dir = articles_dir.with_name(
             f"subset_{subset_name}_extractedData"
         )
     else:

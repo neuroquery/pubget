@@ -60,4 +60,4 @@ for i, batch in enumerate(client.efetch(n_docs=7, retmax=7)):
     stripped = etree.tostring(
         strip_text_transform(etree.fromstring(batch)), xml_declaration=True
     )
-    output_dir.joinpath(f"articleset.xml").write_bytes(stripped)
+    output_dir.joinpath("articleset.xml").write_bytes(stripped)

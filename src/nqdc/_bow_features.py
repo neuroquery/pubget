@@ -2,7 +2,8 @@ from pathlib import Path
 import re
 import logging
 import json
-from typing import Tuple, Dict, Any, Sequence, List, Optional
+from enum import Enum
+from typing import Tuple, Dict, Any, Sequence, List, Optional, Union
 
 import numpy as np
 from scipy import sparse
@@ -18,20 +19,27 @@ from nqdc._typing import PathLikeOrStr
 _LOG = logging.getLogger(__name__)
 
 
+class Vocabulary(Enum):
+    NEUROQUERY_VOCABULARY = (
+        "https://github.com/neuroquery/"
+        "neuroquery_data/blob/main/neuroquery_model/vocabulary.csv"
+    )
+
+
 def _get_output_dir(
     corpus_file: PathLikeOrStr,
-    vocabulary_file: PathLikeOrStr,
     output_dir: Optional[PathLikeOrStr],
+    vocabulary_file: PathLikeOrStr,
 ) -> Path:
     if output_dir is None:
         data_dir = Path(corpus_file).parent
-        voc_checksum = checksum_vocabulary(vocabulary_file)
+        voc_checksum = _checksum_vocabulary(vocabulary_file)
         output_dir_name = re.sub(
             r"^(.*?)(_extractedData)?$",
             rf"\1-voc_{voc_checksum}_vectorizedText",
             data_dir.name,
         )
-        output_dir = data_dir.parent.joinpath(output_dir_name)
+        output_dir = data_dir.with_name(output_dir_name)
     else:
         output_dir = Path(output_dir)
     output_dir.mkdir(exist_ok=True, parents=True)
@@ -40,10 +48,13 @@ def _get_output_dir(
 
 def vectorize_corpus_to_npz(
     corpus_file: PathLikeOrStr,
-    vocabulary_file: PathLikeOrStr,
     output_dir: Optional[PathLikeOrStr] = None,
+    vocabulary: Union[
+        PathLikeOrStr, Vocabulary
+    ] = Vocabulary.NEUROQUERY_VOCABULARY,
 ) -> Tuple[Path, int]:
-    output_dir = _get_output_dir(corpus_file, vocabulary_file, output_dir)
+    vocabulary_file = _resolve_voc(vocabulary)
+    output_dir = _get_output_dir(corpus_file, output_dir, vocabulary_file)
     _LOG.info(
         f"vectorizing {corpus_file} using vocabulary "
         f"{vocabulary_file} to {output_dir}"
@@ -121,20 +132,20 @@ def _extract_word_counts(
     return np.concatenate(pmcids), vectorized_fields, vectorizer
 
 
-def get_voc_mapping_file(vocabulary_file: PathLikeOrStr) -> Path:
+def _get_voc_mapping_file(vocabulary_file: PathLikeOrStr) -> Path:
     return Path(f"{vocabulary_file}_voc_mapping_identity.json")
 
 
-def checksum_vocabulary(vocabulary_file: PathLikeOrStr) -> str:
+def _checksum_vocabulary(vocabulary_file: PathLikeOrStr) -> str:
     voc = Path(vocabulary_file).read_bytes()
-    voc_mapping_file = get_voc_mapping_file(vocabulary_file)
+    voc_mapping_file = _get_voc_mapping_file(vocabulary_file)
     if voc_mapping_file.is_file():
         voc += voc_mapping_file.read_bytes()
     return checksum(voc)
 
 
 def _load_voc_mapping(vocabulary_file: PathLikeOrStr) -> Dict[str, str]:
-    voc_mapping_file = get_voc_mapping_file(vocabulary_file)
+    voc_mapping_file = _get_voc_mapping_file(vocabulary_file)
     if voc_mapping_file.is_file():
         voc_mapping: Dict[str, str] = json.loads(
             voc_mapping_file.read_text("utf-8")
@@ -144,9 +155,23 @@ def _load_voc_mapping(vocabulary_file: PathLikeOrStr) -> Dict[str, str]:
     return voc_mapping
 
 
+def _get_neuroquery_vocabulary() -> Path:
+    return Path(fetch_neuroquery_model()).joinpath("vocabulary.csv")
+
+
+def _resolve_voc(vocabulary: Union[PathLikeOrStr, Vocabulary]) -> Path:
+    if vocabulary is Vocabulary.NEUROQUERY_VOCABULARY:
+        return _get_neuroquery_vocabulary()
+    return Path(vocabulary)
+
+
 def vectorize_corpus(
-    corpus_file: PathLikeOrStr, vocabulary_file: PathLikeOrStr
+    corpus_file: PathLikeOrStr,
+    vocabulary: Union[
+        PathLikeOrStr, Vocabulary
+    ] = Vocabulary.NEUROQUERY_VOCABULARY,
 ) -> Dict[str, Any]:
+    vocabulary_file = _resolve_voc(vocabulary)
     voc_mapping = _load_voc_mapping(vocabulary_file)
     pmcids, counts, vectorizer = _extract_word_counts(
         corpus_file, vocabulary_file

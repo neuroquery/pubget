@@ -1,7 +1,7 @@
 import argparse
 from pathlib import Path
 import os
-from typing import Optional, List
+from typing import Optional, List, Dict
 
 from nqdc._utils import add_log_file
 from nqdc._download import download_articles_for_query
@@ -35,6 +35,12 @@ def _get_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
     parser.add_argument("--log_dir", type=str, default=None)
     return parser
+
+
+def _voc_kwarg(voc_file: Optional[str]) -> Dict[str, str]:
+    if voc_file is None:
+        return {}
+    return {"vocabulary": voc_file}
 
 
 def download_command(argv: Optional[List[str]] = None) -> int:
@@ -84,12 +90,12 @@ def extract_data_command(argv: Optional[List[str]] = None) -> int:
 def vectorize_command(argv: Optional[List[str]] = None) -> int:
     parser = _get_parser()
     parser.add_argument("extracted_data_dir")
-    parser.add_argument("vocabulary_file")
+    parser.add_argument("-v", "--vocabulary_file", type=str, default=None)
     args = parser.parse_args(argv)
     _add_log_file_if_possible(args, "vectorize_")
     data_dir = Path(args.extracted_data_dir)
     _, code = vectorize_corpus_to_npz(
-        data_dir.joinpath("text.csv"), args.vocabulary_file
+        data_dir.joinpath("text.csv"), **_voc_kwarg(args.vocabulary_file)
     )
     return code
 
@@ -97,7 +103,7 @@ def vectorize_command(argv: Optional[List[str]] = None) -> int:
 def full_pipeline_command(argv: Optional[List[str]] = None) -> int:
     parser = _get_parser()
     parser.add_argument("data_dir")
-    parser.add_argument("vocabulary_file")
+    parser.add_argument("-v", "--vocabulary_file", type=str, default=None)
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("-q", "--query", type=str, default=None)
     group.add_argument("-f", "--query_file", type=str, default=None)
@@ -124,7 +130,8 @@ def full_pipeline_command(argv: Optional[List[str]] = None) -> int:
     )
     total_code += code
     _, code = vectorize_corpus_to_npz(
-        extracted_data_dir.joinpath("text.csv"), args.vocabulary_file
+        extracted_data_dir.joinpath("text.csv"),
+        **_voc_kwarg(args.vocabulary_file)
     )
     total_code += code
     return total_code

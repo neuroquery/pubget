@@ -17,7 +17,7 @@ def extract_articles(
     input_dir = Path(input_dir)
     download_complete = _check_if_download_complete(input_dir)
     if output_dir is None:
-        output_dir = input_dir.parent.joinpath("articles")
+        output_dir = input_dir.with_name("articles")
     else:
         output_dir = Path(output_dir)
     _LOG.info(f"Extracting articles from {input_dir} to {output_dir}")

@@ -3,15 +3,20 @@ import json
 import numpy as np
 import pandas as pd
 from scipy import sparse
+import pytest
 
 from nqdc import _bow_features
 
 
-def test_vectorize_corpus_to_npz(tmp_path, test_data_dir):
+@pytest.mark.parametrize("with_voc", [True, False])
+def test_vectorize_corpus_to_npz(
+    tmp_path, nq_datasets_mock, test_data_dir, with_voc
+):
+    kwargs = {}
+    if with_voc:
+        kwargs["vocabulary"] = test_data_dir.joinpath("vocabulary.csv")
     _bow_features.vectorize_corpus_to_npz(
-        test_data_dir.joinpath("corpus.csv"),
-        test_data_dir.joinpath("vocabulary.csv"),
-        tmp_path,
+        test_data_dir.joinpath("corpus.csv"), output_dir=tmp_path, **kwargs
     )
     _check_pmcids(tmp_path)
     _check_doc_frequencies(tmp_path)

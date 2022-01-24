@@ -1,10 +1,9 @@
 from pathlib import Path
-import re
 import logging
 from urllib.parse import urljoin
 import math
 import time
-from typing import Optional, Mapping, Union, Dict, Any, Generator, Tuple
+from typing import Optional, Mapping, Union, Dict, Any
 
 import requests
 

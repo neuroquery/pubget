@@ -1,6 +1,7 @@
+import shutil
 from pathlib import Path
 import json
-from unittest.mock import MagicMock
+from unittest.mock import Mock
 
 from lxml import etree
 import pytest
@@ -8,7 +9,7 @@ import pytest
 
 @pytest.fixture(autouse=True)
 def requests_mock(monkeypatch):
-    mock = MagicMock()
+    mock = Mock()
     monkeypatch.setattr("requests.sessions.Session.send", mock)
     return mock
 
@@ -22,7 +23,35 @@ def entrez_mock(monkeypatch):
 
 @pytest.fixture(scope="session")
 def test_data_dir():
-    return Path(__file__).parent.joinpath("data")
+    return Path(__file__).with_name("data")
+
+
+@pytest.fixture(autouse=True)
+def basic_nq_datasets_mock(monkeypatch):
+    monkeypatch.setattr("neuroquery.datasets.fetch_neuroquery_model", Mock)
+    monkeypatch.setattr("nqdc._bow_features.fetch_neuroquery_model", Mock)
+
+
+@pytest.fixture()
+def nq_datasets_mock(test_data_dir, tmp_path, monkeypatch):
+    nq_model_dir = tmp_path.joinpath("neuroquery_data", "neuroquery_model")
+    nq_model_dir.mkdir(parents=True)
+    shutil.copyfile(
+        str(test_data_dir.joinpath("vocabulary.csv")),
+        str(nq_model_dir.joinpath("vocabulary.csv")),
+    )
+    shutil.copyfile(
+        str(
+            test_data_dir.joinpath("vocabulary.csv_voc_mapping_identity.json")
+        ),
+        str(nq_model_dir.joinpath("vocabulary.csv_voc_mapping_identity.json")),
+    )
+
+    def fetch(*args, **kwargs):
+        return str(nq_model_dir)
+
+    monkeypatch.setattr("neuroquery.datasets.fetch_neuroquery_model", fetch)
+    monkeypatch.setattr("nqdc._bow_features.fetch_neuroquery_model", fetch)
 
 
 class Response:
