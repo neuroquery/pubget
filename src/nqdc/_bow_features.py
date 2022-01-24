@@ -10,6 +10,7 @@ from sklearn.preprocessing import normalize
 
 import pandas as pd
 from neuroquery.tokenization import TextVectorizer
+from neuroquery.datasets import fetch_neuroquery_model
 
 from nqdc._utils import checksum
 from nqdc._typing import PathLikeOrStr
@@ -48,6 +49,12 @@ def vectorize_corpus_to_npz(
         f"{vocabulary_file} to {output_dir}"
     )
     extraction_result = vectorize_corpus(corpus_file, vocabulary_file)
+    np.savetxt(
+        output_dir.joinpath("pmcid.txt"),
+        extraction_result["pmcids"],
+        fmt="%i",
+        encoding="utf-8",
+    )
     for feature_kind in "counts", "tfidf":
         for field, vectorized in extraction_result[feature_kind].items():
             output_file = output_dir.joinpath(f"{field}_{feature_kind}.npz")
@@ -67,9 +74,20 @@ def vectorize_corpus_to_npz(
     return output_dir, 0
 
 
+def _get_n_articles_msg(corpus_file: PathLikeOrStr) -> str:
+    try:
+        n_articles = json.loads(
+            Path(corpus_file).with_name("info.json").read_text("utf-8")
+        )["n_articles"]
+        n_articles_msg = f" / {n_articles}"
+    except Exception:
+        n_articles_msg = ""
+    return n_articles_msg
+
+
 def _extract_word_counts(
     corpus_file: PathLikeOrStr, vocabulary_file: PathLikeOrStr
-) -> Tuple[Dict[str, sparse.csr_matrix], TextVectorizer]:
+) -> Tuple[np.ndarray, Dict[str, sparse.csr_matrix], TextVectorizer]:
     vectorizer = TextVectorizer.from_vocabulary_file(
         str(vocabulary_file), use_idf=False, norm=None, voc_mapping={}
     ).fit()
@@ -80,24 +98,27 @@ def _extract_word_counts(
         "body": [],
     }  # type: Dict[str, List[sparse.csr_matrix]]
     chunksize = 200
+    pmcids = []
+    n_articles_msg = _get_n_articles_msg(corpus_file)
     for i, chunk in enumerate(
         pd.read_csv(corpus_file, encoding="utf-8", chunksize=chunksize)
     ):
         _LOG.debug(
             f"vectorizing articles {i * chunksize} to "
-            f"{i * chunksize + chunk.shape[0]}"
+            f"{i * chunksize + chunk.shape[0]}{n_articles_msg}"
         )
         chunk.fillna("", inplace=True)
         for field in vectorized_chunks:
             vectorized_chunks[field].append(
                 vectorizer.transform(chunk[field].values)
             )
+        pmcids.append(chunk["pmcid"].values)
     vectorized_fields = {}
     for field in vectorized_chunks:
         vectorized_fields[field] = sparse.vstack(
             vectorized_chunks[field], format="csr", dtype=int
         )
-    return vectorized_fields, vectorizer
+    return np.concatenate(pmcids), vectorized_fields, vectorizer
 
 
 def get_voc_mapping_file(vocabulary_file: PathLikeOrStr) -> Path:
@@ -127,7 +148,9 @@ def vectorize_corpus(
     corpus_file: PathLikeOrStr, vocabulary_file: PathLikeOrStr
 ) -> Dict[str, Any]:
     voc_mapping = _load_voc_mapping(vocabulary_file)
-    counts, vectorizer = _extract_word_counts(corpus_file, vocabulary_file)
+    pmcids, counts, vectorizer = _extract_word_counts(
+        corpus_file, vocabulary_file
+    )
     frequencies = {
         k: normalize(v, norm="l1", axis=1, copy=True)
         for k, v in counts.items()
@@ -154,6 +177,7 @@ def vectorize_corpus(
     )
     tfidf = {k: v.dot(idf_mat) for k, v in frequencies.items()}
     return {
+        "pmcids": pmcids,
         "counts": counts,
         "tfidf": tfidf,
         "document_frequencies_vocabulary": pd.Series(

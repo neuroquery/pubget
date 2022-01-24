@@ -10,7 +10,7 @@ from lxml import etree
 
 from nqdc._typing import PathLikeOrStr
 
-_LOG_FORMAT = "%(levelname)s\t%(asctime)s\t%(message)s"
+_LOG_FORMAT = "%(levelname)s\t%(asctime)s\t%(module)s\t%(message)s"
 _LOG_DATE_FORMAT = "%Y-%m-%dT%H:%M:%S%z"
 
 

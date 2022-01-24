@@ -24,7 +24,7 @@ def extract_articles(
     output_dir.mkdir(exist_ok=True, parents=True)
     n_articles = 0
     for batch_file in sorted(input_dir.glob("batch_*.xml")):
-        _LOG.debug(f"Processing {batch_file.name}")
+        _LOG.debug(f"Extracting articles from {batch_file.name}")
         for (pmcid, article) in _extract_from_articleset(batch_file):
             subdir = output_dir.joinpath(_utils.checksum(str(pmcid))[:3])
             subdir.mkdir(exist_ok=True, parents=True)

@@ -13,8 +13,14 @@ def test_vectorize_corpus_to_npz(tmp_path, test_data_dir):
         test_data_dir.joinpath("vocabulary.csv"),
         tmp_path,
     )
+    _check_pmcids(tmp_path)
     _check_doc_frequencies(tmp_path)
     _check_matrices(tmp_path)
+
+
+def _check_pmcids(data_dir):
+    pmcids = np.loadtxt(data_dir.joinpath("pmcid.txt"), dtype=int)
+    assert (pmcids == [123, 456, 789]).all()
 
 
 def _check_matrices(data_dir):

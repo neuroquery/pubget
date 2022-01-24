@@ -25,7 +25,7 @@ def extract_data(
     text_extractor = TextExtractor()
     n_articles, n_with_coords = 0, 0
     for subdir in sorted([f for f in articles_dir.glob("*") if f.is_dir()]):
-        _LOG.debug(f"Processing directory: {subdir.name}")
+        _LOG.debug(f"Reading articles in directory: {subdir.name}")
         for article_file in subdir.glob("pmcid_*.xml"):
             n_articles += 1
             article_data = _extract_article_data(
@@ -118,13 +118,13 @@ def extract_to_csv(
         for article_data in extract_data(
             articles_dir, articles_with_coords_only=articles_with_coords_only
         ):
-            n_articles += article_data["metadata"]
+            n_articles += 1
             metadata_writer.writerow(article_data["metadata"])
             text_writer.writerow(article_data["text"])
             coord_writer.writerows(
                 article_data["coordinates"].to_dict(orient="records")
             )
-    output_dir.joinpath("info.csv").write_text(
+    output_dir.joinpath("info.json").write_text(
         json.dumps({"n_articles": n_articles}), "utf-8"
     )
     _LOG.info(f"Done extracting article data to csv files in {output_dir}")
