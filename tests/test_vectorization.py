@@ -94,3 +94,13 @@ def test_voc_mapping_matrix():
     op = _vectorization._voc_mapping_matrix(voc, mapping)
     assert np.allclose(op.A, [[1, 0, 0, 0], [0, 1, 1, 0], [0, 0, 0, 1]])
     assert np.allclose(op.dot(np.arange(1, len(voc) + 1)), [1, 5, 4])
+
+
+def test_load_voc_mapping(tmp_path):
+    voc_file = tmp_path.joinpath("vocabulary.txt")
+    assert _vectorization._load_voc_mapping(voc_file) == {}
+    mapping = {"brains": "brain"}
+    voc_file.with_name(
+        f"{voc_file.name}_voc_mapping_identity.json"
+    ).write_text(json.dumps(mapping), "utf-8")
+    assert _vectorization._load_voc_mapping(voc_file) == mapping

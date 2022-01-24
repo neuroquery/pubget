@@ -1,5 +1,5 @@
 import json
-from unittest.mock import MagicMock
+from unittest.mock import Mock
 
 from nqdc import _download
 
@@ -29,10 +29,10 @@ def test_download_articles_for_query(tmp_path, entrez_mock, monkeypatch):
     assert json.loads(download_dir.joinpath("info.json").read_text("utf-8"))[
         "download_complete"
     ]
-    mock = MagicMock()
+    mock = Mock()
     monkeypatch.setattr(_download, "EntrezClient", mock)
     download_dir, code = _download.download_articles_for_query(
         "fMRI[abstract]", tmp_path, retmax=3
     )
     assert code == 0
-    assert len(mock.call_list()) == 0
+    assert not mock.called

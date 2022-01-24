@@ -55,22 +55,11 @@ def _extract_from_articleset(
     batch_file: Path,
 ) -> Generator[Tuple[int, etree.ElementTree], None, None]:
     with open(batch_file, "rb") as f:
-        try:
-            tree = etree.parse(f)
-        except Exception:
-            _LOG.exception(f"Bad article set file: {batch_file.name}")
-        for art_nb, article in enumerate(tree.iterfind("article")):
-            try:
-                pmcid = int(
-                    article.xpath(
-                        "front/article-meta/"
-                        "article-id[@pub-id-type='pmc']/text()"
-                    )[0]
-                )
-            except Exception:
-                _LOG.error(
-                    f"Could not find pmcid for article {art_nb} "
-                    f"of {batch_file.name}"
-                )
-            else:
-                yield pmcid, etree.ElementTree(article)
+        tree = etree.parse(f)
+    for art_nb, article in enumerate(tree.iterfind("article")):
+        pmcid = int(
+            article.xpath(
+                "front/article-meta/" "article-id[@pub-id-type='pmc']/text()"
+            )[0]
+        )
+        yield pmcid, etree.ElementTree(article)

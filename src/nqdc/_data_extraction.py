@@ -23,7 +23,7 @@ def extract_data(
     coord_extractor = CoordinateExtractor()
     metadata_extractor = MetadataExtractor()
     text_extractor = TextExtractor()
-    n_articles, n_with_coords = 0, 0
+    n_articles, n_with_coords, n_failures = 0, 0, 0
     for subdir in sorted([f for f in articles_dir.glob("*") if f.is_dir()]):
         _LOG.debug(f"Reading articles in directory: {subdir.name}")
         for article_file in subdir.glob("pmcid_*.xml"):
@@ -35,15 +35,16 @@ def extract_data(
                 coord_extractor,
             )
             if article_data is None:
-                continue
-            if article_data["coordinates"].shape[0]:
+                n_failures += 1
+            elif article_data["coordinates"].shape[0]:
                 n_with_coords += 1
             if not n_articles % 20:
                 _LOG.info(
                     f"Processed {n_articles} articles, {n_with_coords} "
-                    f"({n_with_coords / n_articles:.0%}) had coordinates"
+                    f"({n_with_coords / n_articles:.0%}) had coordinates,"
+                    f"failed to extract data from {n_failures} articles"
                 )
-            if (
+            if article_data is not None and (
                 article_data["coordinates"].shape[0]
                 or not articles_with_coords_only
             ):

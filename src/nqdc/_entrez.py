@@ -82,12 +82,15 @@ class EntrezClient:
             self._esearch_base_url, data=data, verb="POST"
         )
         if resp is None:
+            self.n_failures = 1
             return {}
         try:
             search_result: Dict[str, str] = resp.json()["esearchresult"]
         except Exception:
+            self.n_failures = 1
             return {}
         if "ERROR" in search_result:
+            self.n_failures = 1
             return {}
         self.last_search_result = search_result
         _LOG.info(f"Search returned {search_result['count']} results")
@@ -100,6 +103,7 @@ class EntrezClient:
         if search_result is None:
             search_result = self.last_search_result
         if search_result is None:
+            self.n_failures = 1
             return None
         needed_keys = {"count", "webenv", "querykey"}
         if not needed_keys.issubset(search_result.keys()):

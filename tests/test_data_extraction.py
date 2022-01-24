@@ -13,6 +13,10 @@ def test_extract_to_csv(tmp_path, entrez_mock):
     articles_dir = Path(f"{download_dir}-articles")
     _articles.extract_articles(download_dir, articles_dir)
     data_dir = Path(f"{download_dir}-extracted_data")
+    bucket = articles_dir.joinpath("000")
+    bucket.mkdir(exist_ok=True)
+    for i in range(20):
+        bucket.joinpath(f"pmcid_745{i}.xml").write_bytes(b"")
     _data_extraction.extract_to_csv(articles_dir, data_dir)
     metadata = pd.read_csv(data_dir.joinpath("metadata.csv"))
     assert metadata.shape == (7, 3)
