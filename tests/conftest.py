@@ -86,6 +86,7 @@ class EntrezMock:
         batch_file = Path(__file__).parent.joinpath("data", "articleset.xml")
         self.article_set = etree.parse(str(batch_file))
         self.count = len(self.article_set.getroot())
+        self.fail_efetch = False
 
     def __call__(self, request, *args, **kwargs):
         if "esearch.fcgi" in request.url:
@@ -110,6 +111,8 @@ class EntrezMock:
     def _efetch(self, request):
         params = _parse_query(request.body)
         retstart = int(params["retstart"])
+        if self.fail_efetch and retstart != 0:
+            return Response(status_code=500, reason="Internal Server Error")
         retmax = int(params["retmax"])
         if retstart >= self.count:
             return Response(status_code=400, reason="Bad Request")
