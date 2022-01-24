@@ -86,18 +86,20 @@ def _extract_coordinates_from_article_tables(
 ) -> pd.DataFrame:
     pmcid = int(article_tables.find("pmcid").text)
     all_coordinates = []
-    for i, table in enumerate(article_tables.iterfind("//extracted-table")):
+    for i, table in enumerate(article_tables.iterfind("extracted-table")):
         try:
             table_id = table.find("table-id").text
             table_label = table.find("table-label").text
+            kwargs = {"header": 0} if not table.find("th") else {}
             table_data = pd.read_html(
                 _map_chars(
                     etree.tostring(
                         table.find("transformed-table//{*}table")
-                    ).decode("utf-8")
+                    ).decode("utf-8"),
                 ),
                 thousands=None,
                 flavor="lxml",
+                **kwargs,
             )[0]
         except Exception:
             _LOG.debug(f"Failed to read table # {i} in article pmcid {pmcid}")
@@ -131,11 +133,8 @@ def _map_chars(text: str) -> str:
     return html.unescape(text).translate(_char_map)
 
 
-def _extract_coordinates_from_table(
-    table: pd.DataFrame, copy: bool = False
-) -> pd.DataFrame:
-    if copy:
-        table = table.copy()
+def _extract_coordinates_from_table(table: pd.DataFrame) -> pd.DataFrame:
+    table = table.copy()
     if isinstance(table.columns, pd.MultiIndex):
         table.columns = table.columns.get_level_values(-1)
     table.columns = list(map(str, table.columns))
