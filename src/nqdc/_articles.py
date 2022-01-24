@@ -28,7 +28,7 @@ def extract_articles(
         for (pmcid, article) in _extract_from_articleset(batch_file):
             subdir = output_dir.joinpath(_utils.checksum(str(pmcid))[:3])
             subdir.mkdir(exist_ok=True, parents=True)
-            target_file = subdir / f"pmcid_{pmcid}.xml"
+            target_file = subdir.joinpath(f"pmcid_{pmcid}.xml")
             with open(target_file, "wb") as f:
                 article.write(f, encoding="UTF-8", xml_declaration=True)
             n_articles += 1

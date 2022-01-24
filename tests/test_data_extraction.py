@@ -14,10 +14,10 @@ def test_extract_to_csv(tmp_path, entrez_mock):
     _articles.extract_articles(download_dir, articles_dir)
     data_dir = Path(f"{download_dir}-extracted_data")
     _data_extraction.extract_to_csv(articles_dir, data_dir)
-    metadata = pd.read_csv(data_dir / "metadata.csv")
+    metadata = pd.read_csv(data_dir.joinpath("metadata.csv"))
     assert metadata.shape == (7, 3)
-    text = pd.read_csv(data_dir / "text.csv")
+    text = pd.read_csv(data_dir.joinpath("text.csv"))
     assert text.shape == (7, 5)
     assert text.at[0, "body"].strip() == "The text of the article"
-    coordinates = pd.read_csv(data_dir / "coordinates.csv")
+    coordinates = pd.read_csv(data_dir.joinpath("coordinates.csv"))
     assert coordinates.shape == (14, 6)

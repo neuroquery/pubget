@@ -1,7 +1,7 @@
 import argparse
 from pathlib import Path
 import os
-from typing import Optional
+from typing import Optional, List
 
 from nqdc._utils import add_log_file
 from nqdc._download import download_articles_for_query
@@ -37,7 +37,7 @@ def _get_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def download_command() -> int:
+def download_command(argv: Optional[List[str]] = None) -> int:
     parser = _get_parser()
     parser.add_argument("data_dir")
     group = parser.add_mutually_exclusive_group(required=True)
@@ -45,7 +45,7 @@ def download_command() -> int:
     group.add_argument("-f", "--query_file", type=str, default=None)
     parser.add_argument("-n", "--n_docs", type=int, default=None)
     parser.add_argument("--api_key", type=str, default=None)
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     _add_log_file_if_possible(args, "download_")
     api_key = _get_api_key(args)
     query = _get_query(args)
@@ -58,21 +58,21 @@ def download_command() -> int:
     return code
 
 
-def extract_articles_command() -> int:
+def extract_articles_command(argv: Optional[List[str]] = None) -> int:
     parser = _get_parser()
     parser.add_argument("articlesets_dir")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     _add_log_file_if_possible(args, "extract_articles_")
     download_dir = Path(args.articlesets_dir)
     _, code = extract_articles(download_dir)
     return code
 
 
-def extract_data_command() -> int:
+def extract_data_command(argv: Optional[List[str]] = None) -> int:
     parser = _get_parser()
     parser.add_argument("articles_dir")
     parser.add_argument("--articles_with_coords_only", action="store_true")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     _add_log_file_if_possible(args, "extract_data_")
     _, code = extract_to_csv(
         args.articles_dir,
@@ -81,11 +81,11 @@ def extract_data_command() -> int:
     return code
 
 
-def vectorize_command() -> int:
+def vectorize_command(argv: Optional[List[str]] = None) -> int:
     parser = _get_parser()
     parser.add_argument("extracted_data_dir")
     parser.add_argument("vocabulary_file")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     _add_log_file_if_possible(args, "vectorize_")
     data_dir = Path(args.extracted_data_dir)
     _, code = vectorize_corpus_to_npz(
@@ -94,7 +94,7 @@ def vectorize_command() -> int:
     return code
 
 
-def full_pipeline_command() -> int:
+def full_pipeline_command(argv: Optional[List[str]] = None) -> int:
     parser = _get_parser()
     parser.add_argument("data_dir")
     parser.add_argument("vocabulary_file")
@@ -104,7 +104,7 @@ def full_pipeline_command() -> int:
     parser.add_argument("-n", "--n_docs", type=int, default=None)
     parser.add_argument("--api_key", type=str, default=None)
     parser.add_argument("--articles_with_coords_only", action="store_true")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     _add_log_file_if_possible(args, "full_pipeline_")
     api_key = _get_api_key(args)
     query = _get_query(args)

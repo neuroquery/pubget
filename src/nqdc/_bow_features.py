@@ -50,14 +50,16 @@ def vectorize_corpus_to_npz(
     extraction_result = vectorize_corpus(corpus_file, vocabulary_file)
     for feature_kind in "counts", "tfidf":
         for field, vectorized in extraction_result[feature_kind].items():
-            output_file = output_dir / f"{field}_{feature_kind}.npz"
+            output_file = output_dir.joinpath(f"{field}_{feature_kind}.npz")
             sparse.save_npz(str(output_file), vectorized)
     for voc_name in "feature_names", "vocabulary":
-        voc_file = output_dir / f"{voc_name}.csv"
+        voc_file = output_dir.joinpath(f"{voc_name}.csv")
         extraction_result[f"document_frequencies_{voc_name}"].to_csv(
             voc_file, header=None
         )
-    voc_mapping_file = output_dir / "vocabulary.csv_voc_mapping_identity.json"
+    voc_mapping_file = output_dir.joinpath(
+        "vocabulary.csv_voc_mapping_identity.json"
+    )
     voc_mapping_file.write_text(
         json.dumps(extraction_result["voc_mapping"]), "utf-8"
     )
@@ -82,7 +84,7 @@ def _extract_word_counts(
         pd.read_csv(corpus_file, encoding="utf-8", chunksize=chunksize)
     ):
         _LOG.debug(
-            f"transforming articles {i * chunksize} to "
+            f"vectorizing articles {i * chunksize} to "
             f"{i * chunksize + chunk.shape[0]}"
         )
         chunk.fillna("", inplace=True)

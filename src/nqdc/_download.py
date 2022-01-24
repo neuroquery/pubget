@@ -53,11 +53,13 @@ def download_articles_for_query(
         n_docs=n_docs,
         retmax=info["retmax"],
     )
-    _LOG.info("Finished downloading articles in {output_dir}")
+    _LOG.info(f"Finished downloading articles in {output_dir}")
     info["download_complete"] = client.n_failures == 0 and (
         n_docs is None or n_docs >= int(info["search_result"]["count"])
     )
-    if not info["download_complete"]:
+    if info["download_complete"]:
+        _LOG.info("All articles matching the query have been downloaded")
+    else:
         _LOG.warning(
             "Download is incomplete -- not all articles matching "
             "the query have been downloaded"

@@ -100,13 +100,14 @@ def _extract_coordinates_from_article_tables(
                 flavor="lxml",
             )[0]
         except Exception:
-            _LOG.debug(f"Failed to read table # {i}")
+            _LOG.debug(f"Failed to read table # {i} in article pmcid {pmcid}")
             continue
         try:
             coordinates = _extract_coordinates_from_table(table_data)
         except Exception:
             _LOG.exception(
-                f"Failed to extract coordinates from table {table_id}"
+                f"Failed to extract coordinates from table {table_id} "
+                f"in article pmcid {pmcid}"
             )
             continue
         coordinates["pmcid"] = pmcid

@@ -1,6 +1,7 @@
 from pathlib import Path
 import logging
 import csv
+import json
 from typing import Generator, Dict, Union, Optional, Tuple
 
 from lxml import etree
@@ -24,7 +25,7 @@ def extract_data(
     text_extractor = TextExtractor()
     n_articles, n_with_coords = 0, 0
     for subdir in sorted([f for f in articles_dir.glob("*") if f.is_dir()]):
-        _LOG.info(f"Processing directory: {subdir.name}")
+        _LOG.debug(f"Processing directory: {subdir.name}")
         for article_file in subdir.glob("pmcid_*.xml"):
             n_articles += 1
             article_data = _extract_article_data(
@@ -37,10 +38,11 @@ def extract_data(
                 continue
             if article_data["coordinates"].shape[0]:
                 n_with_coords += 1
-            _LOG.info(
-                f"Processed in total {n_articles} articles, {n_with_coords} "
-                f"({n_with_coords / n_articles:.0%}) had coordinates"
-            )
+            if not n_articles % 20:
+                _LOG.info(
+                    f"Processed {n_articles} articles, {n_with_coords} "
+                    f"({n_with_coords / n_articles:.0%}) had coordinates"
+                )
             if (
                 article_data["coordinates"].shape[0]
                 or not articles_with_coords_only
@@ -54,7 +56,6 @@ def _extract_article_data(
     text_extractor: TextExtractor,
     coord_extractor: CoordinateExtractor,
 ) -> Union[None, Dict[str, pd.DataFrame]]:
-    _LOG.debug(f"processing article: {article_file.name}")
     try:
         article = etree.parse(str(article_file))
     except Exception:
@@ -101,9 +102,9 @@ def extract_to_csv(
     _LOG.info(
         f"Extracting data from articles in {articles_dir} to {output_dir}"
     )
-    metadata_csv = output_dir / "metadata.csv"
-    text_csv = output_dir / "text.csv"
-    coord_csv = output_dir / "coordinates.csv"
+    metadata_csv = output_dir.joinpath("metadata.csv")
+    text_csv = output_dir.joinpath("text.csv")
+    coord_csv = output_dir.joinpath("coordinates.csv")
     with open(metadata_csv, "w", encoding="utf-8", newline="") as meta_f, open(
         text_csv, "w", encoding="utf-8", newline=""
     ) as text_f, open(coord_csv, "w", encoding="utf-8", newline="") as coord_f:
@@ -113,13 +114,18 @@ def extract_to_csv(
         text_writer.writeheader()
         coord_writer = csv.DictWriter(coord_f, CoordinateExtractor.fields)
         coord_writer.writeheader()
+        n_articles = 0
         for article_data in extract_data(
             articles_dir, articles_with_coords_only=articles_with_coords_only
         ):
+            n_articles += article_data["metadata"]
             metadata_writer.writerow(article_data["metadata"])
             text_writer.writerow(article_data["text"])
             coord_writer.writerows(
                 article_data["coordinates"].to_dict(orient="records")
             )
+    output_dir.joinpath("info.csv").write_text(
+        json.dumps({"n_articles": n_articles}), "utf-8"
+    )
     _LOG.info(f"Done extracting article data to csv files in {output_dir}")
     return output_dir, 0

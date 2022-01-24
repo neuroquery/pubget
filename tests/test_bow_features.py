@@ -9,8 +9,8 @@ from nqdc import _bow_features
 
 def test_vectorize_corpus_to_npz(tmp_path, test_data_dir):
     _bow_features.vectorize_corpus_to_npz(
-        test_data_dir / "corpus.csv",
-        test_data_dir / "vocabulary.csv",
+        test_data_dir.joinpath("corpus.csv"),
+        test_data_dir.joinpath("vocabulary.csv"),
         tmp_path,
     )
     _check_doc_frequencies(tmp_path)
@@ -20,10 +20,12 @@ def test_vectorize_corpus_to_npz(tmp_path, test_data_dir):
 def _check_matrices(data_dir):
     for source in ["title", "keywords", "abstract", "body"]:
         for kind in ["tfidf", "counts"]:
-            data = sparse.load_npz(str(data_dir / f"{source}_{kind}.npz"))
+            data = sparse.load_npz(
+                str(data_dir.joinpath(f"{source}_{kind}.npz"))
+            )
             assert data.shape == (3, 5)
             assert data.dtype == int if kind == "counts" else float
-    body_counts = sparse.load_npz(str(data_dir / "body_counts.npz")).A
+    body_counts = sparse.load_npz(str(data_dir.joinpath("body_counts.npz"))).A
     assert (
         body_counts
         == [
@@ -36,7 +38,7 @@ def _check_matrices(data_dir):
 
 def _check_doc_frequencies(data_dir):
     features_freq = pd.read_csv(
-        data_dir / "feature_names.csv", index_col=0, header=None
+        data_dir.joinpath("feature_names.csv"), index_col=0, header=None
     ).iloc[:, 0]
     assert (
         features_freq
@@ -52,7 +54,7 @@ def _check_doc_frequencies(data_dir):
         )
     ).all()
     all_freq = pd.read_csv(
-        data_dir / "vocabulary.csv", index_col=0, header=None
+        data_dir.joinpath("vocabulary.csv"), index_col=0, header=None
     ).iloc[:, 0]
     assert (
         all_freq
