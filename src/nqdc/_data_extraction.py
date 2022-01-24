@@ -41,8 +41,8 @@ def extract_data(
             if not n_articles % 20:
                 _LOG.info(
                     f"Processed {n_articles} articles, {n_with_coords} "
-                    f"({n_with_coords / n_articles:.0%}) had coordinates,"
-                    f"failed to extract data from {n_failures} articles"
+                    f"({n_with_coords / n_articles:.0%}) had coordinates, "
+                    f"{n_failures} failures"
                 )
             if article_data is not None and (
                 article_data["coordinates"].shape[0]
