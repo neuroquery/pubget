@@ -14,6 +14,40 @@ _LOG = logging.getLogger(__name__)
 def extract_articles(
     input_dir: PathLikeOrStr, output_dir: Optional[PathLikeOrStr] = None
 ) -> Tuple[Path, int]:
+    """Extract articles from bulk download files.
+
+    Parameters
+    ----------
+    input_dir
+        Directory containing the downloaded files. It is a directory created by
+        `nqdc.download_articles_for_query`: it is named `articlesets` and it
+        contains the bulk download files `batch_00000.xml`,
+        `batch_00001.xml`, etc.
+    output_dir
+        Directory where to store the extracted articles. If not specified, a
+        sibling directory of `input_dir` called `articles` will be used.
+
+    Returns
+    -------
+    output_dir
+        The directory in which articles are stored. To avoid having a very
+        large number of files in one directory, subdirectories with names
+        ranging from `000` to `fff` are created. Each article is stored in the
+        subdirectory that matches the first hexadecimal digits of the md5
+        checksum of its PMC id. Therefore the contents of the `articles`
+        directory might look like:
+        ```
+        ./articles
+        ├── 001
+        │   └── pmcid_4150635.xml
+        └── 00b
+            ├── pmcid_2568959.xml
+            └── pmcid_5102699.xml
+        ```
+    exit_code
+        0 if the download in `input_dir` was complete and 1 otherwise. Used by
+        the `nqdc` command-line interface.
+    """
     input_dir = Path(input_dir)
     download_complete = _check_if_download_complete(input_dir)
     if output_dir is None:

@@ -6,7 +6,7 @@ from typing import Optional, List, Dict
 from nqdc._utils import add_log_file
 from nqdc._download import download_articles_for_query
 from nqdc._articles import extract_articles
-from nqdc._data_extraction import extract_to_csv
+from nqdc._data_extraction import extract_data_to_csv
 from nqdc._vectorization import vectorize_corpus_to_npz
 
 
@@ -171,7 +171,7 @@ def extract_data_command(argv: Optional[List[str]] = None) -> int:
     parser = _get_extract_data_parser()
     args = parser.parse_args(argv)
     _add_log_file_if_possible(args, "extract_data_")
-    _, code = extract_to_csv(
+    _, code = extract_data_to_csv(
         args.articles_dir,
         articles_with_coords_only=args.articles_with_coords_only,
     )
@@ -249,7 +249,7 @@ def full_pipeline_command(argv: Optional[List[str]] = None) -> int:
     total_code += code
     articles_dir, code = extract_articles(download_dir)
     total_code += code
-    extracted_data_dir, code = extract_to_csv(
+    extracted_data_dir, code = extract_data_to_csv(
         articles_dir,
         articles_with_coords_only=args.articles_with_coords_only,
     )

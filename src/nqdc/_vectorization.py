@@ -53,6 +53,32 @@ def vectorize_corpus_to_npz(
         PathLikeOrStr, Vocabulary
     ] = Vocabulary.NEUROQUERY_VOCABULARY,
 ) -> Tuple[Path, int]:
+    """Compute word counts and TFIDF features and store them in `.npz` files.
+
+    Parameters
+    ----------
+    corpus_file
+        The csv file containing the text of articles to vectorize. It is a file
+        created by `nqdc.extract_data_to_csv`: it is named `text.csv` and its
+        fields are pmcid, title, keywords, abstract, body.
+    output_dir
+        The directory in which to store the results. If not specified, a
+        sibling directory of the directory that contains `corpus_file` will be
+        used. Its name ends with
+        `-voc_<md5 checksum of the vocabulary>_vectorizedText`.
+    vocabulary
+        A file containing the vocabulary used to vectorize text, with one term
+        or phrase per line. Each dimension in the output will correspond to the
+        frequency of one entry in this vocabulary. By default, the vocabulary
+        used by https://neuroquery.org will be downloaded and used.
+
+    Returns
+    -------
+    output_dir
+        The directory in which the vectorized data is stored.
+    exit_code
+        Always 0 at the moment. Used by the `nqdc` command-line interface.
+    """
     vocabulary_file = _resolve_voc(vocabulary)
     output_dir = _get_output_dir(corpus_file, output_dir, vocabulary_file)
     _LOG.info(
@@ -171,6 +197,27 @@ def vectorize_corpus(
         PathLikeOrStr, Vocabulary
     ] = Vocabulary.NEUROQUERY_VOCABULARY,
 ) -> Dict[str, Any]:
+    """Compute word counts and TFIDF features.
+
+    Parameters
+    ----------
+    corpus_file
+        The csv file containing the text of articles to vectorize. It is a file
+        created by `nqdc.extract_data_to_csv`: it is named `text.csv` and its
+        fields are pmcid, title, keywords, abstract, body.
+    vocabulary
+        A file containing the vocabulary used to vectorize text, with one term
+        or phrase per line. Each dimension in the output will correspond to the
+        frequency of one entry in this vocabulary. By default, the vocabulary
+        used by https://neuroquery.org will be downloaded and used.
+
+    Returns
+    -------
+    vectorized_data
+        Contains the pmcids of the vectorized articles, the document
+        frequencies of the vocabulary, and the word counts and TFIDF for each
+        article section and for whole articles as scipy sparse matrices.
+    """
     vocabulary_file = _resolve_voc(vocabulary)
     voc_mapping = _load_voc_mapping(vocabulary_file)
     pmcids, counts, vectorizer = _extract_word_counts(

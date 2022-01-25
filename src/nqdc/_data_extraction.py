@@ -2,10 +2,9 @@ from pathlib import Path
 import logging
 import csv
 import json
-from typing import Generator, Dict, Union, Optional, Tuple
+from typing import Generator, Dict, Union, Optional, Tuple, Any
 
 from lxml import etree
-import pandas as pd
 
 from nqdc._coordinates import CoordinateExtractor
 from nqdc._metadata import MetadataExtractor
@@ -17,8 +16,28 @@ _LOG = logging.getLogger(__name__)
 
 
 def extract_data(
-    articles_dir: PathLikeOrStr, articles_with_coords_only: bool = True
-) -> Generator[Dict[str, pd.DataFrame], None, None]:
+    articles_dir: PathLikeOrStr, *, articles_with_coords_only: bool = True
+) -> Generator[Dict[str, Any], None, None]:
+    """Extract text and coordinates from articles.
+
+    Parameters
+    ----------
+    articles_dir
+        Directory containing the article files. It is a directory created by
+        `nqdc.extract_articles`: it is named `articles` and contains
+        subdirectories `000` - `fff`, each of which contains articles stored in
+        XML files.
+    articles_with_coords_only
+        If true, articles that contain no stereotactic coordinates are ignored.
+
+    Yields
+    ------
+    article_data
+        Data extracted from one article. Keys are:
+        - metadata: a dictionary containing metadata such as pmcid and doi.
+        - text: a dictionary mapping parts such as "abstract" to their content.
+        - coordinates: a `pd.DataFrame` containing the extracted coordinates.
+    """
     articles_dir = Path(articles_dir)
     coord_extractor = CoordinateExtractor()
     metadata_extractor = MetadataExtractor()
@@ -56,7 +75,7 @@ def _extract_article_data(
     metadata_extractor: MetadataExtractor,
     text_extractor: TextExtractor,
     coord_extractor: CoordinateExtractor,
-) -> Union[None, Dict[str, pd.DataFrame]]:
+) -> Union[None, Dict[str, Any]]:
     try:
         article = etree.parse(str(article_file))
     except Exception:
@@ -92,11 +111,37 @@ def _get_output_dir(
     return output_dir
 
 
-def extract_to_csv(
+def extract_data_to_csv(
     articles_dir: PathLikeOrStr,
     output_dir: Optional[PathLikeOrStr] = None,
+    *,
     articles_with_coords_only: bool = False,
 ) -> Tuple[Path, int]:
+    """Extract text and coordinates from articles and store in csv files.
+
+    Parameters
+    ----------
+    articles_dir
+        Directory containing the article files. It is a directory created by
+        `nqdc.extract_articles`: it is named `articles` and contains
+        subdirectories `000` - `fff`, each of which contains articles stored in
+        XML files.
+    output_dir
+        Directory in which to store the extracted data. If not specified, a
+        sibling directory of `articles_dir` is used. Its name is
+        `subset_allArticles_extractedData` or
+        `subset_articlesWithCoords_extractedData`, depending on the value of
+        `articles_with_coords_only`.
+    articles_with_coords_only
+        If true, articles that contain no stereotactic coordinates are ignored.
+
+    Returns
+    -------
+    output_dir
+        The directory in which extracted data is stored.
+    exit_code
+        Always 0 at the moment. Used by the `nqdc` command-line interface.
+    """
     output_dir = _get_output_dir(
         articles_dir, output_dir, articles_with_coords_only
     )

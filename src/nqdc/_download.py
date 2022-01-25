@@ -13,10 +13,44 @@ _LOG = logging.getLogger(__name__)
 def download_articles_for_query(
     query: str,
     data_dir: PathLikeOrStr,
+    *,
     n_docs: Optional[int] = None,
     retmax: int = 500,
     api_key: Optional[str] = None,
 ) -> Tuple[Path, int]:
+    """Download full-text articles matching the given query.
+
+    Parameters
+    ----------
+    query
+        Search term for querying the PMC database. You can build the query
+        using the `PMC advanced search interface
+        <https://www.ncbi.nlm.nih.gov/pmc/advanced>`_. For more information see
+        `the E-Utilities help <https://www.ncbi.nlm.nih.gov/books/NBK3837/>`_.
+
+    data_dir
+        Path to the directory where all nqdc data is stored; a subdirectory
+        will be created for this query.
+    n_docs
+        Approximate maximum number of articles to download. By default, all
+        results returned for the search are downloaded. If n_docs is specified,
+        at most n_docs rounded up to the nearest multiple of 500 articles will
+        be downloaded.
+    retmax
+        Batch size -- number of articles that are downloaded per request.
+    api_key
+        API key for the Entrez E-utilities (see
+        https://www.ncbi.nlm.nih.gov/books/NBK25497/). If the API key is
+        provided, it is included in all requests to the Entrez E-utilities.
+
+    Returns
+    -------
+    output_dir
+        The directory that was created in which downloaded data is stored.
+    exit_code
+        0 if all articles matching the search have been successfully downloaded
+        and 1 otherwise. Used by the `nqdc` command-line interface.
+    """
     data_dir = Path(data_dir)
     output_dir = data_dir.joinpath(
         f"query-{_utils.checksum(query)}", "articlesets"
