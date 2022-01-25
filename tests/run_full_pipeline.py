@@ -39,8 +39,8 @@ assert tfidf.shape[1] == 6308
 assert tfidf.shape[0] >= 3100
 print(f"n articles: {tfidf.shape[0]}")
 
-coords = pd.read_csv(coords_dir.joinpath("coordinates.csv"), index_col=0)
-assert coords.shape[1] == 5
+coords = pd.read_csv(coords_dir.joinpath("coordinates.csv"))
+assert coords.shape[1] == 6
 assert coords.shape[0] >= 3800
 print(f"n coordinates: {coords.shape[0]}")
 

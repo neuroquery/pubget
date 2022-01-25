@@ -19,7 +19,7 @@ def test_extract_data_to_csv(tmp_path, entrez_mock):
         bucket.joinpath(f"pmcid_745{i}.xml").write_bytes(b"")
     _data_extraction.extract_data_to_csv(articles_dir, data_dir)
     metadata = pd.read_csv(data_dir.joinpath("metadata.csv"))
-    assert metadata.shape == (7, 3)
+    assert metadata.shape == (7, 6)
     text = pd.read_csv(data_dir.joinpath("text.csv"))
     assert text.shape == (7, 5)
     assert text.at[0, "body"].strip() == "The text of the article"
