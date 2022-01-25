@@ -49,6 +49,7 @@ def extract_articles(
         the `nqdc` command-line interface.
     """
     input_dir = Path(input_dir)
+    _utils.assert_exists(input_dir)
     download_complete = _check_if_download_complete(input_dir)
     if output_dir is None:
         output_dir = input_dir.with_name("articles")

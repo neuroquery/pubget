@@ -10,6 +10,7 @@ from nqdc._coordinates import CoordinateExtractor
 from nqdc._metadata import MetadataExtractor
 from nqdc._text import TextExtractor
 from nqdc._typing import PathLikeOrStr
+from nqdc import _utils
 
 
 _LOG = logging.getLogger(__name__)
@@ -39,6 +40,7 @@ def extract_data(
         - coordinates: a `pd.DataFrame` containing the extracted coordinates.
     """
     articles_dir = Path(articles_dir)
+    _utils.assert_exists(articles_dir)
     coord_extractor = CoordinateExtractor()
     metadata_extractor = MetadataExtractor()
     text_extractor = TextExtractor()
@@ -142,6 +144,7 @@ def extract_data_to_csv(
     exit_code
         Always 0 at the moment. Used by the `nqdc` command-line interface.
     """
+    _utils.assert_exists(Path(articles_dir))
     output_dir = _get_output_dir(
         articles_dir, output_dir, articles_with_coords_only
     )

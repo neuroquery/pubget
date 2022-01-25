@@ -13,7 +13,7 @@ import pandas as pd
 from neuroquery.tokenization import TextVectorizer
 from neuroquery.datasets import fetch_neuroquery_model
 
-from nqdc._utils import checksum
+from nqdc._utils import checksum, assert_exists
 from nqdc._typing import PathLikeOrStr
 
 _LOG = logging.getLogger(__name__)
@@ -79,6 +79,7 @@ def vectorize_corpus_to_npz(
     exit_code
         Always 0 at the moment. Used by the `nqdc` command-line interface.
     """
+    assert_exists(Path(corpus_file))
     vocabulary_file = _resolve_voc(vocabulary)
     output_dir = _get_output_dir(corpus_file, output_dir, vocabulary_file)
     _LOG.info(
@@ -188,7 +189,9 @@ def _get_neuroquery_vocabulary() -> Path:
 def _resolve_voc(vocabulary: Union[PathLikeOrStr, Vocabulary]) -> Path:
     if vocabulary is Vocabulary.NEUROQUERY_VOCABULARY:
         return _get_neuroquery_vocabulary()
-    return Path(vocabulary)
+    voc = Path(vocabulary)
+    assert_exists(voc)
+    return voc
 
 
 def vectorize_corpus(
@@ -218,6 +221,7 @@ def vectorize_corpus(
         frequencies of the vocabulary, and the word counts and TFIDF for each
         article section and for whole articles as scipy sparse matrices.
     """
+    assert_exists(Path(corpus_file))
     vocabulary_file = _resolve_voc(vocabulary)
     voc_mapping = _load_voc_mapping(vocabulary_file)
     pmcids, counts, vectorizer = _extract_word_counts(

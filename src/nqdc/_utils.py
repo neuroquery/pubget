@@ -71,3 +71,7 @@ def load_stylesheet(stylesheet_name: str) -> etree.XSLT:
     stylesheet_xml = etree.parse(str(stylesheet_path))
     transform = etree.XSLT(stylesheet_xml)
     return transform
+
+
+def assert_exists(path: Path) -> None:
+    path.resolve(strict=True)
