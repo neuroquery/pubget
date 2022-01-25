@@ -1,7 +1,5 @@
 """
 .. include:: ../../README.md
-
-Python API for the NeuroQuery Data Collection tools.
 """
 
 from nqdc._utils import configure_logging as _configure_logging

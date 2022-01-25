@@ -37,12 +37,12 @@ def extract_articles(
         checksum of its PMC id. Therefore the contents of the `articles`
         directory might look like:
         ```
-        ./articles
-        ├── 001
-        │   └── pmcid_4150635.xml
-        └── 00b
-            ├── pmcid_2568959.xml
-            └── pmcid_5102699.xml
+        · articles
+          ├── 001
+          │   └── pmcid_4150635.xml
+          └── 00b
+              ├── pmcid_2568959.xml
+              └── pmcid_5102699.xml
         ```
     exit_code
         0 if the download in `input_dir` was complete and 1 otherwise. Used by
