@@ -37,7 +37,10 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
         name: "setup python"
-      - name: "install tox"
-        run: pip install tox
+      - name: "install"
+        run: pip install .[dev]
       - name: "run tests"
-        run: tox -e py
+        run: make test_coverage
+      - uses: codecov/codecov-action@v2
+        if: success()
+        name: "Upload coverage to CodeCov"

@@ -6,7 +6,7 @@ test:
 	tox
 
 test_coverage:
-	pytest --cov=nqdc --cov-fail-under=100
+	pytest --cov=nqdc --cov-report=xml --cov-report=term --cov-fail-under=100
 	coverage html
 
 test_mypy:
