@@ -117,9 +117,8 @@ class EntrezMock:
         if retstart >= self.count:
             return Response(status_code=400, reason="Bad Request")
         result = etree.Element("pmc-articleset")
-        for article in self.article_set.getroot()[
-            retstart : retstart + retmax
-        ]:
+        start, end = retstart, retstart + retmax
+        for article in self.article_set.getroot()[start:end]:
             result.append(article)
         content = etree.tostring(
             result, encoding="utf-8", xml_declaration=True

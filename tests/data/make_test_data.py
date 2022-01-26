@@ -1,5 +1,6 @@
 #! /usr/bin/env python3
 
+import tempfile
 from pathlib import Path
 import argparse
 
@@ -10,11 +11,12 @@ from nqdc._entrez import EntrezClient
 strip_text_xsl = b"""<?xml version="1.0" encoding="UTF-8"?>
 
 <xsl:transform version="1.0"
-               xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-               xmlns:mml="http://www.w3.org/1998/Math/MathML"
-               xmlns:oasis="http://www.niso.org/standards/z39-96/ns/oasis-exchange/table" >
+   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+   xmlns:mml="http://www.w3.org/1998/Math/MathML"
+   xmlns:oasis="http://www.niso.org/standards/z39-96/ns/oasis-exchange/table" >
 
-  <xsl:output method="xml" version="1.0" encoding="UTF-8" omit-xml-declaration="no"/>
+ <xsl:output method="xml" version="1.0"
+           encoding="UTF-8" omit-xml-declaration="no"/>
 
   <xsl:template match="@*|node()">
     <xsl:copy>
@@ -56,8 +58,12 @@ output_dir.mkdir(exist_ok=True, parents=True)
 
 client = EntrezClient()
 client.esearch("fMRI")
-for i, batch in enumerate(client.efetch(n_docs=7, retmax=7)):
+with tempfile.TemporaryDirectory() as tmp_dir:
+    client.efetch(tmp_dir, n_docs=7, retmax=7)
     stripped = etree.tostring(
-        strip_text_transform(etree.fromstring(batch)), xml_declaration=True
+        strip_text_transform(
+            etree.parse(str(Path(tmp_dir).joinpath("batch_00000.xml")))
+        ),
+        xml_declaration=True,
     )
     output_dir.joinpath("articleset.xml").write_bytes(stripped)
