@@ -104,3 +104,6 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+
+!src/nqdc/data/stylesheets/docbook/**/*
