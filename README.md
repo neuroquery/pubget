@@ -1,3 +1,7 @@
+[![build](https://github.com/neuroquery/nqdc/actions/workflows/testing.yml/badge.svg)](https://github.com/neuroquery/nqdc/actions/workflows/testing.yml)
+[![codecov](https://codecov.io/gh/neuroquery/nqdc/branch/main/graph/badge.svg?token=8KEBP2EN3A)](https://codecov.io/gh/neuroquery/nqdc)
+
+
 # NeuroQuery Data Collection
 
 `nqdc` is a command-line tool for collecting data for large-scale
