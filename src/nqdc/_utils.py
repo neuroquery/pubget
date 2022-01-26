@@ -14,12 +14,14 @@ _LOG_FORMAT = "%(levelname)s\t%(asctime)s\t%(module)s\t%(message)s"
 _LOG_DATE_FORMAT = "%Y-%m-%dT%H:%M:%S%z"
 
 
+def timestamp() -> str:
+    return datetime.now().isoformat().replace(":", "-")
+
+
 def add_log_file(log_dir: PathLikeOrStr, prefix: str = "log_") -> None:
     log_dir = Path(log_dir)
     log_dir.mkdir(exist_ok=True, parents=True)
-    log_file = log_dir.joinpath(
-        f"{prefix}{datetime.now().isoformat()}_{os.getpid()}"
-    )
+    log_file = log_dir.joinpath(f"{prefix}{timestamp()}_{os.getpid()}")
     logger = logging.getLogger("")
     handler = logging.FileHandler(log_file)
     handler.setLevel(logging.DEBUG)

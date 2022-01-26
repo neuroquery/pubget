@@ -11,7 +11,7 @@ parser.add_argument("-o", "--output_dir", type=str, default=".")
 args = parser.parse_args()
 
 data_dir = Path(args.output_dir).joinpath(
-    f"nqdc_full_pipeline_run_{datetime.now().isoformat()}"
+    f"nqdc_full_pipeline_run_{datetime.now().isoformat().replace(':', '-')}"
 )
 
 subprocess.run(
