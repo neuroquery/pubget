@@ -1,0 +1,30 @@
+name: "run unit tests on github actions"
+
+on:
+  push:
+    branches:
+      - "main"
+    pull_request:
+      branches:
+        - "*"
+
+jobs:
+  run_tests:
+    name: ${{ matrix.os }} with Python ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: ["ubuntu-latest", "windows-latest", "macos-latest"]
+        python-version: ["3.7", "3.10"]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+        name: "setup python"
+      - name: "install tox"
+        run: |
+          pip install tox
+      - name: "run tests"
+        run: |
+          tox -e py
