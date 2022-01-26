@@ -16,7 +16,7 @@ stereotactic coordinates. It also computes [TFIDF
 features](https://en.wikipedia.org/wiki/Tf%E2%80%93idf) for the extracted text.
 
 Besides the command-line interface, `nqdc`'s functionality is also exposed
-through its Python API.
+through its [Python API](https://neuroquery.github.io/nqdc/#python-api).
 
 # Installation
 
@@ -331,3 +331,5 @@ written there as well.
 `nqdc` is mostly intended for use as a command-line tool. However, it is also a
 Python package and its functionality can be used in Python programs. The Python
 API closely reflects the command-line programs described above.
+
+The Python API is described on the `nqdc` [website](https://neuroquery.github.io/nqdc/#python-api).
