@@ -1,5 +1,6 @@
 [![build](https://github.com/neuroquery/nqdc/actions/workflows/testing.yml/badge.svg)](https://github.com/neuroquery/nqdc/actions/workflows/testing.yml)
 [![codecov](https://codecov.io/gh/neuroquery/nqdc/branch/main/graph/badge.svg?token=8KEBP2EN3A)](https://codecov.io/gh/neuroquery/nqdc)
+[![nqdc on GitHub](https://img.shields.io/static/v1?label=&message=nqdc%20on%20GitHub&color=black&style=flat&logo=github)](https://github.com/neuroquery/nqdc)
 
 
 # NeuroQuery Data Collection
@@ -58,17 +59,16 @@ parts of the pipeline with different parameters.
 
 All articles downloaded by `nqdc` come from [PubMed
 Central](https://www.ncbi.nlm.nih.gov/pmc/), and are therefore identified by
-their `pmcid`. Note this is not the same as the PubMed ID (`pmid`) -- not all
-articles in PMC have a `pmid`, and not all articles referenced by PubMed have a
-`pmcid`.
+their PubMed Central ID (`pmcid`). Note this is not the same as the PubMed ID
+(`pmid`). Not all articles in PMC have a `pmid`.
 
-## Step 1: download
+## Step 1: Downloading articles from PMC
 
 This step is executed by the `nqdc_download` command. 
 
 We must first define our query, with which Pubmed Central will be searched for
-articles. It can be simple such as `fMRI`, or more specific such as
-`fMRI[Abstract] AND ("2000"[PubDate] : "2022"[PubDate])`. You can build the
+articles. It can be simple such as `'fMRI'`, or more specific such as
+`'fMRI[Abstract] AND ("2000"[PubDate] : "2022"[PubDate])'`. You can build the
 query using the [PMC advanced search
 interface](https://www.ncbi.nlm.nih.gov/pmc/advanced). For more information see
 [the E-Utilities help](https://www.ncbi.nlm.nih.gov/books/NBK3837/). The query
@@ -80,7 +80,7 @@ documentation](https://www.ncbi.nlm.nih.gov/books/NBK25497/)), we can provide it
 through the `NQDC_API_KEY` environment variable or through the `--api_key`
 command line argument (the latter has higher precedence).
 
-We must also specify the directory in which all `nqdc` will be stored.
+We must also specify the directory in which all `nqdc` data will be stored.
 Subdirectories will be created for each different query. In the following we
 suppose we are storing our data in a directory called `nqdc_data`.
 
@@ -111,7 +111,9 @@ Some information about the download is stored in `info.json`. In particular,
 `download_complete` indicates if all articles matching the search have been
 downloaded. If the download was interrupted, some batches failed to download, or
 the number of results was limited by using the `--n_docs` parameter,
-`download_complete` will be `false`.
+`download_complete` will be `false` and the exit status of the program will
+be 1. You may want to re-run the command before moving on to the next step if
+the download is incomplete.
 
 If we run the same query again, only missing batches will be downloaded. If we
 want to force re-running the search and downloading the whole data we need to
@@ -189,8 +191,7 @@ Our data directory now contains (ommitting the contents of the previous steps):
 
 If we had not used `--articles_with_coords_only`, the new subdirectory would be named `subset_allArticles_extractedData` instead.
 
-- `metadata.csv` contains one row per article, with some metadata such as the
-  `pmcid` and DOI
+- `metadata.csv` contains one row per article, with some metadata: `pmcid` (PubMed Central ID), `pmid` (PubMed ID), `doi`, `title`, `journal`, and `publication_year`. Note some values may be missing (for example not all articles have a `pmid` or `doi`).
 - `text.csv` contains one row per article. The first field is the `pmcid`, and
   the other fields are `title`, `keywords`, `abstract`, and `body`, and contain
   the text extracted from these parts of the article.
@@ -212,16 +213,17 @@ represent articles' text. The last step before we can apply these methods is the
 TFIDF features rely on a predefined vocabulary (set of terms or phrases). Each
 dimension of the feature vector corresponds to a term in the vocabulary and
 represents the importance of that term in the encoded text. This importance is
-an increasing function of the _term frequency_ (the number of time the term
+an increasing function of the *term frequency* (the number of time the term
 occurs in the text divided by the length of the text) and a decreasing function
-of the _document frequency_ (the total number of times the term occurs in the
+of the *document frequency* (the total number of times the term occurs in the
 whole corpus or dataset).
 
 To extract the TFIDF features we must therefore choose a vocabulary. By default,
-`nqdc` will download and use the vocabulary used by `neuroquery`. If we want to
-use a different vocabulary we can specify it with the `--vocabulary_file`
-option. This file will be parsed as a csv file with no header, whose first
-column contains the terms. Other columns are ignored.
+`nqdc` will download and use the vocabulary used by
+[neuroquery.org](https://neuroquery.org). If we want to use a different
+vocabulary we can specify it with the `--vocabulary_file` option. This file will
+be parsed as a csv file with no header, whose first column contains the terms.
+Other columns are ignored.
 
 We also pass to `nqdc_vectorize` the directory containing the text we want to
 vectorize, created by `nqdc_extract_data` in step 3 (here we are using the
@@ -232,9 +234,7 @@ nqdc_vectorize nqdc_data/query-10c72245c52d7d4e6f535e2bcffb2572/subset_articlesW
 ```
 
 This creates a new directory whose name reflects the data source (whether all
-articles are kept or only those with coordinates) and the chosen vocabulary
-(`e6f7a7e9c6ebc4fb81118ccabfee8bd7` is the md5 checksum of the vocabulary file's
-content):
+articles are kept or only those with coordinates) and the chosen vocabulary:
 
 ```
 · nqdc_data
@@ -280,8 +280,8 @@ the mean TFIDF computed across all article parts.
 ### Vocabulary mapping: collapsing redundant words
 
 It is possible to instruct the tokenizer (that extracts words from text) to
-collapse some pairs of terms that have the same meaning but slightly different
-forms, such as "brainstem" and "brain stem".
+collapse some pairs of terms that have the same meaning but different spellings,
+such as "brainstem" and "brain stem".
 
 This is done through a JSON file that contains a mapping of the form `{term:
 replacement}`. For example if it contains `{"brain stem": "brainstem"}`, "brain
