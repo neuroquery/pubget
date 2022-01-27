@@ -70,7 +70,6 @@ def download_articles_for_query(
             "download_complete": False,
         }
     _LOG.info(f"Downloading data in {output_dir}")
-    _LOG.info("Performing search")
     client = EntrezClient(api_key=api_key)
     if "search_result" in info:
         _LOG.info(
@@ -79,6 +78,7 @@ def download_articles_for_query(
             f"query key {info['search_result']['querykey']}"
         )
     else:
+        _LOG.info("Performing search")
         info["search_result"] = client.esearch(query)
         info_file.write_text(json.dumps(info), "utf-8")
     client.efetch(

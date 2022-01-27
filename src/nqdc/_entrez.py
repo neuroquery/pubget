@@ -13,7 +13,7 @@ _LOG = logging.getLogger(__name__)
 
 
 class EntrezClient:
-    _default_timeout = 10
+    _default_timeout = 27
     _entrez_base_url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
     _esearch_base_url = urljoin(_entrez_base_url, "esearch.fcgi")
     _efetch_base_url = urljoin(_entrez_base_url, "efetch.fcgi")
