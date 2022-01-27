@@ -1,4 +1,4 @@
-.PHONY: test_all test test_mypy test_flake8 test_no_tox run_full_pipeline doc clean
+.PHONY: test_all test test_mypy test_flake8 run_full_pipeline doc clean
 
 test_all: test_mypy test_flake8 test_coverage test
 
@@ -6,7 +6,7 @@ test:
 	tox
 
 test_coverage:
-	pytest --cov=nqdc --cov-report=xml --cov-report=term --cov-fail-under=100
+	pytest --cov=nqdc --cov-report=xml --cov-report=term
 	coverage html
 
 test_mypy:
@@ -15,9 +15,6 @@ test_mypy:
 test_flake8:
 	flake8 ./src/nqdc/*.py
 	flake8 tests/
-
-test_no_tox:
-	pytest --cov=nqdc tests/
 
 run_full_pipeline:
 	python tests/run_full_pipeline -o /tmp/

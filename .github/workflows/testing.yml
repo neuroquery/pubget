@@ -45,6 +45,20 @@ jobs:
         if: success()
         name: "upload coverage to CodeCov"
 
+  run_tests_ubuntu_old_dependencies:
+    name: "Ubuntu with Python 3.7 min dependencies"
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.7"
+        name: "setup python"
+      - name: "install tox"
+        run: pip install tox
+      - name: "run tests"
+        run: tox -e py37-old
+
   build_doc:
     name: "build documentation"
     runs-on: "ubuntu-latest"
