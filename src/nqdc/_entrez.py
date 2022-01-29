@@ -157,7 +157,7 @@ class EntrezClient:
         n_batches: int,
         params: Dict[str, Any],
     ) -> None:
-        batch_file = output_dir.joinpath(f"batch_{batch_nb:0>5}.xml")
+        batch_file = output_dir.joinpath(f"articleset_{batch_nb:0>5}.xml")
         if batch_file.is_file():
             _LOG.info(f"batch {batch_nb} already downloaded, skipping")
             return

@@ -24,9 +24,10 @@ def download_articles_for_query(
     ----------
     query
         Search term for querying the PMC database. You can build the query
-        using the [PMC advanced search interface]
-        (https://www.ncbi.nlm.nih.gov/pmc/advanced). For more information see
-        [the E-Utilities help](https://www.ncbi.nlm.nih.gov/books/NBK3837/).
+        using the [PMC advanced search
+        interface](https://www.ncbi.nlm.nih.gov/pmc/advanced). For more
+        information see [the E-Utilities
+        help](https://www.ncbi.nlm.nih.gov/books/NBK3837/).
 
     data_dir
         Path to the directory where all nqdc data is stored; a subdirectory
@@ -39,8 +40,8 @@ def download_articles_for_query(
     retmax
         Batch size -- number of articles that are downloaded per request.
     api_key
-        API key for the Entrez E-utilities (see
-        https://www.ncbi.nlm.nih.gov/books/NBK25497/). If the API key is
+        API key for the Entrez E-utilities (see [the E-utilities
+        help](https://www.ncbi.nlm.nih.gov/books/NBK25497/)). If the API key is
         provided, it is included in all requests to the Entrez E-utilities.
 
     Returns

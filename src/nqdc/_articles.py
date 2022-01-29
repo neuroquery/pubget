@@ -12,20 +12,20 @@ _LOG = logging.getLogger(__name__)
 
 
 def extract_articles(
-    input_dir: PathLikeOrStr, output_dir: Optional[PathLikeOrStr] = None
+    articlesets_dir: PathLikeOrStr, output_dir: Optional[PathLikeOrStr] = None
 ) -> Tuple[Path, int]:
     """Extract articles from bulk download files.
 
     Parameters
     ----------
-    input_dir
+    articlesets_dir
         Directory containing the downloaded files. It is a directory created by
         `nqdc.download_articles_for_query`: it is named `articlesets` and it
-        contains the bulk download files `batch_00000.xml`,
-        `batch_00001.xml`, etc.
+        contains the bulk download files `articleset_00000.xml`,
+        `articleset_00001.xml`, etc.
     output_dir
         Directory where to store the extracted articles. If not specified, a
-        sibling directory of `input_dir` called `articles` will be used.
+        sibling directory of `articlesets_dir` called `articles` will be used.
 
     Returns
     -------
@@ -45,20 +45,20 @@ def extract_articles(
               └── pmcid_5102699.xml
         ```
     exit_code
-        0 if the download in `input_dir` was complete and 1 otherwise. Used by
-        the `nqdc` command-line interface.
+        0 if the download in `articlesets_dir` was complete and 1 otherwise.
+        Used by the `nqdc` command-line interface.
     """
-    input_dir = Path(input_dir)
-    _utils.assert_exists(input_dir)
-    download_complete = _check_if_download_complete(input_dir)
+    articlesets_dir = Path(articlesets_dir)
+    _utils.assert_exists(articlesets_dir)
+    download_complete = _check_if_download_complete(articlesets_dir)
     if output_dir is None:
-        output_dir = input_dir.with_name("articles")
+        output_dir = articlesets_dir.with_name("articles")
     else:
         output_dir = Path(output_dir)
-    _LOG.info(f"Extracting articles from {input_dir} to {output_dir}")
+    _LOG.info(f"Extracting articles from {articlesets_dir} to {output_dir}")
     output_dir.mkdir(exist_ok=True, parents=True)
     n_articles = 0
-    for batch_file in sorted(input_dir.glob("batch_*.xml")):
+    for batch_file in sorted(articlesets_dir.glob("articleset_*.xml")):
         _LOG.debug(f"Extracting articles from {batch_file.name}")
         for (pmcid, article) in _extract_from_articleset(batch_file):
             subdir = output_dir.joinpath(_utils.checksum(str(pmcid))[:3])
@@ -68,7 +68,8 @@ def extract_articles(
                 article.write(f, encoding="UTF-8", xml_declaration=True)
             n_articles += 1
     _LOG.info(
-        f"Extracted {n_articles} articles from {input_dir} to {output_dir}"
+        f"Extracted {n_articles} articles from "
+        f"{articlesets_dir} to {output_dir}"
     )
     return output_dir, int(not download_complete)
 

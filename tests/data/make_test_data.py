@@ -62,7 +62,7 @@ with tempfile.TemporaryDirectory() as tmp_dir:
     client.efetch(tmp_dir, n_docs=7, retmax=7)
     stripped = etree.tostring(
         strip_text_transform(
-            etree.parse(str(Path(tmp_dir).joinpath("batch_00000.xml")))
+            etree.parse(str(Path(tmp_dir).joinpath("articleset_00000.xml")))
         ),
         xml_declaration=True,
     )

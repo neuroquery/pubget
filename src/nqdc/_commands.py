@@ -214,7 +214,7 @@ def vectorize_command(argv: Optional[List[str]] = None) -> int:
     _add_log_file_if_possible(args, "vectorize_")
     data_dir = Path(args.extracted_data_dir)
     _, code = vectorize_corpus_to_npz(
-        data_dir.joinpath("text.csv"), **_voc_kwarg(args.vocabulary_file)
+        data_dir, **_voc_kwarg(args.vocabulary_file)
     )
     return code
 
@@ -255,8 +255,7 @@ def full_pipeline_command(argv: Optional[List[str]] = None) -> int:
     )
     total_code += code
     _, code = vectorize_corpus_to_npz(
-        extracted_data_dir.joinpath("text.csv"),
-        **_voc_kwarg(args.vocabulary_file)
+        extracted_data_dir, **_voc_kwarg(args.vocabulary_file)
     )
     total_code += code
     return total_code

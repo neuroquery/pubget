@@ -5,6 +5,8 @@
 
 # NeuroQuery Data Collection
 
+**Warning: `nqdc` is in early development; its commands and functions are subject to change.**
+
 `nqdc` is a command-line tool for collecting data for large-scale
 coordinate-based neuroimaging meta-analysis. It exposes some of the machinery
 that was used to create the [neuroquery
@@ -94,7 +96,7 @@ After running this command, these are the contents of our data directory:
 · nqdc_data
   └── query-10c72245c52d7d4e6f535e2bcffb2572
       └── articlesets
-          ├── batch_00000.xml
+          ├── articleset_00000.xml
           └── info.json
 ```
 
@@ -104,8 +106,8 @@ for the same query, the same subdirectory will be reused
 
 Inside the query directory, the results of the bulk download are stored in the
 `articlesets` directory. The articles themselves are in XML files bundling up to
-500 articles called `batch_*.xml`. Here there is only one because the search
-returned less than 500 articles.
+500 articles called `articleset_*.xml`. Here there is only one because the
+search returned less than 500 articles.
 
 Some information about the download is stored in `info.json`. In particular,
 `download_complete` indicates if all articles matching the search have been
@@ -145,7 +147,7 @@ Our data directory now looks like:
 · nqdc_data
   └── query-10c72245c52d7d4e6f535e2bcffb2572
       ├── articlesets
-      │   ├── batch_00000.xml
+      │   ├── articleset_00000.xml
       │   └── info.json
       └── articles
           ├── 019

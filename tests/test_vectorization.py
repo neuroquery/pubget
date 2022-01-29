@@ -16,7 +16,7 @@ def test_vectorize_corpus_to_npz(
     if with_voc:
         kwargs["vocabulary"] = test_data_dir.joinpath("vocabulary.csv")
     _vectorization.vectorize_corpus_to_npz(
-        test_data_dir.joinpath("corpus.csv"), output_dir=tmp_path, **kwargs
+        test_data_dir, output_dir=tmp_path, **kwargs
     )
     _check_pmcids(tmp_path)
     _check_doc_frequencies(tmp_path)

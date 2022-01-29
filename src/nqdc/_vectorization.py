@@ -27,19 +27,19 @@ class Vocabulary(Enum):
 
 
 def _get_output_dir(
-    corpus_file: PathLikeOrStr,
+    extracted_data_dir: PathLikeOrStr,
     output_dir: Optional[PathLikeOrStr],
     vocabulary_file: PathLikeOrStr,
 ) -> Path:
     if output_dir is None:
-        data_dir = Path(corpus_file).parent
+        extracted_data_dir = Path(extracted_data_dir)
         voc_checksum = _checksum_vocabulary(vocabulary_file)
         output_dir_name = re.sub(
             r"^(.*?)(_extractedData)?$",
             rf"\1-voc_{voc_checksum}_vectorizedText",
-            data_dir.name,
+            extracted_data_dir.name,
         )
-        output_dir = data_dir.with_name(output_dir_name)
+        output_dir = extracted_data_dir.with_name(output_dir_name)
     else:
         output_dir = Path(output_dir)
     output_dir.mkdir(exist_ok=True, parents=True)
@@ -47,7 +47,7 @@ def _get_output_dir(
 
 
 def vectorize_corpus_to_npz(
-    corpus_file: PathLikeOrStr,
+    extracted_data_dir: PathLikeOrStr,
     output_dir: Optional[PathLikeOrStr] = None,
     vocabulary: Union[
         PathLikeOrStr, Vocabulary
@@ -57,15 +57,14 @@ def vectorize_corpus_to_npz(
 
     Parameters
     ----------
-    corpus_file
-        The csv file containing the text of articles to vectorize. It is a file
-        created by `nqdc.extract_data_to_csv`: it is named `text.csv` and its
-        fields are pmcid, title, keywords, abstract, body.
+    extracted_data_dir
+        The directory containing the text of articles to vectorize. It is a
+        directory created by `nqdc.extract_data_to_csv`: it contains a file
+        named `text.csv` with fields pmcid, title, keywords, abstract, body.
     output_dir
         The directory in which to store the results. If not specified, a
-        sibling directory of the directory that contains `corpus_file` will be
-        used. Its name ends with
-        `-voc_<md5 checksum of the vocabulary>_vectorizedText`.
+        sibling directory of `extracted_data_dir` will be used. Its name will
+        end with `-voc_<md5 checksum of the vocabulary>_vectorizedText`.
     vocabulary
         A file containing the vocabulary used to vectorize text, with one term
         or phrase per line. Each dimension in the output will correspond to the
@@ -78,15 +77,18 @@ def vectorize_corpus_to_npz(
         The directory in which the vectorized data is stored.
     exit_code
         Always 0 at the moment. Used by the `nqdc` command-line interface.
+
     """
-    assert_exists(Path(corpus_file))
+    assert_exists(Path(extracted_data_dir).joinpath("text.csv"))
     vocabulary_file = _resolve_voc(vocabulary)
-    output_dir = _get_output_dir(corpus_file, output_dir, vocabulary_file)
+    output_dir = _get_output_dir(
+        extracted_data_dir, output_dir, vocabulary_file
+    )
     _LOG.info(
-        f"vectorizing {corpus_file} using vocabulary "
+        f"vectorizing {extracted_data_dir} using vocabulary "
         f"{vocabulary_file} to {output_dir}"
     )
-    extraction_result = vectorize_corpus(corpus_file, vocabulary_file)
+    extraction_result = vectorize_corpus(extracted_data_dir, vocabulary_file)
     np.savetxt(
         output_dir.joinpath("pmcid.txt"),
         extraction_result["pmcids"],
@@ -195,7 +197,7 @@ def _resolve_voc(vocabulary: Union[PathLikeOrStr, Vocabulary]) -> Path:
 
 
 def vectorize_corpus(
-    corpus_file: PathLikeOrStr,
+    extracted_data_dir: PathLikeOrStr,
     vocabulary: Union[
         PathLikeOrStr, Vocabulary
     ] = Vocabulary.NEUROQUERY_VOCABULARY,
@@ -204,10 +206,10 @@ def vectorize_corpus(
 
     Parameters
     ----------
-    corpus_file
-        The csv file containing the text of articles to vectorize. It is a file
-        created by `nqdc.extract_data_to_csv`: it is named `text.csv` and its
-        fields are pmcid, title, keywords, abstract, body.
+    extracted_data_dir
+        The directory containing the text of articles to vectorize. It is a
+        directory created by `nqdc.extract_data_to_csv`: it contains a file
+        named `text.csv` with fields pmcid, title, keywords, abstract, body.
     vocabulary
         A file containing the vocabulary used to vectorize text, with one term
         or phrase per line. Each dimension in the output will correspond to the
@@ -221,7 +223,8 @@ def vectorize_corpus(
         frequencies of the vocabulary, and the word counts and TFIDF for each
         article section and for whole articles as scipy sparse matrices.
     """
-    assert_exists(Path(corpus_file))
+    corpus_file = Path(extracted_data_dir).joinpath("text.csv")
+    assert_exists(corpus_file)
     vocabulary_file = _resolve_voc(vocabulary)
     voc_mapping = _load_voc_mapping(vocabulary_file)
     pmcids, counts, vectorizer = _extract_word_counts(

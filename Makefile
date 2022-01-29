@@ -17,7 +17,7 @@ test_flake8:
 	flake8 tests/
 
 run_full_pipeline:
-	python tests/run_full_pipeline -o /tmp/
+	python tests/run_full_pipeline.py -o /tmp/
 
 doc:
 	pdoc --no-search --no-show-source -d numpy -o doc_build ./src/nqdc
