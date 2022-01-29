@@ -27,7 +27,7 @@ def test_metadata_extractor():
     </article>
     """
     )
-    metadata = _metadata.MetadataExtractor()(xml)
+    metadata = _metadata.MetadataExtractor().extract(xml)
     assert metadata["pmcid"] == 123
     assert metadata["pmid"] == 456
     assert metadata["doi"] == "doi789"

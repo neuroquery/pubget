@@ -2,11 +2,14 @@ from typing import Dict, Any
 
 from lxml import etree
 
+from nqdc._typing import BaseExtractor
 
-class MetadataExtractor:
+
+class MetadataExtractor(BaseExtractor):
     fields = ("pmcid", "pmid", "doi", "title", "journal", "publication_year")
+    name = "metadata"
 
-    def __call__(self, article: etree.ElementTree) -> Dict[str, Any]:
+    def extract(self, article: etree.ElementTree) -> Dict[str, Any]:
         metadata: Dict[str, Any] = {}
         for article_id in article.iterfind("front/article-meta/article-id"):
             _add_id(article_id, metadata)

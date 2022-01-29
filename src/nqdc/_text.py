@@ -4,17 +4,19 @@ from typing import Dict, Union
 from lxml import etree
 
 from nqdc import _utils
+from nqdc._typing import BaseExtractor
 
 _LOG = logging.getLogger(__name__)
 
 
-class TextExtractor:
+class TextExtractor(BaseExtractor):
     fields = ("pmcid", "title", "keywords", "abstract", "body")
+    name = "text"
 
     def __init__(self) -> None:
         self._stylesheet = _utils.load_stylesheet("text_extraction.xsl")
 
-    def __call__(
+    def extract(
         self, article: etree.ElementTree
     ) -> Dict[str, Union[str, int]]:
         return self._extract_text_from_article(article, self._stylesheet)

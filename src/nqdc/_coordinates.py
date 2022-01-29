@@ -9,6 +9,8 @@ import pandas as pd
 from lxml import etree
 
 from nqdc import _utils
+from nqdc._typing import BaseExtractor
+
 
 _LOG = logging.getLogger(__name__)
 
@@ -54,13 +56,14 @@ _COORD_DATA_TRIPLET = _TRIPLET.format(
 _COORD_FIELDS = ("pmcid", "table_id", "table_label", "x", "y", "z")
 
 
-class CoordinateExtractor:
+class CoordinateExtractor(BaseExtractor):
     fields = _COORD_FIELDS
+    name = "coordinates"
 
     def __init__(self) -> None:
         self._stylesheet = _utils.load_stylesheet("table_extraction.xsl")
 
-    def __call__(self, article: etree.ElementTree) -> pd.DataFrame:
+    def extract(self, article: etree.ElementTree) -> pd.DataFrame:
         coords = _extract_coordinates_from_article(article, self._stylesheet)
         return coords.loc[:, self.fields]
 

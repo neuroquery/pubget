@@ -1,15 +1,16 @@
 from pathlib import Path
 import logging
-import csv
 import json
-from typing import Generator, Dict, Union, Optional, Tuple, Any
+from contextlib import ExitStack
+from typing import Generator, Dict, Optional, Tuple, Any, List
 
 from lxml import etree
 
 from nqdc._coordinates import CoordinateExtractor
 from nqdc._metadata import MetadataExtractor
 from nqdc._text import TextExtractor
-from nqdc._typing import PathLikeOrStr
+from nqdc._writers import CSVWriter
+from nqdc._typing import PathLikeOrStr, BaseExtractor, BaseWriter
 from nqdc import _utils
 
 
@@ -41,55 +42,60 @@ def extract_data(
     """
     articles_dir = Path(articles_dir)
     _utils.assert_exists(articles_dir)
-    coord_extractor = CoordinateExtractor()
-    metadata_extractor = MetadataExtractor()
-    text_extractor = TextExtractor()
-    n_articles, n_with_coords, n_failures = 0, 0, 0
+    data_extractors: List[BaseExtractor] = [
+        CoordinateExtractor(),
+        MetadataExtractor(),
+        TextExtractor(),
+    ]
+    for article in iter_articles(articles_dir):
+        yield {
+            extractor.name: extractor.extract(article)
+            for extractor in data_extractors
+        }
+
+
+def iter_articles(
+    articles_dir: PathLikeOrStr,
+) -> Generator[etree.ElementTree, None, None]:
+    """Generator that iterates over all articles in a directory.
+
+    Articles are parsed and provided as ElementTrees. Articles that fail to be
+    parsed are skipped. The order in which articles are visited is
+    deterministic.
+
+    Parameters
+    ----------
+    articles_dir
+        Directory containing the article files. It is a directory created by
+        `nqdc.extract_articles`: it is named `articles` and contains
+        subdirectories `000` - `fff`, each of which contains articles stored in
+        XML files.
+
+    Yields
+    ------
+    article
+        A parsed article.
+    """
+    articles_dir = Path(articles_dir)
+    _utils.assert_exists(articles_dir)
+    n_articles, n_failures = 0, 0
     for subdir in sorted([f for f in articles_dir.glob("*") if f.is_dir()]):
-        _LOG.debug(f"Reading articles in directory: {subdir.name}")
-        for article_file in subdir.glob("pmcid_*.xml"):
-            n_articles += 1
-            article_data = _extract_article_data(
-                article_file,
-                metadata_extractor,
-                text_extractor,
-                coord_extractor,
-            )
-            if article_data is None:
+        for article_file in sorted(subdir.glob("pmcid_*.xml")):
+            try:
+                article = etree.parse(str(article_file))
+            except Exception:
                 n_failures += 1
-            elif article_data["coordinates"].shape[0]:
-                n_with_coords += 1
-            if not n_articles % 20:
-                _LOG.info(
-                    f"Processed {n_articles} articles, {n_with_coords} "
-                    f"({n_with_coords / n_articles:.0%}) had coordinates, "
-                    f"{n_failures} failures"
-                )
-            if article_data is not None and (
-                article_data["coordinates"].shape[0]
-                or not articles_with_coords_only
-            ):
-                yield article_data
-
-
-def _extract_article_data(
-    article_file: Path,
-    metadata_extractor: MetadataExtractor,
-    text_extractor: TextExtractor,
-    coord_extractor: CoordinateExtractor,
-) -> Union[None, Dict[str, Any]]:
-    try:
-        article = etree.parse(str(article_file))
-    except Exception:
-        _LOG.exception(f"Failed to parse {article_file}")
-        return None
-    metadata = metadata_extractor(article)
-    text = text_extractor(article)
-    text["pmcid"] = metadata["pmcid"]
-    coords = coord_extractor(article)
-    if coords.shape[0]:
-        coords["pmcid"] = metadata["pmcid"]
-    return {"metadata": metadata, "text": text, "coordinates": coords}
+                _LOG.exception(f"Failed to parse {article_file}")
+            else:
+                yield article
+            finally:
+                n_articles += 1
+                if not n_articles % 20:
+                    _LOG.info(
+                        f"In directory {subdir.name}: "
+                        f"processed {n_articles} articles, "
+                        f"{n_failures} failures"
+                    )
 
 
 def _get_output_dir(
@@ -151,28 +157,21 @@ def extract_data_to_csv(
     _LOG.info(
         f"Extracting data from articles in {articles_dir} to {output_dir}"
     )
-    metadata_csv = output_dir.joinpath("metadata.csv")
-    text_csv = output_dir.joinpath("text.csv")
-    coord_csv = output_dir.joinpath("coordinates.csv")
-    with open(metadata_csv, "w", encoding="utf-8", newline="") as meta_f, open(
-        text_csv, "w", encoding="utf-8", newline=""
-    ) as text_f, open(coord_csv, "w", encoding="utf-8", newline="") as coord_f:
-        metadata_writer = csv.DictWriter(meta_f, MetadataExtractor.fields)
-        metadata_writer.writeheader()
-        text_writer = csv.DictWriter(text_f, TextExtractor.fields)
-        text_writer.writeheader()
-        coord_writer = csv.DictWriter(coord_f, CoordinateExtractor.fields)
-        coord_writer.writeheader()
+    all_writers: List[BaseWriter] = [
+        CSVWriter.from_extractor(MetadataExtractor, output_dir),
+        CSVWriter.from_extractor(TextExtractor, output_dir),
+        CSVWriter.from_extractor(CoordinateExtractor, output_dir),
+    ]
+    with ExitStack() as stack:
+        for writer in all_writers:
+            stack.enter_context(writer)
         n_articles = 0
         for article_data in extract_data(
             articles_dir, articles_with_coords_only=articles_with_coords_only
         ):
             n_articles += 1
-            metadata_writer.writerow(article_data["metadata"])
-            text_writer.writerow(article_data["text"])
-            coord_writer.writerows(
-                article_data["coordinates"].to_dict(orient="records")
-            )
+            for writer in all_writers:
+                writer.write(article_data)
     output_dir.joinpath("info.json").write_text(
         json.dumps({"n_articles": n_articles}), "utf-8"
     )
