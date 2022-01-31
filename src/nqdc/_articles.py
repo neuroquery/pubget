@@ -98,9 +98,5 @@ def _extract_from_articleset(
     with open(batch_file, "rb") as f:
         tree = etree.parse(f)
     for art_nb, article in enumerate(tree.iterfind("article")):
-        pmcid = int(
-            article.xpath(
-                "front/article-meta/" "article-id[@pub-id-type='pmc']/text()"
-            )[0]
-        )
+        pmcid = _utils.get_pmcid(article)
         yield pmcid, etree.ElementTree(article)

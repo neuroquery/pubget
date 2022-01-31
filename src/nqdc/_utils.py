@@ -76,6 +76,12 @@ def load_stylesheet(stylesheet_name: str) -> etree.XSLT:
     return transform
 
 
+def get_pmcid(article: Union[etree.ElementTree, etree.Element]) -> int:
+    return int(
+        article.find("front/article-meta/article-id[@pub-id-type='pmc']").text
+    )
+
+
 def assert_exists(path: Path) -> None:
     path.resolve(strict=True)
 

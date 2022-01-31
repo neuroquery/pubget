@@ -2,6 +2,7 @@ import pandas as pd
 from lxml import etree
 
 from nqdc._typing import BaseExtractor
+from nqdc import _utils
 
 
 class AuthorsExtractor(BaseExtractor):
@@ -10,11 +11,7 @@ class AuthorsExtractor(BaseExtractor):
 
     def extract(self, article: etree.ElementTree) -> pd.DataFrame:
         authors = []
-        pmcid = int(
-            article.find(
-                "front/article-meta/article-id[@pub-id-type='pmc']"
-            ).text
-        )
+        pmcid = _utils.get_pmcid(article)
         for author_elem in article.iterfind(
             "front/article-meta/contrib-group/contrib[@contrib-type='author']"
         ):
