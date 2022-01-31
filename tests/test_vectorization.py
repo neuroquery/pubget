@@ -1,4 +1,6 @@
 import json
+import shutil
+from unittest.mock import patch
 
 import numpy as np
 import pandas as pd
@@ -12,15 +14,31 @@ from nqdc import _vectorization
 def test_vectorize_corpus_to_npz(
     tmp_path, nq_datasets_mock, test_data_dir, with_voc
 ):
+    input_dir = tmp_path.joinpath("extracted_data")
+    shutil.copytree(test_data_dir, input_dir)
     kwargs = {}
     if with_voc:
-        kwargs["vocabulary"] = test_data_dir.joinpath("vocabulary.csv")
-    _vectorization.vectorize_corpus_to_npz(
-        test_data_dir, output_dir=tmp_path, **kwargs
+        kwargs["vocabulary"] = input_dir.joinpath("vocabulary.csv")
+    output_dir, code = _vectorization.vectorize_corpus_to_npz(
+        input_dir, output_dir=tmp_path, **kwargs
     )
+    assert code == 1
+    input_dir.joinpath("info.json").write_text(
+        json.dumps({"data_extraction_complete": True}), "utf-8"
+    )
+    output_dir, code = _vectorization.vectorize_corpus_to_npz(
+        input_dir, output_dir=tmp_path, **kwargs
+    )
+    assert code == 0
     _check_pmcids(tmp_path)
     _check_doc_frequencies(tmp_path)
     _check_matrices(tmp_path)
+    with patch("nqdc._vectorization._do_vectorize_corpus_to_npz") as mock:
+        output_dir, code = _vectorization.vectorize_corpus_to_npz(
+            input_dir, output_dir=tmp_path, **kwargs
+        )
+        assert code == 0
+        assert len(mock.mock_calls) == 0
 
 
 def _check_pmcids(data_dir):

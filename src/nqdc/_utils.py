@@ -2,6 +2,7 @@ from pathlib import Path
 import logging
 import logging.config
 import hashlib
+import json
 from datetime import datetime
 import os
 from typing import Union
@@ -77,3 +78,11 @@ def load_stylesheet(stylesheet_name: str) -> etree.XSLT:
 
 def assert_exists(path: Path) -> None:
     path.resolve(strict=True)
+
+
+def is_step_complete(step_dir: Path, step_name: str) -> bool:
+    info_file = step_dir.joinpath("info.json")
+    if not info_file.is_file():
+        return False
+    info = json.loads(info_file.read_text("utf-8"))
+    return bool(info.get(f"{step_name}_complete"))

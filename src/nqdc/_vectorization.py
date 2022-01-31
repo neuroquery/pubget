@@ -15,6 +15,7 @@ from neuroquery.datasets import fetch_neuroquery_model
 
 from nqdc._utils import checksum, assert_exists
 from nqdc._typing import PathLikeOrStr
+from nqdc import _utils
 
 _LOG = logging.getLogger(__name__)
 
@@ -76,10 +77,12 @@ def vectorize_corpus_to_npz(
     output_dir
         The directory in which the vectorized data is stored.
     exit_code
-        Always 0 at the moment. Used by the `nqdc` command-line interface.
-
+        0 if previous (data extraction) step was complete and this step
+        (vectorization) finished normally as well. Used by the `nqdc`
+        command-line interface.
     """
-    assert_exists(Path(extracted_data_dir).joinpath("text.csv"))
+    extracted_data_dir = Path(extracted_data_dir)
+    assert_exists(extracted_data_dir.joinpath("text.csv"))
     vocabulary_file = _resolve_voc(vocabulary)
     output_dir = _get_output_dir(
         extracted_data_dir, output_dir, vocabulary_file
@@ -88,6 +91,36 @@ def vectorize_corpus_to_npz(
         f"vectorizing {extracted_data_dir} using vocabulary "
         f"{vocabulary_file} to {output_dir}"
     )
+    if _utils.is_step_complete(output_dir, "vectorization"):
+        _LOG.info("Vectorization complete, nothing to do.")
+        return output_dir, 0
+    data_extraction_complete = _utils.is_step_complete(
+        extracted_data_dir, "data_extraction"
+    )
+    if not data_extraction_complete:
+        _LOG.warning(
+            "Data extraction is incomplete, not all articles "
+            "matching query will be vectorized."
+        )
+    n_articles = _do_vectorize_corpus_to_npz(
+        extracted_data_dir, output_dir, vocabulary_file
+    )
+    output_dir.joinpath("info.json").write_text(
+        json.dumps(
+            {
+                "vectorization_complete": data_extraction_complete,
+                "n_articles": n_articles,
+            }
+        ),
+        "utf-8",
+    )
+    _LOG.info(f"Done creating BOW features .npz files in {output_dir}")
+    return output_dir, int(not data_extraction_complete)
+
+
+def _do_vectorize_corpus_to_npz(
+    extracted_data_dir: Path, output_dir: Path, vocabulary_file: Path
+) -> int:
     extraction_result = vectorize_corpus(extracted_data_dir, vocabulary_file)
     np.savetxt(
         output_dir.joinpath("pmcid.txt"),
@@ -110,8 +143,7 @@ def vectorize_corpus_to_npz(
     voc_mapping_file.write_text(
         json.dumps(extraction_result["voc_mapping"]), "utf-8"
     )
-    _LOG.info(f"Done creating BOW features .npz files in {output_dir}")
-    return output_dir, 0
+    return len(extraction_result["pmcids"])
 
 
 def _get_n_articles_msg(corpus_file: PathLikeOrStr) -> str:

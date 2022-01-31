@@ -5,7 +5,8 @@
 
 # NeuroQuery Data Collection
 
-**Warning: `nqdc` is in early development; its commands and functions are subject to change.**
+**Warning: `nqdc` is in early development; its commands and functions are
+subject to change.**
 
 `nqdc` is a command-line tool for collecting data for large-scale
 coordinate-based neuroimaging meta-analysis. It exposes some of the machinery
@@ -35,7 +36,7 @@ This will install the `nqdc` Python package, as well as the commands
 # Quick Start
 
 Once `nqdc` is installed, we can download and process neuroimaging articles so
-that we can later use them for meta-analysis. 
+that we can later use them for meta-analysis.
 
 ```
 nqdc_full_pipeline ./nqdc_data -q 'fMRI[title]'
@@ -157,7 +158,14 @@ Our data directory now looks like:
           ├── 03f
           │   └── pmcid_6625472.xml
           ├── ...
+          └── info.json
 ```
+
+If the download and article extraction were successfully run and we run the same
+query again, the article extraction is skipped. If we want to force re-running
+the article extraction we need to remove the `articles` directory (or the
+`info.json` file it contains).
+
 
 ## Step 3: extracting data from articles
 
@@ -192,13 +200,15 @@ Our data directory now contains (ommitting the contents of the previous steps):
           └── text.csv
 ```
 
-If we had not used `--articles_with_coords_only`, the new subdirectory would be named `subset_allArticles_extractedData` instead.
+If we had not used `--articles_with_coords_only`, the new subdirectory would be
+named `subset_allArticles_extractedData` instead.
 
 - `metadata.csv` contains one row per article, with some metadata: `pmcid`
   (PubMed Central ID), `pmid` (PubMed ID), `doi`, `title`, `journal`, and
   `publication_year`. Note some values may be missing (for example not all
   articles have a `pmid` or `doi`).
-- `authors.csv` contains one row per article per author. Fields are `pmcid`, `surname`, `given-names`.
+- `authors.csv` contains one row per article per author. Fields are `pmcid`,
+  `surname`, `given-names`.
 - `text.csv` contains one row per article. The first field is the `pmcid`, and
   the other fields are `title`, `keywords`, `abstract`, and `body`, and contain
   the text extracted from these parts of the article.
@@ -208,6 +218,10 @@ If we had not used `--articles_with_coords_only`, the new subdirectory would be 
   
 The different files can be joined on the `pmcid` field.
 
+If all steps up to data extraction were successfully run and we run the same
+query again, the data extraction is skipped. If we want to force re-running the
+data extraction we need to remove the corresponding directory (or the
+`info.json` file it contains).
 
 ## Step 4: vectorizing (computing TFIDF features)
 
@@ -216,7 +230,9 @@ This step is executed by the `nqdc_vectorize` command.
 Some large-scale meta-analysis methods such as
 [neurosynth](https://neurosynth.org/) and [neuroquery](https://neuroquery.org)
 rely on [TFIDF features](https://en.wikipedia.org/wiki/Tf%E2%80%93idf) to
-represent articles' text. The last step before we can apply these methods is therefore to extract TFIDF features from the text we obtained in the previous step.
+represent articles' text. The last step before we can apply these methods is
+therefore to extract TFIDF features from the text we obtained in the previous
+step.
 
 TFIDF features rely on a predefined vocabulary (set of terms or phrases). Each
 dimension of the feature vector corresponds to a term in the vocabulary and
@@ -256,6 +272,7 @@ articles are kept or only those with coordinates) and the chosen vocabulary:
           ├── body_counts.npz
           ├── body_tfidf.npz
           ├── feature_names.csv
+          ├── info.json
           ├── keywords_counts.npz
           ├── keywords_tfidf.npz
           ├── merged_tfidf.npz
@@ -284,6 +301,11 @@ For each article part ("title", "keywords", "abstract" and "body"), we get the
 section), and the `tfidf` which hold the TFIDF features (the counts divided by
 article length and log document frequency). Moreover, `merged_tfidf` contains
 the mean TFIDF computed across all article parts.
+
+If all steps up to vectorization were successfully run and we run the same query
+again, the vectorization is skipped. If we want to force re-running the
+vectorization we need to remove the corresponding directory (or the `info.json`
+file it contains).
 
 ### Vocabulary mapping: collapsing redundant words
 
@@ -324,6 +346,9 @@ The full procedure described above could be run by executing:
 ```
 nqdc_full_pipeline -q 'fMRI[Title] AND ("2019"[PubDate] : "2019"[PubDate])' --articles_with_coords_only nqdc_data
 ```
+
+Here also, steps that had already been completed are skipped; we need to remove
+the corresponding directories if we want to force running these steps again.
 
 ## Logging
 

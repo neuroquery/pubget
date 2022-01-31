@@ -1,5 +1,6 @@
 from pathlib import Path
 import json
+from unittest.mock import patch
 
 from nqdc import _download, _articles
 
@@ -14,6 +15,16 @@ def test_extract_articles(tmp_path, entrez_mock):
     assert created_dir == articles_dir
     assert code == 0
     assert len(list(articles_dir.glob("**/*.xml"))) == 7
+
+    # check does not repeat completed extraction
+    with patch("nqdc._articles._extract_from_articleset") as mock:
+        created_dir, code = _articles.extract_articles(
+            download_dir, articles_dir
+        )
+        assert len(mock.mock_calls) == 0
+        assert code == 0
+
+    # check returns 1 if download incomplete
     info_file = download_dir.joinpath("info.json")
     info = json.loads(info_file.read_text("utf-8"))
     info["download_complete"] = False
@@ -26,5 +37,3 @@ def test_extract_articles(tmp_path, entrez_mock):
     info_file.unlink()
     _, code = _articles.extract_articles(download_dir)
     assert code == 1
-    info["download_complete"] = True
-    info_file.write_text(json.dumps(info), "utf-8")

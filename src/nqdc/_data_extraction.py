@@ -155,15 +155,47 @@ def extract_data_to_csv(
     output_dir
         The directory in which extracted data is stored.
     exit_code
-        Always 0 at the moment. Used by the `nqdc` command-line interface.
+        0 if previous (article extraction) step was complete and this step
+        (data extraction) finished normally as well. Used by the `nqdc`
+        command-line interface.
     """
-    _utils.assert_exists(Path(articles_dir))
+    articles_dir = Path(articles_dir)
+    _utils.assert_exists(articles_dir)
     output_dir = _get_output_dir(
         articles_dir, output_dir, articles_with_coords_only
     )
     _LOG.info(
         f"Extracting data from articles in {articles_dir} to {output_dir}"
     )
+    if _utils.is_step_complete(output_dir, "data_extraction"):
+        _LOG.info("Data extraction complete, nothing to do.")
+        return output_dir, 0
+    article_extraction_complete = _utils.is_step_complete(
+        articles_dir, "article_extraction"
+    )
+    if not article_extraction_complete:
+        _LOG.warning(
+            "Not all articles have been extracted from download dir "
+            "or download is incomplete."
+        )
+    n_articles = _do_extract_data_to_csv(
+        articles_dir, output_dir, articles_with_coords_only
+    )
+    info = {
+        "n_articles": n_articles,
+        "data_extraction_complete": article_extraction_complete,
+    }
+    output_dir.joinpath("info.json").write_text(
+        json.dumps(info),
+        "utf-8",
+    )
+    _LOG.info(f"Done extracting article data to csv files in {output_dir}")
+    return output_dir, int(not article_extraction_complete)
+
+
+def _do_extract_data_to_csv(
+    articles_dir: Path, output_dir: Path, articles_with_coords_only: bool
+) -> int:
     all_writers: List[BaseWriter] = [
         CSVWriter.from_extractor(MetadataExtractor, output_dir),
         CSVWriter.from_extractor(AuthorsExtractor, output_dir),
@@ -180,8 +212,4 @@ def extract_data_to_csv(
             n_articles += 1
             for writer in all_writers:
                 writer.write(article_data)
-    output_dir.joinpath("info.json").write_text(
-        json.dumps({"n_articles": n_articles}), "utf-8"
-    )
-    _LOG.info(f"Done extracting article data to csv files in {output_dir}")
-    return output_dir, 0
+    return n_articles
