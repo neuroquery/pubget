@@ -43,8 +43,14 @@ class CSVWriter(BaseWriter):
         self.csv_file.close()
 
     def write(self, all_data: Mapping[str, Any]) -> None:
+        if all_data.get(self.name) is None:
+            return
         data: Union[pd.DataFrame, Mapping[str, Any]] = all_data[self.name]
         if isinstance(data, pd.DataFrame):
-            self.writer.writerows(data.to_dict(orient="records"))
+            self.writer.writerows(
+                data.astype(object)
+                .where(data.notnull(), None)
+                .to_dict(orient="records")
+            )
         else:
             self.writer.writerow(data)

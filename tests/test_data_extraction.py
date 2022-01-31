@@ -1,11 +1,12 @@
 from pathlib import Path
+from unittest.mock import Mock
 
 import pandas as pd
 
 from nqdc import _download, _articles, _data_extraction
 
 
-def test_extract_data_to_csv(tmp_path, entrez_mock):
+def test_extract_data_to_csv(tmp_path, entrez_mock, monkeypatch):
     download_dir, code = _download.download_articles_for_query(
         "fMRI[abstract]", tmp_path
     )
@@ -25,3 +26,15 @@ def test_extract_data_to_csv(tmp_path, entrez_mock):
     assert text.at[0, "body"].strip() == "The text of the article"
     coordinates = pd.read_csv(data_dir.joinpath("coordinates.csv"))
     assert coordinates.shape == (14, 6)
+    authors = pd.read_csv(data_dir.joinpath("authors.csv"))
+    assert authors.shape == (52, 3)
+    assert authors["pmcid"].nunique() == 7
+
+    data_dir = Path(f"{download_dir}-extraction_failures-extracted_data")
+    mock = Mock(side_effect=ValueError)
+    monkeypatch.setattr("nqdc._authors.AuthorsExtractor.extract", mock)
+    _data_extraction.extract_data_to_csv(articles_dir, data_dir)
+    metadata = pd.read_csv(data_dir.joinpath("metadata.csv"))
+    assert metadata.shape == (7, 6)
+    authors = pd.read_csv(data_dir.joinpath("authors.csv"))
+    assert authors.shape == (0, 3)

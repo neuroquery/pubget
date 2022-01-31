@@ -6,6 +6,7 @@ from typing import Generator, Dict, Optional, Tuple, Any, List
 
 from lxml import etree
 
+from nqdc._authors import AuthorsExtractor
 from nqdc._coordinates import CoordinateExtractor
 from nqdc._metadata import MetadataExtractor
 from nqdc._text import TextExtractor
@@ -43,20 +44,26 @@ def extract_data(
     articles_dir = Path(articles_dir)
     _utils.assert_exists(articles_dir)
     data_extractors: List[BaseExtractor] = [
-        CoordinateExtractor(),
         MetadataExtractor(),
+        AuthorsExtractor(),
         TextExtractor(),
+        CoordinateExtractor(),
     ]
-    for article in iter_articles(articles_dir):
-        yield {
-            extractor.name: extractor.extract(article)
-            for extractor in data_extractors
-        }
+    for article, article_file in iter_articles(articles_dir):
+        article_info = {}
+        for extractor in data_extractors:
+            try:
+                article_info[extractor.name] = extractor.extract(article)
+            except Exception:
+                _LOG.exception(
+                    f"Extractor '{extractor.name}' failed on {article_file}."
+                )
+        yield article_info
 
 
 def iter_articles(
     articles_dir: PathLikeOrStr,
-) -> Generator[etree.ElementTree, None, None]:
+) -> Generator[Tuple[etree.ElementTree, Path], None, None]:
     """Generator that iterates over all articles in a directory.
 
     Articles are parsed and provided as ElementTrees. Articles that fail to be
@@ -75,26 +82,26 @@ def iter_articles(
     ------
     article
         A parsed article.
+    article_file
+        File from which the article was parsed.
     """
     articles_dir = Path(articles_dir)
     _utils.assert_exists(articles_dir)
-    n_articles, n_failures = 0, 0
+    n_articles = 0
     for subdir in sorted([f for f in articles_dir.glob("*") if f.is_dir()]):
         for article_file in sorted(subdir.glob("pmcid_*.xml")):
             try:
                 article = etree.parse(str(article_file))
             except Exception:
-                n_failures += 1
                 _LOG.exception(f"Failed to parse {article_file}")
             else:
-                yield article
+                yield article, article_file
             finally:
                 n_articles += 1
                 if not n_articles % 20:
                     _LOG.info(
                         f"In directory {subdir.name}: "
-                        f"processed {n_articles} articles, "
-                        f"{n_failures} failures"
+                        f"processed {n_articles} articles"
                     )
 
 
@@ -159,6 +166,7 @@ def extract_data_to_csv(
     )
     all_writers: List[BaseWriter] = [
         CSVWriter.from_extractor(MetadataExtractor, output_dir),
+        CSVWriter.from_extractor(AuthorsExtractor, output_dir),
         CSVWriter.from_extractor(TextExtractor, output_dir),
         CSVWriter.from_extractor(CoordinateExtractor, output_dir),
     ]
