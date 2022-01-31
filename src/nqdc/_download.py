@@ -28,7 +28,6 @@ def download_articles_for_query(
         interface](https://www.ncbi.nlm.nih.gov/pmc/advanced). For more
         information see [the E-Utilities
         help](https://www.ncbi.nlm.nih.gov/books/NBK3837/).
-
     data_dir
         Path to the directory where all nqdc data is stored; a subdirectory
         will be created for this query.
@@ -51,7 +50,6 @@ def download_articles_for_query(
     exit_code
         0 if all articles matching the search have been successfully downloaded
         and 1 otherwise. Used by the `nqdc` command-line interface.
-
     """
     data_dir = Path(data_dir)
     output_dir = data_dir.joinpath(

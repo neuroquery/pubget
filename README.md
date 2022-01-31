@@ -51,7 +51,7 @@ The creation of a dataset happens in four steps:
   [PMC](https://www.ncbi.nlm.nih.gov/pmc/) API.
 - Extracting the articles from the bulk download 
 - Extracting text, stereotactic coordinates and metadata from the articles, and
-  storing this information in csv files.
+  storing this information in CSV files.
 - Vectorizing the text: transforming it into vectors of
   [TFIDF](https://en.wikipedia.org/wiki/Tf%E2%80%93idf) features.
 
@@ -171,7 +171,7 @@ the article extraction we need to remove the `articles` directory (or the
 
 This step is executed by the `nqdc_extract_data` command.
 
-It creates another directory that contains csv files, containing the text,
+It creates another directory that contains CSV files, containing the text,
 metadata and coordinates extracted from all the articles.
 
 If we use the `--articles_with_coords_only` option, only articles in which
@@ -246,7 +246,7 @@ To extract the TFIDF features we must therefore choose a vocabulary. By default,
 `nqdc` will download and use the vocabulary used by
 [neuroquery.org](https://neuroquery.org). If we want to use a different
 vocabulary we can specify it with the `--vocabulary_file` option. This file will
-be parsed as a csv file with no header, whose first column contains the terms.
+be parsed as a CSV file with no header, whose first column contains the terms.
 Other columns are ignored.
 
 We also pass to `nqdc_vectorize` the directory containing the text we want to
@@ -333,7 +333,7 @@ created by `nqdc`, but if no vocabulary mapping was used, that file contains an
 empty mapping (`{}`) and `vocabulary.csv` and `feature_names.csv` are identical.
 
 The vocabulary mapping is primarily used by the `neuroquery` package and its
-tokenization pipeline, and you can safely ignore this -- just remember that the
+tokenization pipeline, and you can safely ignore this – just remember that the
 file providing the terms corresponding to the TFIDF *features* is
 `feature_names.csv`.
 
@@ -358,6 +358,20 @@ command-line argument, or if we define the `NQDC_LOG_DIR` environment variable
 (the command-line argument has higher precedence). If this log directory is
 specified, a new log file with a timestamp is created and all the output is
 written there as well.
+
+# Contributing
+
+Feedback and contributions are welcome. Development happens at the 
+[nqdc GitHub repositiory](https://github.com/neuroquery/nqdc).
+To install the dependencies required for development, from the directory where you cloned `nqdc`, run:
+```
+pip install -e '.[dev]'
+```
+
+The tests can be run with `make test_all`, or `make test_coverage` to report
+test coverage. The documentation can be rendered with `make doc`. `make
+run_full_pipeline` runs the full `nqdc` pipeline on a query returning a
+realistic number of results (`'fMRI[title]'`).
 
 # Python API
 

@@ -53,7 +53,7 @@ def extract_articles(
     _utils.assert_exists(articlesets_dir)
     download_complete = _utils.is_step_complete(articlesets_dir, "download")
     if not download_complete:
-        _LOG.warning("Not all articles for the query have been downloaded")
+        _LOG.warning("Not all articles for the query have been downloaded.")
     if output_dir is None:
         output_dir = articlesets_dir.with_name("articles")
     else:

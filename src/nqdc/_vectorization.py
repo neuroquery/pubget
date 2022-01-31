@@ -61,7 +61,8 @@ def vectorize_corpus_to_npz(
     extracted_data_dir
         The directory containing the text of articles to vectorize. It is a
         directory created by `nqdc.extract_data_to_csv`: it contains a file
-        named `text.csv` with fields pmcid, title, keywords, abstract, body.
+        named `text.csv` with fields `pmcid`, `title`, `keywords`, `abstract`,
+        `body`.
     output_dir
         The directory in which to store the results. If not specified, a
         sibling directory of `extracted_data_dir` will be used. Its name will
@@ -163,12 +164,12 @@ def _extract_word_counts(
     vectorizer = TextVectorizer.from_vocabulary_file(
         str(vocabulary_file), use_idf=False, norm=None, voc_mapping={}
     ).fit()
-    vectorized_chunks = {
+    vectorized_chunks: Dict[str, List[sparse.csr_matrix]] = {
         "title": [],
         "keywords": [],
         "abstract": [],
         "body": [],
-    }  # type: Dict[str, List[sparse.csr_matrix]]
+    }
     chunksize = 200
     pmcids = []
     n_articles_msg = _get_n_articles_msg(corpus_file)
@@ -241,7 +242,8 @@ def vectorize_corpus(
     extracted_data_dir
         The directory containing the text of articles to vectorize. It is a
         directory created by `nqdc.extract_data_to_csv`: it contains a file
-        named `text.csv` with fields pmcid, title, keywords, abstract, body.
+        named `text.csv` with fields `pmcid`, `title`, `keywords`, `abstract`,
+        `body`.
     vocabulary
         A file containing the vocabulary used to vectorize text, with one term
         or phrase per line. Each dimension in the output will correspond to the

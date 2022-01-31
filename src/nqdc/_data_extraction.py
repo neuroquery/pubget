@@ -38,6 +38,8 @@ def extract_data(
     article_data
         Data extracted from one article. Keys are:
         - metadata: a dictionary containing metadata such as pmcid and doi.
+        - authors: a `pd.DataFrame` with columns `pmcid`, `surname`,
+          `given-names`.
         - text: a dictionary mapping parts such as "abstract" to their content.
         - coordinates: a `pd.DataFrame` containing the extracted coordinates.
     """
@@ -68,7 +70,7 @@ def iter_articles(
 
     Articles are parsed and provided as ElementTrees. Articles that fail to be
     parsed are skipped. The order in which articles are visited is
-    deterministic.
+    always the same.
 
     Parameters
     ----------
@@ -148,7 +150,7 @@ def extract_data_to_csv(
         `subset_articlesWithCoords_extractedData`, depending on the value of
         `articles_with_coords_only`.
     articles_with_coords_only
-        If true, articles that contain no stereotactic coordinates are ignored.
+        If True, articles that contain no stereotactic coordinates are ignored.
 
     Returns
     -------
