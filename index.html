@@ -3,18 +3,18 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="pdoc 9.0.0" />
+    <meta name="generator" content="pdoc 9.0.1" />
     <title>nqdc API documentation</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2264%22%20height%3D%2264%22%20viewBox%3D%2244.5%202.5%2015%2015%22%3E%3Cpath%20d%3D%22M49.351%2021.041c-.233-.721-.546-2.408-.772-4.076-.042-.09-.067-.187-.046-.288-.166-1.347-.277-2.625-.241-3.351-1.378-1.008-2.271-2.586-2.271-4.362%200-.976.272-1.935.788-2.774.057-.094.122-.18.184-.268-.033-.167-.052-.339-.052-.516%200-1.477%201.202-2.679%202.679-2.679.791%200%201.496.352%201.987.9a6.3%206.3%200%200%201%201.001.029c.492-.564%201.207-.929%202.012-.929%201.477%200%202.679%201.202%202.679%202.679a2.65%202.65%200%200%201-.269%201.148c.383.747.595%201.572.595%202.41%200%202.311-1.507%204.29-3.635%205.107.037.699.147%202.27.423%203.294l.137.461c.156%202.136-4.612%205.166-5.199%203.215zm.127-4.919a4.78%204.78%200%200%200%20.775-.584c-.172-.115-.505-.254-.88-.378zm.331%202.302l.828-.502c-.202-.143-.576-.328-.984-.49zm.45%202.157l.701-.403c-.214-.115-.536-.249-.891-.376l.19.779zM49.13%204.141c0%20.152.123.276.276.276s.275-.124.275-.276-.123-.276-.276-.276-.275.124-.275.276zm.735-.389a1.15%201.15%200%200%201%20.314.783%201.16%201.16%200%200%201-1.162%201.162c-.457%200-.842-.27-1.032-.653-.026.117-.042.238-.042.362a1.68%201.68%200%200%200%201.679%201.679%201.68%201.68%200%200%200%201.679-1.679c0-.843-.626-1.535-1.436-1.654zm3.076%201.654a1.68%201.68%200%200%200%201.679%201.679%201.68%201.68%200%200%200%201.679-1.679c0-.037-.009-.072-.011-.109-.21.3-.541.508-.935.508a1.16%201.16%200%200%201-1.162-1.162%201.14%201.14%200%200%201%20.474-.912c-.015%200-.03-.005-.045-.005-.926.001-1.679.754-1.679%201.68zm1.861-1.265c0%20.152.123.276.276.276s.275-.124.275-.276-.123-.276-.276-.276-.275.124-.275.276zm1.823%204.823c0-.52-.103-1.035-.288-1.52-.466.394-1.06.64-1.717.64-1.144%200-2.116-.725-2.499-1.738-.383%201.012-1.355%201.738-2.499%201.738-.867%200-1.631-.421-2.121-1.062-.307.605-.478%201.267-.478%201.942%200%202.486%202.153%204.51%204.801%204.51s4.801-2.023%204.801-4.51zm-3.032%209.156l-.146-.492c-.276-1.02-.395-2.457-.444-3.268a6.11%206.11%200%200%201-1.18.115%206.01%206.01%200%200%201-2.536-.562l.006.175c.802.215%201.848.612%202.021%201.25.079.295-.021.601-.274.837l-.598.501c.667.304%201.243.698%201.311%201.179.02.144.022.507-.393.787l-.564.365c1.285.521%201.361.96%201.381%201.126.018.142.011.496-.427.746l-.854.489c.064-1.19%201.985-2.585%202.697-3.248zM49.34%209.925c0-.667%201-.667%201%200%200%20.653.818%201.205%201.787%201.205s1.787-.552%201.787-1.205c0-.667%201-.667%201%200%200%201.216-1.25%202.205-2.787%202.205s-2.787-.989-2.787-2.205zm-.887-7.633c-.093.077-.205.114-.317.114a.5.5%200%200%201-.318-.886L49.183.397a.5.5%200%200%201%20.703.068.5.5%200%200%201-.069.703zm7.661-.065c-.086%200-.173-.022-.253-.068l-1.523-.893c-.575-.337-.069-1.2.506-.863l1.523.892a.5.5%200%200%201%20.179.685c-.094.158-.261.247-.432.247z%22%20fill%3D%22%233bb300%22/%3E%3C/svg%3E"/>
 
 
 <style>/*! * Bootstrap Reboot v5.0.0 (https://getbootstrap.com/) * Copyright 2011-2021 The Bootstrap Authors * Copyright 2011-2021 Twitter, Inc. * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE) * Forked from Normalize.css, licensed MIT (https://github.com/necolas/normalize.css/blob/master/LICENSE.md) */*,::after,::before{box-sizing:border-box}@media (prefers-reduced-motion:no-preference){:root{scroll-behavior:smooth}}body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";font-size:1rem;font-weight:400;line-height:1.5;color:#212529;background-color:#fff;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}hr{margin:1rem 0;color:inherit;background-color:currentColor;border:0;opacity:.25}hr:not([size]){height:1px}h1,h2,h3,h4,h5,h6{margin-top:0;margin-bottom:.5rem;font-weight:500;line-height:1.2}h1{font-size:calc(1.375rem + 1.5vw)}@media (min-width:1200px){h1{font-size:2.5rem}}h2{font-size:calc(1.325rem + .9vw)}@media (min-width:1200px){h2{font-size:2rem}}h3{font-size:calc(1.3rem + .6vw)}@media (min-width:1200px){h3{font-size:1.75rem}}h4{font-size:calc(1.275rem + .3vw)}@media (min-width:1200px){h4{font-size:1.5rem}}h5{font-size:1.25rem}h6{font-size:1rem}p{margin-top:0;margin-bottom:1rem}abbr[data-bs-original-title],abbr[title]{-webkit-text-decoration:underline dotted;text-decoration:underline dotted;cursor:help;-webkit-text-decoration-skip-ink:none;text-decoration-skip-ink:none}address{margin-bottom:1rem;font-style:normal;line-height:inherit}ol,ul{padding-left:2rem}dl,ol,ul{margin-top:0;margin-bottom:1rem}ol ol,ol ul,ul ol,ul ul{margin-bottom:0}dt{font-weight:700}dd{margin-bottom:.5rem;margin-left:0}blockquote{margin:0 0 1rem}b,strong{font-weight:bolder}small{font-size:.875em}mark{padding:.2em;background-color:#fcf8e3}sub,sup{position:relative;font-size:.75em;line-height:0;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}a{color:#0d6efd;text-decoration:underline}a:hover{color:#0a58ca}a:not([href]):not([class]),a:not([href]):not([class]):hover{color:inherit;text-decoration:none}code,kbd,pre,samp{font-family:SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;font-size:1em;direction:ltr;unicode-bidi:bidi-override}pre{display:block;margin-top:0;margin-bottom:1rem;overflow:auto;font-size:.875em}pre code{font-size:inherit;color:inherit;word-break:normal}code{font-size:.875em;color:#d63384;word-wrap:break-word}a>code{color:inherit}kbd{padding:.2rem .4rem;font-size:.875em;color:#fff;background-color:#212529;border-radius:.2rem}kbd kbd{padding:0;font-size:1em;font-weight:700}figure{margin:0 0 1rem}img,svg{vertical-align:middle}table{caption-side:bottom;border-collapse:collapse}caption{padding-top:.5rem;padding-bottom:.5rem;color:#6c757d;text-align:left}th{text-align:inherit;text-align:-webkit-match-parent}tbody,td,tfoot,th,thead,tr{border-color:inherit;border-style:solid;border-width:0}label{display:inline-block}button{border-radius:0}button:focus:not(:focus-visible){outline:0}button,input,optgroup,select,textarea{margin:0;font-family:inherit;font-size:inherit;line-height:inherit}button,select{text-transform:none}[role=button]{cursor:pointer}select{word-wrap:normal}select:disabled{opacity:1}[list]::-webkit-calendar-picker-indicator{display:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]:not(:disabled),[type=reset]:not(:disabled),[type=submit]:not(:disabled),button:not(:disabled){cursor:pointer}::-moz-focus-inner{padding:0;border-style:none}textarea{resize:vertical}fieldset{min-width:0;padding:0;margin:0;border:0}legend{float:left;width:100%;padding:0;margin-bottom:.5rem;font-size:calc(1.275rem + .3vw);line-height:inherit}@media (min-width:1200px){legend{font-size:1.5rem}}legend+*{clear:left}::-webkit-datetime-edit-day-field,::-webkit-datetime-edit-fields-wrapper,::-webkit-datetime-edit-hour-field,::-webkit-datetime-edit-minute,::-webkit-datetime-edit-month-field,::-webkit-datetime-edit-text,::-webkit-datetime-edit-year-field{padding:0}::-webkit-inner-spin-button{height:auto}[type=search]{outline-offset:-2px;-webkit-appearance:textfield}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-color-swatch-wrapper{padding:0}::file-selector-button{font:inherit}::-webkit-file-upload-button{font:inherit;-webkit-appearance:button}output{display:inline-block}iframe{border:0}summary{display:list-item;cursor:pointer}progress{vertical-align:baseline}[hidden]{display:none!important}</style>
 <style>/*! pygments syntax highlighting */pre{line-height:125%;}td.linenos pre{color:#000000; background-color:#f0f0f0; padding-left:5px; padding-right:5px;}span.linenos{color:#000000; background-color:#f0f0f0; padding-left:5px; padding-right:5px;}td.linenos pre.special{color:#000000; background-color:#ffffc0; padding-left:5px; padding-right:5px;}span.linenos.special{color:#000000; background-color:#ffffc0; padding-left:5px; padding-right:5px;}.pdoc .hll{background-color:#ffffcc}.pdoc{background:#f8f8f8;}.pdoc .c{color:#408080; font-style:italic}.pdoc .err{border:1px solid #FF0000}.pdoc .k{color:#008000; font-weight:bold}.pdoc .o{color:#666666}.pdoc .ch{color:#408080; font-style:italic}.pdoc .cm{color:#408080; font-style:italic}.pdoc .cp{color:#BC7A00}.pdoc .cpf{color:#408080; font-style:italic}.pdoc .c1{color:#408080; font-style:italic}.pdoc .cs{color:#408080; font-style:italic}.pdoc .gd{color:#A00000}.pdoc .ge{font-style:italic}.pdoc .gr{color:#FF0000}.pdoc .gh{color:#000080; font-weight:bold}.pdoc .gi{color:#00A000}.pdoc .go{color:#888888}.pdoc .gp{color:#000080; font-weight:bold}.pdoc .gs{font-weight:bold}.pdoc .gu{color:#800080; font-weight:bold}.pdoc .gt{color:#0044DD}.pdoc .kc{color:#008000; font-weight:bold}.pdoc .kd{color:#008000; font-weight:bold}.pdoc .kn{color:#008000; font-weight:bold}.pdoc .kp{color:#008000}.pdoc .kr{color:#008000; font-weight:bold}.pdoc .kt{color:#B00040}.pdoc .m{color:#666666}.pdoc .s{color:#BA2121}.pdoc .na{color:#7D9029}.pdoc .nb{color:#008000}.pdoc .nc{color:#0000FF; font-weight:bold}.pdoc .no{color:#880000}.pdoc .nd{color:#AA22FF}.pdoc .ni{color:#999999; font-weight:bold}.pdoc .ne{color:#D2413A; font-weight:bold}.pdoc .nf{color:#0000FF}.pdoc .nl{color:#A0A000}.pdoc .nn{color:#0000FF; font-weight:bold}.pdoc .nt{color:#008000; font-weight:bold}.pdoc .nv{color:#19177C}.pdoc .ow{color:#AA22FF; font-weight:bold}.pdoc .w{color:#bbbbbb}.pdoc .mb{color:#666666}.pdoc .mf{color:#666666}.pdoc .mh{color:#666666}.pdoc .mi{color:#666666}.pdoc .mo{color:#666666}.pdoc .sa{color:#BA2121}.pdoc .sb{color:#BA2121}.pdoc .sc{color:#BA2121}.pdoc .dl{color:#BA2121}.pdoc .sd{color:#BA2121; font-style:italic}.pdoc .s2{color:#BA2121}.pdoc .se{color:#BB6622; font-weight:bold}.pdoc .sh{color:#BA2121}.pdoc .si{color:#BB6688; font-weight:bold}.pdoc .sx{color:#008000}.pdoc .sr{color:#BB6688}.pdoc .s1{color:#BA2121}.pdoc .ss{color:#19177C}.pdoc .bp{color:#008000}.pdoc .fm{color:#0000FF}.pdoc .vc{color:#19177C}.pdoc .vg{color:#19177C}.pdoc .vi{color:#19177C}.pdoc .vm{color:#19177C}.pdoc .il{color:#666666}</style>
-<style>/*! pdoc */:root{--pdoc-background:#fff;}.pdoc{--text:#212529;--muted:#6c757d;--link:#3660a5;--link-hover:#1659c5;--code:#f7f7f7;--active:#fff598;--accent:#eee;--accent2:#c1c1c1;--nav-hover:rgba(255, 255, 255, 0.5);--name:#0066BB;--def:#008800;--annotation:#007020;}body{background-color:var(--pdoc-background);}html, body{width:100%;height:100%;}@media (max-width:769px){#navtoggle{cursor:pointer;position:absolute;width:50px;height:40px;top:1rem;right:1rem;border-color:var(--text);color:var(--text);display:flex;opacity:0.8;}#navtoggle:hover{opacity:1;}#togglestate + div{display:none;}#togglestate:checked + div{display:inherit;}main, header{padding:2rem 3vw;}.git-button{display:none !important;}nav input[type="search"]:valid ~ *{display:none !important;}}@media (min-width:770px){:root{--sidebar-width:clamp(12.5rem, 28vw, 22rem);}nav{position:fixed;overflow:auto;height:100vh;width:var(--sidebar-width);}main, header{padding:3rem 2rem 3rem calc(var(--sidebar-width) + 3rem);width:calc(54rem + var(--sidebar-width));max-width:100%;}#navtoggle{display:none;}}#togglestate{display:none;}nav.pdoc{--pad:1.75rem;--indent:1.5rem;background-color:var(--accent);border-right:1px solid var(--accent2);box-shadow:0 0 20px rgba(50, 50, 50, .2) inset;padding:0 0 0 var(--pad);overflow-wrap:anywhere;scrollbar-width:thin; scrollbar-color:var(--accent2) transparent }nav.pdoc::-webkit-scrollbar{width:.4rem; }nav.pdoc::-webkit-scrollbar-thumb{background-color:var(--accent2); }nav.pdoc > div{padding:var(--pad) 0;}nav.pdoc .module-list-button{display:inline-flex;align-items:center;color:var(--text);border-color:var(--muted);margin-bottom:1rem;}nav.pdoc .module-list-button:hover{border-color:var(--text);}nav.pdoc input[type=search]{display:block;outline-offset:0;width:calc(100% - var(--pad));}nav.pdoc .logo{max-width:calc(100% - var(--pad));max-height:35vh;display:block;margin:0 auto 1rem;transform:translate(calc(-.5 * var(--pad)), 0);}nav.pdoc ul{list-style:none;padding-left:0;}nav.pdoc li{display:block;margin:0;padding:.2rem 0 .2rem var(--indent);transition:all 100ms;}nav.pdoc > div > ul > li{padding-left:0;}nav.pdoc li:hover{background-color:var(--nav-hover);}nav.pdoc a, nav.pdoc a:hover{color:var(--text);}nav.pdoc a{display:block;}nav.pdoc > h2:first-of-type{margin-top:1.5rem;}nav.pdoc .class:before{content:"class ";color:var(--muted);}nav.pdoc .function:after{content:"()";color:var(--muted);}nav.pdoc footer:before{content:"";display:block;width:calc(100% - var(--pad));border-top:solid var(--accent2) 1px;margin-top:1.5rem;padding-top:.5rem;}nav.pdoc footer{font-size:small;}html, main{scroll-behavior:smooth;}.pdoc{color:var(--text);box-sizing:border-box;line-height:1.5;background:none;}.pdoc .pdoc-button{display:inline-block;border:solid black 1px;border-radius:2px;font-size:.75rem;padding:calc(0.5em - 1px) 1em;transition:100ms all;}.pdoc .visually-hidden{position:absolute !important;width:1px !important;height:1px !important;padding:0 !important;margin:-1px !important;overflow:hidden !important;clip:rect(0, 0, 0, 0) !important;white-space:nowrap !important;border:0 !important;}.pdoc h1, .pdoc h2, .pdoc h3{font-weight:300;margin:.3em 0;padding:.2em 0;}.pdoc a{text-decoration:none;color:var(--link);}.pdoc a:hover{color:var(--link-hover);}.pdoc blockquote{margin-left:2rem;}.pdoc pre{background-color:var(--code);border-top:1px solid var(--accent2);border-bottom:1px solid var(--accent2);margin-bottom:1em;padding:.5rem 0 .5rem .5rem;overflow-x:auto;}.pdoc code{color:var(--text);padding:.2em .4em;margin:0;font-size:85%;background-color:var(--code);border-radius:6px;}.pdoc a > code{color:inherit;}.pdoc pre > code{display:inline-block;font-size:inherit;background:none;border:none;padding:0;}.pdoc .modulename{margin-top:0;font-weight:bold;}.pdoc .modulename a{color:var(--link);transition:100ms all;}.pdoc .git-button{float:right;border:solid var(--link) 1px;}.pdoc .git-button:hover{background-color:var(--link);color:var(--pdoc-background);}.pdoc details{filter:opacity(1);}.pdoc details:not([open]){height:0;}.pdoc details > summary{position:absolute;top:-35px;right:0;font-size:.75rem;color:var(--muted);padding:0 .7em;user-select:none;}.pdoc details > summary:focus{outline:0;}.pdoc .docstring{margin-bottom:1.5rem;}.pdoc > section:first-of-type > .docstring{margin-bottom:2.5rem;}.pdoc .docstring pre{margin-left:1em;margin-right:1em;}.pdoc h1:target,.pdoc h2:target,.pdoc h3:target,.pdoc h4:target,.pdoc h5:target,.pdoc h6:target{background-color:var(--active);box-shadow:-1rem 0 0 0 var(--active);}.pdoc div:target > .attr,.pdoc section:target > .attr,.pdoc dd:target > a{background-color:var(--active);}.pdoc .attr:hover{filter:contrast(0.95);}.pdoc .headerlink{position:absolute;width:0;margin-left:-1.5rem;line-height:1.4rem;font-size:1.5rem;font-weight:normal;transition:all 100ms ease-in-out;opacity:0;user-select:none;}.pdoc .attr > .headerlink{margin-left:-2.5rem;}.pdoc *:hover > .headerlink,.pdoc *:target > .attr > .headerlink{opacity:1;}.pdoc .attr{display:block;color:var(--text);margin:.5rem 0 .5rem;padding:.4rem 5rem .4rem 1rem;background-color:var(--accent);}.pdoc .classattr{margin-left:2rem;}.pdoc .name{color:var(--name);font-weight:bold;}.pdoc .def{color:var(--def);font-weight:bold;}.pdoc .signature{white-space:pre-wrap;}.pdoc .annotation{color:var(--annotation);}.pdoc .inherited{margin-left:2rem;}.pdoc .inherited dt{font-weight:700;}.pdoc .inherited dt, .pdoc .inherited dd{display:inline;margin-left:0;margin-bottom:.5rem;}.pdoc .inherited dd:not(:last-child):after{content:", ";}.pdoc .inherited .class:before{content:"class ";}.pdoc .inherited .function a:after{content:"()";}.pdoc .search-result .docstring{overflow:auto;max-height:25vh;}.pdoc .search-result.focused > .attr{background-color:var(--active);}.pdoc .attribution{margin-top:2rem;display:block;opacity:0.5;transition:all 200ms;filter:grayscale(100%);}.pdoc .attribution:hover{opacity:1;filter:grayscale(0%);}.pdoc .attribution img{margin-left:5px;height:35px;vertical-align:middle;width:70px;transition:all 200ms;}.pdoc table{display:block;width:max-content;max-width:100%;overflow:auto;margin-bottom:1rem;}.pdoc table th{font-weight:600;}.pdoc table th, .pdoc table td{padding:6px 13px;border:1px solid var(--accent2);}</style>
+<style>/*! pdoc */:root{--pdoc-background:#fff;}.pdoc{--text:#212529;--muted:#6c757d;--link:#3660a5;--link-hover:#1659c5;--code:#f7f7f7;--active:#fff598;--accent:#eee;--accent2:#c1c1c1;--nav-hover:rgba(255, 255, 255, 0.5);--name:#0066BB;--def:#008800;--annotation:#007020;}body{background-color:var(--pdoc-background);}html, body{width:100%;height:100%;}@media (max-width:769px){#navtoggle{cursor:pointer;position:absolute;width:50px;height:40px;top:1rem;right:1rem;border-color:var(--text);color:var(--text);display:flex;opacity:0.8;}#navtoggle:hover{opacity:1;}#togglestate + div{display:none;}#togglestate:checked + div{display:inherit;}main, header{padding:2rem 3vw;}.git-button{display:none !important;}nav input[type="search"]{max-width:77%;}nav input[type="search"]:first-child{margin-top:-6px;}nav input[type="search"]:valid ~ *{display:none !important;}}@media (min-width:770px){:root{--sidebar-width:clamp(12.5rem, 28vw, 22rem);}nav{position:fixed;overflow:auto;height:100vh;width:var(--sidebar-width);}main, header{padding:3rem 2rem 3rem calc(var(--sidebar-width) + 3rem);width:calc(54rem + var(--sidebar-width));max-width:100%;}#navtoggle{display:none;}}#togglestate{position:absolute;height:0;}nav.pdoc{--pad:1.75rem;--indent:1.5rem;background-color:var(--accent);border-right:1px solid var(--accent2);box-shadow:0 0 20px rgba(50, 50, 50, .2) inset;padding:0 0 0 var(--pad);overflow-wrap:anywhere;scrollbar-width:thin; scrollbar-color:var(--accent2) transparent }nav.pdoc::-webkit-scrollbar{width:.4rem; }nav.pdoc::-webkit-scrollbar-thumb{background-color:var(--accent2); }nav.pdoc > div{padding:var(--pad) 0;}nav.pdoc .module-list-button{display:inline-flex;align-items:center;color:var(--text);border-color:var(--muted);margin-bottom:1rem;}nav.pdoc .module-list-button:hover{border-color:var(--text);}nav.pdoc input[type=search]{display:block;outline-offset:0;width:calc(100% - var(--pad));}nav.pdoc .logo{max-width:calc(100% - var(--pad));max-height:35vh;display:block;margin:0 auto 1rem;transform:translate(calc(-.5 * var(--pad)), 0);}nav.pdoc ul{list-style:none;padding-left:0;}nav.pdoc li{display:block;margin:0;padding:.2rem 0 .2rem var(--indent);transition:all 100ms;}nav.pdoc > div > ul > li{padding-left:0;}nav.pdoc li:hover{background-color:var(--nav-hover);}nav.pdoc a, nav.pdoc a:hover{color:var(--text);}nav.pdoc a{display:block;}nav.pdoc > h2:first-of-type{margin-top:1.5rem;}nav.pdoc .class:before{content:"class ";color:var(--muted);}nav.pdoc .function:after{content:"()";color:var(--muted);}nav.pdoc footer:before{content:"";display:block;width:calc(100% - var(--pad));border-top:solid var(--accent2) 1px;margin-top:1.5rem;padding-top:.5rem;}nav.pdoc footer{font-size:small;}html, main{scroll-behavior:smooth;}.pdoc{color:var(--text);box-sizing:border-box;line-height:1.5;background:none;}.pdoc .pdoc-button{display:inline-block;border:solid black 1px;border-radius:2px;font-size:.75rem;padding:calc(0.5em - 1px) 1em;transition:100ms all;}.pdoc .visually-hidden{position:absolute !important;width:1px !important;height:1px !important;padding:0 !important;margin:-1px !important;overflow:hidden !important;clip:rect(0, 0, 0, 0) !important;white-space:nowrap !important;border:0 !important;}.pdoc h1, .pdoc h2, .pdoc h3{font-weight:300;margin:.3em 0;padding:.2em 0;}.pdoc a{text-decoration:none;color:var(--link);}.pdoc a:hover{color:var(--link-hover);}.pdoc blockquote{margin-left:2rem;}.pdoc pre{background-color:var(--code);border-top:1px solid var(--accent2);border-bottom:1px solid var(--accent2);margin-bottom:1em;padding:.5rem 0 .5rem .5rem;overflow-x:auto;}.pdoc code{color:var(--text);padding:.2em .4em;margin:0;font-size:85%;background-color:var(--code);border-radius:6px;}.pdoc a > code{color:inherit;}.pdoc pre > code{display:inline-block;font-size:inherit;background:none;border:none;padding:0;}.pdoc .modulename{margin-top:0;font-weight:bold;}.pdoc .modulename a{color:var(--link);transition:100ms all;}.pdoc .git-button{float:right;border:solid var(--link) 1px;}.pdoc .git-button:hover{background-color:var(--link);color:var(--pdoc-background);}.pdoc details{filter:opacity(1);}.pdoc details:not([open]){height:0;}.pdoc details > summary{position:absolute;top:-35px;right:0;font-size:.75rem;color:var(--muted);padding:0 .7em;user-select:none;}.pdoc details > summary:focus{outline:0;}.pdoc .docstring{margin-bottom:1.5rem;}.pdoc > section:first-of-type > .docstring{margin-bottom:2.5rem;}.pdoc .docstring pre{margin-left:1em;margin-right:1em;}.pdoc h1:target,.pdoc h2:target,.pdoc h3:target,.pdoc h4:target,.pdoc h5:target,.pdoc h6:target{background-color:var(--active);box-shadow:-1rem 0 0 0 var(--active);}.pdoc div:target > .attr,.pdoc section:target > .attr,.pdoc dd:target > a{background-color:var(--active);}.pdoc .attr:hover{filter:contrast(0.95);}.pdoc .headerlink{position:absolute;width:0;margin-left:-1.5rem;line-height:1.4rem;font-size:1.5rem;font-weight:normal;transition:all 100ms ease-in-out;opacity:0;user-select:none;}.pdoc .attr > .headerlink{margin-left:-2.5rem;}.pdoc *:hover > .headerlink,.pdoc *:target > .attr > .headerlink{opacity:1;}.pdoc .attr{display:block;color:var(--text);margin:.5rem 0 .5rem;padding:.4rem 5rem .4rem 1rem;background-color:var(--accent);}.pdoc .classattr{margin-left:2rem;}.pdoc .name{color:var(--name);font-weight:bold;}.pdoc .def{color:var(--def);font-weight:bold;}.pdoc .signature{white-space:pre-wrap;}.pdoc .annotation{color:var(--annotation);}.pdoc .inherited{margin-left:2rem;}.pdoc .inherited dt{font-weight:700;}.pdoc .inherited dt, .pdoc .inherited dd{display:inline;margin-left:0;margin-bottom:.5rem;}.pdoc .inherited dd:not(:last-child):after{content:", ";}.pdoc .inherited .class:before{content:"class ";}.pdoc .inherited .function a:after{content:"()";}.pdoc .search-result .docstring{overflow:auto;max-height:25vh;}.pdoc .search-result.focused > .attr{background-color:var(--active);}.pdoc .attribution{margin-top:2rem;display:block;opacity:0.5;transition:all 200ms;filter:grayscale(100%);}.pdoc .attribution:hover{opacity:1;filter:grayscale(0%);}.pdoc .attribution img{margin-left:5px;height:35px;vertical-align:middle;width:70px;transition:all 200ms;}.pdoc table{display:block;width:max-content;max-width:100%;overflow:auto;margin-bottom:1rem;}.pdoc table th{font-weight:600;}.pdoc table th, .pdoc table td{padding:6px 13px;border:1px solid var(--accent2);}</style>
 </head>
 <body>        <nav class="pdoc">
             <label id="navtoggle" for="togglestate" class="pdoc-button"><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><path stroke-linecap='round' stroke="currentColor" stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/></svg></label>
-            <input id="togglestate" type="checkbox">
+            <input id="togglestate" type="checkbox" aria-hidden="true" tabindex="-1">
             <div>
 
 
@@ -26,13 +26,14 @@
   <li><a href="#quick-start">Quick Start</a></li>
   <li><a href="#usage">Usage</a>
   <ul>
-    <li><a href="#step-1-download">Step 1: download</a></li>
+    <li><a href="#step-1-downloading-articles-from-pmc">Step 1: Downloading articles from PMC</a></li>
     <li><a href="#step-2-extracting-articles-from-bulk-download">Step 2: extracting articles from bulk download</a></li>
     <li><a href="#step-3-extracting-data-from-articles">Step 3: extracting data from articles</a></li>
     <li><a href="#step-4-vectorizing-computing-tfidf-features">Step 4: vectorizing (computing TFIDF features)</a></li>
     <li><a href="#full-pipeline">Full pipeline</a></li>
     <li><a href="#logging">Logging</a></li>
   </ul></li>
+  <li><a href="#contributing">Contributing</a></li>
   <li><a href="#python-api">Python API</a></li>
 </ul>
 
@@ -47,13 +48,7 @@
                     <a class="function" href="#extract_articles">extract_articles</a>
             </li>
             <li>
-                    <a class="function" href="#extract_data">extract_data</a>
-            </li>
-            <li>
                     <a class="function" href="#extract_data_to_csv">extract_data_to_csv</a>
-            </li>
-            <li>
-                    <a class="function" href="#vectorize_corpus">vectorize_corpus</a>
             </li>
             <li>
                     <a class="function" href="#vectorize_corpus_to_npz">vectorize_corpus_to_npz</a>
@@ -75,9 +70,13 @@
 nqdc    </h1>
 
                         <div class="docstring"><p><a href="https://github.com/neuroquery/nqdc/actions/workflows/testing.yml"><img src="https://github.com/neuroquery/nqdc/actions/workflows/testing.yml/badge.svg" alt="build" /></a>
-<a href="https://codecov.io/gh/neuroquery/nqdc"><img src="https://codecov.io/gh/neuroquery/nqdc/branch/main/graph/badge.svg?token=8KEBP2EN3A" alt="codecov" /></a></p>
+<a href="https://codecov.io/gh/neuroquery/nqdc"><img src="https://codecov.io/gh/neuroquery/nqdc/branch/main/graph/badge.svg?token=8KEBP2EN3A" alt="codecov" /></a>
+<a href="https://github.com/neuroquery/nqdc"><img src="https://img.shields.io/static/v1?label=&amp;message=nqdc%20on%20GitHub&amp;color=black&amp;style=flat&amp;logo=github" alt="nqdc on GitHub" /></a></p>
 
 <h1 id="neuroquery-data-collection">NeuroQuery Data Collection</h1>
+
+<p><strong>Warning: <code><a href="">nqdc</a></code> is in early development; its commands and functions are
+subject to change.</strong></p>
 
 <p><code><a href="">nqdc</a></code> is a command-line tool for collecting data for large-scale
 coordinate-based neuroimaging meta-analysis. It exposes some of the machinery
@@ -107,7 +106,7 @@ through its <a href="https://neuroquery.github.io/nqdc/#python-api">Python API</
 <h1 id="quick-start">Quick Start</h1>
 
 <p>Once <code><a href="">nqdc</a></code> is installed, we can download and process neuroimaging articles so
-that we can later use them for meta-analysis. </p>
+that we can later use them for meta-analysis.</p>
 
 <pre><code>nqdc_full_pipeline ./nqdc_data -q 'fMRI[title]'
 </code></pre>
@@ -123,7 +122,7 @@ that we can later use them for meta-analysis. </p>
 <a href="https://www.ncbi.nlm.nih.gov/pmc/">PMC</a> API.</li>
 <li>Extracting the articles from the bulk download </li>
 <li>Extracting text, stereotactic coordinates and metadata from the articles, and
-storing this information in csv files.</li>
+storing this information in CSV files.</li>
 <li>Vectorizing the text: transforming it into vectors of
 <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf">TFIDF</a> features.</li>
 </ul>
@@ -135,17 +134,16 @@ parts of the pipeline with different parameters.</p>
 
 <p>All articles downloaded by <code><a href="">nqdc</a></code> come from <a href="https://www.ncbi.nlm.nih.gov/pmc/">PubMed
 Central</a>, and are therefore identified by
-their <code>pmcid</code>. Note this is not the same as the PubMed ID (<code>pmid</code>) -- not all
-articles in PMC have a <code>pmid</code>, and not all articles referenced by PubMed have a
-<code>pmcid</code>.</p>
+their PubMed Central ID (<code>pmcid</code>). Note this is not the same as the PubMed ID
+(<code>pmid</code>). Not all articles in PMC have a <code>pmid</code>.</p>
 
-<h2 id="step-1-download">Step 1: download</h2>
+<h2 id="step-1-downloading-articles-from-pmc">Step 1: Downloading articles from PMC</h2>
 
 <p>This step is executed by the <code>nqdc_download</code> command. </p>
 
 <p>We must first define our query, with which Pubmed Central will be searched for
-articles. It can be simple such as <code>fMRI</code>, or more specific such as
-<code>fMRI[Abstract] AND ("2000"[PubDate] : "2022"[PubDate])</code>. You can build the
+articles. It can be simple such as <code>'fMRI'</code>, or more specific such as
+<code>'fMRI[Abstract] AND ("2000"[PubDate] : "2022"[PubDate])'</code>. You can build the
 query using the <a href="https://www.ncbi.nlm.nih.gov/pmc/advanced">PMC advanced search
 interface</a>. For more information see
 <a href="https://www.ncbi.nlm.nih.gov/books/NBK3837/">the E-Utilities help</a>. The query
@@ -157,7 +155,7 @@ documentation</a>), we can provide it
 through the <code>NQDC_API_KEY</code> environment variable or through the <code>--api_key</code>
 command line argument (the latter has higher precedence).</p>
 
-<p>We must also specify the directory in which all <code><a href="">nqdc</a></code> will be stored.
+<p>We must also specify the directory in which all <code><a href="">nqdc</a></code> data will be stored.
 Subdirectories will be created for each different query. In the following we
 suppose we are storing our data in a directory called <code>nqdc_data</code>.</p>
 
@@ -171,7 +169,7 @@ suppose we are storing our data in a directory called <code>nqdc_data</code>.</p
 <pre><code>· nqdc_data
   └── query-10c72245c52d7d4e6f535e2bcffb2572
       └── articlesets
-          ├── batch_00000.xml
+          ├── articleset_00000.xml
           └── info.json
 </code></pre>
 
@@ -181,14 +179,16 @@ for the same query, the same subdirectory will be reused
 
 <p>Inside the query directory, the results of the bulk download are stored in the
 <code>articlesets</code> directory. The articles themselves are in XML files bundling up to
-500 articles called <code>batch_*.xml</code>. Here there is only one because the search
-returned less than 500 articles.</p>
+500 articles called <code>articleset_*.xml</code>. Here there is only one because the
+search returned less than 500 articles.</p>
 
 <p>Some information about the download is stored in <code>info.json</code>. In particular,
 <code>download_complete</code> indicates if all articles matching the search have been
 downloaded. If the download was interrupted, some batches failed to download, or
 the number of results was limited by using the <code>--n_docs</code> parameter,
-<code>download_complete</code> will be <code>false</code>.</p>
+<code>download_complete</code> will be <code>false</code> and the exit status of the program will
+be 1. You may want to re-run the command before moving on to the next step if
+the download is incomplete.</p>
 
 <p>If we run the same query again, only missing batches will be downloaded. If we
 want to force re-running the search and downloading the whole data we need to
@@ -217,7 +217,7 @@ the first 3 hexidecimal digits of the md5 hash of its <code>pmcid</code>.</p>
 <pre><code>· nqdc_data
   └── query-10c72245c52d7d4e6f535e2bcffb2572
       ├── articlesets
-      │   ├── batch_00000.xml
+      │   ├── articleset_00000.xml
       │   └── info.json
       └── articles
           ├── 019
@@ -227,13 +227,19 @@ the first 3 hexidecimal digits of the md5 hash of its <code>pmcid</code>.</p>
           ├── 03f
           │   └── pmcid_6625472.xml
           ├── ...
+          └── info.json
 </code></pre>
+
+<p>If the download and article extraction were successfully run and we run the same
+query again, the article extraction is skipped. If we want to force re-running
+the article extraction we need to remove the <code>articles</code> directory (or the
+<code>info.json</code> file it contains).</p>
 
 <h2 id="step-3-extracting-data-from-articles">Step 3: extracting data from articles</h2>
 
 <p>This step is executed by the <code>nqdc_extract_data</code> command.</p>
 
-<p>It creates another directory that contains csv files, containing the text,
+<p>It creates another directory that contains CSV files, containing the text,
 metadata and coordinates extracted from all the articles.</p>
 
 <p>If we use the <code>--articles_with_coords_only</code> option, only articles in which
@@ -253,25 +259,37 @@ in the previous step to the <code>nqdc_extract_data</code> command:</p>
       ├── articles
       ├── articlesets
       └── subset_articlesWithCoords_extractedData
+          ├── authors.csv
           ├── coordinates.csv
           ├── info.json
           ├── metadata.csv
           └── text.csv
 </code></pre>
 
-<p>If we had not used <code>--articles_with_coords_only</code>, the new subdirectory would be named <code>subset_allArticles_extractedData</code> instead.</p>
+<p>If we had not used <code>--articles_with_coords_only</code>, the new subdirectory would be
+named <code>subset_allArticles_extractedData</code> instead.</p>
 
 <ul>
-<li><code>metadata.csv</code> contains one row per article, with some metadata such as the
-<code>pmcid</code> and DOI</li>
+<li><code>metadata.csv</code> contains one row per article, with some metadata: <code>pmcid</code>
+(PubMed Central ID), <code>pmid</code> (PubMed ID), <code>doi</code>, <code>title</code>, <code>journal</code>, and
+<code>publication_year</code>. Note some values may be missing (for example not all
+articles have a <code>pmid</code> or <code>doi</code>).</li>
+<li><code>authors.csv</code> contains one row per article per author. Fields are <code>pmcid</code>,
+<code>surname</code>, <code>given-names</code>.</li>
 <li><code>text.csv</code> contains one row per article. The first field is the <code>pmcid</code>, and
 the other fields are <code>title</code>, <code>keywords</code>, <code>abstract</code>, and <code>body</code>, and contain
 the text extracted from these parts of the article.</li>
 <li><code>coordinates.csv</code> contains one row for each <code>(x, y, z)</code> stereotactic
 coordinate found in any article. Its fields are the <code>pmcid</code> of the article,
-the table label and id the coordinates came from, and <code>x</code>, <code>y</code>, <code>z</code>. It can be
-joined with <code>text.csv</code> and <code>metadata.csv</code> on the <code>pmcid</code> field.</li>
+the table label and id the coordinates came from, and <code>x</code>, <code>y</code>, <code>z</code>. </li>
 </ul>
+
+<p>The different files can be joined on the <code>pmcid</code> field.</p>
+
+<p>If all steps up to data extraction were successfully run and we run the same
+query again, the data extraction is skipped. If we want to force re-running the
+data extraction we need to remove the corresponding directory (or the
+<code>info.json</code> file it contains).</p>
 
 <h2 id="step-4-vectorizing-computing-tfidf-features">Step 4: vectorizing (computing TFIDF features)</h2>
 
@@ -280,21 +298,24 @@ joined with <code>text.csv</code> and <code>metadata.csv</code> on the <code>pmc
 <p>Some large-scale meta-analysis methods such as
 <a href="https://neurosynth.org/">neurosynth</a> and <a href="https://neuroquery.org">neuroquery</a>
 rely on <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf">TFIDF features</a> to
-represent articles' text. The last step before we can apply these methods is therefore to extract TFIDF features from the text we obtained in the previous step.</p>
+represent articles' text. The last step before we can apply these methods is
+therefore to extract TFIDF features from the text we obtained in the previous
+step.</p>
 
 <p>TFIDF features rely on a predefined vocabulary (set of terms or phrases). Each
 dimension of the feature vector corresponds to a term in the vocabulary and
 represents the importance of that term in the encoded text. This importance is
-an increasing function of the _term frequency_ (the number of time the term
+an increasing function of the <em>term frequency</em> (the number of time the term
 occurs in the text divided by the length of the text) and a decreasing function
-of the _document frequency_ (the total number of times the term occurs in the
+of the <em>document frequency</em> (the total number of times the term occurs in the
 whole corpus or dataset).</p>
 
 <p>To extract the TFIDF features we must therefore choose a vocabulary. By default,
-<code><a href="">nqdc</a></code> will download and use the vocabulary used by <code>neuroquery</code>. If we want to
-use a different vocabulary we can specify it with the <code>--vocabulary_file</code>
-option. This file will be parsed as a csv file with no header, whose first
-column contains the terms. Other columns are ignored.</p>
+<code><a href="">nqdc</a></code> will download and use the vocabulary used by
+<a href="https://neuroquery.org">neuroquery.org</a>. If we want to use a different
+vocabulary we can specify it with the <code>--vocabulary_file</code> option. This file will
+be parsed as a CSV file with no header, whose first column contains the terms.
+Other columns are ignored.</p>
 
 <p>We also pass to <code>nqdc_vectorize</code> the directory containing the text we want to
 vectorize, created by <code>nqdc_extract_data</code> in step 3 (here we are using the
@@ -304,9 +325,7 @@ default vocabulary):</p>
 </code></pre>
 
 <p>This creates a new directory whose name reflects the data source (whether all
-articles are kept or only those with coordinates) and the chosen vocabulary
-(<code>e6f7a7e9c6ebc4fb81118ccabfee8bd7</code> is the md5 checksum of the vocabulary file's
-content):</p>
+articles are kept or only those with coordinates) and the chosen vocabulary:</p>
 
 <pre><code>· nqdc_data
   └── query-10c72245c52d7d4e6f535e2bcffb2572
@@ -319,6 +338,7 @@ content):</p>
           ├── body_counts.npz
           ├── body_tfidf.npz
           ├── feature_names.csv
+          ├── info.json
           ├── keywords_counts.npz
           ├── keywords_tfidf.npz
           ├── merged_tfidf.npz
@@ -348,11 +368,16 @@ section), and the <code>tfidf</code> which hold the TFIDF features (the counts d
 article length and log document frequency). Moreover, <code>merged_tfidf</code> contains
 the mean TFIDF computed across all article parts.</p>
 
+<p>If all steps up to vectorization were successfully run and we run the same query
+again, the vectorization is skipped. If we want to force re-running the
+vectorization we need to remove the corresponding directory (or the <code>info.json</code>
+file it contains).</p>
+
 <h3 id="vocabulary-mapping-collapsing-redundant-words">Vocabulary mapping: collapsing redundant words</h3>
 
 <p>It is possible to instruct the tokenizer (that extracts words from text) to
-collapse some pairs of terms that have the same meaning but slightly different
-forms, such as "brainstem" and "brain stem".</p>
+collapse some pairs of terms that have the same meaning but different spellings,
+such as "brainstem" and "brain stem".</p>
 
 <p>This is done through a JSON file that contains a mapping of the form <code>{term:
 replacement}</code>. For example if it contains <code>{"brain stem": "brainstem"}</code>, "brain
@@ -374,7 +399,7 @@ created by <code><a href="">nqdc</a></code>, but if no vocabulary mapping was us
 empty mapping (<code>{}</code>) and <code>vocabulary.csv</code> and <code>feature_names.csv</code> are identical.</p>
 
 <p>The vocabulary mapping is primarily used by the <code>neuroquery</code> package and its
-tokenization pipeline, and you can safely ignore this -- just remember that the
+tokenization pipeline, and you can safely ignore this – just remember that the
 file providing the terms corresponding to the TFIDF <em>features</em> is
 <code>feature_names.csv</code>.</p>
 
@@ -387,6 +412,9 @@ file providing the terms corresponding to the TFIDF <em>features</em> is
 <pre><code>nqdc_full_pipeline -q 'fMRI[Title] AND ("2019"[PubDate] : "2019"[PubDate])' --articles_with_coords_only nqdc_data
 </code></pre>
 
+<p>Here also, steps that had already been completed are skipped; we need to remove
+the corresponding directories if we want to force running these steps again.</p>
+
 <h2 id="logging">Logging</h2>
 
 <p>By default <code><a href="">nqdc</a></code> commands report their progress by writing to the standard
@@ -395,6 +423,20 @@ command-line argument, or if we define the <code>NQDC_LOG_DIR</code> environment
 (the command-line argument has higher precedence). If this log directory is
 specified, a new log file with a timestamp is created and all the output is
 written there as well.</p>
+
+<h1 id="contributing">Contributing</h1>
+
+<p>Feedback and contributions are welcome. Development happens at the 
+<a href="https://github.com/neuroquery/nqdc">nqdc GitHub repositiory</a>.
+To install the dependencies required for development, from the directory where you cloned <code><a href="">nqdc</a></code>, run:</p>
+
+<pre><code>pip install -e '.[dev]'
+</code></pre>
+
+<p>The tests can be run with <code>make test_all</code>, or <code>make test_coverage</code> to report
+test coverage. The documentation can be rendered with <code>make doc</code>. <code>make
+run_full_pipeline</code> runs the full <code><a href="">nqdc</a></code> pipeline on a query returning a
+realistic number of results (<code>'fMRI[title]'</code>).</p>
 
 <h1 id="python-api">Python API</h1>
 
@@ -416,9 +458,9 @@ API closely reflects the command-line programs described above.</p>
     query: str,
     data_dir: Union[os.PathLike, str],
     *,
-    n_docs: Union[int, NoneType] = None,
+    n_docs: Optional[int] = None,
     retmax: int = 500,
-    api_key: Union[str, NoneType] = None
+    api_key: Optional[str] = None
 ) -&gt; Tuple[pathlib.Path, int]</span>:
     </div>
 
@@ -429,9 +471,10 @@ API closely reflects the command-line programs described above.</p>
 
 <ul>
 <li><strong>query</strong>: Search term for querying the PMC database. You can build the query
-using the [PMC advanced search interface]
-(https://www.ncbi.nlm.nih.gov/pmc/advanced). For more information see
-<a href="https://www.ncbi.nlm.nih.gov/books/NBK3837/">the E-Utilities help</a>.</li>
+using the <a href="https://www.ncbi.nlm.nih.gov/pmc/advanced">PMC advanced search
+interface</a>. For more
+information see <a href="https://www.ncbi.nlm.nih.gov/books/NBK3837/">the E-Utilities
+help</a>.</li>
 <li><strong>data_dir</strong>: Path to the directory where all nqdc data is stored; a subdirectory
 will be created for this query.</li>
 <li><strong>n_docs</strong>: Approximate maximum number of articles to download. By default, all
@@ -439,8 +482,8 @@ results returned for the search are downloaded. If n_docs is specified,
 at most n_docs rounded up to the nearest multiple of 500 articles will
 be downloaded.</li>
 <li><strong>retmax</strong>: Batch size -- number of articles that are downloaded per request.</li>
-<li><strong>api_key</strong>: API key for the Entrez E-utilities (see
-https://www.ncbi.nlm.nih.gov/books/NBK25497/). If the API key is
+<li><strong>api_key</strong>: API key for the Entrez E-utilities (see <a href="https://www.ncbi.nlm.nih.gov/books/NBK25497/">the E-utilities
+help</a>). If the API key is
 provided, it is included in all requests to the Entrez E-utilities.</li>
 </ul>
 
@@ -461,7 +504,7 @@ and 1 otherwise. Used by the <code><a href="">nqdc</a></code> command-line inter
         
             <span class="def">def</span>
             <span class="name">extract_articles</span><span class="signature">(
-    input_dir: Union[os.PathLike, str],
+    articlesets_dir: Union[os.PathLike, str],
     output_dir: Union[os.PathLike, str, NoneType] = None
 ) -&gt; Tuple[pathlib.Path, int]</span>:
     </div>
@@ -472,12 +515,12 @@ and 1 otherwise. Used by the <code><a href="">nqdc</a></code> command-line inter
 <h6 id="parameters">Parameters</h6>
 
 <ul>
-<li><strong>input_dir</strong>: Directory containing the downloaded files. It is a directory created by
+<li><strong>articlesets_dir</strong>: Directory containing the downloaded files. It is a directory created by
 <code><a href="#download_articles_for_query">nqdc.download_articles_for_query</a></code>: it is named <code>articlesets</code> and it
-contains the bulk download files <code>batch_00000.xml</code>,
-<code>batch_00001.xml</code>, etc.</li>
+contains the bulk download files <code>articleset_00000.xml</code>,
+<code>articleset_00001.xml</code>, etc.</li>
 <li><strong>output_dir</strong>: Directory where to store the extracted articles. If not specified, a
-sibling directory of <code>input_dir</code> called <code>articles</code> will be used.</li>
+sibling directory of <code>articlesets_dir</code> called <code>articles</code> will be used.</li>
 </ul>
 
 <h6 id="returns">Returns</h6>
@@ -500,47 +543,9 @@ directory might look like:</li>
 </code></pre>
 
 <ul>
-<li><strong>exit_code</strong>: 0 if the download in <code>input_dir</code> was complete and 1 otherwise. Used by
-the <code><a href="">nqdc</a></code> command-line interface.</li>
-</ul>
-</div>
-
-
-                </section>
-                <section id="extract_data">
-                            <div class="attr function"><a class="headerlink" href="#extract_data">#&nbsp;&nbsp</a>
-
-        
-            <span class="def">def</span>
-            <span class="name">extract_data</span><span class="signature">(
-    articles_dir: Union[os.PathLike, str],
-    *,
-    articles_with_coords_only: bool = True
-) -&gt; Generator[Dict[str, Any], NoneType, NoneType]</span>:
-    </div>
-
-        
-            <div class="docstring"><p>Extract text and coordinates from articles.</p>
-
-<h6 id="parameters">Parameters</h6>
-
-<ul>
-<li><strong>articles_dir</strong>: Directory containing the article files. It is a directory created by
-<code><a href="#extract_articles">nqdc.extract_articles</a></code>: it is named <code>articles</code> and contains
-subdirectories <code>000</code> - <code>fff</code>, each of which contains articles stored in
-XML files.</li>
-<li><strong>articles_with_coords_only</strong>: If true, articles that contain no stereotactic coordinates are ignored.</li>
-</ul>
-
-<h6 id="yields">Yields</h6>
-
-<ul>
-<li><strong>article_data</strong>: Data extracted from one article. Keys are:
-<ul>
-<li>metadata: a dictionary containing metadata such as pmcid and doi.</li>
-<li>text: a dictionary mapping parts such as "abstract" to their content.</li>
-<li>coordinates: a <code>pd.DataFrame</code> containing the extracted coordinates.</li>
-</ul></li>
+<li><strong>exit_code</strong>: 0 if the download in <code>articlesets_dir</code> was complete and the article
+extraction finished normally and 1 otherwise. Used by the <code><a href="">nqdc</a></code>
+command-line interface.</li>
 </ul>
 </div>
 
@@ -574,51 +579,16 @@ sibling directory of <code>articles_dir</code> is used. Its name is
 <code>subset_allArticles_extractedData</code> or
 <code>subset_articlesWithCoords_extractedData</code>, depending on the value of
 <code>articles_with_coords_only</code>.</li>
-<li><strong>articles_with_coords_only</strong>: If true, articles that contain no stereotactic coordinates are ignored.</li>
+<li><strong>articles_with_coords_only</strong>: If True, articles that contain no stereotactic coordinates are ignored.</li>
 </ul>
 
 <h6 id="returns">Returns</h6>
 
 <ul>
 <li><strong>output_dir</strong>: The directory in which extracted data is stored.</li>
-<li><strong>exit_code</strong>: Always 0 at the moment. Used by the <code><a href="">nqdc</a></code> command-line interface.</li>
-</ul>
-</div>
-
-
-                </section>
-                <section id="vectorize_corpus">
-                            <div class="attr function"><a class="headerlink" href="#vectorize_corpus">#&nbsp;&nbsp</a>
-
-        
-            <span class="def">def</span>
-            <span class="name">vectorize_corpus</span><span class="signature">(
-    corpus_file: Union[os.PathLike, str],
-    vocabulary: Union[os.PathLike, str, <a href="#_vectorization.Vocabulary">nqdc._vectorization.Vocabulary</a>] = &lt;Vocabulary.NEUROQUERY_VOCABULARY: &#39;https://github.com/neuroquery/neuroquery_data/blob/main/neuroquery_model/vocabulary.csv&#39;&gt;
-) -&gt; Dict[str, Any]</span>:
-    </div>
-
-        
-            <div class="docstring"><p>Compute word counts and TFIDF features.</p>
-
-<h6 id="parameters">Parameters</h6>
-
-<ul>
-<li><strong>corpus_file</strong>: The csv file containing the text of articles to vectorize. It is a file
-created by <code><a href="#extract_data_to_csv">nqdc.extract_data_to_csv</a></code>: it is named <code>text.csv</code> and its
-fields are pmcid, title, keywords, abstract, body.</li>
-<li><strong>vocabulary</strong>: A file containing the vocabulary used to vectorize text, with one term
-or phrase per line. Each dimension in the output will correspond to the
-frequency of one entry in this vocabulary. By default, the vocabulary
-used by https://neuroquery.org will be downloaded and used.</li>
-</ul>
-
-<h6 id="returns">Returns</h6>
-
-<ul>
-<li><strong>vectorized_data</strong>: Contains the pmcids of the vectorized articles, the document
-frequencies of the vocabulary, and the word counts and TFIDF for each
-article section and for whole articles as scipy sparse matrices.</li>
+<li><strong>exit_code</strong>: 0 if previous (article extraction) step was complete and this step
+(data extraction) finished normally as well. Used by the <code><a href="">nqdc</a></code>
+command-line interface.</li>
 </ul>
 </div>
 
@@ -630,7 +600,7 @@ article section and for whole articles as scipy sparse matrices.</li>
         
             <span class="def">def</span>
             <span class="name">vectorize_corpus_to_npz</span><span class="signature">(
-    corpus_file: Union[os.PathLike, str],
+    extracted_data_dir: Union[os.PathLike, str],
     output_dir: Union[os.PathLike, str, NoneType] = None,
     vocabulary: Union[os.PathLike, str, <a href="#_vectorization.Vocabulary">nqdc._vectorization.Vocabulary</a>] = &lt;Vocabulary.NEUROQUERY_VOCABULARY: &#39;https://github.com/neuroquery/neuroquery_data/blob/main/neuroquery_model/vocabulary.csv&#39;&gt;
 ) -&gt; Tuple[pathlib.Path, int]</span>:
@@ -642,13 +612,13 @@ article section and for whole articles as scipy sparse matrices.</li>
 <h6 id="parameters">Parameters</h6>
 
 <ul>
-<li><strong>corpus_file</strong>: The csv file containing the text of articles to vectorize. It is a file
-created by <code><a href="#extract_data_to_csv">nqdc.extract_data_to_csv</a></code>: it is named <code>text.csv</code> and its
-fields are pmcid, title, keywords, abstract, body.</li>
+<li><strong>extracted_data_dir</strong>: The directory containing the text of articles to vectorize. It is a
+directory created by <code><a href="#extract_data_to_csv">nqdc.extract_data_to_csv</a></code>: it contains a file
+named <code>text.csv</code> with fields <code>pmcid</code>, <code>title</code>, <code>keywords</code>, <code>abstract</code>,
+<code>body</code>.</li>
 <li><strong>output_dir</strong>: The directory in which to store the results. If not specified, a
-sibling directory of the directory that contains <code>corpus_file</code> will be
-used. Its name ends with
-<code>-voc_&lt;md5 checksum of the vocabulary&gt;_vectorizedText</code>.</li>
+sibling directory of <code>extracted_data_dir</code> will be used. Its name will
+end with <code>-voc_&lt;md5 checksum of the vocabulary&gt;_vectorizedText</code>.</li>
 <li><strong>vocabulary</strong>: A file containing the vocabulary used to vectorize text, with one term
 or phrase per line. Each dimension in the output will correspond to the
 frequency of one entry in this vocabulary. By default, the vocabulary
@@ -659,7 +629,9 @@ used by https://neuroquery.org will be downloaded and used.</li>
 
 <ul>
 <li><strong>output_dir</strong>: The directory in which the vectorized data is stored.</li>
-<li><strong>exit_code</strong>: Always 0 at the moment. Used by the <code><a href="">nqdc</a></code> command-line interface.</li>
+<li><strong>exit_code</strong>: 0 if previous (data extraction) step was complete and this step
+(vectorization) finished normally as well. Used by the <code><a href="">nqdc</a></code>
+command-line interface.</li>
 </ul>
 </div>
 
