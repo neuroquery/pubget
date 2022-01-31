@@ -6,6 +6,7 @@
   xmlns:oasis="http://www.niso.org/standards/z39-96/ns/oasis-exchange/table" >
 
   <xsl:output method="xml" version="1.0" encoding="UTF-8" omit-xml-declaration="no"/>
+  <xsl:strip-space elements="*"/>
 
   <xsl:template match="/">
     <extracted-text>
@@ -33,11 +34,42 @@
     <xsl:text> </xsl:text>
   </xsl:template>
 
-  <xsl:template match="text()" >
-    <xsl:text> </xsl:text>
-    <xsl:copy-of select="."/>
-    <xsl:text> </xsl:text>
-  </xsl:template>
+<xsl:template match="p|sec" >
+<xsl:text>
+</xsl:text>
+<xsl:apply-templates />
+<xsl:text>
+</xsl:text>
+</xsl:template>
+
+<xsl:template name="repeat">
+  <xsl:param name="output" />
+  <xsl:param name="count" />
+  <xsl:if test="$count &gt; 0">
+    <xsl:value-of select="$output" />
+    <xsl:call-template name="repeat">
+      <xsl:with-param name="output" select="$output" />
+      <xsl:with-param name="count" select="$count - 1" />
+    </xsl:call-template>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template match="sec/title" >
+<xsl:apply-templates />
+<xsl:text>
+</xsl:text>
+<xsl:call-template name="repeat">
+  <xsl:with-param name="output">-</xsl:with-param>
+  <xsl:with-param name="count" select="string-length(./text())"/>
+</xsl:call-template>
+<xsl:text>
+</xsl:text>
+</xsl:template>
+
+<xsl:template match="text()" >
+  <xsl:copy-of select="."/>
+  <xsl:text> </xsl:text>
+</xsl:template>
 
   <xsl:template match="text() | comment() | processing-instruction()"
                 mode="keywords"/>
