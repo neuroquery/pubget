@@ -34,6 +34,8 @@
     <xsl:text> </xsl:text>
   </xsl:template>
 
+  <xsl:template match="/article/front/article-meta/abstract/title[text()='Abstract']" />
+
 <xsl:template match="p|sec" >
 <xsl:text>
 </xsl:text>
@@ -42,26 +44,9 @@
 </xsl:text>
 </xsl:template>
 
-<xsl:template name="repeat">
-  <xsl:param name="output" />
-  <xsl:param name="count" />
-  <xsl:if test="$count &gt; 0">
-    <xsl:value-of select="$output" />
-    <xsl:call-template name="repeat">
-      <xsl:with-param name="output" select="$output" />
-      <xsl:with-param name="count" select="$count - 1" />
-    </xsl:call-template>
-  </xsl:if>
-</xsl:template>
 
 <xsl:template match="sec/title" >
-<xsl:apply-templates />
-<xsl:text>
-</xsl:text>
-<xsl:call-template name="repeat">
-  <xsl:with-param name="output">-</xsl:with-param>
-  <xsl:with-param name="count" select="string-length(./text())"/>
-</xsl:call-template>
+<xsl:text>## </xsl:text><xsl:apply-templates />
 <xsl:text>
 </xsl:text>
 </xsl:template>
