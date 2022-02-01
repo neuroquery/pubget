@@ -204,9 +204,9 @@ If we had not used `--articles_with_coords_only`, the new subdirectory would be
 named `subset_allArticles_extractedData` instead.
 
 - `metadata.csv` contains one row per article, with some metadata: `pmcid`
-  (PubMed Central ID), `pmid` (PubMed ID), `doi`, `title`, `journal`, and
-  `publication_year`. Note some values may be missing (for example not all
-  articles have a `pmid` or `doi`).
+  (PubMed Central ID), `pmid` (PubMed ID), `doi`, `title`, `journal`,
+  `publication_year` and `license`. Note some values may be missing (for example
+  not all articles have a `pmid` or `doi`).
 - `authors.csv` contains one row per article per author. Fields are `pmcid`,
   `surname`, `given-names`.
 - `text.csv` contains one row per article. The first field is the `pmcid`, and

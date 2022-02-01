@@ -6,7 +6,15 @@ from nqdc._typing import BaseExtractor
 
 
 class MetadataExtractor(BaseExtractor):
-    fields = ("pmcid", "pmid", "doi", "title", "journal", "publication_year")
+    fields = (
+        "pmcid",
+        "pmid",
+        "doi",
+        "title",
+        "journal",
+        "publication_year",
+        "license",
+    )
     name = "metadata"
 
     def extract(self, article: etree.ElementTree) -> Dict[str, Any]:
@@ -20,6 +28,7 @@ class MetadataExtractor(BaseExtractor):
             metadata["title"] = "".join(title_elem.xpath(".//text()"))
         _add_journal(article, metadata)
         _add_pub_date(article, metadata)
+        _add_license(article, metadata)
         return metadata
 
 
@@ -42,6 +51,31 @@ def _add_pub_date(article: etree.Element, metadata: Dict[str, Any]) -> None:
             pass
     if pub_dates:
         metadata["publication_year"] = min(pub_dates)
+
+
+def _add_license(article: etree.Element, metadata: Dict[str, Any]) -> None:
+    license_elem = article.find("front/article-meta/permissions/license")
+    if license_elem is None:
+        return
+    href = "{http://www.w3.org/1999/xlink}href"
+    if href in license_elem.attrib:
+        metadata["license"] = license_elem.get(href)
+        return
+    license_p_link = license_elem.find(".//ext-link")
+    if license_p_link is None:
+        license_p_link = license_elem.find(".//uri")
+    if license_p_link is not None and href in license_p_link.attrib:
+        metadata["license"] = license_p_link.get(href)
+        return
+    ali_link = license_elem.find(
+        ".//{http://www.niso.org/schemas/ali/1.0/}license_ref"
+    )
+    if ali_link is not None:
+        metadata["license"] = ali_link.text
+        return
+    if "license-type" in license_elem.attrib:
+        metadata["license"] = license_elem.get("license-type")
+        return
 
 
 def _add_id(article_id: etree.Element, metadata: Dict[str, Any]) -> None:

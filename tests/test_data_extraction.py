@@ -33,7 +33,7 @@ def test_extract_data_to_csv(tmp_path, entrez_mock, monkeypatch):
 
     # check extracted data
     metadata = pd.read_csv(data_dir.joinpath("metadata.csv"))
-    assert metadata.shape == (7, 6)
+    assert metadata.shape == (7, 7)
     text = pd.read_csv(data_dir.joinpath("text.csv"))
     assert text.shape == (7, 5)
     assert text.at[0, "body"].strip() == "The text of the article"
@@ -48,8 +48,9 @@ def test_extract_data_to_csv(tmp_path, entrez_mock, monkeypatch):
     mock = Mock(side_effect=ValueError)
     monkeypatch.setattr("nqdc._authors.AuthorsExtractor.extract", mock)
     _data_extraction.extract_data_to_csv(articles_dir, data_dir)
+
     metadata = pd.read_csv(data_dir.joinpath("metadata.csv"))
-    assert metadata.shape == (7, 6)
+    assert metadata.shape == (7, 7)
     authors = pd.read_csv(data_dir.joinpath("authors.csv"))
     assert authors.shape == (0, 3)
 
