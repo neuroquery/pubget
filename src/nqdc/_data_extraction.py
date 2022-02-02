@@ -8,6 +8,7 @@ from lxml import etree
 
 from nqdc._authors import AuthorsExtractor
 from nqdc._coordinates import CoordinateExtractor
+from nqdc._coordinate_space import CoordinateSpaceExtractor
 from nqdc._metadata import MetadataExtractor
 from nqdc._text import TextExtractor
 from nqdc._writers import CSVWriter
@@ -50,6 +51,7 @@ def extract_data(
         AuthorsExtractor(),
         TextExtractor(),
         CoordinateExtractor(),
+        CoordinateSpaceExtractor(),
     ]
     for article, article_file in iter_articles(articles_dir):
         article_info = {}
@@ -203,6 +205,7 @@ def _do_extract_data_to_csv(
         CSVWriter.from_extractor(AuthorsExtractor, output_dir),
         CSVWriter.from_extractor(TextExtractor, output_dir),
         CSVWriter.from_extractor(CoordinateExtractor, output_dir),
+        CSVWriter.from_extractor(CoordinateSpaceExtractor, output_dir),
     ]
     with ExitStack() as stack:
         for writer in all_writers:

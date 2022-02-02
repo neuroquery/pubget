@@ -34,6 +34,8 @@ def test_extract_data_to_csv(tmp_path, entrez_mock, monkeypatch):
     # check extracted data
     metadata = pd.read_csv(data_dir.joinpath("metadata.csv"))
     assert metadata.shape == (7, 7)
+    space = pd.read_csv(data_dir.joinpath("coordinate_space.csv"))
+    assert space.shape == (7, 2)
     text = pd.read_csv(data_dir.joinpath("text.csv"))
     assert text.shape == (7, 5)
     assert text.at[0, "body"].strip() == "The text of the article"

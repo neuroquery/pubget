@@ -195,6 +195,7 @@ Our data directory now contains (ommitting the contents of the previous steps):
       └── subset_articlesWithCoords_extractedData
           ├── authors.csv
           ├── coordinates.csv
+          ├── coordinate_space.csv
           ├── info.json
           ├── metadata.csv
           └── text.csv
@@ -215,6 +216,11 @@ named `subset_allArticles_extractedData` instead.
 - `coordinates.csv` contains one row for each `(x, y, z)` stereotactic
   coordinate found in any article. Its fields are the `pmcid` of the article,
   the table label and id the coordinates came from, and `x`, `y`, `z`. 
+- `coordinate_space.csv` has fields `pmcid` and `coordinate_space`. It contains
+  a guess about the stereotactic space coordinates are reported in, based on a
+  heuristic derived from [neurosynth](https://github.com/neurosynth/ACE).
+  Possible values for the space are the terms used by `neurosynth`: "MNI", "TAL"
+  (for Talairach space), and "UNKNOWN".
   
 The different files can be joined on the `pmcid` field.
 
