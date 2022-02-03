@@ -110,7 +110,7 @@ def iter_articles(
                 n_articles += 1
                 if not n_articles % 20:
                     _LOG.info(
-                        f"In directory {subdir.name}: "
+                        f"In directory {subdir.name}; "
                         f"processed {n_articles} articles"
                     )
 

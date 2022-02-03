@@ -5,7 +5,7 @@ import hashlib
 import json
 from datetime import datetime
 import os
-from typing import Union
+from typing import Union, Optional
 
 from lxml import etree
 
@@ -19,10 +19,18 @@ def timestamp() -> str:
     return datetime.now().isoformat().replace(":", "-")
 
 
-def add_log_file(log_dir: PathLikeOrStr, prefix: str = "log_") -> None:
+def _add_log_file(
+    log_dir: Optional[PathLikeOrStr] = None, log_filename_prefix: str = "log_"
+) -> None:
+    if log_dir is None:
+        log_dir = os.environ.get("NQDC_LOG_DIR", None)
+    if log_dir is None:
+        return
     log_dir = Path(log_dir)
     log_dir.mkdir(exist_ok=True, parents=True)
-    log_file = log_dir.joinpath(f"{prefix}{timestamp()}_{os.getpid()}")
+    log_file = log_dir.joinpath(
+        f"{log_filename_prefix}{timestamp()}_{os.getpid()}"
+    )
     logger = logging.getLogger("")
     handler = logging.FileHandler(log_file)
     handler.setLevel(logging.DEBUG)
@@ -31,7 +39,9 @@ def add_log_file(log_dir: PathLikeOrStr, prefix: str = "log_") -> None:
     logger.addHandler(handler)
 
 
-def configure_logging() -> None:
+def configure_logging(
+    log_dir: Optional[PathLikeOrStr] = None, log_filename_prefix: str = "log_"
+) -> None:
     config = {
         "version": 1,
         "incremental": False,
@@ -59,6 +69,7 @@ def configure_logging() -> None:
     }
     logging.config.dictConfig(config)
     logging.captureWarnings(True)
+    _add_log_file(log_dir, log_filename_prefix)
 
 
 def checksum(value: Union[str, bytes]) -> str:

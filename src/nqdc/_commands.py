@@ -3,20 +3,11 @@ from pathlib import Path
 import os
 from typing import Optional, List, Dict
 
-from nqdc._utils import add_log_file
+from nqdc._utils import configure_logging
 from nqdc._download import download_articles_for_query
 from nqdc._articles import extract_articles
 from nqdc._data_extraction import extract_data_to_csv
 from nqdc._vectorization import vectorize_corpus_to_npz
-
-
-def _add_log_file_if_possible(args: argparse.Namespace, prefix: str) -> None:
-    log_dir = args.log_dir
-    if log_dir is None:
-        log_dir = os.environ.get("NQDC_LOG_DIR", None)
-    if log_dir is None:
-        return
-    add_log_file(log_dir, prefix)
 
 
 def _get_api_key(args: argparse.Namespace) -> Optional[str]:
@@ -106,7 +97,7 @@ def _get_download_parser() -> argparse.ArgumentParser:
 def download_command(argv: Optional[List[str]] = None) -> int:
     parser = _get_download_parser()
     args = parser.parse_args(argv)
-    _add_log_file_if_possible(args, "download_")
+    configure_logging(args.log_dir, "download_")
     api_key = _get_api_key(args)
     query = _get_query(args)
     _, code = download_articles_for_query(
@@ -136,7 +127,7 @@ def _get_extract_articles_parser() -> argparse.ArgumentParser:
 def extract_articles_command(argv: Optional[List[str]] = None) -> int:
     parser = _get_extract_articles_parser()
     args = parser.parse_args(argv)
-    _add_log_file_if_possible(args, "extract_articles_")
+    configure_logging(args.log_dir, "extract_articles_")
     download_dir = Path(args.articlesets_dir)
     _, code = extract_articles(download_dir)
     return code
@@ -170,7 +161,7 @@ def _get_extract_data_parser() -> argparse.ArgumentParser:
 def extract_data_command(argv: Optional[List[str]] = None) -> int:
     parser = _get_extract_data_parser()
     args = parser.parse_args(argv)
-    _add_log_file_if_possible(args, "extract_data_")
+    configure_logging(args.log_dir, "extract_data_")
     _, code = extract_data_to_csv(
         args.articles_dir,
         articles_with_coords_only=args.articles_with_coords_only,
@@ -211,7 +202,7 @@ def _get_vectorize_parser() -> argparse.ArgumentParser:
 def vectorize_command(argv: Optional[List[str]] = None) -> int:
     parser = _get_vectorize_parser()
     args = parser.parse_args(argv)
-    _add_log_file_if_possible(args, "vectorize_")
+    configure_logging(args.log_dir, "vectorize_")
     data_dir = Path(args.extracted_data_dir)
     _, code = vectorize_corpus_to_npz(
         data_dir, **_voc_kwarg(args.vocabulary_file)
@@ -236,7 +227,7 @@ def _get_full_pipeline_parser() -> argparse.ArgumentParser:
 def full_pipeline_command(argv: Optional[List[str]] = None) -> int:
     parser = _get_full_pipeline_parser()
     args = parser.parse_args(argv)
-    _add_log_file_if_possible(args, "full_pipeline_")
+    configure_logging(args.log_dir, "full_pipeline_")
     api_key = _get_api_key(args)
     query = _get_query(args)
     total_code = 0
