@@ -1,9 +1,13 @@
 .PHONY: test_all test test_mypy test_flake8 run_full_pipeline doc clean
 
-test_all: test_mypy test_flake8 test_coverage test
+test_all: test_mypy test_flake8 test_coverage_strict test
 
 test:
 	tox
+
+test_coverage_strict:
+	pytest --cov=nqdc --cov-report=xml --cov-report=term --cov-fail-under=100
+	coverage html
 
 test_coverage:
 	pytest --cov=nqdc --cov-report=xml --cov-report=term

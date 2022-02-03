@@ -5,6 +5,7 @@ from contextlib import ExitStack
 from typing import Generator, Dict, Optional, Tuple, Any, List
 
 from lxml import etree
+import pandas as pd
 
 from nqdc._authors import AuthorsExtractor
 from nqdc._coordinates import CoordinateExtractor
@@ -62,7 +63,12 @@ def extract_data(
                 _LOG.exception(
                     f"Extractor '{extractor.name}' failed on {article_file}."
                 )
-        yield article_info
+        if not articles_with_coords_only:
+            yield article_info
+        elif "coordinates" in article_info:
+            coord: pd.DataFrame = article_info["coordinates"]
+            if coord.shape[0]:
+                yield article_info
 
 
 def iter_articles(

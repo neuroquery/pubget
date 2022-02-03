@@ -1,52 +1,71 @@
 from pathlib import Path
 from unittest.mock import Mock, patch
+import pytest
 
 import pandas as pd
 
 from nqdc import _download, _articles, _data_extraction
 
 
-def test_extract_data_to_csv(tmp_path, entrez_mock, monkeypatch):
+@pytest.fixture
+def articles_dir(tmp_path, entrez_mock):
     download_dir, code = _download.download_articles_for_query(
         "fMRI[abstract]", tmp_path
     )
     assert code == 0
     articles_dir = Path(f"{download_dir}-articles")
     _articles.extract_articles(download_dir, articles_dir)
-    data_dir = Path(f"{download_dir}-extracted_data")
     bucket = articles_dir.joinpath("000")
     bucket.mkdir(exist_ok=True)
     for i in range(20):
         bucket.joinpath(f"pmcid_745{i}.xml").write_bytes(b"")
+    return articles_dir
+
+
+def _check_extracted_data(data_dir, articles_with_coords_only):
+    n_articles = 6 if articles_with_coords_only else 7
+    n_authors = 28 if articles_with_coords_only else 34
+    metadata = pd.read_csv(data_dir.joinpath("metadata.csv"))
+    assert metadata.shape == (n_articles, 7)
+    space = pd.read_csv(data_dir.joinpath("coordinate_space.csv"))
+    assert space.shape == (n_articles, 2)
+    text = pd.read_csv(data_dir.joinpath("text.csv"))
+    assert text.shape == (n_articles, 5)
+    assert text.at[0, "body"].strip().startswith("The text")
+    coordinates = pd.read_csv(data_dir.joinpath("coordinates.csv"))
+    assert coordinates.shape == (12, 6)
+    authors = pd.read_csv(data_dir.joinpath("authors.csv"))
+    assert authors.shape == (n_authors, 3)
+    assert authors["pmcid"].nunique() == n_articles
+
+
+@pytest.mark.parametrize("articles_with_coords_only", [True, False])
+def test_extract_data_to_csv(
+    tmp_path, articles_dir, entrez_mock, monkeypatch, articles_with_coords_only
+):
+    data_dir = tmp_path.joinpath("extracted_data")
     data_dir, code = _data_extraction.extract_data_to_csv(
-        articles_dir, data_dir
+        articles_dir,
+        data_dir,
+        articles_with_coords_only=articles_with_coords_only,
     )
     assert code == 0
 
     # check does not repeat completed extraction
     with patch("nqdc._data_extraction._do_extract_data_to_csv") as mock:
         data_dir, code = _data_extraction.extract_data_to_csv(
-            articles_dir, data_dir
+            articles_dir,
+            data_dir,
+            articles_with_coords_only=articles_with_coords_only,
         )
         assert code == 0
         assert len(mock.mock_calls) == 0
 
-    # check extracted data
-    metadata = pd.read_csv(data_dir.joinpath("metadata.csv"))
-    assert metadata.shape == (7, 7)
-    space = pd.read_csv(data_dir.joinpath("coordinate_space.csv"))
-    assert space.shape == (7, 2)
-    text = pd.read_csv(data_dir.joinpath("text.csv"))
-    assert text.shape == (7, 5)
-    assert text.at[0, "body"].strip() == "The text of the article"
-    coordinates = pd.read_csv(data_dir.joinpath("coordinates.csv"))
-    assert coordinates.shape == (14, 6)
-    authors = pd.read_csv(data_dir.joinpath("authors.csv"))
-    assert authors.shape == (52, 3)
-    assert authors["pmcid"].nunique() == 7
+    _check_extracted_data(data_dir, articles_with_coords_only)
 
-    # check individual extactors are allowed to fail
-    data_dir = Path(f"{download_dir}-extraction_failures-extracted_data")
+
+def test_extractor_failures(articles_dir, tmp_path, monkeypatch):
+    data_dir = Path(f"{tmp_path}-extraction_failures-extracted_data")
     mock = Mock(side_effect=ValueError)
     monkeypatch.setattr("nqdc._authors.AuthorsExtractor.extract", mock)
     _data_extraction.extract_data_to_csv(articles_dir, data_dir)
@@ -56,10 +75,10 @@ def test_extract_data_to_csv(tmp_path, entrez_mock, monkeypatch):
     authors = pd.read_csv(data_dir.joinpath("authors.csv"))
     assert authors.shape == (0, 3)
 
-    # check returns 1 if starting from incomplete set of articles
+
+def test_extract_from_incomplete_articles(articles_dir, tmp_path):
     articles_dir.joinpath("info.json").unlink()
-    data_dir.joinpath("info.json").unlink()
     data_dir, code = _data_extraction.extract_data_to_csv(
-        articles_dir, data_dir
+        articles_dir, tmp_path.joinpath("extracted_data")
     )
     assert code == 1
