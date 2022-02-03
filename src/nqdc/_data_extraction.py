@@ -1,8 +1,9 @@
 from pathlib import Path
 import logging
+import argparse
 import json
 from contextlib import ExitStack
-from typing import Generator, Dict, Optional, Tuple, Any, List
+from typing import Generator, Dict, Optional, Tuple, Any, List, Mapping
 
 from lxml import etree
 import pandas as pd
@@ -13,7 +14,12 @@ from nqdc._coordinate_space import CoordinateSpaceExtractor
 from nqdc._metadata import MetadataExtractor
 from nqdc._text import TextExtractor
 from nqdc._writers import CSVWriter
-from nqdc._typing import PathLikeOrStr, BaseExtractor, BaseWriter
+from nqdc._typing import (
+    PathLikeOrStr,
+    BaseExtractor,
+    BaseWriter,
+    BaseProcessingStep,
+)
 from nqdc import _utils
 
 
@@ -224,3 +230,63 @@ def _do_extract_data_to_csv(
             for writer in all_writers:
                 writer.write(article_data)
     return n_articles
+
+
+def _add_coords_only_argument(
+    argument_parser: argparse.ArgumentParser,
+) -> None:
+    argument_parser.add_argument(
+        "--articles_with_coords_only",
+        action="store_true",
+        help="Only keep data for articles in which stereotactic coordinates "
+        "are found.",
+    )
+
+
+class DataExtractionStep(BaseProcessingStep):
+    name = "data_extraction"
+
+    def edit_argument_parser(
+        self, argument_parser: argparse.ArgumentParser
+    ) -> None:
+        _add_coords_only_argument(argument_parser)
+
+    def run(
+        self,
+        args: argparse.Namespace,
+        previous_steps_output: Mapping[str, Path],
+    ) -> Tuple[Path, int]:
+        return extract_data_to_csv(
+            previous_steps_output["article_extraction"],
+            articles_with_coords_only=args.articles_with_coords_only,
+        )
+
+
+class StandaloneDataExtractionStep(BaseProcessingStep):
+    name = "data_extraction"
+
+    def edit_argument_parser(
+        self, argument_parser: argparse.ArgumentParser
+    ) -> None:
+        argument_parser.add_argument(
+            "articles_dir",
+            help="Directory containing articles "
+            "from which text and coordinates will be extracted. It is a "
+            "directory created by the nqdc_extract_articles command. "
+            "A sibling directory will be created to contain "
+            "the extracted data",
+        )
+        _add_coords_only_argument(argument_parser)
+        argument_parser.description = (
+            "Extract text, metadata and coordinates from articles."
+        )
+
+    def run(
+        self,
+        args: argparse.Namespace,
+        previous_steps_output: Mapping[str, Path],
+    ) -> Tuple[Path, int]:
+        return extract_data_to_csv(
+            args.articles_dir,
+            articles_with_coords_only=args.articles_with_coords_only,
+        )

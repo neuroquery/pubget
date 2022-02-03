@@ -1,4 +1,5 @@
 import json
+import argparse
 from unittest.mock import Mock
 
 from nqdc import _download
@@ -36,3 +37,16 @@ def test_download_articles_for_query(tmp_path, entrez_mock, monkeypatch):
     )
     assert code == 0
     assert not mock.called
+
+
+def test_get_api_key(monkeypatch):
+    monkeypatch.delenv("NQDC_API_KEY", raising=False)
+    args = argparse.Namespace(api_key=None)
+    key = _download._get_api_key(args)
+    assert key is None
+    monkeypatch.setenv("NQDC_API_KEY", "apikey")
+    key = _download._get_api_key(args)
+    assert key == "apikey"
+    args = argparse.Namespace(api_key="apikey1")
+    key = _download._get_api_key(args)
+    assert key == "apikey1"

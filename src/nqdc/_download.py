@@ -1,11 +1,13 @@
 import logging
 import json
+import os
 from pathlib import Path
-from typing import Optional, Tuple
+import argparse
+from typing import Optional, Tuple, Mapping
 
 from nqdc._entrez import EntrezClient
 from nqdc import _utils
-from nqdc._typing import PathLikeOrStr
+from nqdc._typing import PathLikeOrStr, BaseProcessingStep
 
 _LOG = logging.getLogger(__name__)
 
@@ -99,3 +101,99 @@ def download_articles_for_query(
         )
     info_file.write_text(json.dumps(info), "utf-8")
     return output_dir, int(client.n_failures != 0)
+
+
+def _get_api_key(args: argparse.Namespace) -> Optional[str]:
+    if args.api_key is not None:
+        return str(args.api_key)
+    return os.environ.get("NQDC_API_KEY", None)
+
+
+def _get_query(args: argparse.Namespace) -> str:
+    if args.query is not None:
+        return str(args.query)
+    return Path(args.query_file).read_text("utf-8")
+
+
+def _edit_argument_parser(argument_parser: argparse.ArgumentParser) -> None:
+    argument_parser.add_argument(
+        "data_dir",
+        help="Directory in which all nqdc data should be stored. "
+        "A subdirectory will be created for the given query.",
+    )
+    group = argument_parser.add_mutually_exclusive_group(required=True)
+    group.add_argument(
+        "-q",
+        "--query",
+        type=str,
+        default=None,
+        help="Query with which to search the PubMed Central database. "
+        "The query can alternatively be read from a file by using the "
+        "query_file parameter.",
+    )
+    group.add_argument(
+        "-f",
+        "--query_file",
+        type=str,
+        default=None,
+        help="File in which the query is stored. The query can alternatively "
+        "be provided as a string by using the query parameter.",
+    )
+    argument_parser.add_argument(
+        "-n",
+        "--n_docs",
+        type=int,
+        default=None,
+        help="Approximate maximum number of articles to download. By default, "
+        "all results returned for the search are downloaded. If n_docs is "
+        "specified, at most n_docs rounded up to the nearest multiple of 500 "
+        "articles will be downloaded.",
+    )
+    argument_parser.add_argument(
+        "--api_key",
+        type=str,
+        default=None,
+        help="API key for the Entrez E-utilities (see "
+        "https://www.ncbi.nlm.nih.gov/books/NBK25497/). Can also be provided "
+        "by exporting the NQDC_API_KEY environment variable (if both are "
+        "specified the command-line argument has higher precedence). If the "
+        "API key is provided, it is included in all requests to the Entrez "
+        "E-utilities.",
+    )
+
+
+class DownloadStep(BaseProcessingStep):
+    name = "download"
+
+    def edit_argument_parser(
+        self, argument_parser: argparse.ArgumentParser
+    ) -> None:
+        _edit_argument_parser(argument_parser)
+
+    def run(
+        self,
+        args: argparse.Namespace,
+        previous_steps_output: Mapping[str, Path],
+    ) -> Tuple[Path, int]:
+        api_key = _get_api_key(args)
+        query = _get_query(args)
+        download_dir, code = download_articles_for_query(
+            query=query,
+            data_dir=args.data_dir,
+            n_docs=args.n_docs,
+            api_key=api_key,
+        )
+        return download_dir, code
+
+
+class StandaloneDownloadStep(DownloadStep):
+    name = "download"
+
+    def edit_argument_parser(
+        self, argument_parser: argparse.ArgumentParser
+    ) -> None:
+        _edit_argument_parser(argument_parser)
+        argument_parser.description = (
+            "Download full-text articles from "
+            "PubMed Central for the given query."
+        )

@@ -1,12 +1,13 @@
 import json
 import logging
+import argparse
 from pathlib import Path
-from typing import Generator, Tuple, Optional
+from typing import Generator, Tuple, Optional, Mapping
 
 from lxml import etree
 
 from nqdc import _utils
-from nqdc._typing import PathLikeOrStr
+from nqdc._typing import PathLikeOrStr, BaseProcessingStep
 
 _LOG = logging.getLogger(__name__)
 
@@ -100,3 +101,47 @@ def _extract_from_articleset(
     for art_nb, article in enumerate(tree.iterfind("article")):
         pmcid = _utils.get_pmcid(article)
         yield pmcid, etree.ElementTree(article)
+
+
+class ArticleExtractionStep(BaseProcessingStep):
+    name = "article_extraction"
+
+    def edit_argument_parser(
+        self, argument_parser: argparse.ArgumentParser
+    ) -> None:
+        pass
+
+    def run(
+        self,
+        args: argparse.Namespace,
+        previous_steps_output: Mapping[str, Path],
+    ) -> Tuple[Path, int]:
+        download_dir = previous_steps_output["download"]
+        return extract_articles(download_dir)
+
+
+class StandaloneArticleExtractionStep(BaseProcessingStep):
+    name = "article_extraction"
+
+    def edit_argument_parser(
+        self, argument_parser: argparse.ArgumentParser
+    ) -> None:
+        argument_parser.add_argument(
+            "articlesets_dir",
+            help="Directory from which to extract articles. It is a directory "
+            "created by the nqdc_download command. "
+            "A sibling directory will be "
+            "created to contain the individual article files",
+        )
+        argument_parser.description = (
+            "Extract articles from batches (articleset XML files) "
+            "downloaded from PubMed Central by the nqdc_download command."
+        )
+
+    def run(
+        self,
+        args: argparse.Namespace,
+        previous_steps_output: Mapping[str, Path],
+    ) -> Tuple[Path, int]:
+        download_dir = Path(args.articlesets_dir)
+        return extract_articles(download_dir)

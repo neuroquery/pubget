@@ -1,9 +1,10 @@
 from pathlib import Path
+import argparse
 import re
 import logging
 import json
 from enum import Enum
-from typing import Tuple, Dict, Any, Sequence, List, Optional, Union
+from typing import Tuple, Dict, Any, Sequence, List, Optional, Union, Mapping
 
 import numpy as np
 from scipy import sparse
@@ -14,7 +15,7 @@ from neuroquery.tokenization import TextVectorizer
 from neuroquery.datasets import fetch_neuroquery_model
 
 from nqdc._utils import checksum, assert_exists
-from nqdc._typing import PathLikeOrStr
+from nqdc._typing import PathLikeOrStr, BaseProcessingStep
 from nqdc import _utils
 
 _LOG = logging.getLogger(__name__)
@@ -315,3 +316,70 @@ def _voc_mapping_matrix(
         form[t_idx, s_idx] = 1
     form = form[keep, :]
     return form.tocsr()
+
+
+def _add_voc_arg(argument_parser: argparse.ArgumentParser) -> None:
+    argument_parser.add_argument(
+        "-v",
+        "--vocabulary_file",
+        type=str,
+        default=None,
+        help="Vocabulary used to vectorize the text: each dimension of the "
+        "vectorized text corresponds to a term in this vocabulary. If not "
+        "provided, the default vocabulary used by the neuroquery "
+        "package (https://github.com/neuroquery/neuroquery) is used.",
+    )
+
+
+def _voc_kwarg(voc_file: Optional[str]) -> Dict[str, str]:
+    if voc_file is None:
+        return {}
+    return {"vocabulary": voc_file}
+
+
+class VectorizationStep(BaseProcessingStep):
+    name = "vectorization"
+
+    def edit_argument_parser(
+        self, argument_parser: argparse.ArgumentParser
+    ) -> None:
+        _add_voc_arg(argument_parser)
+
+    def run(
+        self,
+        args: argparse.Namespace,
+        previous_steps_output: Mapping[str, Path],
+    ) -> Tuple[Path, int]:
+        return vectorize_corpus_to_npz(
+            previous_steps_output["data_extraction"],
+            **_voc_kwarg(args.vocabulary_file),
+        )
+
+
+class StandaloneVectorizationStep(BaseProcessingStep):
+    name = "vectorization"
+
+    def edit_argument_parser(
+        self, argument_parser: argparse.ArgumentParser
+    ) -> None:
+        argument_parser.add_argument(
+            "extracted_data_dir",
+            help="Directory containing the csv file text.csv created by "
+            "the nqdc_extract_data command. A sibling directory will be "
+            "created for the vectorized data.",
+        )
+        _add_voc_arg(argument_parser)
+        argument_parser.description = (
+            "Vectorize text by computing word counts and "
+            "TFIDF features. The text comes from csv files created by "
+            "the nqdc_extract_data command."
+        )
+
+    def run(
+        self,
+        args: argparse.Namespace,
+        previous_steps_output: Mapping[str, Path],
+    ) -> Tuple[Path, int]:
+        return vectorize_corpus_to_npz(
+            args.extracted_data_dir, **_voc_kwarg(args.vocabulary_file)
+        )

@@ -1,5 +1,4 @@
 import json
-import argparse
 
 import numpy as np
 import pytest
@@ -61,16 +60,3 @@ def test_steps(tmp_path, nq_datasets_mock, entrez_mock, test_data_dir):
     assert (
         len(np.loadtxt(vectorized_dir.joinpath("pmcid.txt"), dtype=int)) == 7
     )
-
-
-def test_get_api_key(monkeypatch):
-    monkeypatch.delenv("NQDC_API_KEY", raising=False)
-    args = argparse.Namespace(api_key=None)
-    key = _commands._get_api_key(args)
-    assert key is None
-    monkeypatch.setenv("NQDC_API_KEY", "apikey")
-    key = _commands._get_api_key(args)
-    assert key == "apikey"
-    args = argparse.Namespace(api_key="apikey1")
-    key = _commands._get_api_key(args)
-    assert key == "apikey1"
