@@ -3,7 +3,7 @@ from pathlib import Path
 from abc import ABC, abstractmethod
 from contextlib import AbstractContextManager
 import argparse
-from typing import Union, Dict, Any, Tuple, Mapping
+from typing import Union, Dict, Any, Tuple, Mapping, Optional
 
 from lxml import etree
 import pandas as pd
@@ -52,5 +52,5 @@ class BaseProcessingStep(ABC):
         self,
         args: argparse.Namespace,
         previous_steps_output: Mapping[str, Path],
-    ) -> Tuple[Path, int]:
+    ) -> Tuple[Optional[Path], int]:
         """Execute this step. Return resulting directory and exit code."""

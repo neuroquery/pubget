@@ -13,6 +13,7 @@ from nqdc._data_extraction import (
     StandaloneDataExtractionStep,
 )
 from nqdc._vectorization import VectorizationStep, StandaloneVectorizationStep
+from nqdc._nimare import NimareStep
 from nqdc._typing import BaseProcessingStep
 
 
@@ -47,7 +48,8 @@ def _run_pipeline(
     outputs: Dict[str, Path] = {}
     for step in all_steps:
         step_output, code = step.run(args, outputs)
-        outputs[step.name] = step_output
+        if step_output is not None:
+            outputs[step.name] = step_output
         total_code += code
     return total_code
 
@@ -78,6 +80,7 @@ def full_pipeline_command(argv: Optional[List[str]] = None) -> int:
         ArticleExtractionStep(),
         DataExtractionStep(),
         VectorizationStep(),
+        NimareStep(),
     ]
     description = (
         "Download and process full-text articles from PubMed Central "

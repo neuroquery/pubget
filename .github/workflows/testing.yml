@@ -59,6 +59,20 @@ jobs:
       - name: "run tests"
         run: tox -e py37-old
 
+  run_tests_with_nimare_installed:
+    name: "Ubuntu with Python 3.8 and NiMARE"
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+        name: "setup python"
+      - name: "install tox"
+        run: pip install tox
+      - name: "run tests"
+        run: tox -e py38-nimare
+
   build_doc:
     name: "build documentation"
     runs-on: "ubuntu-latest"

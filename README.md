@@ -356,6 +356,26 @@ nqdc_full_pipeline -q 'fMRI[Title] AND ("2019"[PubDate] : "2019"[PubDate])' --ar
 Here also, steps that had already been completed are skipped; we need to remove
 the corresponding directories if we want to force running these steps again.
 
+### Optional: creating a NiMARE dataset
+
+If we pass the `--nimare` option to `nqdc_full_pipeline`, after vectorizing the
+text `nqdc` will create a directory whose name ends with `_nimareDataset`,
+containing a [NiMARE](https://nimare.readthedocs.io/) dataset for the extracted
+data in JSON format. See the NiMARE
+[documentation](https://nimare.readthedocs.io/en/latest/generated/nimare.dataset.Dataset.html#nimare.dataset.Dataset)
+for details.
+
+Using this option requires installing NiMARE, which is not installed by default
+with `nqdc`. To use this option, install NiMARE separately with
+```
+pip install nimare
+```
+or install `nqdc` with
+```
+pip install 'nqdc[nimare]'
+```
+
+
 ## Logging
 
 By default `nqdc` commands report their progress by writing to the standard

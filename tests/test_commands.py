@@ -1,4 +1,6 @@
 import json
+import sys
+from unittest.mock import Mock
 
 import numpy as np
 import pytest
@@ -6,18 +8,46 @@ import pytest
 from nqdc import _commands, _vectorization
 
 
-@pytest.mark.parametrize("with_voc", [True, False])
+def test_full_pipeline_command_with_nimare(
+    tmp_path,
+    nq_datasets_mock,
+    entrez_mock,
+    test_data_dir,
+    monkeypatch,
+):
+    pytest.importorskip("nimare")
+    args = [str(tmp_path), "-q", "fMRI[abstract]", "--nimare"]
+    code = _commands.full_pipeline_command(args)
+    assert code == 0
+    voc_file = test_data_dir.joinpath("vocabulary.csv")
+    voc_checksum = _vectorization._checksum_vocabulary(voc_file)
+    assert tmp_path.joinpath(
+        "query-7838640309244685021f9954f8aa25fc",
+        f"subset_allArticles-voc_{voc_checksum}_nimareDataset",
+        "nimare_dataset.json",
+    ).is_file()
+
+
+@pytest.mark.parametrize(
+    ("with_voc", "with_nimare"), [(True, True), (False, False)]
+)
 def test_full_pipeline_command(
     tmp_path,
     nq_datasets_mock,
     entrez_mock,
     test_data_dir,
     with_voc,
+    with_nimare,
     monkeypatch,
 ):
+    monkeypatch.setitem(sys.modules, "nimare", Mock())
+    nimare_io = Mock()
+    monkeypatch.setitem(sys.modules, "nimare.io", nimare_io)
     log_dir = tmp_path.joinpath("log")
     monkeypatch.setenv("NQDC_LOG_DIR", str(log_dir))
     args = [str(tmp_path), "-q", "fMRI[abstract]"]
+    if with_nimare:
+        args.append("--nimare")
     voc_file = test_data_dir.joinpath("vocabulary.csv")
     if with_voc:
         args.extend(["-v", str(voc_file)])
@@ -29,6 +59,12 @@ def test_full_pipeline_command(
         f"subset_allArticles-voc_{voc_checksum}_vectorizedText",
         "pmcid.txt",
     ).is_file()
+    if with_nimare:
+        assert tmp_path.joinpath(
+            "query-7838640309244685021f9954f8aa25fc",
+            f"subset_allArticles-voc_{voc_checksum}_nimareDataset",
+        ).is_dir()
+        nimare_io.convert_neurosynth_to_json.assert_called_once()
     assert len(list(log_dir.glob("*"))) == 1
 
 
