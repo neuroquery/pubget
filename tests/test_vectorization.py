@@ -24,7 +24,7 @@ def test_vectorize_corpus_to_npz(
     )
     assert code == 1
     input_dir.joinpath("info.json").write_text(
-        json.dumps({"data_extraction_complete": True}), "utf-8"
+        json.dumps({"is_complete": True, "name": "data_extraction"}), "utf-8"
     )
     output_dir, code = _vectorization.vectorize_corpus_to_npz(
         input_dir, output_dir=tmp_path, **kwargs

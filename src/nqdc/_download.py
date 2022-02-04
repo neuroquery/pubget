@@ -57,18 +57,19 @@ def download_articles_for_query(
     output_dir = data_dir.joinpath(
         f"query-{_utils.checksum(query)}", "articlesets"
     )
+    status = _utils.check_steps_status(None, output_dir, __name__)
+    if not status["need_run"]:
+        return output_dir, 0
     info_file = output_dir.joinpath("info.json")
     if info_file.is_file():
         info = json.loads(info_file.read_text("utf-8"))
-        if info["download_complete"]:
-            _LOG.info("Download already complete, nothing to do")
-            return output_dir, 0
     else:
         output_dir.mkdir(exist_ok=True, parents=True)
         info = {
             "query": query,
             "retmax": retmax,
-            "download_complete": False,
+            "is_complete": False,
+            "name": "download",
         }
     _LOG.info(f"Downloading data in {output_dir}")
     client = EntrezClient(api_key=api_key)
@@ -81,7 +82,7 @@ def download_articles_for_query(
     else:
         _LOG.info("Performing search")
         info["search_result"] = client.esearch(query)
-        info_file.write_text(json.dumps(info), "utf-8")
+        _utils.write_info(output_dir, **info)
     client.efetch(
         output_dir,
         search_result=info["search_result"],
@@ -89,17 +90,17 @@ def download_articles_for_query(
         retmax=info["retmax"],
     )
     _LOG.info(f"Finished downloading articles in {output_dir}")
-    info["download_complete"] = client.n_failures == 0 and (
+    info["is_complete"] = client.n_failures == 0 and (
         n_docs is None or n_docs >= int(info["search_result"]["count"])
     )
-    if info["download_complete"]:
+    if info["is_complete"]:
         _LOG.info("All articles matching the query have been downloaded")
     else:
         _LOG.warning(
             "Download is incomplete -- not all articles matching "
             "the query have been downloaded"
         )
-    info_file.write_text(json.dumps(info), "utf-8")
+    _utils.write_info(output_dir, **info)
     return output_dir, int(client.n_failures != 0)
 
 

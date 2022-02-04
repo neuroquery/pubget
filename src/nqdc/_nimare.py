@@ -10,6 +10,7 @@ from scipy import sparse
 import pandas as pd
 
 from nqdc._typing import PathLikeOrStr, BaseProcessingStep
+from nqdc import _utils
 
 _LOG = logging.getLogger(__name__)
 
@@ -112,6 +113,7 @@ def _write_nimare_data(
 def make_nimare_dataset(
     extracted_data_dir: PathLikeOrStr,
     vectorized_dir: PathLikeOrStr,
+    output_dir: Optional[PathLikeOrStr] = None,
 ) -> Tuple[Optional[Path], int]:
     """Create a NiMARE JSON dataset from data collected by `nqdc`.
 
@@ -127,6 +129,10 @@ def make_nimare_dataset(
         The directory containing the vectorized text (TFIDF features). It is
         the directory created by `nqdc.vectorize_corpus_to_npz` using
         `extracted_data_dir` as input.
+    output_dir
+        Directory in which to store the extracted data. If not specified, a
+        sibling directory of `vectorized_dir` whose name ends with
+        _nimareDataset is created.
 
     Returns
     -------
@@ -138,6 +144,17 @@ def make_nimare_dataset(
         command-line interface.
 
     """
+    extracted_data_dir = Path(extracted_data_dir)
+    vectorized_dir = Path(vectorized_dir)
+    if output_dir is None:
+        output_dir = vectorized_dir.with_name(
+            _get_nimare_dataset_name(vectorized_dir)
+        )
+    else:
+        output_dir = Path(output_dir)
+    status = _utils.check_steps_status(vectorized_dir, output_dir, __name__)
+    if not status["need_run"]:
+        return output_dir, 0
     try:
         from nimare.io import convert_neurosynth_to_json
     except ImportError:
@@ -145,12 +162,6 @@ def make_nimare_dataset(
             "NiMARE is not installed. Skipping creation of NiMARE dataset."
         )
         return None, 1
-
-    extracted_data_dir = Path(extracted_data_dir)
-    vectorized_dir = Path(vectorized_dir)
-    output_dir = vectorized_dir.with_name(
-        _get_nimare_dataset_name(vectorized_dir)
-    )
     _LOG.info(f"Beginning creation of NiMARE dataset in {output_dir}")
     nimare_data = _collect_nimare_data(extracted_data_dir, vectorized_dir)
     with tempfile.TemporaryDirectory() as tmp_dir:
@@ -162,6 +173,10 @@ def make_nimare_dataset(
             str(output_dir.joinpath("nimare_dataset.json")),
             annotations_files=nimare_params["annotation_files"],
         )
+    is_complete = bool(status["previous_step_complete"])
+    _utils.write_info(
+        output_dir, name="nimare_dataset_creation", is_complete=is_complete
+    )
     _LOG.info(f"Done creating NiMARE dataset in {output_dir}")
     return output_dir, 0
 

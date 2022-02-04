@@ -1,4 +1,3 @@
-import json
 import logging
 import argparse
 from pathlib import Path
@@ -51,32 +50,28 @@ def extract_articles(
         command-line interface.
     """
     articlesets_dir = Path(articlesets_dir)
-    _utils.assert_exists(articlesets_dir)
-    download_complete = _utils.is_step_complete(articlesets_dir, "download")
-    if not download_complete:
-        _LOG.warning("Not all articles for the query have been downloaded.")
     if output_dir is None:
         output_dir = articlesets_dir.with_name("articles")
     else:
         output_dir = Path(output_dir)
+    status = _utils.check_steps_status(articlesets_dir, output_dir, __name__)
+    if not status["need_run"]:
+        return output_dir, 0
     _LOG.info(f"Extracting articles from {articlesets_dir} to {output_dir}")
     output_dir.mkdir(exist_ok=True, parents=True)
-    if _utils.is_step_complete(output_dir, "article_extraction"):
-        _LOG.info("Article extraction already complete, nothing to do.")
-        return output_dir, 0
     n_articles = _do_extract_articles(articlesets_dir, output_dir)
     _LOG.info(
         f"Extracted {n_articles} articles from "
         f"{articlesets_dir} to {output_dir}"
     )
-    info = {
-        "article_extraction_complete": download_complete,
-        "n_articles": n_articles,
-    }
-    output_dir.joinpath("info.json").write_text(
-        json.dumps(info), encoding="utf-8"
+    is_complete = bool(status["previous_step_complete"])
+    _utils.write_info(
+        output_dir,
+        name="article_extraction",
+        is_complete=is_complete,
+        n_articles=n_articles,
     )
-    return output_dir, int(not download_complete)
+    return output_dir, int(not is_complete)
 
 
 def _do_extract_articles(articlesets_dir: Path, output_dir: Path) -> int:

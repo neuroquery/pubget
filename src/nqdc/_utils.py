@@ -5,13 +5,13 @@ import hashlib
 import json
 from datetime import datetime
 import os
-from typing import Union, Optional
+from typing import Union, Optional, Dict, Any
 
 from lxml import etree
 
 from nqdc._typing import PathLikeOrStr
 
-_LOG_FORMAT = "%(levelname)s\t%(asctime)s\t%(module)s\t%(message)s"
+_LOG_FORMAT = "%(levelname)s\t%(asctime)s\t%(name)s\t%(message)s"
 _LOG_DATE_FORMAT = "%Y-%m-%dT%H:%M:%S%z"
 
 
@@ -97,9 +97,64 @@ def assert_exists(path: Path) -> None:
     path.resolve(strict=True)
 
 
-def is_step_complete(step_dir: Path, step_name: str) -> bool:
-    info_file = step_dir.joinpath("info.json")
-    if not info_file.is_file():
-        return False
-    info = json.loads(info_file.read_text("utf-8"))
-    return bool(info.get(f"{step_name}_complete"))
+def check_steps_status(
+    previous_step_dir: Optional[Path], current_step_dir: Path, logger_name: str
+) -> Dict[str, Union[None, bool, str]]:
+    result: Dict[str, Union[None, bool, str]] = dict.fromkeys(
+        [
+            "previous_step_complete",
+            "current_step_complete",
+            "previous_step_name",
+            "current_step_name",
+            "need_run",
+        ]
+    )
+    if previous_step_dir is not None:
+        assert_exists(previous_step_dir)
+        previous_info_file = previous_step_dir.joinpath("info.json")
+        if previous_info_file.is_file():
+            previous_info = json.loads(previous_info_file.read_text("utf-8"))
+            result["previous_step_complete"] = previous_info["is_complete"]
+            result["previous_step_name"] = previous_info.get(
+                "name", previous_step_dir.name
+            )
+        else:
+            result["previous_step_complete"] = False
+            result["previous_step_name"] = previous_step_dir.name
+    current_info_file = current_step_dir.joinpath("info.json")
+    if current_info_file.is_file():
+        current_info = json.loads(current_info_file.read_text("utf-8"))
+        result["current_step_complete"] = current_info["is_complete"]
+        result["current_step_name"] = current_info.get(
+            "name", current_step_dir.name
+        )
+    else:
+        result["current_step_complete"] = False
+        result["current_step_name"] = current_step_dir.name
+    logger = logging.getLogger(logger_name)
+    if result["current_step_complete"]:
+        logger.info(
+            f"Current processing step '{result['current_step_name']}' "
+            "already completed: nothing to do."
+        )
+        result["need_run"] = False
+        return result
+    if previous_step_dir is not None and not result["previous_step_complete"]:
+        logger.warning(
+            f"Previous processing step '{result['previous_step_name']}' "
+            "was not completed: not all the articles matching the query "
+            "will be processed."
+        )
+    result["need_run"] = True
+    return result
+
+
+def write_info(
+    output_dir: Path, *, name: str, is_complete: bool, **info: Any
+) -> Path:
+    info["name"] = name
+    info["is_complete"] = is_complete
+    info["date"] = datetime.now().isoformat()
+    info_file = output_dir.joinpath("info.json")
+    info_file.write_text(json.dumps(info), "utf-8")
+    return info_file

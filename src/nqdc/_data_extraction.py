@@ -1,7 +1,6 @@
 from pathlib import Path
 import logging
 import argparse
-import json
 from contextlib import ExitStack
 from typing import Generator, Dict, Optional, Tuple, Any, List, Mapping
 
@@ -176,37 +175,27 @@ def extract_data_to_csv(
         command-line interface.
     """
     articles_dir = Path(articles_dir)
-    _utils.assert_exists(articles_dir)
     output_dir = _get_output_dir(
         articles_dir, output_dir, articles_with_coords_only
     )
+    status = _utils.check_steps_status(articles_dir, output_dir, __name__)
+    if not status["need_run"]:
+        return output_dir, 0
     _LOG.info(
         f"Extracting data from articles in {articles_dir} to {output_dir}"
     )
-    if _utils.is_step_complete(output_dir, "data_extraction"):
-        _LOG.info("Data extraction complete, nothing to do.")
-        return output_dir, 0
-    article_extraction_complete = _utils.is_step_complete(
-        articles_dir, "article_extraction"
-    )
-    if not article_extraction_complete:
-        _LOG.warning(
-            "Not all articles have been extracted from download dir "
-            "or download is incomplete."
-        )
     n_articles = _do_extract_data_to_csv(
         articles_dir, output_dir, articles_with_coords_only
     )
-    info = {
-        "n_articles": n_articles,
-        "data_extraction_complete": article_extraction_complete,
-    }
-    output_dir.joinpath("info.json").write_text(
-        json.dumps(info),
-        "utf-8",
+    is_complete = bool(status["previous_step_complete"])
+    _utils.write_info(
+        output_dir,
+        name="data_extraction",
+        is_complete=is_complete,
+        n_articles=n_articles,
     )
     _LOG.info(f"Done extracting article data to csv files in {output_dir}")
-    return output_dir, int(not article_extraction_complete)
+    return output_dir, int(not is_complete)
 
 
 def _do_extract_data_to_csv(

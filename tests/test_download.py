@@ -18,7 +18,7 @@ def test_download_articles_for_query(tmp_path, entrez_mock, monkeypatch):
     assert not download_dir.joinpath("articleset_00001.xml").is_file()
     assert not json.loads(
         download_dir.joinpath("info.json").read_text("utf-8")
-    )["download_complete"]
+    )["is_complete"]
 
     entrez_mock.fail_efetch = False
     download_dir, code = _download.download_articles_for_query(
@@ -28,7 +28,7 @@ def test_download_articles_for_query(tmp_path, entrez_mock, monkeypatch):
     assert download_dir.joinpath("articleset_00001.xml").is_file()
     assert download_dir.joinpath("articleset_00002.xml").is_file()
     assert json.loads(download_dir.joinpath("info.json").read_text("utf-8"))[
-        "download_complete"
+        "is_complete"
     ]
     mock = Mock()
     monkeypatch.setattr(_download, "EntrezClient", mock)

@@ -111,10 +111,10 @@ Inside the query directory, the results of the bulk download are stored in the
 search returned less than 500 articles.
 
 Some information about the download is stored in `info.json`. In particular,
-`download_complete` indicates if all articles matching the search have been
+`is_complete` indicates if all articles matching the search have been
 downloaded. If the download was interrupted, some batches failed to download, or
 the number of results was limited by using the `--n_docs` parameter,
-`download_complete` will be `false` and the exit status of the program will
+`is_complete` will be `false` and the exit status of the program will
 be 1. You may want to re-run the command before moving on to the next step if
 the download is incomplete.
 

@@ -89,35 +89,27 @@ def vectorize_corpus_to_npz(
     output_dir = _get_output_dir(
         extracted_data_dir, output_dir, vocabulary_file
     )
+    status = _utils.check_steps_status(
+        extracted_data_dir, output_dir, __name__
+    )
+    if not status["need_run"]:
+        return output_dir, 0
     _LOG.info(
         f"vectorizing {extracted_data_dir} using vocabulary "
         f"{vocabulary_file} to {output_dir}"
     )
-    if _utils.is_step_complete(output_dir, "vectorization"):
-        _LOG.info("Vectorization complete, nothing to do.")
-        return output_dir, 0
-    data_extraction_complete = _utils.is_step_complete(
-        extracted_data_dir, "data_extraction"
-    )
-    if not data_extraction_complete:
-        _LOG.warning(
-            "Data extraction is incomplete, not all articles "
-            "matching query will be vectorized."
-        )
     n_articles = _do_vectorize_corpus_to_npz(
         extracted_data_dir, output_dir, vocabulary_file
     )
-    output_dir.joinpath("info.json").write_text(
-        json.dumps(
-            {
-                "vectorization_complete": data_extraction_complete,
-                "n_articles": n_articles,
-            }
-        ),
-        "utf-8",
+    is_complete = bool(status["previous_step_complete"])
+    _utils.write_info(
+        output_dir,
+        name="vectorization",
+        is_complete=is_complete,
+        n_articles=n_articles,
     )
     _LOG.info(f"Done creating BOW features .npz files in {output_dir}")
-    return output_dir, int(not data_extraction_complete)
+    return output_dir, int(not is_complete)
 
 
 def _do_vectorize_corpus_to_npz(

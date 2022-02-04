@@ -27,7 +27,7 @@ def test_extract_articles(tmp_path, entrez_mock):
     # check returns 1 if download incomplete
     info_file = download_dir.joinpath("info.json")
     info = json.loads(info_file.read_text("utf-8"))
-    info["download_complete"] = False
+    info["is_complete"] = False
     info_file.write_text(json.dumps(info), "utf-8")
     created_dir, code = _articles.extract_articles(download_dir)
     assert created_dir == tmp_path.joinpath(
