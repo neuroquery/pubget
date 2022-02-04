@@ -14,6 +14,7 @@ from nqdc._data_extraction import (
 )
 from nqdc._vectorization import VectorizationStep, StandaloneVectorizationStep
 from nqdc._nimare import NimareStep
+from nqdc._labelbuddy import LabelbuddyStep
 from nqdc._typing import BaseProcessingStep
 
 
@@ -81,6 +82,7 @@ def full_pipeline_command(argv: Optional[List[str]] = None) -> int:
         DataExtractionStep(),
         VectorizationStep(),
         NimareStep(),
+        LabelbuddyStep(),
     ]
     description = (
         "Download and process full-text articles from PubMed Central "

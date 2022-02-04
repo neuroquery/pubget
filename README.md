@@ -356,7 +356,16 @@ nqdc_full_pipeline -q 'fMRI[Title] AND ("2019"[PubDate] : "2019"[PubDate])' --ar
 Here also, steps that had already been completed are skipped; we need to remove
 the corresponding directories if we want to force running these steps again.
 
-### Optional: creating a NiMARE dataset
+## Optional extra steps
+
+Some additional steps that are not run by default can be executed by passing
+options to `nqdc_full_pipeline`. They run after the steps described above have
+completed and store their output in separate subdirectories inside the query
+directory. At this time there exist 2, which enable easy interfacing with the
+[NiMARE](https://nimare.readthedocs.io/) library and the
+[labelbuddy](https://jeromedockes.github.io/labelbuddy/) tool.
+
+### Creating a NiMARE dataset
 
 If we pass the `--nimare` option to `nqdc_full_pipeline`, after vectorizing the
 text `nqdc` will create a directory whose name ends with `_nimareDataset`,
@@ -375,6 +384,21 @@ or install `nqdc` with
 pip install 'nqdc[nimare]'
 ```
 
+### Preparing articles for annotation with `labelbuddy`
+
+If we use the `--labelbuddy` or `--labelbuddy_batch_size` options, a step is
+added which prepares the articles whose data was extracted for annotation with
+[labelbuddy](https://jeromedockes.github.io/labelbuddy/). These documents are
+found in `.jsonl` files a directory whose name ends with `_labelbuddyData` in
+the query directory. They can be imported into `labelbuddy` using the GUI or with:
+
+```
+labelbuddy mydb.labelbuddy --import-docs documents_00000.jsonl
+```
+
+See the [labelbuddy
+documentation](https://jeromedockes.github.io/labelbuddy/labelbuddy/current/documentation/)
+for details.
 
 ## Logging
 

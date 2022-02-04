@@ -132,7 +132,7 @@ def make_nimare_dataset(
     output_dir
         Directory in which to store the extracted data. If not specified, a
         sibling directory of `vectorized_dir` whose name ends with
-        _nimareDataset is created.
+        `_nimareDataset` is created.
 
     Returns
     -------

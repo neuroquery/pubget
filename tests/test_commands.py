@@ -29,7 +29,12 @@ def test_full_pipeline_command_with_nimare(
 
 
 @pytest.mark.parametrize(
-    ("with_voc", "with_nimare"), [(True, True), (False, False)]
+    ("with_voc", "with_nimare", "labelbuddy_params"),
+    [
+        (True, True, []),
+        (False, False, ["--labelbuddy"]),
+        (False, False, ["--labelbuddy_batch_size", "3"]),
+    ],
 )
 def test_full_pipeline_command(
     tmp_path,
@@ -38,6 +43,7 @@ def test_full_pipeline_command(
     test_data_dir,
     with_voc,
     with_nimare,
+    labelbuddy_params,
     monkeypatch,
 ):
     monkeypatch.setitem(sys.modules, "nimare", Mock())
@@ -48,6 +54,7 @@ def test_full_pipeline_command(
     args = [str(tmp_path), "-q", "fMRI[abstract]"]
     if with_nimare:
         args.append("--nimare")
+    args.extend(labelbuddy_params)
     voc_file = test_data_dir.joinpath("vocabulary.csv")
     if with_voc:
         args.extend(["-v", str(voc_file)])
@@ -65,6 +72,12 @@ def test_full_pipeline_command(
             f"subset_allArticles-voc_{voc_checksum}_nimareDataset",
         ).is_dir()
         nimare_io.convert_neurosynth_to_json.assert_called_once()
+    if labelbuddy_params:
+        assert tmp_path.joinpath(
+            "query-7838640309244685021f9954f8aa25fc",
+            "subset_allArticles_labelbuddyData",
+            "documents_00000.jsonl",
+        ).is_file()
     assert len(list(log_dir.glob("*"))) == 1
 
 
