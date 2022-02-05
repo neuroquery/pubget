@@ -1,5 +1,8 @@
+import re
+
 import pytest
 
+import nqdc
 from nqdc import _utils
 
 
@@ -15,3 +18,8 @@ def test_assert_exists(tmp_path):
         _utils.assert_exists(tmp_file)
     tmp_file.touch()
     _utils.assert_exists(tmp_file)
+
+
+def test_version():
+    assert nqdc.__version__ == _utils.get_nqdc_version()
+    assert re.match(r"[0-9]+\.[0-9]+\.[0-9]+", _utils.get_nqdc_version())

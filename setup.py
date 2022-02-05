@@ -6,4 +6,5 @@ data_files = [
     str(f.relative_to(package_dir))
     for f in package_dir.joinpath("data").glob("**/*")
 ]
-setup(package_data={"nqdc": data_files})
+version = package_dir.joinpath("data", "VERSION").read_text("utf-8").strip()
+setup(package_data={"nqdc": data_files}, version=version)

@@ -169,7 +169,7 @@ def _extract_word_counts(
     for i, chunk in enumerate(
         pd.read_csv(corpus_file, encoding="utf-8", chunksize=chunksize)
     ):
-        _LOG.debug(
+        _LOG.info(
             f"vectorizing articles {i * chunksize} to "
             f"{i * chunksize + chunk.shape[0]}{n_articles_msg}"
         )

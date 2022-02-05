@@ -15,6 +15,15 @@ _LOG_FORMAT = "%(levelname)s\t%(asctime)s\t%(name)s\t%(message)s"
 _LOG_DATE_FORMAT = "%Y-%m-%dT%H:%M:%S%z"
 
 
+def get_nqdc_version() -> str:
+    return (
+        Path(__file__)
+        .parent.joinpath("data", "VERSION")
+        .read_text("utf-8")
+        .strip()
+    )
+
+
 def timestamp() -> str:
     return datetime.now().isoformat().replace(":", "-")
 
@@ -134,8 +143,9 @@ def check_steps_status(
     logger = logging.getLogger(logger_name)
     if result["current_step_complete"]:
         logger.info(
-            f"Current processing step '{result['current_step_name']}' "
-            "already completed: nothing to do."
+            f"Nothing to do: current processing step "
+            f"'{result['current_step_name']}' already completed "
+            f"in {current_step_dir}"
         )
         result["need_run"] = False
         return result
@@ -155,6 +165,7 @@ def write_info(
     info["name"] = name
     info["is_complete"] = is_complete
     info["date"] = datetime.now().isoformat()
+    info["nqdc_version"] = get_nqdc_version()
     info_file = output_dir.joinpath("info.json")
     info_file.write_text(json.dumps(info), "utf-8")
     return info_file
