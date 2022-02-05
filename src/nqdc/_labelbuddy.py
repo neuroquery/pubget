@@ -32,6 +32,21 @@ _TEMPLATE = """{authors}
 """
 
 
+def _get_inserted_field_positions(
+    template: str, fields: Mapping[str, Any]
+) -> Dict[str, Tuple[int, int]]:
+    template_parts = re.split(r"\{([^}]*)\}", template)
+    prefixes, field_names = template_parts[::2], template_parts[1::2]
+    positions = {}
+    start, end = 0, 0
+    for pref, name in zip(prefixes, field_names):
+        start += len(pref)
+        end = start + len(str(fields[name]))
+        positions[name] = start, end
+        start = end
+    return positions
+
+
 def _format_authors(doc_authors: pd.DataFrame) -> str:
     return " and ".join(
         f"{row['surname']}, {row['given-names']}"
@@ -46,12 +61,13 @@ def _prepare_document(
 ) -> Dict[str, Any]:
     doc_text = doc_text.fillna("")
     doc_info: Dict[str, Any] = {}
-    doc_info["text"] = _TEMPLATE.format(
-        authors=_format_authors(doc_authors), **{**doc_meta, **doc_text}
-    )
+    fields = {**doc_text, **doc_meta}
+    fields["authors"] = _format_authors(doc_authors)
+    doc_info["text"] = _TEMPLATE.format(**fields)
     doc_info["meta"] = {
         "pmcid": int(doc_meta["pmcid"]),
         "text_md5": md5(doc_info["text"].encode("utf-8")).hexdigest(),
+        "field_positions": _get_inserted_field_positions(_TEMPLATE, fields),
     }
     if not pd.isnull(doc_meta["pmid"]):
         doc_info["meta"]["pmid"] = int(doc_meta["pmid"])
