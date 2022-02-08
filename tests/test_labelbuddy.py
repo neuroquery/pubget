@@ -34,7 +34,7 @@ def test_prepare_labelbuddy_documents(tmp_path, entrez_mock):
         labelbuddy_dir.joinpath("documents_00000.jsonl"), "r", encoding="utf-8"
     ) as f:
         docs = [json.loads(doc_json) for doc_json in f]
-    assert docs[0]["meta"]["pmcid"] == 8806456
+    assert len(docs) == 3
     assert "Abstract\n The abstract of the article" in docs[1]["text"]
 
 

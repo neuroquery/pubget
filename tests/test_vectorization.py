@@ -43,7 +43,7 @@ def test_vectorize_corpus_to_npz(
 
 def _check_pmcids(data_dir):
     pmcids = np.loadtxt(data_dir.joinpath("pmcid.txt"), dtype=int)
-    assert (pmcids == [123, 456, 789]).all()
+    assert set(pmcids) == {123, 456, 789}
 
 
 def _check_matrices(data_dir):
