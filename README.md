@@ -42,7 +42,9 @@ that we can later use them for meta-analysis.
 nqdc_full_pipeline ./nqdc_data -q 'fMRI[title]'
 ```
 
-See `nqdc_full_pipeline --help` for a description of this command.
+See `nqdc_full_pipeline --help` for a description of this command. In
+particular, the `--n_jobs` option allows running the data extraction in
+parallel, which can significantly speed up the pipeline.
 
 # Usage
 

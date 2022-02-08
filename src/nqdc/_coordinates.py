@@ -61,9 +61,11 @@ class CoordinateExtractor(BaseExtractor):
     name = "coordinates"
 
     def __init__(self) -> None:
-        self._stylesheet = _utils.load_stylesheet("table_extraction.xsl")
+        self._stylesheet = None
 
     def extract(self, article: etree.ElementTree) -> pd.DataFrame:
+        if self._stylesheet is None:
+            self._stylesheet = _utils.load_stylesheet("table_extraction.xsl")
         coords = _extract_coordinates_from_article(article, self._stylesheet)
         return coords.loc[:, self.fields]
 
@@ -105,12 +107,13 @@ def _extract_coordinates_from_article_tables(
                 **kwargs,
             )[0]
         except Exception:
-            _LOG.debug(f"Failed to read table # {i} in article pmcid {pmcid}")
+            # tables may fail to be parsed for various reasons eg they can be
+            # empty.
             continue
         try:
             coordinates = _extract_coordinates_from_table(table_data)
         except Exception:
-            _LOG.exception(
+            _LOG.debug(
                 f"Failed to extract coordinates from table {table_id} "
                 f"in article pmcid {pmcid}"
             )

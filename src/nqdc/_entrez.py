@@ -159,7 +159,7 @@ class EntrezClient:
     ) -> None:
         batch_file = output_dir.joinpath(f"articleset_{batch_nb:0>5}.xml")
         if batch_file.is_file():
-            _LOG.info(f"batch {batch_nb} already downloaded, skipping")
+            _LOG.info(f"batch {batch_nb + 1} already downloaded, skipping")
             return
         _LOG.info(f"getting batch {batch_nb + 1} / {n_batches}")
         resp = self._send_request(

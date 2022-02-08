@@ -112,10 +112,12 @@ class EntrezMock:
         params = _parse_query(request.body)
         retstart = int(params["retstart"])
         if self.fail_efetch and retstart != 0:
-            return Response(status_code=500, reason="Internal Server Error")
+            return Response(
+                request.url, status_code=500, reason="Internal Server Error"
+            )
         retmax = int(params["retmax"])
         if retstart >= self.count:
-            return Response(status_code=400, reason="Bad Request")
+            return Response(request.url, status_code=400, reason="Bad Request")
         result = etree.Element("pmc-articleset")
         start, end = retstart, retstart + retmax
         for article in self.article_set.getroot()[start:end]:

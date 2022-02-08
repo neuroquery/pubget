@@ -1,7 +1,10 @@
 from pathlib import Path
 from unittest.mock import Mock, patch
+import json
+
 import pytest
 
+import numpy as np
 import pandas as pd
 
 from nqdc import _download, _articles, _data_extraction
@@ -17,7 +20,7 @@ def articles_dir(tmp_path, entrez_mock):
     _articles.extract_articles(download_dir, articles_dir)
     bucket = articles_dir.joinpath("000")
     bucket.mkdir(exist_ok=True)
-    for i in range(20):
+    for i in range(150):
         bucket.joinpath(f"pmcid_745{i}.xml").write_bytes(b"")
     return articles_dir
 
@@ -37,17 +40,28 @@ def _check_extracted_data(data_dir, articles_with_coords_only):
     authors = pd.read_csv(data_dir.joinpath("authors.csv"))
     assert authors.shape == (n_authors, 3)
     assert authors["pmcid"].nunique() == n_articles
+    info = json.loads(data_dir.joinpath("info.json").read_text("utf-8"))
+    assert info["is_complete"] is True
+    assert info["n_articles"] == n_articles
 
 
-@pytest.mark.parametrize("articles_with_coords_only", [True, False])
+@pytest.mark.parametrize(
+    ("articles_with_coords_only", "n_jobs"), [(True, 1), (False, 3)]
+)
 def test_extract_data_to_csv(
-    tmp_path, articles_dir, entrez_mock, monkeypatch, articles_with_coords_only
+    tmp_path,
+    articles_dir,
+    entrez_mock,
+    monkeypatch,
+    articles_with_coords_only,
+    n_jobs,
 ):
     data_dir = tmp_path.joinpath("extracted_data")
     data_dir, code = _data_extraction.extract_data_to_csv(
         articles_dir,
         data_dir,
         articles_with_coords_only=articles_with_coords_only,
+        n_jobs=n_jobs,
     )
     assert code == 0
 
@@ -82,3 +96,17 @@ def test_extract_from_incomplete_articles(articles_dir, tmp_path):
         articles_dir, tmp_path.joinpath("extracted_data")
     )
     assert code == 1
+
+
+@pytest.mark.parametrize(
+    ("data", "with_coords", "expected"),
+    [
+        (None, False, False),
+        ({"coordinates": np.ones(3)}, True, True),
+        ({}, False, True),
+        ({}, True, False),
+        ({"coordinates": np.array([])}, True, False),
+    ],
+)
+def test_should_write(data, with_coords, expected):
+    assert _data_extraction._should_write(data, with_coords) == expected

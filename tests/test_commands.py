@@ -51,7 +51,7 @@ def test_full_pipeline_command(
     monkeypatch.setitem(sys.modules, "nimare.io", nimare_io)
     log_dir = tmp_path.joinpath("log")
     monkeypatch.setenv("NQDC_LOG_DIR", str(log_dir))
-    args = [str(tmp_path), "-q", "fMRI[abstract]"]
+    args = [str(tmp_path), "-q", "fMRI[abstract]", "--n_jobs", "2"]
     if with_nimare:
         args.append("--nimare")
     args.extend(labelbuddy_params)

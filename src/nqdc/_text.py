@@ -14,11 +14,13 @@ class TextExtractor(BaseExtractor):
     name = "text"
 
     def __init__(self) -> None:
-        self._stylesheet = _utils.load_stylesheet("text_extraction.xsl")
+        self._stylesheet = None
 
     def extract(
         self, article: etree.ElementTree
     ) -> Dict[str, Union[str, int]]:
+        if self._stylesheet is None:
+            self._stylesheet = _utils.load_stylesheet("text_extraction.xsl")
         return self._extract_text_from_article(article, self._stylesheet)
 
     def _extract_text_from_article(

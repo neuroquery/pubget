@@ -31,6 +31,11 @@ def _get_nimare_dataset_name(vectorized_dir: Path) -> str:
 
 
 def _collapse_authors(authors: pd.DataFrame) -> pd.Series:
+    """Collapse author info into one entry per article.
+
+    nqdc authors have one row per author per article, neurosynth and nimare use
+    a single string for all authors in an article.
+    """
     collapsed_authors, author_pmcids = [], []
     for pmcid, article_authors in authors.groupby("pmcid"):
         collapsed_authors.append(
@@ -47,6 +52,7 @@ def _collapse_authors(authors: pd.DataFrame) -> pd.Series:
 def _collect_nimare_data(
     extracted_data_dir: Path, vectorized_dir: Path
 ) -> Dict[str, Any]:
+    """Extract data needed for a NiMARE dataset from nqdc data dir."""
     metadata = pd.read_csv(extracted_data_dir.joinpath("metadata.csv"))
     metadata.rename(
         columns={"pmcid": "id", "publication_year": "year"}, inplace=True
@@ -77,6 +83,7 @@ def _collect_nimare_data(
 def _write_nimare_data(
     nimare_data: Mapping[str, Any], tmp_dir: Path
 ) -> Dict[str, Any]:
+    """Write data to a temp dir in the layout NiMARE expects."""
     target_metadata = tmp_dir.joinpath("metadata.tsv.gz")
     nimare_data["metadata"].to_csv(target_metadata, sep="\t", index=False)
     target_coordinates = tmp_dir.joinpath("coordinates.tsv.gz")

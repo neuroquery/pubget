@@ -10,9 +10,9 @@ import pytest
 from nqdc import _vectorization
 
 
-@pytest.mark.parametrize("with_voc", [True, False])
+@pytest.mark.parametrize(("with_voc", "n_jobs"), [(True, 3), (False, 1)])
 def test_vectorize_corpus_to_npz(
-    tmp_path, nq_datasets_mock, test_data_dir, with_voc
+    tmp_path, nq_datasets_mock, test_data_dir, with_voc, n_jobs
 ):
     input_dir = tmp_path.joinpath("extracted_data")
     shutil.copytree(test_data_dir, input_dir)
@@ -20,14 +20,14 @@ def test_vectorize_corpus_to_npz(
     if with_voc:
         kwargs["vocabulary"] = input_dir.joinpath("vocabulary.csv")
     output_dir, code = _vectorization.vectorize_corpus_to_npz(
-        input_dir, output_dir=tmp_path, **kwargs
+        input_dir, output_dir=tmp_path, n_jobs=n_jobs, **kwargs
     )
     assert code == 1
     input_dir.joinpath("info.json").write_text(
         json.dumps({"is_complete": True, "name": "data_extraction"}), "utf-8"
     )
     output_dir, code = _vectorization.vectorize_corpus_to_npz(
-        input_dir, output_dir=tmp_path, **kwargs
+        input_dir, output_dir=tmp_path, n_jobs=n_jobs, **kwargs
     )
     assert code == 0
     _check_pmcids(tmp_path)
@@ -35,7 +35,7 @@ def test_vectorize_corpus_to_npz(
     _check_matrices(tmp_path)
     with patch("nqdc._vectorization._do_vectorize_corpus_to_npz") as mock:
         output_dir, code = _vectorization.vectorize_corpus_to_npz(
-            input_dir, output_dir=tmp_path, **kwargs
+            input_dir, output_dir=tmp_path, n_jobs=n_jobs, **kwargs
         )
         assert code == 0
         assert len(mock.mock_calls) == 0

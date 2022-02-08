@@ -35,6 +35,12 @@ _TEMPLATE = """{authors}
 def _get_inserted_field_positions(
     template: str, fields: Mapping[str, Any]
 ) -> Dict[str, Tuple[int, int]]:
+    """Return the indices in a formatted str where values have been inserted.
+
+    example:
+    >>> _get_inserted_field_positions("{a}345{b}7", {"a": "012", "b": "6"})
+    {'a': (0, 3), 'b': (6, 7)}
+    """
     template_parts = re.split(r"\{([^}]*)\}", template)
     prefixes, field_names = template_parts[::2], template_parts[1::2]
     positions = {}
@@ -48,6 +54,7 @@ def _get_inserted_field_positions(
 
 
 def _format_authors(doc_authors: pd.DataFrame) -> str:
+    """Collapse dataframe with one row per author to a single string."""
     return " and ".join(
         f"{row['surname']}, {row['given-names']}"
         for _, row in doc_authors.iterrows()
@@ -59,6 +66,7 @@ def _prepare_document(
     doc_authors: pd.DataFrame,
     doc_text: pd.Series,
 ) -> Dict[str, Any]:
+    """Extract information for one article and prepare labelbuddy document."""
     doc_text = doc_text.fillna("")
     doc_info: Dict[str, Any] = {}
     fields = {**doc_text, **doc_meta}
@@ -85,6 +93,7 @@ def _prepare_labelbuddy_batch(
     text: pd.DataFrame,
     output_file: Path,
 ) -> None:
+    """Write documents for one batch of articles to the output file."""
     with open(output_file, "w", encoding="utf-8") as out_f:
         for (_, doc_meta), (_, doc_text) in zip(
             metadata.iterrows(), text.iterrows()
@@ -100,6 +109,7 @@ def _prepare_labelbuddy_batch(
 def _get_output_dir(
     extracted_data_dir: Path, output_dir: Optional[PathLikeOrStr]
 ) -> Path:
+    """Choose an appropriate output directory & create if necessary."""
     if output_dir is None:
         output_dir_name = re.sub(
             r"^(.*?)(_extractedData)?$",

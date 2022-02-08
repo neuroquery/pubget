@@ -1,4 +1,5 @@
 from pathlib import Path
+import argparse
 import logging
 import logging.config
 import hashlib
@@ -10,6 +11,8 @@ from typing import Union, Optional, Dict, Any
 from lxml import etree
 
 from nqdc._typing import PathLikeOrStr
+
+_LOG = logging.getLogger(__name__)
 
 _LOG_FORMAT = "%(levelname)s\t%(asctime)s\t%(name)s\t%(message)s"
 _LOG_DATE_FORMAT = "%Y-%m-%dT%H:%M:%S%z"
@@ -25,12 +28,14 @@ def get_nqdc_version() -> str:
 
 
 def timestamp() -> str:
+    """Timestamp that can be used in a file name."""
     return datetime.now().isoformat().replace(":", "-")
 
 
 def _add_log_file(
     log_dir: Optional[PathLikeOrStr] = None, log_filename_prefix: str = "log_"
 ) -> None:
+    """Add a file log handler if user specified a nqdc log directory."""
     if log_dir is None:
         log_dir = os.environ.get("NQDC_LOG_DIR", None)
     if log_dir is None:
@@ -42,7 +47,7 @@ def _add_log_file(
     )
     logger = logging.getLogger("")
     handler = logging.FileHandler(log_file)
-    handler.setLevel(logging.DEBUG)
+    handler.setLevel(logging.INFO)
     formatter = logging.Formatter(fmt=_LOG_FORMAT, datefmt=_LOG_DATE_FORMAT)
     handler.setFormatter(formatter)
     logger.addHandler(handler)
@@ -51,6 +56,12 @@ def _add_log_file(
 def configure_logging(
     log_dir: Optional[PathLikeOrStr] = None, log_filename_prefix: str = "log_"
 ) -> None:
+    """Add logging handlers.
+
+    Only used by the commands in `nqdc._commands` -- handlers are added when
+    `nqdc` is used as a command-line tool but not when it is imported as a
+    library.
+    """
     config = {
         "version": 1,
         "incremental": False,
@@ -58,7 +69,7 @@ def configure_logging(
         "handlers": {
             "console_handler": {
                 "class": "logging.StreamHandler",
-                "level": "DEBUG",
+                "level": "INFO",
                 "formatter": "formatter",
             },
         },
@@ -103,12 +114,23 @@ def get_pmcid(article: Union[etree.ElementTree, etree.Element]) -> int:
 
 
 def assert_exists(path: Path) -> None:
+    """raise a FileNotFoundError if path doesn't exist."""
     path.resolve(strict=True)
 
 
 def check_steps_status(
     previous_step_dir: Optional[Path], current_step_dir: Path, logger_name: str
 ) -> Dict[str, Union[None, bool, str]]:
+    """Check whethere previous and current processing steps are complete.
+
+    Logs a warning if the previous step is incomplete and a message about
+    skipping the current step if it is already complete.
+
+    Returns a dict with completion status of both steps. "need_run" is true if
+    the current step is not already complete. If `previous_step_dir` is `None`
+    it means there is no previous step (the current step is download, the
+    beginning of the pipeline).
+    """
     result: Dict[str, Union[None, bool, str]] = dict.fromkeys(
         [
             "previous_step_complete",
@@ -162,6 +184,7 @@ def check_steps_status(
 def write_info(
     output_dir: Path, *, name: str, is_complete: bool, **info: Any
 ) -> Path:
+    """Write info about a processing step to its output directory."""
     info["name"] = name
     info["is_complete"] = is_complete
     info["date"] = datetime.now().isoformat()
@@ -169,3 +192,42 @@ def write_info(
     info_file = output_dir.joinpath("info.json")
     info_file.write_text(json.dumps(info), "utf-8")
     return info_file
+
+
+def get_n_articles(data_dir: Path) -> Optional[int]:
+    """get `n_articles` reported in a processing step's output dir."""
+    try:
+        return int(
+            json.loads(data_dir.joinpath("info.json").read_text("utf-8"))[
+                "n_articles"
+            ]
+        )
+    except Exception:
+        return None
+
+
+def add_n_jobs_argument(
+    argument_parser: argparse.ArgumentParser,
+) -> None:
+    try:
+        argument_parser.add_argument(
+            "--n_jobs",
+            type=int,
+            default=1,
+            help="Number of processes to run in parallel "
+            "(for some parts of the pipeline). -1 means use all processors.",
+        )
+    except argparse.ArgumentError:
+        pass
+
+
+def check_n_jobs(n_jobs: int) -> int:
+    cpu_count = os.cpu_count()
+    if n_jobs == -1:
+        return cpu_count if cpu_count is not None else 1
+    if n_jobs < 1:
+        _LOG.error(f"n_jobs set to invalid value '{n_jobs}'; using 1 instead.")
+        return 1
+    if cpu_count is not None:
+        return min(n_jobs, cpu_count)
+    return n_jobs

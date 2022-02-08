@@ -2,16 +2,21 @@ from pathlib import Path
 import json
 from unittest.mock import patch
 
+import pytest
+
 from nqdc import _download, _articles
 
 
-def test_extract_articles(tmp_path, entrez_mock):
+@pytest.mark.parametrize("n_jobs", [1, 3])
+def test_extract_articles(n_jobs, tmp_path, entrez_mock):
     download_dir, code = _download.download_articles_for_query(
         "fMRI[abstract]", tmp_path
     )
     assert code == 0
     articles_dir = Path(f"{download_dir}-articles")
-    created_dir, code = _articles.extract_articles(download_dir, articles_dir)
+    created_dir, code = _articles.extract_articles(
+        download_dir, articles_dir, n_jobs=n_jobs
+    )
     assert created_dir == articles_dir
     assert code == 0
     assert len(list(articles_dir.glob("**/*.xml"))) == 7

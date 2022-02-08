@@ -8,5 +8,5 @@ warn_unused_configs = true
 disallow_untyped_defs = true
 
 [[tool.mypy.overrides]]
-module = ["sklearn.*", "lxml.*", "scipy.*", "pandas.*", "neuroquery.*", "nimare.*"]
+module = ["joblib.*", "sklearn.*", "lxml.*", "scipy.*", "pandas.*", "neuroquery.*", "nimare.*"]
 ignore_missing_imports = true

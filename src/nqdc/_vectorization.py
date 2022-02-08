@@ -4,12 +4,12 @@ import re
 import logging
 import json
 from enum import Enum
-from typing import Tuple, Dict, Any, Sequence, List, Optional, Union, Mapping
+from typing import Tuple, Dict, Any, Sequence, Optional, Union, Mapping
 
 import numpy as np
 from scipy import sparse
 from sklearn.preprocessing import normalize
-
+from joblib import Parallel, delayed
 import pandas as pd
 from neuroquery.tokenization import TextVectorizer
 from neuroquery.datasets import fetch_neuroquery_model
@@ -19,6 +19,8 @@ from nqdc._typing import PathLikeOrStr, BaseProcessingStep
 from nqdc import _utils
 
 _LOG = logging.getLogger(__name__)
+
+_FIELDS = ("title", "keywords", "abstract", "body")
 
 
 class Vocabulary(Enum):
@@ -33,6 +35,7 @@ def _get_output_dir(
     output_dir: Optional[PathLikeOrStr],
     vocabulary_file: PathLikeOrStr,
 ) -> Path:
+    """Choose an appropriate output directory & create if necessary."""
     if output_dir is None:
         extracted_data_dir = Path(extracted_data_dir)
         voc_checksum = _checksum_vocabulary(vocabulary_file)
@@ -54,6 +57,7 @@ def vectorize_corpus_to_npz(
     vocabulary: Union[
         PathLikeOrStr, Vocabulary
     ] = Vocabulary.NEUROQUERY_VOCABULARY,
+    n_jobs: int = 1,
 ) -> Tuple[Path, int]:
     """Compute word counts and TFIDF features and store them in `.npz` files.
 
@@ -73,6 +77,9 @@ def vectorize_corpus_to_npz(
         or phrase per line. Each dimension in the output will correspond to the
         frequency of one entry in this vocabulary. By default, the vocabulary
         used by https://neuroquery.org will be downloaded and used.
+    n_jobs
+        Number of processes to run in parallel. `-1` means using all
+        processors.
 
     Returns
     -------
@@ -85,6 +92,7 @@ def vectorize_corpus_to_npz(
     """
     extracted_data_dir = Path(extracted_data_dir)
     assert_exists(extracted_data_dir.joinpath("text.csv"))
+    n_jobs = _utils.check_n_jobs(n_jobs)
     vocabulary_file = _resolve_voc(vocabulary)
     output_dir = _get_output_dir(
         extracted_data_dir, output_dir, vocabulary_file
@@ -99,7 +107,7 @@ def vectorize_corpus_to_npz(
         f"{vocabulary_file} to {output_dir}"
     )
     n_articles = _do_vectorize_corpus_to_npz(
-        extracted_data_dir, output_dir, vocabulary_file
+        extracted_data_dir, output_dir, vocabulary_file, n_jobs=n_jobs
     )
     is_complete = bool(status["previous_step_complete"])
     _utils.write_info(
@@ -113,9 +121,15 @@ def vectorize_corpus_to_npz(
 
 
 def _do_vectorize_corpus_to_npz(
-    extracted_data_dir: Path, output_dir: Path, vocabulary_file: Path
+    extracted_data_dir: Path,
+    output_dir: Path,
+    vocabulary_file: Path,
+    n_jobs: int,
 ) -> int:
-    extraction_result = vectorize_corpus(extracted_data_dir, vocabulary_file)
+    """Do the extraction and return number of vectorized articles."""
+    extraction_result = vectorize_corpus(
+        extracted_data_dir, vocabulary_file, n_jobs=n_jobs
+    )
     np.savetxt(
         output_dir.joinpath("pmcid.txt"),
         extraction_result["pmcids"],
@@ -140,51 +154,48 @@ def _do_vectorize_corpus_to_npz(
     return len(extraction_result["pmcids"])
 
 
-def _get_n_articles_msg(corpus_file: PathLikeOrStr) -> str:
-    try:
-        n_articles = json.loads(
-            Path(corpus_file).with_name("info.json").read_text("utf-8")
-        )["n_articles"]
-        n_articles_msg = f" / {n_articles}"
-    except Exception:
-        n_articles_msg = ""
-    return n_articles_msg
+def _vectorize_articles(
+    articles: pd.DataFrame, vectorizer: TextVectorizer
+) -> Tuple[np.ndarray, Dict[str, sparse.csr_matrix]]:
+    """Vectorize one batch of articles.
+
+    Returns the pmcids and the mapping text field: csr matrix of features.
+    """
+    articles.fillna("", inplace=True)
+    vectorized = {}
+    for field in _FIELDS:
+        vectorized[field] = vectorizer.transform(articles[field].values)
+    return articles["pmcid"].values, vectorized
 
 
 def _extract_word_counts(
-    corpus_file: PathLikeOrStr, vocabulary_file: PathLikeOrStr
+    corpus_file: PathLikeOrStr, vocabulary_file: PathLikeOrStr, n_jobs: int
 ) -> Tuple[np.ndarray, Dict[str, sparse.csr_matrix], TextVectorizer]:
+    """Compute word counts for all articles in a csv file.
+
+    returns the pmcids, mapping of text filed: csr matrix, and the vectorizer.
+    order of pmcids matches rows in the feature matrices.
+    """
     vectorizer = TextVectorizer.from_vocabulary_file(
         str(vocabulary_file), use_idf=False, norm=None, voc_mapping={}
     ).fit()
-    vectorized_chunks: Dict[str, List[sparse.csr_matrix]] = {
-        "title": [],
-        "keywords": [],
-        "abstract": [],
-        "body": [],
-    }
     chunksize = 200
-    pmcids = []
-    n_articles_msg = _get_n_articles_msg(corpus_file)
-    for i, chunk in enumerate(
-        pd.read_csv(corpus_file, encoding="utf-8", chunksize=chunksize)
-    ):
-        _LOG.info(
-            f"vectorizing articles {i * chunksize} to "
-            f"{i * chunksize + chunk.shape[0]}{n_articles_msg}"
-        )
-        chunk.fillna("", inplace=True)
-        for field in vectorized_chunks:
-            vectorized_chunks[field].append(
-                vectorizer.transform(chunk[field].values)
-            )
-        pmcids.append(chunk["pmcid"].values)
+    all_chunks = pd.read_csv(
+        corpus_file, encoding="utf-8", chunksize=chunksize
+    )
+    vectorized_chunks = Parallel(n_jobs=n_jobs, verbose=8)(
+        delayed(_vectorize_articles)(chunk, vectorizer=vectorizer)
+        for chunk in all_chunks
+    )
     vectorized_fields = {}
-    for field in vectorized_chunks:
+    for field in _FIELDS:
         vectorized_fields[field] = sparse.vstack(
-            vectorized_chunks[field], format="csr", dtype=int
+            [chunk[1][field] for chunk in vectorized_chunks],
+            format="csr",
+            dtype=int,
         )
-    return np.concatenate(pmcids), vectorized_fields, vectorizer
+    pmcids = np.concatenate([chunk[0] for chunk in vectorized_chunks])
+    return pmcids, vectorized_fields, vectorizer
 
 
 def _get_voc_mapping_file(vocabulary_file: PathLikeOrStr) -> Path:
@@ -192,6 +203,7 @@ def _get_voc_mapping_file(vocabulary_file: PathLikeOrStr) -> Path:
 
 
 def _checksum_vocabulary(vocabulary_file: PathLikeOrStr) -> str:
+    """md5sum of concatenated voc file and voc mapping file contents."""
     voc = Path(vocabulary_file).read_bytes()
     voc_mapping_file = _get_voc_mapping_file(vocabulary_file)
     if voc_mapping_file.is_file():
@@ -200,6 +212,7 @@ def _checksum_vocabulary(vocabulary_file: PathLikeOrStr) -> str:
 
 
 def _load_voc_mapping(vocabulary_file: PathLikeOrStr) -> Dict[str, str]:
+    """Load the voc mapping corresponding to `vocabulary_file` if it exists"""
     voc_mapping_file = _get_voc_mapping_file(vocabulary_file)
     if voc_mapping_file.is_file():
         voc_mapping: Dict[str, str] = json.loads(
@@ -211,10 +224,12 @@ def _load_voc_mapping(vocabulary_file: PathLikeOrStr) -> Dict[str, str]:
 
 
 def _get_neuroquery_vocabulary() -> Path:
+    """Load default voc, downloading it if necessary."""
     return Path(fetch_neuroquery_model()).joinpath("vocabulary.csv")
 
 
 def _resolve_voc(vocabulary: Union[PathLikeOrStr, Vocabulary]) -> Path:
+    """Resolve vocabulary to an existing file path."""
     if vocabulary is Vocabulary.NEUROQUERY_VOCABULARY:
         return _get_neuroquery_vocabulary()
     voc = Path(vocabulary)
@@ -227,6 +242,7 @@ def vectorize_corpus(
     vocabulary: Union[
         PathLikeOrStr, Vocabulary
     ] = Vocabulary.NEUROQUERY_VOCABULARY,
+    n_jobs: int = 1,
 ) -> Dict[str, Any]:
     """Compute word counts and TFIDF features.
 
@@ -242,6 +258,9 @@ def vectorize_corpus(
         or phrase per line. Each dimension in the output will correspond to the
         frequency of one entry in this vocabulary. By default, the vocabulary
         used by https://neuroquery.org will be downloaded and used.
+    n_jobs
+        Number of processes to run in parallel. `-1` means using all
+        processors.
 
     Returns
     -------
@@ -249,13 +268,15 @@ def vectorize_corpus(
         Contains the pmcids of the vectorized articles, the document
         frequencies of the vocabulary, and the word counts and TFIDF for each
         article section and for whole articles as scipy sparse matrices.
+
     """
     corpus_file = Path(extracted_data_dir).joinpath("text.csv")
     assert_exists(corpus_file)
+    n_jobs = _utils.check_n_jobs(n_jobs)
     vocabulary_file = _resolve_voc(vocabulary)
     voc_mapping = _load_voc_mapping(vocabulary_file)
     pmcids, counts, vectorizer = _extract_word_counts(
-        corpus_file, vocabulary_file
+        corpus_file, vocabulary_file, n_jobs=n_jobs
     )
     frequencies = {
         k: normalize(v, norm="l1", axis=1, copy=True)
@@ -299,6 +320,11 @@ def vectorize_corpus(
 def _voc_mapping_matrix(
     vocabulary: Sequence[str], voc_mapping: Dict[str, str]
 ) -> sparse.csr_matrix:
+    """Sparse matrix representing voc mapping as operator on feature vectors.
+
+    `M.dot(v)` applies the vocabulary mapping, where M is the voc mapping
+    matrix and v is a tfidf (or word count) vector.
+    """
     word_to_idx = pd.Series(np.arange(len(vocabulary)), index=vocabulary)
     form = sparse.eye(len(vocabulary), format="lil", dtype=int)
     keep = np.ones(len(vocabulary), dtype=bool)
@@ -336,6 +362,7 @@ class VectorizationStep(BaseProcessingStep):
         self, argument_parser: argparse.ArgumentParser
     ) -> None:
         _add_voc_arg(argument_parser)
+        _utils.add_n_jobs_argument(argument_parser)
 
     def run(
         self,
@@ -344,6 +371,7 @@ class VectorizationStep(BaseProcessingStep):
     ) -> Tuple[Path, int]:
         return vectorize_corpus_to_npz(
             previous_steps_output["data_extraction"],
+            n_jobs=args.n_jobs,
             **_voc_kwarg(args.vocabulary_file),
         )
 
@@ -361,6 +389,7 @@ class StandaloneVectorizationStep(BaseProcessingStep):
             "created for the vectorized data.",
         )
         _add_voc_arg(argument_parser)
+        _utils.add_n_jobs_argument(argument_parser)
         argument_parser.description = (
             "Vectorize text by computing word counts and "
             "TFIDF features. The text comes from csv files created by "
@@ -373,5 +402,7 @@ class StandaloneVectorizationStep(BaseProcessingStep):
         previous_steps_output: Mapping[str, Path],
     ) -> Tuple[Path, int]:
         return vectorize_corpus_to_npz(
-            args.extracted_data_dir, **_voc_kwarg(args.vocabulary_file)
+            args.extracted_data_dir,
+            n_jobs=args.n_jobs,
+            **_voc_kwarg(args.vocabulary_file),
         )
