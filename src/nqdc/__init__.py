@@ -12,7 +12,6 @@ from nqdc._labelbuddy import prepare_labelbuddy_documents
 __version__ = _utils.get_nqdc_version()
 
 __all__ = [
-    "__version__",
     "download_articles_for_query",
     "extract_articles",
     "extract_data_to_csv",

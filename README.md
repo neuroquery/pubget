@@ -29,9 +29,7 @@ You can install `nqdc` by running:
 pip install nqdc
 ```
 
-This will install the `nqdc` Python package, as well as the commands
-`nqdc_full_pipeline`, `nqdc_download`, `nqdc_extract_articles`,
-`nqdc_extract_data` and `nqdc_vectorize`.
+This will install the `nqdc` Python package, as well as the `nqdc` command.
 
 # Quick Start
 
@@ -39,10 +37,10 @@ Once `nqdc` is installed, we can download and process neuroimaging articles so
 that we can later use them for meta-analysis.
 
 ```
-nqdc_full_pipeline ./nqdc_data -q 'fMRI[title]'
+nqdc run ./nqdc_data -q 'fMRI[title]'
 ```
 
-See `nqdc_full_pipeline --help` for a description of this command. In
+See `nqdc run --help` for a description of this command. In
 particular, the `--n_jobs` option allows running the data extraction in
 parallel, which can significantly speed up the pipeline.
 
@@ -51,16 +49,17 @@ parallel, which can significantly speed up the pipeline.
 The creation of a dataset happens in four steps:
 - Downloading the articles in bulk from the
   [PMC](https://www.ncbi.nlm.nih.gov/pmc/) API.
-- Extracting the articles from the bulk download 
+- Extracting the articles from the bulk download
 - Extracting text, stereotactic coordinates and metadata from the articles, and
   storing this information in CSV files.
 - Vectorizing the text: transforming it into vectors of
   [TFIDF](https://en.wikipedia.org/wiki/Tf%E2%80%93idf) features.
 
-Each of these steps stores its output in a separate directory. The whole process
-can be run by using the `nqdc_full_pipeline` command. Moreover, separate
-commands are also provided to run each step separately so that we can re-run
-parts of the pipeline with different parameters.
+Each of these steps stores its output in a separate directory. Normally, you
+will run the whole procedure in one command by invoking `nqdc run`. However,
+separate commands are also provided to run each step separately. Below, we
+describe each step and its output. Use `nqdc -h` to see a list of all available
+commands.
 
 All articles downloaded by `nqdc` come from [PubMed
 Central](https://www.ncbi.nlm.nih.gov/pmc/), and are therefore identified by
@@ -69,7 +68,7 @@ their PubMed Central ID (`pmcid`). Note this is not the same as the PubMed ID
 
 ## Step 1: Downloading articles from PMC
 
-This step is executed by the `nqdc_download` command. 
+This step is executed by the `nqdc download` command.
 
 We must first define our query, with which Pubmed Central will be searched for
 articles. It can be simple such as `'fMRI'`, or more specific such as
@@ -91,7 +90,7 @@ suppose we are storing our data in a directory called `nqdc_data`.
 
 We can thus download all articles with "fMRI" in their title published in 2019 by running:
 ```
-nqdc_download -q 'fMRI[Title] AND ("2019"[PubDate] : "2019"[PubDate])' nqdc_data
+nqdc download -q 'fMRI[Title] AND ("2019"[PubDate] : "2019"[PubDate])' nqdc_data
 ```
 
 After running this command, these are the contents of our data directory:
@@ -127,14 +126,14 @@ remove the `articlesets` directory.
 
 ## Step 2: extracting articles from bulk download
 
-This step is executed by the `nqdc_extract_articles` command.
+This step is executed by the `nqdc extract_articles` command.
 
 Once our download is complete, we extract articles directory and store them in
 individual XML files. To do so, we pass the `articlesets` directory created by
-the `nqdc_download` command in step 1:
+the `nqdc download` command in step 1:
 
 ```
-nqdc_extract_articles nqdc_data/query-10c72245c52d7d4e6f535e2bcffb2572/articlesets
+nqdc extract_articles nqdc_data/query-10c72245c52d7d4e6f535e2bcffb2572/articlesets
 ```
 
 This creates an `articles` subdirectory in the query directory, containing the
@@ -150,16 +149,21 @@ Our data directory now looks like:
 · nqdc_data
   └── query-10c72245c52d7d4e6f535e2bcffb2572
       ├── articlesets
-      │   ├── articleset_00000.xml
-      │   └── info.json
+      │   ├── articleset_00000.xml
+      │   └── info.json
       └── articles
           ├── 019
-          │   └── pmcid_6759467.xml
+          │   └── pmcid_6759467.xml
           ├── 01f
-          │   └── pmcid_6781806.xml
+          │   └── pmcid_6781806.xml
           ├── 03f
-          │   └── pmcid_6625472.xml
+          │   └── pmcid_6625472.xml
           ├── ...
+          ├── 27d
+          │   ├── pmcid_6657681.xml
+          │   └── pmcid_6790327.xml
+          ├── ...
+          │
           └── info.json
 ```
 
@@ -171,7 +175,7 @@ the article extraction we need to remove the `articles` directory (or the
 
 ## Step 3: extracting data from articles
 
-This step is executed by the `nqdc_extract_data` command.
+This step is executed by the `nqdc extract_data` command.
 
 It creates another directory that contains CSV files, containing the text,
 metadata and coordinates extracted from all the articles.
@@ -180,11 +184,11 @@ If we use the `--articles_with_coords_only` option, only articles in which
 `nqdc` finds stereotactic coordinates are kept. The name of the resulting
 directory will reflect that choice.
 
-We pass the path of the `articles` directory created by `nqdc_extract_articles`
-in the previous step to the `nqdc_extract_data` command:
+We pass the path of the `articles` directory created by `nqdc extract_articles`
+in the previous step to the `nqdc extract_data` command:
 
 ```
-nqdc_extract_data --articles_with_coords_only nqdc_data/query-10c72245c52d7d4e6f535e2bcffb2572/articles/
+nqdc extract_data --articles_with_coords_only nqdc_data/query-10c72245c52d7d4e6f535e2bcffb2572/articles/
 ```
 
 Our data directory now contains (ommitting the contents of the previous steps):
@@ -217,13 +221,13 @@ named `subset_allArticles_extractedData` instead.
   the text extracted from these parts of the article.
 - `coordinates.csv` contains one row for each `(x, y, z)` stereotactic
   coordinate found in any article. Its fields are the `pmcid` of the article,
-  the table label and id the coordinates came from, and `x`, `y`, `z`. 
+  the table label and id the coordinates came from, and `x`, `y`, `z`.
 - `coordinate_space.csv` has fields `pmcid` and `coordinate_space`. It contains
   a guess about the stereotactic space coordinates are reported in, based on a
   heuristic derived from [neurosynth](https://github.com/neurosynth/ACE).
   Possible values for the space are the terms used by `neurosynth`: "MNI", "TAL"
   (for Talairach space), and "UNKNOWN".
-  
+
 The different files can be joined on the `pmcid` field.
 
 If all steps up to data extraction were successfully run and we run the same
@@ -233,7 +237,7 @@ data extraction we need to remove the corresponding directory (or the
 
 ## Step 4: vectorizing (computing TFIDF features)
 
-This step is executed by the `nqdc_vectorize` command.
+This step is executed by the `nqdc vectorize` command.
 
 Some large-scale meta-analysis methods such as
 [neurosynth](https://neurosynth.org/) and [neuroquery](https://neuroquery.org)
@@ -257,12 +261,12 @@ vocabulary we can specify it with the `--vocabulary_file` option. This file will
 be parsed as a CSV file with no header, whose first column contains the terms.
 Other columns are ignored.
 
-We also pass to `nqdc_vectorize` the directory containing the text we want to
-vectorize, created by `nqdc_extract_data` in step 3 (here we are using the
+We also pass to `nqdc vectorize` the directory containing the text we want to
+vectorize, created by `nqdc extract_data` in step 3 (here we are using the
 default vocabulary):
 
 ```
-nqdc_vectorize nqdc_data/query-10c72245c52d7d4e6f535e2bcffb2572/subset_articlesWithCoords_extractedData/
+nqdc vectorize nqdc_data/query-10c72245c52d7d4e6f535e2bcffb2572/subset_articlesWithCoords_extractedData/
 ```
 
 This creates a new directory whose name reflects the data source (whether all
@@ -345,36 +349,69 @@ tokenization pipeline, and you can safely ignore this – just remember that the
 file providing the terms corresponding to the TFIDF *features* is
 `feature_names.csv`.
 
-## Full pipeline
+## Optional step: preparing articles for annotation with `labelbuddy`
 
-We can run all steps in one command by using `nqdc_full_pipeline`.
+This step is executed by the `nqdc extract_labelbuddy_data` command.
+When running the full pipeline this step is optional: we must use
+the `--labelbuddy` or `--labelbuddy_batch_size` option for it to be executed.
 
-The full procedure described above could be run by executing:
+It prepares the articles whose data was extracted for annotation with
+[labelbuddy](https://jeromedockes.github.io/labelbuddy/).
+
+We pass the `_extractedData` directory created by `nqdc extract_data`:
 
 ```
-nqdc_full_pipeline -q 'fMRI[Title] AND ("2019"[PubDate] : "2019"[PubDate])' --articles_with_coords_only nqdc_data
+nqdc extract_labelbuddy_data nqdc_data/query-10c72245c52d7d4e6f535e2bcffb2572/subset_articlesWithCoords_extractedData
 ```
 
-Here also, steps that had already been completed are skipped; we need to remove
-the corresponding directories if we want to force running these steps again.
+This creates a directory whose name ends with `labelbuddyData` containig the batches of documents in JSONL format (in this case there is a single batch):
 
-## Optional extra steps
+```
+· nqdc_data
+  └── query-10c72245c52d7d4e6f535e2bcffb2572
+      ├── articles
+      ├── articlesets
+      ├── subset_articlesWithCoords_extractedData
+      ├── subset_articlesWithCoords_labelbuddyData
+      │   ├── documents_00000.jsonl
+      │   └── info.json
+      └── subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
+```
 
-Some additional steps that are not run by default can be executed by passing
-options to `nqdc_full_pipeline`. They run after the steps described above have
-completed and store their output in separate subdirectories inside the query
-directory. At this time there exist 2, which enable easy interfacing with the
-[NiMARE](https://nimare.readthedocs.io/) library and the
-[labelbuddy](https://jeromedockes.github.io/labelbuddy/) tool.
+The documents can be imported into `labelbuddy` using the GUI or with:
 
-### Creating a NiMARE dataset
+```
+labelbuddy mydb.labelbuddy --import-docs documents_00000.jsonl
+```
 
-If we pass the `--nimare` option to `nqdc_full_pipeline`, after vectorizing the
-text `nqdc` will create a directory whose name ends with `_nimareDataset`,
-containing a [NiMARE](https://nimare.readthedocs.io/) dataset for the extracted
+See the [labelbuddy
+documentation](https://jeromedockes.github.io/labelbuddy/labelbuddy/current/documentation/)
+for details.
+
+## Optional step: creating a NiMARE dataset
+
+This step is executed by the `nqdc extract_nimare_data` command. When running
+the full pipeline this step is optional: we must use the `--nimare` option for
+it to be executed.
+
+It creates a [NiMARE](https://nimare.readthedocs.io/) dataset for the extracted
 data in JSON format. See the NiMARE
 [documentation](https://nimare.readthedocs.io/en/latest/generated/nimare.dataset.Dataset.html#nimare.dataset.Dataset)
 for details.
+
+We pass the `_vectorizedText` directory created by `nqdc vectorize`:
+```
+· nqdc_data
+  └── query-10c72245c52d7d4e6f535e2bcffb2572
+      ├── articles
+      ├── articlesets
+      ├── subset_articlesWithCoords_extractedData
+      ├── subset_articlesWithCoords_labelbuddyData
+      ├── subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_nimareDataset
+      │   ├── info.json
+      │   └── nimare_dataset.json
+      └── subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
+```
 
 Using this option requires installing NiMARE, which is not installed by default
 with `nqdc`. To use this option, install NiMARE separately with
@@ -386,21 +423,27 @@ or install `nqdc` with
 pip install 'nqdc[nimare]'
 ```
 
-### Preparing articles for annotation with `labelbuddy`
+## Full pipeline
 
-If we use the `--labelbuddy` or `--labelbuddy_batch_size` options, a step is
-added which prepares the articles whose data was extracted for annotation with
-[labelbuddy](https://jeromedockes.github.io/labelbuddy/). These documents are
-found in `.jsonl` files a directory whose name ends with `_labelbuddyData` in
-the query directory. They can be imported into `labelbuddy` using the GUI or with:
+We can run all steps in one command by using `nqdc run`.
+
+The full procedure described above could be run by executing:
 
 ```
-labelbuddy mydb.labelbuddy --import-docs documents_00000.jsonl
+nqdc run -q 'fMRI[Title] AND ("2019"[PubDate] : "2019"[PubDate])' --articles_with_coords_only nqdc_data
 ```
 
-See the [labelbuddy
-documentation](https://jeromedockes.github.io/labelbuddy/labelbuddy/current/documentation/)
-for details.
+If we also want to apply the optional steps:
+```
+nqdc run -q 'fMRI[Title] AND ("2019"[PubDate] : "2019"[PubDate])' --articles_with_coords_only nqdc_data --labelbuddy --nimare
+```
+(remember that `--nimare` requires NiMARE to be installed).
+
+Here also, steps that had already been completed are skipped; we need to remove
+the corresponding directories if we want to force running these steps again.
+
+See `nqdc run --help` for a description of all options.
+
 
 ## Logging
 
@@ -413,7 +456,7 @@ written there as well.
 
 # Contributing
 
-Feedback and contributions are welcome. Development happens at the 
+Feedback and contributions are welcome. Development happens at the
 [nqdc GitHub repositiory](https://github.com/neuroquery/nqdc).
 To install the dependencies required for development, from the directory where you cloned `nqdc`, run:
 ```

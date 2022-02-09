@@ -7,9 +7,11 @@ from typing import Optional, Tuple, Mapping
 
 from nqdc._entrez import EntrezClient
 from nqdc import _utils
-from nqdc._typing import PathLikeOrStr, BaseProcessingStep
+from nqdc._typing import PathLikeOrStr, BaseProcessingStep, ArgparseActions
 
 _LOG = logging.getLogger(__name__)
+_STEP_NAME = "download"
+_STEP_DESCRIPTION = "Download articles from PubMed Central."
 
 
 def download_articles_for_query(
@@ -69,11 +71,11 @@ def download_articles_for_query(
             "query": query,
             "retmax": retmax,
             "is_complete": False,
-            "name": "download",
+            "name": _STEP_NAME,
         }
     _LOG.info(f"Downloading data in {output_dir}")
     client = EntrezClient(api_key=api_key)
-    if "search_result" in info:
+    if "search_result" in info and "webenv" in info["search_result"]:
         _LOG.info(
             "Found partial download, resuming download of webenv "
             f"{info['search_result']['webenv']}, "
@@ -116,7 +118,7 @@ def _get_query(args: argparse.Namespace) -> str:
     return Path(args.query_file).read_text("utf-8")
 
 
-def _edit_argument_parser(argument_parser: argparse.ArgumentParser) -> None:
+def _edit_argument_parser(argument_parser: ArgparseActions) -> None:
     argument_parser.add_argument(
         "data_dir",
         help="Directory in which all nqdc data should be stored. "
@@ -164,11 +166,10 @@ def _edit_argument_parser(argument_parser: argparse.ArgumentParser) -> None:
 
 
 class DownloadStep(BaseProcessingStep):
-    name = "download"
+    name = _STEP_NAME
+    short_description = _STEP_DESCRIPTION
 
-    def edit_argument_parser(
-        self, argument_parser: argparse.ArgumentParser
-    ) -> None:
+    def edit_argument_parser(self, argument_parser: ArgparseActions) -> None:
         _edit_argument_parser(argument_parser)
 
     def run(
@@ -188,11 +189,10 @@ class DownloadStep(BaseProcessingStep):
 
 
 class StandaloneDownloadStep(DownloadStep):
-    name = "download"
+    name = _STEP_NAME
+    short_description = _STEP_DESCRIPTION
 
-    def edit_argument_parser(
-        self, argument_parser: argparse.ArgumentParser
-    ) -> None:
+    def edit_argument_parser(self, argument_parser: ArgparseActions) -> None:
         _edit_argument_parser(argument_parser)
         argument_parser.description = (
             "Download full-text articles from "

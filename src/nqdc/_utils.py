@@ -10,7 +10,7 @@ from typing import Union, Optional, Dict, Any
 
 from lxml import etree
 
-from nqdc._typing import PathLikeOrStr
+from nqdc._typing import PathLikeOrStr, ArgparseActions
 
 _LOG = logging.getLogger(__name__)
 
@@ -33,7 +33,8 @@ def timestamp() -> str:
 
 
 def _add_log_file(
-    log_dir: Optional[PathLikeOrStr] = None, log_filename_prefix: str = "log_"
+    log_dir: Optional[PathLikeOrStr] = None,
+    log_filename_prefix: str = "nqdc_log_",
 ) -> None:
     """Add a file log handler if user specified a nqdc log directory."""
     if log_dir is None:
@@ -206,16 +207,14 @@ def get_n_articles(data_dir: Path) -> Optional[int]:
         return None
 
 
-def add_n_jobs_argument(
-    argument_parser: argparse.ArgumentParser,
-) -> None:
+def add_n_jobs_argument(argument_parser: ArgparseActions) -> None:
     try:
         argument_parser.add_argument(
             "--n_jobs",
             type=int,
             default=1,
-            help="Number of processes to run in parallel "
-            "(for some parts of the pipeline). -1 means use all processors.",
+            help="Number of processes to run in parallel. "
+            "-1 means use all processors.",
         )
     except argparse.ArgumentError:
         pass

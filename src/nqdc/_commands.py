@@ -1,6 +1,5 @@
 import argparse
-from pathlib import Path
-from typing import Optional, List, Dict
+from typing import Optional, List
 
 from nqdc._utils import configure_logging
 from nqdc._download import DownloadStep, StandaloneDownloadStep
@@ -13,13 +12,19 @@ from nqdc._data_extraction import (
     StandaloneDataExtractionStep,
 )
 from nqdc._vectorization import VectorizationStep, StandaloneVectorizationStep
-from nqdc._nimare import NimareStep
-from nqdc._labelbuddy import LabelbuddyStep
-from nqdc._typing import BaseProcessingStep
+from nqdc._nimare import NimareStep, StandaloneNimareStep
+from nqdc._labelbuddy import LabelbuddyStep, StandaloneLabelbuddyStep
+from nqdc._pipeline import Pipeline
 
 
-def _get_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser()
+_NQDC_DESCRIPTION = (
+    "Download articles from PubMedCentral and extract "
+    "metadata, text, stereotactic coordinates and TFIDF features."
+)
+
+
+def _get_root_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument(
         "--log_dir",
         type=str,
@@ -32,64 +37,56 @@ def _get_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def _run_pipeline(
-    argv: Optional[List[str]],
-    all_steps: List[BaseProcessingStep],
-    name: str,
-    description: Optional[str] = None,
-) -> int:
-    parser = _get_parser()
-    if description is not None:
-        parser.description = description
-    for step in all_steps:
-        step.edit_argument_parser(parser)
-    args = parser.parse_args(argv)
-    configure_logging(args.log_dir, "full_pipeline_")
-    total_code = 0
-    outputs: Dict[str, Path] = {}
-    for step in all_steps:
-        step_output, code = step.run(args, outputs)
-        if step_output is not None:
-            outputs[step.name] = step_output
-        total_code += code
-    return total_code
-
-
-def download_command(argv: Optional[List[str]] = None) -> int:
-    return _run_pipeline(argv, [StandaloneDownloadStep()], "download_")
-
-
-def extract_articles_command(argv: Optional[List[str]] = None) -> int:
-    return _run_pipeline(
-        argv, [StandaloneArticleExtractionStep()], "extract_articles_"
-    )
-
-
-def extract_data_command(argv: Optional[List[str]] = None) -> int:
-    return _run_pipeline(
-        argv, [StandaloneDataExtractionStep()], "extract_data_"
-    )
-
-
-def vectorize_command(argv: Optional[List[str]] = None) -> int:
-    return _run_pipeline(argv, [StandaloneVectorizationStep()], "vectorize_")
-
-
-def full_pipeline_command(argv: Optional[List[str]] = None) -> int:
+def _add_step_subparsers(
+    subparsers: argparse._SubParsersAction,
+) -> None:
     all_steps = [
-        DownloadStep(),
-        ArticleExtractionStep(),
-        DataExtractionStep(),
-        VectorizationStep(),
-        NimareStep(),
-        LabelbuddyStep(),
+        Pipeline(
+            [
+                DownloadStep(),
+                ArticleExtractionStep(),
+                DataExtractionStep(),
+                VectorizationStep(),
+                LabelbuddyStep(),
+                NimareStep(),
+            ]
+        ),
+        StandaloneDownloadStep(),
+        StandaloneArticleExtractionStep(),
+        StandaloneDataExtractionStep(),
+        StandaloneVectorizationStep(),
+        StandaloneLabelbuddyStep(),
+        StandaloneNimareStep(),
     ]
-    description = (
-        "Download and process full-text articles from PubMed Central "
-        "for the given query. Articles are downloaded and stored in "
-        "individual files. Then, their text and stereotactic coordinates "
-        "are extracted and stored in csv files. Finally, the text is "
-        "vectorized by computing word counts and TFIDF features."
-    )
+    for step in all_steps:
+        step_parser = subparsers.add_parser(
+            step.name,
+            parents=[_get_root_parser()],
+            help=step.short_description,
+        )
+        step_parser.set_defaults(run_subcommand=step.run)
+        step.edit_argument_parser(step_parser)
 
-    return _run_pipeline(argv, all_steps, "full_pipeline_", description)
+
+def _get_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description=_NQDC_DESCRIPTION)
+    subparsers = parser.add_subparsers(
+        title="Commands",
+        description="The nqdc action to execute. The main one "
+        "is 'nqdc run', which executes the full pipeline from bulk "
+        "download to feature extraction. For help on a specific command "
+        "use: 'nqdc COMMAND -h' .",
+        required=True,
+        dest="command",
+        metavar="COMMAND",
+        help="DESCRIPTION",
+    )
+    _add_step_subparsers(subparsers)
+    return parser
+
+
+def nqdc_command(argv: Optional[List[str]] = None) -> int:
+    parser = _get_parser()
+    args = parser.parse_args(argv)
+    configure_logging(args.log_dir)
+    return int(args.run_subcommand(args, {})[1])

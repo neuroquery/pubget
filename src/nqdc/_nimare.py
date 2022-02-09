@@ -9,10 +9,12 @@ import numpy as np
 from scipy import sparse
 import pandas as pd
 
-from nqdc._typing import PathLikeOrStr, BaseProcessingStep
+from nqdc._typing import PathLikeOrStr, BaseProcessingStep, ArgparseActions
 from nqdc import _utils
 
 _LOG = logging.getLogger(__name__)
+_STEP_NAME = "extract_nimare_data"
+_STEP_DESCRIPTION = "Create a NiMARE JSON dataset from extracted data."
 
 
 def _get_vocabulary_name(vectorized_dir: Path) -> str:
@@ -20,6 +22,23 @@ def _get_vocabulary_name(vectorized_dir: Path) -> str:
     if match is None:
         return "UNKNOWN"
     return match.group(1)
+
+
+def _get_extracted_data_dir(
+    vectorized_dir: Path, extracted_data_dir: Optional[PathLikeOrStr]
+) -> Path:
+    """Find extracted_data_dir if not specified."""
+    if extracted_data_dir is None:
+        dir_name = re.sub(
+            r"^(.*)-voc_.*_vectorizedText",
+            r"\1_extractedData",
+            vectorized_dir.name,
+        )
+        found_data_dir = vectorized_dir.with_name(dir_name)
+    else:
+        found_data_dir = Path(extracted_data_dir)
+    _utils.assert_exists(found_data_dir)
+    return found_data_dir
 
 
 def _get_nimare_dataset_name(vectorized_dir: Path) -> str:
@@ -118,8 +137,8 @@ def _write_nimare_data(
 
 
 def make_nimare_dataset(
-    extracted_data_dir: PathLikeOrStr,
     vectorized_dir: PathLikeOrStr,
+    extracted_data_dir: Optional[PathLikeOrStr] = None,
     output_dir: Optional[PathLikeOrStr] = None,
 ) -> Tuple[Optional[Path], int]:
     """Create a NiMARE JSON dataset from data collected by `nqdc`.
@@ -129,13 +148,15 @@ def make_nimare_dataset(
 
     Parameters
     ----------
-    extracted_data_dir
-        The directory containing extracted metadata and coordinates. It is a
-        directory created by `nqdc.extract_data_to_csv`.
     vectorized_dir
         The directory containing the vectorized text (TFIDF features). It is
         the directory created by `nqdc.vectorize_corpus_to_npz` using
         `extracted_data_dir` as input.
+    extracted_data_dir
+        The directory containing extracted metadata and coordinates. It is a
+        directory created by `nqdc.extract_data_to_csv`. If `None`, this
+        function looks for a sibling directory of the `vectorized_dir` whose
+        name ends with `_extractedData`.
     output_dir
         Directory in which to store the extracted data. If not specified, a
         sibling directory of `vectorized_dir` whose name ends with
@@ -151,8 +172,10 @@ def make_nimare_dataset(
         command-line interface.
 
     """
-    extracted_data_dir = Path(extracted_data_dir)
     vectorized_dir = Path(vectorized_dir)
+    extracted_data_dir = _get_extracted_data_dir(
+        vectorized_dir, extracted_data_dir
+    )
     if output_dir is None:
         output_dir = vectorized_dir.with_name(
             _get_nimare_dataset_name(vectorized_dir)
@@ -181,19 +204,16 @@ def make_nimare_dataset(
             annotations_files=nimare_params["annotation_files"],
         )
     is_complete = bool(status["previous_step_complete"])
-    _utils.write_info(
-        output_dir, name="nimare_dataset_creation", is_complete=is_complete
-    )
+    _utils.write_info(output_dir, name=_STEP_NAME, is_complete=is_complete)
     _LOG.info(f"Done creating NiMARE dataset in {output_dir}")
     return output_dir, 0
 
 
 class NimareStep(BaseProcessingStep):
-    name = "nimare"
+    name = _STEP_NAME
+    short_description = _STEP_DESCRIPTION
 
-    def edit_argument_parser(
-        self, argument_parser: argparse.ArgumentParser
-    ) -> None:
+    def edit_argument_parser(self, argument_parser: ArgparseActions) -> None:
         argument_parser.add_argument(
             "--nimare",
             action="store_true",
@@ -211,6 +231,28 @@ class NimareStep(BaseProcessingStep):
         if not args.nimare:
             return None, 0
         return make_nimare_dataset(
-            previous_steps_output["data_extraction"],
-            previous_steps_output["vectorization"],
+            previous_steps_output["vectorize"],
+            previous_steps_output["extract_data"],
         )
+
+
+class StandaloneNimareStep(BaseProcessingStep):
+    name = _STEP_NAME
+    short_description = _STEP_DESCRIPTION
+
+    def edit_argument_parser(self, argument_parser: ArgparseActions) -> None:
+        argument_parser.add_argument(
+            "vectorized_data_dir",
+            help="Directory containing TFIDF features and vocabulary. "
+            "It is a directory created by nqdc whose name ends with "
+            "'_vectorizedText'. A sibling directory will be created for "
+            "the NiMARE dataset.",
+        )
+        argument_parser.description = self.short_description
+
+    def run(
+        self,
+        args: argparse.Namespace,
+        previous_steps_output: Mapping[str, Path],
+    ) -> Tuple[Optional[Path], int]:
+        return make_nimare_dataset(args.vectorized_data_dir)

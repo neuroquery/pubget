@@ -7,9 +7,11 @@ from lxml import etree
 from joblib import Parallel, delayed
 
 from nqdc import _utils
-from nqdc._typing import PathLikeOrStr, BaseProcessingStep
+from nqdc._typing import PathLikeOrStr, BaseProcessingStep, ArgparseActions
 
 _LOG = logging.getLogger(__name__)
+_STEP_NAME = "extract_articles"
+_STEP_DESCRIPTION = "Extract articles from bulk PMC download."
 
 
 def extract_articles(
@@ -74,7 +76,7 @@ def extract_articles(
     is_complete = bool(status["previous_step_complete"])
     _utils.write_info(
         output_dir,
-        name="article_extraction",
+        name=_STEP_NAME,
         is_complete=is_complete,
         n_articles=n_articles,
     )
@@ -112,11 +114,10 @@ def _extract_from_articleset(batch_file: Path, output_dir: Path) -> int:
 
 
 class ArticleExtractionStep(BaseProcessingStep):
-    name = "article_extraction"
+    name = _STEP_NAME
+    short_description = _STEP_DESCRIPTION
 
-    def edit_argument_parser(
-        self, argument_parser: argparse.ArgumentParser
-    ) -> None:
+    def edit_argument_parser(self, argument_parser: ArgparseActions) -> None:
         _utils.add_n_jobs_argument(argument_parser)
 
     def run(
@@ -129,22 +130,21 @@ class ArticleExtractionStep(BaseProcessingStep):
 
 
 class StandaloneArticleExtractionStep(BaseProcessingStep):
-    name = "article_extraction"
+    name = _STEP_NAME
+    short_description = _STEP_DESCRIPTION
 
-    def edit_argument_parser(
-        self, argument_parser: argparse.ArgumentParser
-    ) -> None:
+    def edit_argument_parser(self, argument_parser: ArgparseActions) -> None:
         argument_parser.add_argument(
             "articlesets_dir",
             help="Directory from which to extract articles. It is a directory "
-            "created by the nqdc_download command. "
+            "created by nqdc whose name ends with '_articlesets'. "
             "A sibling directory will be "
-            "created to contain the individual article files",
+            "created to contain the individual article files.",
         )
         _utils.add_n_jobs_argument(argument_parser)
         argument_parser.description = (
             "Extract articles from batches (articleset XML files) "
-            "downloaded from PubMed Central by the nqdc_download command."
+            "downloaded from PubMed Central by nqdc."
         )
 
     def run(

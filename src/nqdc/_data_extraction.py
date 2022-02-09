@@ -30,12 +30,15 @@ from nqdc._typing import (
     BaseExtractor,
     BaseWriter,
     BaseProcessingStep,
+    ArgparseActions,
 )
 from nqdc import _utils
 
 
-_CHUNK_SIZE = 100
 _LOG = logging.getLogger(__name__)
+_STEP_NAME = "extract_data"
+_STEP_DESCRIPTION = "Extract metadata, text and coordinates from articles."
+_CHUNK_SIZE = 100
 
 
 def config_worker_logging() -> None:
@@ -203,7 +206,7 @@ def extract_data_to_csv(
     is_complete = bool(status["previous_step_complete"])
     _utils.write_info(
         output_dir,
-        name="data_extraction",
+        name=_STEP_NAME,
         is_complete=is_complete,
         n_articles=n_articles,
     )
@@ -274,7 +277,7 @@ def _report_progress(n_articles: int, n_to_process: Optional[int]) -> None:
 
 
 def _edit_argument_parser(
-    argument_parser: argparse.ArgumentParser,
+    argument_parser: ArgparseActions,
 ) -> None:
     argument_parser.add_argument(
         "--articles_with_coords_only",
@@ -286,11 +289,10 @@ def _edit_argument_parser(
 
 
 class DataExtractionStep(BaseProcessingStep):
-    name = "data_extraction"
+    name = _STEP_NAME
+    short_description = _STEP_DESCRIPTION
 
-    def edit_argument_parser(
-        self, argument_parser: argparse.ArgumentParser
-    ) -> None:
+    def edit_argument_parser(self, argument_parser: ArgparseActions) -> None:
         _edit_argument_parser(argument_parser)
 
     def run(
@@ -299,25 +301,24 @@ class DataExtractionStep(BaseProcessingStep):
         previous_steps_output: Mapping[str, Path],
     ) -> Tuple[Path, int]:
         return extract_data_to_csv(
-            previous_steps_output["article_extraction"],
+            previous_steps_output["extract_articles"],
             articles_with_coords_only=args.articles_with_coords_only,
             n_jobs=args.n_jobs,
         )
 
 
 class StandaloneDataExtractionStep(BaseProcessingStep):
-    name = "data_extraction"
+    name = _STEP_NAME
+    short_description = _STEP_DESCRIPTION
 
-    def edit_argument_parser(
-        self, argument_parser: argparse.ArgumentParser
-    ) -> None:
+    def edit_argument_parser(self, argument_parser: ArgparseActions) -> None:
         argument_parser.add_argument(
             "articles_dir",
             help="Directory containing articles "
             "from which text and coordinates will be extracted. It is a "
-            "directory created by the nqdc_extract_articles command. "
+            "directory created by nqdc whose name ends with '_articles'. "
             "A sibling directory will be created to contain "
-            "the extracted data",
+            "the extracted data.",
         )
         _edit_argument_parser(argument_parser)
         argument_parser.description = (

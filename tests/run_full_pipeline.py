@@ -19,7 +19,8 @@ def run_and_check():
 
     subprocess.run(
         [
-            "nqdc_full_pipeline",
+            "nqdc",
+            "run",
             str(data_dir),
             "-q",
             "fMRI[title]",

@@ -15,11 +15,12 @@ from neuroquery.tokenization import TextVectorizer
 from neuroquery.datasets import fetch_neuroquery_model
 
 from nqdc._utils import checksum, assert_exists
-from nqdc._typing import PathLikeOrStr, BaseProcessingStep
+from nqdc._typing import PathLikeOrStr, BaseProcessingStep, ArgparseActions
 from nqdc import _utils
 
 _LOG = logging.getLogger(__name__)
-
+_STEP_NAME = "vectorize"
+_STEP_DESCRIPTION = "Extract TFIDF features from text."
 _FIELDS = ("title", "keywords", "abstract", "body")
 
 
@@ -112,7 +113,7 @@ def vectorize_corpus_to_npz(
     is_complete = bool(status["previous_step_complete"])
     _utils.write_info(
         output_dir,
-        name="vectorization",
+        name=_STEP_NAME,
         is_complete=is_complete,
         n_articles=n_articles,
     )
@@ -336,7 +337,7 @@ def _voc_mapping_matrix(
     return form.tocsr()
 
 
-def _add_voc_arg(argument_parser: argparse.ArgumentParser) -> None:
+def _add_voc_arg(argument_parser: ArgparseActions) -> None:
     argument_parser.add_argument(
         "-v",
         "--vocabulary_file",
@@ -356,11 +357,10 @@ def _voc_kwarg(voc_file: Optional[str]) -> Dict[str, str]:
 
 
 class VectorizationStep(BaseProcessingStep):
-    name = "vectorization"
+    name = _STEP_NAME
+    short_description = _STEP_DESCRIPTION
 
-    def edit_argument_parser(
-        self, argument_parser: argparse.ArgumentParser
-    ) -> None:
+    def edit_argument_parser(self, argument_parser: ArgparseActions) -> None:
         _add_voc_arg(argument_parser)
         _utils.add_n_jobs_argument(argument_parser)
 
@@ -370,30 +370,29 @@ class VectorizationStep(BaseProcessingStep):
         previous_steps_output: Mapping[str, Path],
     ) -> Tuple[Path, int]:
         return vectorize_corpus_to_npz(
-            previous_steps_output["data_extraction"],
+            previous_steps_output["extract_data"],
             n_jobs=args.n_jobs,
             **_voc_kwarg(args.vocabulary_file),
         )
 
 
 class StandaloneVectorizationStep(BaseProcessingStep):
-    name = "vectorization"
+    name = _STEP_NAME
+    short_description = _STEP_DESCRIPTION
 
-    def edit_argument_parser(
-        self, argument_parser: argparse.ArgumentParser
-    ) -> None:
+    def edit_argument_parser(self, argument_parser: ArgparseActions) -> None:
         argument_parser.add_argument(
             "extracted_data_dir",
             help="Directory containing the csv file text.csv created by "
-            "the nqdc_extract_data command. A sibling directory will be "
-            "created for the vectorized data.",
+            "nqdc whose name ends with '_extractedData'. A sibling "
+            "directory will be created for the vectorized data.",
         )
         _add_voc_arg(argument_parser)
         _utils.add_n_jobs_argument(argument_parser)
         argument_parser.description = (
             "Vectorize text by computing word counts and "
             "TFIDF features. The text comes from csv files created by "
-            "the nqdc_extract_data command."
+            "nqdc."
         )
 
     def run(

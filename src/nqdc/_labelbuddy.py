@@ -8,10 +8,15 @@ from typing import Mapping, Any, Dict, Tuple, Optional
 
 import pandas as pd
 
-from nqdc._typing import PathLikeOrStr, BaseProcessingStep
+from nqdc._typing import PathLikeOrStr, BaseProcessingStep, ArgparseActions
 from nqdc import _utils
 
 _LOG = logging.getLogger(__name__)
+_STEP_NAME = "extract_labelbuddy_data"
+_STEP_DESCRIPTION = (
+    "Prepare extracted articles for annotation with labelbuddy."
+)
+
 
 _TEMPLATE = """{authors}
 {journal}, {publication_year}
@@ -170,25 +175,55 @@ def prepare_labelbuddy_documents(
         output_file = output_dir.joinpath(f"documents_{i:0>5}.jsonl")
         _prepare_labelbuddy_batch(metadata, authors, text, output_file)
     is_complete = bool(status["previous_step_complete"])
-    _utils.write_info(
-        output_dir, name="labelbuddy_data_creation", is_complete=is_complete
-    )
+    _utils.write_info(output_dir, name=_STEP_NAME, is_complete=is_complete)
     _LOG.info(f"Done creating labelbuddy data in {output_dir}")
     return output_dir, 0
 
 
 class LabelbuddyStep(BaseProcessingStep):
-    name = "labelbuddy"
+    name = _STEP_NAME
+    short_description = _STEP_DESCRIPTION
 
-    def edit_argument_parser(
-        self, argument_parser: argparse.ArgumentParser
-    ) -> None:
+    def edit_argument_parser(self, argument_parser: ArgparseActions) -> None:
         argument_parser.add_argument(
             "--labelbuddy",
             action="store_true",
             help="Prepare extracted articles for annotation with labelbuddy. "
             "See https://jeromedockes.github.io/labelbuddy/ "
             "for more information.",
+        )
+        argument_parser.add_argument(
+            "--labelbuddy_batch_size",
+            type=int,
+            default=None,
+            help="Number of articles in each batch of documents "
+            "prepared for annotation with labelbuddy. "
+            "This option implies --labelbuddy.",
+        )
+
+    def run(
+        self,
+        args: argparse.Namespace,
+        previous_steps_output: Mapping[str, Path],
+    ) -> Tuple[Optional[Path], int]:
+        if not args.labelbuddy and args.labelbuddy_batch_size is None:
+            return None, 0
+        return prepare_labelbuddy_documents(
+            previous_steps_output["extract_data"],
+            batch_size=(args.labelbuddy_batch_size or 200),
+        )
+
+
+class StandaloneLabelbuddyStep(BaseProcessingStep):
+    name = _STEP_NAME
+    short_description = _STEP_DESCRIPTION
+
+    def edit_argument_parser(self, argument_parser: ArgparseActions) -> None:
+        argument_parser.add_argument(
+            "extracted_data_dir",
+            help="Directory containing  extracted data CSV files. "
+            "It is a directory created by nqdc whose name ends "
+            "with 'extractedData'.",
         )
         argument_parser.add_argument(
             "--labelbuddy_batch_size",
@@ -203,9 +238,7 @@ class LabelbuddyStep(BaseProcessingStep):
         args: argparse.Namespace,
         previous_steps_output: Mapping[str, Path],
     ) -> Tuple[Optional[Path], int]:
-        if not args.labelbuddy and args.labelbuddy_batch_size is None:
-            return None, 0
         return prepare_labelbuddy_documents(
-            previous_steps_output["data_extraction"],
+            args.extracted_data_dir,
             batch_size=(args.labelbuddy_batch_size or 200),
         )

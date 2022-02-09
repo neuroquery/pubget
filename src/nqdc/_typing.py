@@ -9,6 +9,7 @@ from lxml import etree
 import pandas as pd
 
 PathLikeOrStr = Union[PathLike, str]
+ArgparseActions = Union[argparse.ArgumentParser, argparse._ArgumentGroup]
 
 
 class BaseExtractor(ABC):
@@ -41,10 +42,13 @@ class BaseProcessingStep(ABC):
     def name(self) -> str:
         """Name for this step."""
 
+    @property
     @abstractmethod
-    def edit_argument_parser(
-        self, argument_parser: argparse.ArgumentParser
-    ) -> None:
+    def short_description(self) -> str:
+        """Name for this step."""
+
+    @abstractmethod
+    def edit_argument_parser(self, argument_parser: ArgparseActions) -> None:
         """Add arguments needed by this step to parser."""
 
     @abstractmethod
