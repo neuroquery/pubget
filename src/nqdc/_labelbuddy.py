@@ -96,7 +96,7 @@ def _prepare_document(
     return doc_info
 
 
-def _prepare_labelbuddy_batch(
+def _make_labelbuddy_batch(
     metadata: pd.DataFrame,
     authors: pd.DataFrame,
     text: pd.DataFrame,
@@ -115,24 +115,7 @@ def _prepare_labelbuddy_batch(
             out_f.write("\n")
 
 
-def _get_output_dir(
-    extracted_data_dir: Path, output_dir: Optional[PathLikeOrStr]
-) -> Path:
-    """Choose an appropriate output directory & create if necessary."""
-    if output_dir is None:
-        output_dir_name = re.sub(
-            r"^(.*?)(_extractedData)?$",
-            r"\1_labelbuddyData",
-            extracted_data_dir.name,
-        )
-        output_dir = extracted_data_dir.with_name(output_dir_name)
-    else:
-        output_dir = Path(output_dir)
-    output_dir.mkdir(exist_ok=True, parents=True)
-    return output_dir
-
-
-def prepare_labelbuddy_documents(
+def make_labelbuddy_documents(
     extracted_data_dir: PathLikeOrStr,
     output_dir: Optional[PathLikeOrStr] = None,
     batch_size: int = 200,
@@ -160,7 +143,9 @@ def prepare_labelbuddy_documents(
         Number of articles stored in each `.jsonl` file.
     """
     extracted_data_dir = Path(extracted_data_dir)
-    output_dir = _get_output_dir(extracted_data_dir, output_dir)
+    output_dir = _utils.get_output_dir(
+        extracted_data_dir, output_dir, "_extractedData", "_labelbuddyData"
+    )
     status = _utils.check_steps_status(
         extracted_data_dir, output_dir, __name__
     )
@@ -177,7 +162,7 @@ def prepare_labelbuddy_documents(
     )
     for i, (metadata, text) in enumerate(zip(all_metadata, all_text)):
         output_file = output_dir.joinpath(f"documents_{i:0>5}.jsonl")
-        _prepare_labelbuddy_batch(metadata, authors, text, output_file)
+        _make_labelbuddy_batch(metadata, authors, text, output_file)
     is_complete = bool(status["previous_step_complete"])
     _utils.write_info(output_dir, name=_STEP_NAME, is_complete=is_complete)
     _LOG.info(f"Done creating labelbuddy data in {output_dir}")
@@ -214,7 +199,7 @@ class LabelbuddyStep(BaseProcessingStep):
     ) -> Tuple[Optional[Path], int]:
         if not args.labelbuddy and args.labelbuddy_batch_size is None:
             return None, 0
-        return prepare_labelbuddy_documents(
+        return make_labelbuddy_documents(
             previous_steps_output["extract_data"],
             batch_size=(args.labelbuddy_batch_size or 200),
         )
@@ -246,7 +231,7 @@ class StandaloneLabelbuddyStep(BaseProcessingStep):
         args: argparse.Namespace,
         previous_steps_output: Mapping[str, Path],
     ) -> Tuple[Optional[Path], int]:
-        return prepare_labelbuddy_documents(
+        return make_labelbuddy_documents(
             args.extracted_data_dir,
             batch_size=(args.labelbuddy_batch_size or 200),
         )

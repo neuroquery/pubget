@@ -5,6 +5,7 @@ import logging
 import logging.config
 import hashlib
 import json
+import re
 from datetime import datetime
 import os
 from typing import Union, Optional, Dict, Any
@@ -237,3 +238,23 @@ def check_n_jobs(n_jobs: int) -> int:
     if cpu_count is not None:
         return min(n_jobs, cpu_count)
     return n_jobs
+
+
+def get_output_dir(
+    input_dir: Path,
+    output_dir: Optional[PathLikeOrStr],
+    suffix_to_remove: str,
+    suffix_to_add: str,
+) -> Path:
+    """Choose an appropriate output directory & create if necessary."""
+    if output_dir is None:
+        output_dir_name = re.sub(
+            rf"^(.*?)({suffix_to_remove})?$",
+            rf"\1{suffix_to_add}",
+            input_dir.name,
+        )
+        output_dir = input_dir.with_name(output_dir_name)
+    else:
+        output_dir = Path(output_dir)
+    output_dir.mkdir(exist_ok=True, parents=True)
+    return output_dir

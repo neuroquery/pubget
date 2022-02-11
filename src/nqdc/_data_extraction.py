@@ -125,28 +125,6 @@ def _iter_article_files(
                 yield article_file
 
 
-def _get_output_dir(
-    articles_dir: PathLikeOrStr,
-    output_dir: Optional[PathLikeOrStr],
-    articles_with_coords_only: bool,
-) -> Path:
-    """Choose an appropriate output directory & create if necessary."""
-    if output_dir is None:
-        articles_dir = Path(articles_dir)
-        subset_name = (
-            "articlesWithCoords"
-            if articles_with_coords_only
-            else "allArticles"
-        )
-        output_dir = articles_dir.with_name(
-            f"subset_{subset_name}_extractedData"
-        )
-    else:
-        output_dir = Path(output_dir)
-    output_dir.mkdir(exist_ok=True, parents=True)
-    return output_dir
-
-
 def extract_data_to_csv(
     articles_dir: PathLikeOrStr,
     output_dir: Optional[PathLikeOrStr] = None,
@@ -186,8 +164,14 @@ def extract_data_to_csv(
     """
     articles_dir = Path(articles_dir)
     _utils.assert_exists(articles_dir)
-    output_dir = _get_output_dir(
-        articles_dir, output_dir, articles_with_coords_only
+    subset_name = (
+        "articlesWithCoords" if articles_with_coords_only else "allArticles"
+    )
+    output_dir = _utils.get_output_dir(
+        articles_dir,
+        output_dir,
+        "articles",
+        f"subset_{subset_name}_extractedData",
     )
     status = _utils.check_steps_status(articles_dir, output_dir, __name__)
     if not status["need_run"]:

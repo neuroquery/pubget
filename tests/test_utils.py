@@ -47,3 +47,32 @@ def test_get_n_articles(tmp_path):
         json.dumps({"is_complete": True, "n_articles": 23}), "utf-8"
     )
     assert _utils.get_n_articles(tmp_path) == 23
+
+
+@pytest.mark.parametrize(
+    "input_dir_name, output_dir_name, suffix_to_remove,"
+    " suffix_to_add, expected_name",
+    [
+        ("articles", "user_defined", "articles", "addthis", "user_defined"),
+        ("articles", None, "articles", "addthis", "addthis"),
+        ("articles_", None, "articles", "addthis", "articles_addthis"),
+    ],
+)
+def test_get_output_dir(
+    input_dir_name,
+    output_dir_name,
+    suffix_to_remove,
+    suffix_to_add,
+    expected_name,
+    tmp_path,
+):
+    input_dir = tmp_path.joinpath(input_dir_name)
+    if output_dir_name is not None:
+        output_dir = tmp_path.joinpath(output_dir_name)
+    else:
+        output_dir = None
+    chosen = _utils.get_output_dir(
+        input_dir, output_dir, suffix_to_remove, suffix_to_add
+    )
+    assert chosen == input_dir.with_name(expected_name)
+    assert chosen.is_dir()

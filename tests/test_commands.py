@@ -51,11 +51,11 @@ def mock_nimare(monkeypatch):
 
 
 @pytest.mark.parametrize(
-    ("with_voc", "with_nimare", "labelbuddy_params"),
+    ("voc_source", "with_nimare", "labelbuddy_params"),
     [
-        (True, True, []),
-        (False, False, ["--labelbuddy"]),
-        (False, False, ["--labelbuddy_batch_size", "3"]),
+        ("file", True, []),
+        ("default", False, ["--labelbuddy"]),
+        ("extract", False, ["--labelbuddy_batch_size", "3"]),
     ],
 )
 def test_full_pipeline_command(
@@ -63,7 +63,7 @@ def test_full_pipeline_command(
     nq_datasets_mock,
     entrez_mock,
     test_data_dir,
-    with_voc,
+    voc_source,
     with_nimare,
     labelbuddy_params,
     monkeypatch,
@@ -76,25 +76,37 @@ def test_full_pipeline_command(
         args.append("--nimare")
     args.extend(labelbuddy_params)
     voc_file = test_data_dir.joinpath("vocabulary.csv")
-    if with_voc:
+    if voc_source == "file":
         args.extend(["-v", str(voc_file)])
+    elif voc_source == "extract":
+        args.extend(["--extract_vocabulary"])
+    else:
+        assert voc_source == "default"
     code = _commands.nqdc_command(args)
     assert code == 0
+    query_name = "query-7838640309244685021f9954f8aa25fc"
+    if voc_source == "extract":
+        voc_file = tmp_path.joinpath(
+            query_name,
+            "subset_allArticles_extractedVocabulary",
+            "vocabulary.csv",
+        )
+        assert voc_file.is_file()
     voc_checksum = _vectorization._checksum_vocabulary(voc_file)
     assert tmp_path.joinpath(
-        "query-7838640309244685021f9954f8aa25fc",
+        query_name,
         f"subset_allArticles-voc_{voc_checksum}_vectorizedText",
         "pmcid.txt",
     ).is_file()
     if with_nimare:
         assert tmp_path.joinpath(
-            "query-7838640309244685021f9954f8aa25fc",
+            query_name,
             f"subset_allArticles-voc_{voc_checksum}_nimareDataset",
         ).is_dir()
         mock_nimare.assert_called_once()
     if labelbuddy_params:
         assert tmp_path.joinpath(
-            "query-7838640309244685021f9954f8aa25fc",
+            query_name,
             "subset_allArticles_labelbuddyData",
             "documents_00000.jsonl",
         ).is_file()
@@ -121,6 +133,10 @@ def test_steps(
         )["n_articles"]
         == 7
     )
+    _commands.nqdc_command(["extract_vocabulary", str(extracted_data_dir)])
+    assert query_dir.joinpath(
+        "subset_allArticles_extractedVocabulary", "vocabulary.csv"
+    ).is_file()
     _commands.nqdc_command(["vectorize", str(extracted_data_dir)])
     voc_checksum = _vectorization._checksum_vocabulary(
         test_data_dir.joinpath("vocabulary.csv")

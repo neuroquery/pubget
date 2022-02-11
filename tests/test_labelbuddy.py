@@ -13,18 +13,18 @@ def test_does_not_rerun(tmp_path, monkeypatch):
     )
     mock = Mock()
     monkeypatch.setattr("nqdc._nimare._collect_nimare_data", mock)
-    _, code = _labelbuddy.prepare_labelbuddy_documents(tmp_path, tmp_path)
+    _, code = _labelbuddy.make_labelbuddy_documents(tmp_path, tmp_path)
     assert code == 0
     assert len(mock.mock_calls) == 0
 
 
-def test_prepare_labelbuddy_documents(tmp_path, entrez_mock):
+def test_make_labelbuddy_documents(tmp_path, entrez_mock):
     download_dir, _ = _download.download_articles_for_query(
         "fMRI[abstract]", tmp_path.joinpath("query-abc")
     )
     articles_dir, _ = _articles.extract_articles(download_dir)
     data_dir, _ = _data_extraction.extract_data_to_csv(articles_dir)
-    labelbuddy_dir, code = _labelbuddy.prepare_labelbuddy_documents(
+    labelbuddy_dir, code = _labelbuddy.make_labelbuddy_documents(
         data_dir, batch_size=3
     )
     assert code == 0

@@ -28,6 +28,7 @@ def run_and_check():
             str(data_dir.joinpath("log")),
             "--n_jobs",
             "4",
+            "--extract_vocabulary",
             "--labelbuddy",
         ],
         check=True,
@@ -36,20 +37,19 @@ def run_and_check():
     print("\n")
 
     query_dir = data_dir.joinpath("query-1856490e8aca377ff8e6c38e84a77112")
-    vectorized_dir = query_dir.joinpath(
-        "subset_allArticles-voc_"
-        "e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText"
-    )
+    vectorized_dir = list(
+        query_dir.glob("subset_allArticles-voc_*_vectorizedText")
+    )[0]
     coords_dir = query_dir.joinpath("subset_allArticles_extractedData")
 
     tfidf = sparse.load_npz(str(vectorized_dir.joinpath("merged_tfidf.npz")))
-    assert tfidf.shape[1] == 6308
-    assert tfidf.shape[0] >= 3100
+    assert tfidf.shape[1] >= 300_000
+    assert tfidf.shape[0] >= 3_100
     print(f"n articles: {tfidf.shape[0]}")
 
     coords = pd.read_csv(coords_dir.joinpath("coordinates.csv"))
     assert coords.shape[1] == 6
-    assert coords.shape[0] >= 3800
+    assert coords.shape[0] >= 30_000
     print(f"n coordinates: {coords.shape[0]}")
 
     print(f"\nnqdc pipeline ran successfully\nresults saved in {query_dir}")

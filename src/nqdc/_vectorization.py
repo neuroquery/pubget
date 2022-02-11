@@ -1,7 +1,6 @@
 """'vectorize' step: compute TFIDF from extracted text."""
 from pathlib import Path
 import argparse
-import re
 import logging
 import json
 from enum import Enum
@@ -35,27 +34,6 @@ class Vocabulary(Enum):
         "https://github.com/neuroquery/"
         "neuroquery_data/blob/main/neuroquery_model/vocabulary.csv"
     )
-
-
-def _get_output_dir(
-    extracted_data_dir: PathLikeOrStr,
-    output_dir: Optional[PathLikeOrStr],
-    vocabulary_file: PathLikeOrStr,
-) -> Path:
-    """Choose an appropriate output directory & create if necessary."""
-    if output_dir is None:
-        extracted_data_dir = Path(extracted_data_dir)
-        voc_checksum = _checksum_vocabulary(vocabulary_file)
-        output_dir_name = re.sub(
-            r"^(.*?)(_extractedData)?$",
-            rf"\1-voc_{voc_checksum}_vectorizedText",
-            extracted_data_dir.name,
-        )
-        output_dir = extracted_data_dir.with_name(output_dir_name)
-    else:
-        output_dir = Path(output_dir)
-    output_dir.mkdir(exist_ok=True, parents=True)
-    return output_dir
 
 
 def vectorize_corpus_to_npz(
@@ -101,8 +79,12 @@ def vectorize_corpus_to_npz(
     assert_exists(extracted_data_dir.joinpath("text.csv"))
     n_jobs = _utils.check_n_jobs(n_jobs)
     vocabulary_file = _resolve_voc(vocabulary)
-    output_dir = _get_output_dir(
-        extracted_data_dir, output_dir, vocabulary_file
+    voc_checksum = _checksum_vocabulary(vocabulary_file)
+    output_dir = _utils.get_output_dir(
+        extracted_data_dir,
+        output_dir,
+        "_extractedData",
+        f"-voc_{voc_checksum}_vectorizedText",
     )
     status = _utils.check_steps_status(
         extracted_data_dir, output_dir, __name__
@@ -409,10 +391,18 @@ def _add_voc_arg(argument_parser: ArgparseActions) -> None:
     )
 
 
-def _voc_kwarg(voc_file: Optional[str]) -> Dict[str, str]:
-    if voc_file is None:
-        return {}
-    return {"vocabulary": voc_file}
+def _voc_kwarg(
+    args: argparse.Namespace, previous_steps_output: Mapping[str, Path]
+) -> Dict[str, PathLikeOrStr]:
+    if args.vocabulary_file is not None:
+        return {"vocabulary": args.vocabulary_file}
+    if "extract_vocabulary" in previous_steps_output:
+        return {
+            "vocabulary": previous_steps_output["extract_vocabulary"].joinpath(
+                "vocabulary.csv"
+            )
+        }
+    return {}
 
 
 class VectorizationStep(BaseProcessingStep):
@@ -433,7 +423,7 @@ class VectorizationStep(BaseProcessingStep):
         return vectorize_corpus_to_npz(
             previous_steps_output["extract_data"],
             n_jobs=args.n_jobs,
-            **_voc_kwarg(args.vocabulary_file),
+            **_voc_kwarg(args, previous_steps_output),
         )
 
 
@@ -466,5 +456,5 @@ class StandaloneVectorizationStep(BaseProcessingStep):
         return vectorize_corpus_to_npz(
             args.extracted_data_dir,
             n_jobs=args.n_jobs,
-            **_voc_kwarg(args.vocabulary_file),
+            **_voc_kwarg(args, previous_steps_output),
         )

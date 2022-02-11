@@ -254,12 +254,15 @@ occurs in the text divided by the length of the text) and a decreasing function
 of the *document frequency* (the total number of times the term occurs in the
 whole corpus or dataset).
 
-To extract the TFIDF features we must therefore choose a vocabulary. By default,
-`nqdc` will download and use the vocabulary used by
-[neuroquery.org](https://neuroquery.org). If we want to use a different
-vocabulary we can specify it with the `--vocabulary_file` option. This file will
-be parsed as a CSV file with no header, whose first column contains the terms.
-Other columns are ignored.
+To extract the TFIDF features we must therefore choose a vocabulary.
+- By default, `nqdc` will download and use the vocabulary used by
+[neuroquery.org](https://neuroquery.org).
+- If we use the `--extract_vocabulary` option, a new vocabulary is created from
+  the downloaded text and used for computing TFIDF features (see "extracting a
+  new vocabulary" below).
+- If we want to use a different vocabulary we can specify it with the
+`--vocabulary_file` option. This file will be parsed as a CSV file with no
+header, whose first column contains the terms. Other columns are ignored.
 
 We also pass to `nqdc vectorize` the directory containing the text we want to
 vectorize, created by `nqdc extract_data` in step 3 (here we are using the
@@ -270,7 +273,10 @@ nqdc vectorize nqdc_data/query-10c72245c52d7d4e6f535e2bcffb2572/subset_articlesW
 ```
 
 This creates a new directory whose name reflects the data source (whether all
-articles are kept or only those with coordinates) and the chosen vocabulary:
+articles are kept or only those with coordinates) and the chosen vocabulary
+(`e6f7a7e9c6ebc4fb81118ccabfee8bd7` is the md5 checksum of the contents of the
+vocabulary file, concatenated with those of the vocabulary mapping file, see
+"vocabulary mapping" below):
 
 ```
 · nqdc_data
@@ -348,6 +354,39 @@ The vocabulary mapping is primarily used by the `neuroquery` package and its
 tokenization pipeline, and you can safely ignore this – just remember that the
 file providing the terms corresponding to the TFIDF *features* is
 `feature_names.csv`.
+
+## Optional step: extracting a new vocabulary
+
+This step is executed by the `nqdc extract_vocabulary` command.
+When running the full pipeline this step is optional: we must use
+the `--extract_vocabulary` option for it to be executed.
+
+It builds a vocabulary of all the words and 2-grams (groups of 2 
+words) that appear in the downloaded text, and computes their document frequency
+(the proportion of documents in which a term appears).
+```
+nqdc extract_vocabulary nqdc_data/query-10c72245c52d7d4e6f535e2bcffb2572/subset_articlesWithCoords_extractedData
+```
+
+The vocabulary is stored in a csv file in a new directory. There is no header
+and the 2 columns are the term and its document frequency.
+
+```
+· nqdc_data
+  └── query-10c72245c52d7d4e6f535e2bcffb2572
+      ├── articles
+      ├── articlesets
+      ├── subset_articlesWithCoords_extractedData
+      ├── subset_articlesWithCoords_extractedVocabulary
+      │   ├── info.json
+      │   └── vocabulary.csv
+      └── subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
+```
+
+When running the whole pipeline (`nqdc run`), if we use the
+`--extract_vocabulary` option and don't provide an explicit value for
+`--vocabulary_file`, the freshly-extracted vocabulary is used instead of the
+default `neuroquery` one for computing TFIDF features.
 
 ## Optional step: preparing articles for annotation with `labelbuddy`
 

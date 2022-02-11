@@ -12,6 +12,10 @@ from nqdc._data_extraction import (
     DataExtractionStep,
     StandaloneDataExtractionStep,
 )
+from nqdc._vocabulary import (
+    VocabularyExtractionStep,
+    StandaloneVocabularyExtractionStep,
+)
 from nqdc._vectorization import VectorizationStep, StandaloneVectorizationStep
 from nqdc._nimare import NimareStep, StandaloneNimareStep
 from nqdc._labelbuddy import LabelbuddyStep, StandaloneLabelbuddyStep
@@ -47,6 +51,7 @@ def _add_step_subparsers(
                 DownloadStep(),
                 ArticleExtractionStep(),
                 DataExtractionStep(),
+                VocabularyExtractionStep(),
                 VectorizationStep(),
                 LabelbuddyStep(),
                 NimareStep(),
@@ -55,6 +60,7 @@ def _add_step_subparsers(
         StandaloneDownloadStep(),
         StandaloneArticleExtractionStep(),
         StandaloneDataExtractionStep(),
+        StandaloneVocabularyExtractionStep(),
         StandaloneVectorizationStep(),
         StandaloneLabelbuddyStep(),
         StandaloneNimareStep(),
