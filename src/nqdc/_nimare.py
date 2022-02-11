@@ -1,3 +1,7 @@
+"""'extract_nimare_data' step: build a NiMARE json dataset.
+
+https://nimare.readthedocs.io/
+"""
 from pathlib import Path
 import logging
 import tempfile
@@ -8,6 +12,14 @@ from typing import Dict, Any, Mapping, Tuple, Optional
 import numpy as np
 from scipy import sparse
 import pandas as pd
+
+try:
+    import nimare
+    import nimare.io
+except ImportError:
+    _NIMARE_INSTALLED = False
+else:
+    _NIMARE_INSTALLED = True
 
 from nqdc._typing import PathLikeOrStr, BaseProcessingStep, ArgparseActions
 from nqdc import _utils
@@ -77,9 +89,13 @@ def _collect_nimare_data(
         columns={"pmcid": "id", "publication_year": "year"}, inplace=True
     )
     space = pd.read_csv(extracted_data_dir.joinpath("coordinate_space.csv"))
+    # false positive: pylint thinks read_csv returns a TextFileReader
+    # pylint: disable-next=unsupported-assignment-operation
     metadata["space"] = space["coordinate_space"]
     authors = pd.read_csv(extracted_data_dir.joinpath("authors.csv"))
     collapsed_authors = _collapse_authors(authors)
+    # false positive: pylint thinks read_csv returns a TextFileReader
+    # pylint: disable-next=no-member
     metadata = metadata.join(collapsed_authors, on="id")
     coordinates = pd.read_csv(extracted_data_dir.joinpath("coordinates.csv"))
     coordinates.rename(columns={"pmcid": "id"}, inplace=True)
@@ -185,9 +201,7 @@ def make_nimare_dataset(
     status = _utils.check_steps_status(vectorized_dir, output_dir, __name__)
     if not status["need_run"]:
         return output_dir, 0
-    try:
-        from nimare.io import convert_neurosynth_to_json
-    except ImportError:
+    if not _NIMARE_INSTALLED:
         _LOG.error(
             "NiMARE is not installed. Skipping creation of NiMARE dataset."
         )
@@ -197,7 +211,7 @@ def make_nimare_dataset(
     with tempfile.TemporaryDirectory() as tmp_dir:
         nimare_params = _write_nimare_data(nimare_data, Path(tmp_dir))
         output_dir.mkdir(exist_ok=True, parents=True)
-        convert_neurosynth_to_json(
+        nimare.io.convert_neurosynth_to_json(
             nimare_params["coordinates"],
             nimare_params["metadata"],
             str(output_dir.joinpath("nimare_dataset.json")),
@@ -210,6 +224,8 @@ def make_nimare_dataset(
 
 
 class NimareStep(BaseProcessingStep):
+    """nimare as part of a pipeline (nqdc run)."""
+
     name = _STEP_NAME
     short_description = _STEP_DESCRIPTION
 
@@ -237,6 +253,8 @@ class NimareStep(BaseProcessingStep):
 
 
 class StandaloneNimareStep(BaseProcessingStep):
+    """nimare as a standalone command (nqdc extract_nimare_data)."""
+
     name = _STEP_NAME
     short_description = _STEP_DESCRIPTION
 

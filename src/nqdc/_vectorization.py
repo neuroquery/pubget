@@ -1,3 +1,4 @@
+"""'vectorize' step: compute TFIDF from extracted text."""
 from pathlib import Path
 import argparse
 import re
@@ -25,6 +26,11 @@ _FIELDS = ("title", "keywords", "abstract", "body")
 
 
 class Vocabulary(Enum):
+    """Enumeration of known vocabularies.
+
+    At the moment only contains the vocabulary used by `neuroquery`.
+    """
+
     NEUROQUERY_VOCABULARY = (
         "https://github.com/neuroquery/"
         "neuroquery_data/blob/main/neuroquery_model/vocabulary.csv"
@@ -157,7 +163,7 @@ def _do_vectorize_corpus_to_npz(
 
 def _vectorize_articles(
     articles: pd.DataFrame, vectorizer: TextVectorizer
-) -> Tuple[np.ndarray, Dict[str, sparse.csr_matrix]]:
+) -> Tuple[Sequence[int], Dict[str, sparse.csr_matrix]]:
     """Vectorize one batch of articles.
 
     Returns the pmcids and the mapping text field: csr matrix of features.
@@ -171,7 +177,7 @@ def _vectorize_articles(
 
 def _extract_word_counts(
     corpus_file: PathLikeOrStr, vocabulary_file: PathLikeOrStr, n_jobs: int
-) -> Tuple[np.ndarray, Dict[str, sparse.csr_matrix], TextVectorizer]:
+) -> Tuple[Sequence[int], Dict[str, sparse.csr_matrix], TextVectorizer]:
     """Compute word counts for all articles in a csv file.
 
     returns the pmcids, mapping of text filed: csr matrix, and the vectorizer.
@@ -238,6 +244,92 @@ def _resolve_voc(vocabulary: Union[PathLikeOrStr, Vocabulary]) -> Path:
     return voc
 
 
+def _counts_to_frequencies(
+    counts: Mapping[str, sparse.csr_matrix]
+) -> Tuple[Dict[str, sparse.csr_matrix], Sequence[float]]:
+    """Compute term and document frequencies."""
+    term_freq = {
+        k: normalize(v, norm="l1", axis=1, copy=True)
+        for k, v in counts.items()
+    }
+    freq_merged = np.sum(list(term_freq.values())) / len(term_freq)
+    term_freq["merged"] = freq_merged
+    doc_counts = np.asarray((freq_merged > 0).sum(axis=0)).squeeze()
+    n_docs = counts["body"].shape[0]
+    doc_freq = (doc_counts + 1) / (n_docs + 1)
+    return term_freq, doc_freq
+
+
+def _apply_voc_mapping(
+    counts_full_voc: Mapping[str, sparse.csr_matrix],
+    term_freq_full_voc: Mapping[str, sparse.csr_matrix],
+    voc: Sequence[str],
+    voc_mapping: Mapping[str, str],
+) -> Tuple[
+    Dict[str, sparse.csr_matrix],
+    Dict[str, sparse.csr_matrix],
+    Sequence[float],
+]:
+    """Compute term counts & frequencies for reduced voc after voc mapping."""
+    voc_map_mat = _voc_mapping_matrix(voc, voc_mapping)
+    counts = {k: v.dot(voc_map_mat.T) for k, v in counts_full_voc.items()}
+    term_freq = {
+        k: v.dot(voc_map_mat.T) for k, v in term_freq_full_voc.items()
+    }
+    doc_counts = np.asarray((term_freq["merged"] > 0).sum(axis=0)).squeeze()
+    n_docs = counts["body"].shape[0]
+    doc_freq = (doc_counts + 1) / (n_docs + 1)
+    return counts, term_freq, doc_freq
+
+
+def _compute_tfidf(
+    term_freq: Mapping[str, sparse.csr_matrix],
+    doc_freq: Sequence[float],
+) -> Dict[str, sparse.csr_matrix]:
+    idf = -np.log(doc_freq) + 1
+    n_terms = len(idf)
+    idf_mat = sparse.spdiags(
+        idf,
+        diags=0,
+        m=n_terms,
+        n=n_terms,
+        format="csr",
+    )
+    tfidf = {k: v.dot(idf_mat) for k, v in term_freq.items()}
+    return tfidf
+
+
+def _prepare_bow_data(
+    counts_full_voc: Mapping[str, sparse.csr_matrix],
+    voc: Sequence[str],
+    voc_mapping: Mapping[str, str],
+) -> Dict[str, Any]:
+    """Compute term & doc frequency data from raw counts and vocabulary.
+
+    The counts and tfidf are for the reduced vocabulary (after applying the
+    vocabulary mapping).
+    """
+    term_freq_full_voc, doc_freq_full_voc = _counts_to_frequencies(
+        counts_full_voc
+    )
+    counts, term_freq, doc_freq = _apply_voc_mapping(
+        counts_full_voc, term_freq_full_voc, voc, voc_mapping
+    )
+    tfidf = _compute_tfidf(term_freq, doc_freq)
+    return {
+        "counts": counts,
+        "tfidf": tfidf,
+        "document_frequencies_vocabulary": pd.Series(
+            doc_freq_full_voc, index=voc
+        ),
+        "document_frequencies_feature_names": pd.Series(
+            doc_freq,
+            index=sorted(set(voc).difference(voc_mapping.keys())),
+        ),
+        "voc_mapping": voc_mapping,
+    }
+
+
 def vectorize_corpus(
     extracted_data_dir: PathLikeOrStr,
     vocabulary: Union[
@@ -275,51 +367,18 @@ def vectorize_corpus(
     assert_exists(corpus_file)
     n_jobs = _utils.check_n_jobs(n_jobs)
     vocabulary_file = _resolve_voc(vocabulary)
-    voc_mapping = _load_voc_mapping(vocabulary_file)
-    pmcids, counts, vectorizer = _extract_word_counts(
+    pmcids, counts_full_voc, vectorizer = _extract_word_counts(
         corpus_file, vocabulary_file, n_jobs=n_jobs
     )
-    frequencies = {
-        k: normalize(v, norm="l1", axis=1, copy=True)
-        for k, v in counts.items()
-    }
-    freq_merged = np.sum(list(frequencies.values())) / len(frequencies)
-    frequencies["merged"] = freq_merged
-    doc_counts_full_voc = np.asarray((freq_merged > 0).sum(axis=0)).squeeze()
-    n_docs = counts["body"].shape[0]
-    doc_freq_full_voc = (doc_counts_full_voc + 1) / (n_docs + 1)
     voc = vectorizer.get_feature_names()
-    voc_map_mat = _voc_mapping_matrix(voc, voc_mapping)
-    counts = {k: v.dot(voc_map_mat.T) for k, v in counts.items()}
-    frequencies = {k: v.dot(voc_map_mat.T) for k, v in frequencies.items()}
-    doc_counts = np.asarray((frequencies["merged"] > 0).sum(axis=0)).squeeze()
-    doc_freq = (doc_counts + 1) / (n_docs + 1)
-    idf = -np.log(doc_freq) + 1
-    n_terms = len(idf)
-    idf_mat = sparse.spdiags(
-        idf,
-        diags=0,
-        m=n_terms,
-        n=n_terms,
-        format="csr",
-    )
-    tfidf = {k: v.dot(idf_mat) for k, v in frequencies.items()}
-    return {
-        "pmcids": pmcids,
-        "counts": counts,
-        "tfidf": tfidf,
-        "document_frequencies_vocabulary": pd.Series(
-            doc_freq_full_voc, index=voc
-        ),
-        "document_frequencies_feature_names": pd.Series(
-            doc_freq, index=sorted(set(voc).difference(voc_mapping.keys()))
-        ),
-        "voc_mapping": voc_mapping,
-    }
+    voc_mapping = _load_voc_mapping(vocabulary_file)
+    data = _prepare_bow_data(counts_full_voc, voc, voc_mapping)
+    data["pmcids"] = pmcids
+    return data
 
 
 def _voc_mapping_matrix(
-    vocabulary: Sequence[str], voc_mapping: Dict[str, str]
+    vocabulary: Sequence[str], voc_mapping: Mapping[str, str]
 ) -> sparse.csr_matrix:
     """Sparse matrix representing voc mapping as operator on feature vectors.
 
@@ -357,6 +416,8 @@ def _voc_kwarg(voc_file: Optional[str]) -> Dict[str, str]:
 
 
 class VectorizationStep(BaseProcessingStep):
+    """Vectorizing text as part of a pipeline (nqdc run)."""
+
     name = _STEP_NAME
     short_description = _STEP_DESCRIPTION
 
@@ -377,6 +438,8 @@ class VectorizationStep(BaseProcessingStep):
 
 
 class StandaloneVectorizationStep(BaseProcessingStep):
+    """Vectorizing text as a standalone command (nqdc vectorize)."""
+
     name = _STEP_NAME
     short_description = _STEP_DESCRIPTION
 

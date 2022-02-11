@@ -1,13 +1,16 @@
+"""Extracting coordinate space from articles, based on NeuroSynth heuristic."""
 import re
+from typing import Dict, Any
 
 from lxml import etree
-from typing import Dict, Any
 
 from nqdc._typing import BaseExtractor
 from nqdc._utils import get_pmcid
 
 
 class CoordinateSpaceExtractor(BaseExtractor):
+    """Extracting coordinate space from article XML"""
+
     fields = ("pmcid", "coordinate_space")
     name = "coordinate_space"
 

@@ -1,4 +1,5 @@
 import builtins
+import importlib
 from pathlib import Path
 import json
 import sys
@@ -9,20 +10,42 @@ import pytest
 from nqdc import _nimare
 
 
-def test_nimare_import_failure(monkeypatch, tmp_path):
-    monkeypatch.delitem(sys.modules, "nimare", False)
-    monkeypatch.delitem(sys.modules, "nimare.io", False)
-    _builtins_import = builtins.__import__
+@pytest.fixture
+def can_not_import_nimare(monkeypatch):
+    with monkeypatch.context():
+        monkeypatch.delitem(sys.modules, "nimare", False)
+        monkeypatch.delitem(sys.modules, "nimare.io", False)
+        _builtins_import = builtins.__import__
 
-    def mock_import(name, *args, **kwargs):
-        if "nimare" in name:
-            raise ImportError("nimare not installed")
-        return _builtins_import(name, *args, **kwargs)
+        def mock_import(name, *args, **kwargs):
+            if "nimare" in name:
+                raise ImportError("nimare not installed")
+            return _builtins_import(name, *args, **kwargs)
 
-    monkeypatch.setattr("builtins.__import__", mock_import)
+        monkeypatch.setattr("builtins.__import__", mock_import)
+        yield
+    importlib.reload(_nimare)
+
+
+def test_nimare_import_failure(can_not_import_nimare, tmp_path):
+    importlib.reload(_nimare)
+    assert _nimare._NIMARE_INSTALLED is False
     output_dir, code = _nimare.make_nimare_dataset(tmp_path, tmp_path)
     assert output_dir is None
     assert code == 1
+
+
+@pytest.fixture
+def can_import_nimare(monkeypatch):
+    monkeypatch.setitem(sys.modules, "nimare", Mock())
+    monkeypatch.setitem(sys.modules, "nimare.io", Mock())
+    yield
+    importlib.reload(_nimare)
+
+
+def test_nimare_import_success(can_import_nimare):
+    importlib.reload(_nimare)
+    assert _nimare._NIMARE_INSTALLED is True
 
 
 @pytest.mark.parametrize(

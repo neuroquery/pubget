@@ -1,3 +1,4 @@
+"""Pipeline: chain processing steps (used for the nqdc run command)."""
 import argparse
 from pathlib import Path
 from typing import Sequence, Mapping, Tuple, Dict, Optional
@@ -19,6 +20,8 @@ _FULL_PIPELINE_DESCRIPTION = (
 
 
 class Pipeline(BaseProcessingStep):
+    """Chaining several processing steps."""
+
     name = _STEP_NAME
     short_description = _STEP_DESCRIPTION
 

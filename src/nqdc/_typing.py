@@ -1,3 +1,4 @@
+"""Base classes and utilities for typing."""
 from os import PathLike
 from pathlib import Path
 from abc import ABC, abstractmethod
@@ -9,10 +10,15 @@ from lxml import etree
 import pandas as pd
 
 PathLikeOrStr = Union[PathLike, str]
+# argparse public functions (add_argument_group) return a private type so we
+# have to use it here.
+# pylint: disable-next=protected-access
 ArgparseActions = Union[argparse.ArgumentParser, argparse._ArgumentGroup]
 
 
 class BaseExtractor(ABC):
+    """Extractors used by the `_data_extraction` module."""
+
     @property
     @abstractmethod
     def fields(self) -> Tuple[str, ...]:
@@ -31,12 +37,16 @@ class BaseExtractor(ABC):
 
 
 class BaseWriter(AbstractContextManager):
+    """Writers used by the `_data_extraction` module."""
+
     @abstractmethod
     def write(self, all_data: Mapping[str, Any]) -> None:
         """Write part of data extracted from article to storage."""
 
 
 class BaseProcessingStep(ABC):
+    """A processing step in the `nqdc` pipeline."""
+
     @property
     @abstractmethod
     def name(self) -> str:

@@ -1,3 +1,4 @@
+"""Extracting stereotactic coordinates from XML articles."""
 import logging
 import re
 import html
@@ -57,6 +58,8 @@ _COORD_FIELDS = ("pmcid", "table_id", "table_label", "x", "y", "z")
 
 
 class CoordinateExtractor(BaseExtractor):
+    """Extracting coordinates from articles."""
+
     fields = _COORD_FIELDS
     name = "coordinates"
 
@@ -64,6 +67,9 @@ class CoordinateExtractor(BaseExtractor):
         self._stylesheet = None
 
     def extract(self, article: etree.ElementTree) -> pd.DataFrame:
+        # lazy loading the stylesheet because lxml.XSLT cannot be pickled so
+        # loading it in __init__ would prevent passing extractor to child
+        # processes
         if self._stylesheet is None:
             self._stylesheet = _utils.load_stylesheet("table_extraction.xsl")
         coords = _extract_coordinates_from_article(article, self._stylesheet)
@@ -91,7 +97,7 @@ def _extract_coordinates_from_article_tables(
 ) -> pd.DataFrame:
     pmcid = int(article_tables.find("pmcid").text)
     all_coordinates = []
-    for i, table in enumerate(article_tables.iterfind("extracted-table")):
+    for table in article_tables.iterfind("extracted-table"):
         try:
             table_id = table.find("table-id").text
             table_label = table.find("table-label").text
@@ -214,19 +220,19 @@ def _to_numeric(series: pd.Series) -> pd.Series:
     )
 
 
-def _find_xyz(tr: Sequence[str]) -> List[List[int]]:
+def _find_xyz(table_columns: Sequence[str]) -> List[List[int]]:
     found = []
     pos = 0
-    while pos < len(tr) - 2:
+    while pos < len(table_columns) - 2:
         if (
-            re.search(r"\bx\b", tr[pos], re.I)
-            and re.search(r"\by\b", tr[pos + 1], re.I)
-            and re.search(r"\bz\b", tr[pos + 2], re.I)
+            re.search(r"\bx\b", table_columns[pos], re.I)
+            and re.search(r"\by\b", table_columns[pos + 1], re.I)
+            and re.search(r"\bz\b", table_columns[pos + 2], re.I)
         ) or (
-            re.match(_COORD_HEAD_NAME, tr[pos])
-            and re.match(_COORD_HEAD_NAME, tr[pos + 1])
-            and re.match(_COORD_HEAD_NAME, tr[pos + 2])
-            and not re.search(r"\bx\b", tr[pos + 1], re.I)
+            re.match(_COORD_HEAD_NAME, table_columns[pos])
+            and re.match(_COORD_HEAD_NAME, table_columns[pos + 1])
+            and re.match(_COORD_HEAD_NAME, table_columns[pos + 2])
+            and not re.search(r"\bx\b", table_columns[pos + 1], re.I)
         ):
             found.append([pos, pos + 1, pos + 2])
             pos += 2

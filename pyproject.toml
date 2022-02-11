@@ -10,3 +10,7 @@ disallow_untyped_defs = true
 [[tool.mypy.overrides]]
 module = ["joblib.*", "sklearn.*", "lxml.*", "scipy.*", "pandas.*", "neuroquery.*", "nimare.*"]
 ignore_missing_imports = true
+
+[tool.black]
+line-length = 79
+exclude = "data"

@@ -6,7 +6,7 @@ from unittest.mock import Mock
 import numpy as np
 import pytest
 
-from nqdc import _commands, _vectorization
+from nqdc import _commands, _vectorization, _nimare
 
 
 def test_full_pipeline_command_with_nimare(
@@ -22,18 +22,26 @@ def test_full_pipeline_command_with_nimare(
     assert code == 0
     voc_file = test_data_dir.joinpath("vocabulary.csv")
     voc_checksum = _vectorization._checksum_vocabulary(voc_file)
-    assert tmp_path.joinpath(
+    nimare_file = tmp_path.joinpath(
         "query-7838640309244685021f9954f8aa25fc",
         f"subset_allArticles-voc_{voc_checksum}_nimareDataset",
         "nimare_dataset.json",
-    ).is_file()
+    )
+    assert nimare_file.is_file()
+    nimare_data = json.loads(nimare_file.read_text("utf-8"))
+    assert "contrasts" in list(nimare_data.values())[0]
 
 
 @pytest.fixture
 def mock_nimare(monkeypatch):
-    monkeypatch.setitem(sys.modules, "nimare", Mock())
+    nimare = Mock()
     nimare_io = Mock()
+    nimare.io = nimare_io
+    monkeypatch.setitem(sys.modules, "nimare", nimare)
     monkeypatch.setitem(sys.modules, "nimare.io", nimare_io)
+    monkeypatch.setattr(_nimare, "_NIMARE_INSTALLED", True)
+    monkeypatch.setattr(_nimare, "nimare", nimare, raising=False)
+    # monkeypatch.setattr(_nimare.nimare, "io", nimare_io)
 
     def convert(coords, meta, output_file, **kwargs):
         Path(output_file).write_text(json.dumps("nimare"), "utf-8")

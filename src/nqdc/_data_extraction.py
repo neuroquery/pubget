@@ -1,3 +1,4 @@
+"""'extract_data' step: extract metadata, text and coordinates from XML."""
 from pathlib import Path
 import functools
 import multiprocessing
@@ -11,7 +12,6 @@ from typing import (
     Optional,
     Tuple,
     Any,
-    List,
     Mapping,
     Sequence,
 )
@@ -28,7 +28,6 @@ from nqdc._writers import CSVWriter
 from nqdc._typing import (
     PathLikeOrStr,
     BaseExtractor,
-    BaseWriter,
     BaseProcessingStep,
     ArgparseActions,
 )
@@ -41,7 +40,7 @@ _STEP_DESCRIPTION = "Extract metadata, text and coordinates from articles."
 _CHUNK_SIZE = 100
 
 
-def config_worker_logging() -> None:
+def _config_worker_logging() -> None:
     # Silence logging from workers. We could add a QueueHandler or a handler
     # that logs to a file with the pid in its name but it's probably not needed
     # as the extraction doesn't produce much logging output and we can see it
@@ -51,6 +50,7 @@ def config_worker_logging() -> None:
 
 def _extract_data(
     articles_dir: Path,
+    data_extractors: Sequence[BaseExtractor],
     n_jobs: int,
     articles_semaphore: multiprocessing.synchronize.Semaphore,
 ) -> Generator[Optional[Dict[str, Any]], None, None]:
@@ -59,13 +59,6 @@ def _extract_data(
     Yields `None` for articles that cannot be parsed. `articles_semaphore` is
     used to block this if too many articles are waiting to be written.
     """
-    data_extractors: List[BaseExtractor] = [
-        MetadataExtractor(),
-        AuthorsExtractor(),
-        TextExtractor(),
-        CoordinateExtractor(),
-        CoordinateSpaceExtractor(),
-    ]
     extract = functools.partial(
         _extract_article_data, data_extractors=data_extractors
     )
@@ -73,7 +66,13 @@ def _extract_data(
     if n_jobs == 1:
         yield from map(extract, article_files)
     else:
-        pool = multiprocessing.Pool(n_jobs, initializer=config_worker_logging)
+        # if we use the context manager it can cause pytest-cov to hang as
+        # __exit__ uses terminate() rather than close(); see
+        # https://pytest-cov.readthedocs.io/en/latest/subprocess-support.html
+        # so we use the try/finally block and call close() and join() instead
+
+        # pylint: disable-next=consider-using-with
+        pool = multiprocessing.Pool(n_jobs, initializer=_config_worker_logging)
         try:
             yield from pool.imap_unordered(
                 extract,
@@ -81,9 +80,6 @@ def _extract_data(
                 chunksize=_CHUNK_SIZE,
             )
         finally:
-            # if we use the context manager instead it can cause pytest-cov to
-            # hang as it uses terminate() rather than close() see
-            # https://pytest-cov.readthedocs.io/en/latest/subprocess-support.html
             pool.close()
             pool.join()
 
@@ -225,12 +221,16 @@ def _do_extract_data_to_csv(
     sterotactic coordinate triplet have their data saved.
     """
     n_to_process = _utils.get_n_articles(articles_dir)
-    all_writers: List[BaseWriter] = [
-        CSVWriter.from_extractor(MetadataExtractor, output_dir),
-        CSVWriter.from_extractor(AuthorsExtractor, output_dir),
-        CSVWriter.from_extractor(TextExtractor, output_dir),
-        CSVWriter.from_extractor(CoordinateExtractor, output_dir),
-        CSVWriter.from_extractor(CoordinateSpaceExtractor, output_dir),
+    data_extractors = [
+        MetadataExtractor(),
+        AuthorsExtractor(),
+        TextExtractor(),
+        CoordinateExtractor(),
+        CoordinateSpaceExtractor(),
+    ]
+    all_writers = [
+        CSVWriter.from_extractor(extractor, output_dir)
+        for extractor in data_extractors
     ]
     with ExitStack() as stack:
         for writer in all_writers:
@@ -241,7 +241,10 @@ def _do_extract_data_to_csv(
         # enough.
         articles_semaphore = multiprocessing.Semaphore(_CHUNK_SIZE * n_jobs)
         for article_data in _extract_data(
-            articles_dir, n_jobs=n_jobs, articles_semaphore=articles_semaphore
+            articles_dir,
+            data_extractors,
+            n_jobs=n_jobs,
+            articles_semaphore=articles_semaphore,
         ):
             if _should_write(article_data, articles_with_coords_only):
                 assert article_data is not None  # for mypy
@@ -289,6 +292,8 @@ def _edit_argument_parser(
 
 
 class DataExtractionStep(BaseProcessingStep):
+    """Data extraction as part of a pipeline (nqdc run)."""
+
     name = _STEP_NAME
     short_description = _STEP_DESCRIPTION
 
@@ -308,6 +313,8 @@ class DataExtractionStep(BaseProcessingStep):
 
 
 class StandaloneDataExtractionStep(BaseProcessingStep):
+    """Data extraction as a standalone command (nqdc extract_data)."""
+
     name = _STEP_NAME
     short_description = _STEP_DESCRIPTION
 

@@ -1,3 +1,4 @@
+"""Various utility functions for internal use."""
 from pathlib import Path
 import argparse
 import logging
@@ -19,6 +20,7 @@ _LOG_DATE_FORMAT = "%Y-%m-%dT%H:%M:%S%z"
 
 
 def get_nqdc_version() -> str:
+    """Find the package version."""
     return (
         Path(__file__)
         .parent.joinpath("data", "VERSION")
@@ -94,12 +96,14 @@ def configure_logging(
 
 
 def checksum(value: Union[str, bytes]) -> str:
+    """MD5 checksum of utf-8 encoded string."""
     if isinstance(value, str):
         value = value.encode("utf-8")
     return hashlib.md5(value).hexdigest()
 
 
 def load_stylesheet(stylesheet_name: str) -> etree.XSLT:
+    """Find and parse an XSLT stylesheet."""
     stylesheet_path = Path(__file__).parent.joinpath(
         "data", "stylesheets", stylesheet_name
     )
@@ -109,6 +113,7 @@ def load_stylesheet(stylesheet_name: str) -> etree.XSLT:
 
 
 def get_pmcid(article: Union[etree.ElementTree, etree.Element]) -> int:
+    """Extract the PubMedCentral ID from an XML article."""
     return int(
         article.find("front/article-meta/article-id[@pub-id-type='pmc']").text
     )
@@ -208,6 +213,7 @@ def get_n_articles(data_dir: Path) -> Optional[int]:
 
 
 def add_n_jobs_argument(argument_parser: ArgparseActions) -> None:
+    """Add n_jobs to command-line arguments if it is not already there."""
     try:
         argument_parser.add_argument(
             "--n_jobs",
@@ -221,6 +227,7 @@ def add_n_jobs_argument(argument_parser: ArgparseActions) -> None:
 
 
 def check_n_jobs(n_jobs: int) -> int:
+    """Choose the number of processes to use."""
     cpu_count = os.cpu_count()
     if n_jobs == -1:
         return cpu_count if cpu_count is not None else 1

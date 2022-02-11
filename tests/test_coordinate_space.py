@@ -27,7 +27,7 @@ def test_neurosynth_guess_space(text, space):
 
 
 def _original_neurosynth_guess_space(text):
-    """ Take article text as input and return a guess about the image space."""
+    """Take article text as input and return a guess about the image space."""
 
     targets = [
         "mni",

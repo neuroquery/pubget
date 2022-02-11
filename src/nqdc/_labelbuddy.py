@@ -1,3 +1,7 @@
+"""'extract_labelbuddy_data' step: prepare docs for labelbuddy.
+
+https://jeromedockes.github.io/labelbuddy/
+"""
 from pathlib import Path
 import re
 import argparse
@@ -181,6 +185,8 @@ def prepare_labelbuddy_documents(
 
 
 class LabelbuddyStep(BaseProcessingStep):
+    """labelbuddy as part of a pipeline (nqdc run)."""
+
     name = _STEP_NAME
     short_description = _STEP_DESCRIPTION
 
@@ -215,6 +221,8 @@ class LabelbuddyStep(BaseProcessingStep):
 
 
 class StandaloneLabelbuddyStep(BaseProcessingStep):
+    """labelbuddy as a standalone command (nqdc extract_labelbuddy_data)."""
+
     name = _STEP_NAME
     short_description = _STEP_DESCRIPTION
 

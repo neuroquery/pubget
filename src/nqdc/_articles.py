@@ -1,3 +1,4 @@
+"""'extract_articles' step: extract articles from bulk PMC download."""
 import logging
 import argparse
 from pathlib import Path
@@ -98,10 +99,10 @@ def _do_extract_articles(
 def _extract_from_articleset(batch_file: Path, output_dir: Path) -> int:
     """Extract articles from one batch and return the number of articles."""
     _LOG.debug(f"Extracting articles from {batch_file.name}")
-    with open(batch_file, "rb") as f:
-        tree = etree.parse(f)
+    with open(batch_file, "rb") as batch_fh:
+        tree = etree.parse(batch_fh)
     n_articles = 0
-    for art_nb, article in enumerate(tree.iterfind("article")):
+    for article in tree.iterfind("article"):
         pmcid = _utils.get_pmcid(article)
         subdir = output_dir.joinpath(_utils.checksum(str(pmcid))[:3])
         subdir.mkdir(exist_ok=True, parents=True)
@@ -114,6 +115,8 @@ def _extract_from_articleset(batch_file: Path, output_dir: Path) -> int:
 
 
 class ArticleExtractionStep(BaseProcessingStep):
+    """Article extraction as part of a pipeline (nqdc run)."""
+
     name = _STEP_NAME
     short_description = _STEP_DESCRIPTION
 
@@ -130,6 +133,8 @@ class ArticleExtractionStep(BaseProcessingStep):
 
 
 class StandaloneArticleExtractionStep(BaseProcessingStep):
+    """Article extraction as a standalone command (nqdc extract_articles)."""
+
     name = _STEP_NAME
     short_description = _STEP_DESCRIPTION
 

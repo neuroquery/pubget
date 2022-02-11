@@ -1,3 +1,4 @@
+"""Extracting list of authors from article XML."""
 import pandas as pd
 from lxml import etree
 
@@ -6,6 +7,8 @@ from nqdc import _utils
 
 
 class AuthorsExtractor(BaseExtractor):
+    """Extracting list of authors from article XML."""
+
     fields = ("pmcid", "surname", "given-names")
     name = "authors"
 

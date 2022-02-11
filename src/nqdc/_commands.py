@@ -1,3 +1,4 @@
+"""Implementation of the nqdc command."""
 import argparse
 from typing import Optional, List
 
@@ -86,6 +87,7 @@ def _get_parser() -> argparse.ArgumentParser:
 
 
 def nqdc_command(argv: Optional[List[str]] = None) -> int:
+    """Entry point: nqdc command-line tool."""
     parser = _get_parser()
     args = parser.parse_args(argv)
     configure_logging(args.log_dir)

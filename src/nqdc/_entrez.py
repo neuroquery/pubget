@@ -1,3 +1,4 @@
+"""Client for the Entrez E-utilities needed for downloading articles."""
 from pathlib import Path
 import logging
 from urllib.parse import urljoin
@@ -13,6 +14,8 @@ _LOG = logging.getLogger(__name__)
 
 
 class EntrezClient:
+    """Client for esearch and efetch using the pmc database."""
+
     _default_timeout = 27
     _entrez_base_url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
     _esearch_base_url = urljoin(_entrez_base_url, "esearch.fcgi")
@@ -33,6 +36,7 @@ class EntrezClient:
         self._last_request_time: Union[None, float] = None
         self._session = requests.Session()
         self.last_search_result: Optional[Mapping[str, str]] = None
+        self.n_failures = 0
 
     def _wait_to_send_request(self) -> None:
         if self._last_request_time is None:
@@ -70,6 +74,12 @@ class EntrezClient:
         self,
         query: str,
     ) -> Dict[str, str]:
+        """Perform search.
+
+        If search fails, returns an empty dictionary. Otherwise returns the
+        search results -- keys of interest are "count", "webenv", and
+        "querykey".
+        """
         search_params = {
             "db": "pmc",
             "term": f"{query}&open+access[filter]",
@@ -122,6 +132,17 @@ class EntrezClient:
         n_docs: Optional[int] = None,
         retmax: int = 500,
     ) -> None:
+        """Performs the download.
+
+        If not `None`, search_result` must contain "webenv", "querykey" and
+        "count". Otherwise a search must have been performed first and the
+        results from the search are used.
+
+        This function assumes that the caller (the `_download` module) has made
+        sure that if a partial download is in the output directory, it is safe
+        to skip already-downloaded batches -- ie the webenv, querykey and
+        retmax are the same.
+        """
         output_dir = Path(output_dir)
         search_result = self._check_search_result(search_result)
         if search_result is None:

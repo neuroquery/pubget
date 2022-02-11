@@ -1,3 +1,4 @@
+"""'download' step: bulk download from PubMedCentral."""
 import logging
 import json
 import os
@@ -165,7 +166,21 @@ def _edit_argument_parser(argument_parser: ArgparseActions) -> None:
     )
 
 
+def _download_articles_for_args(args: argparse.Namespace) -> Tuple[Path, int]:
+    api_key = _get_api_key(args)
+    query = _get_query(args)
+    download_dir, code = download_articles_for_query(
+        query=query,
+        data_dir=args.data_dir,
+        n_docs=args.n_docs,
+        api_key=api_key,
+    )
+    return download_dir, code
+
+
 class DownloadStep(BaseProcessingStep):
+    """Download as part of a pipeline (nqdc run)."""
+
     name = _STEP_NAME
     short_description = _STEP_DESCRIPTION
 
@@ -177,18 +192,12 @@ class DownloadStep(BaseProcessingStep):
         args: argparse.Namespace,
         previous_steps_output: Mapping[str, Path],
     ) -> Tuple[Path, int]:
-        api_key = _get_api_key(args)
-        query = _get_query(args)
-        download_dir, code = download_articles_for_query(
-            query=query,
-            data_dir=args.data_dir,
-            n_docs=args.n_docs,
-            api_key=api_key,
-        )
-        return download_dir, code
+        return _download_articles_for_args(args)
 
 
-class StandaloneDownloadStep(DownloadStep):
+class StandaloneDownloadStep(BaseProcessingStep):
+    """Download as a standalone command (nqdc download)."""
+
     name = _STEP_NAME
     short_description = _STEP_DESCRIPTION
 
@@ -198,3 +207,10 @@ class StandaloneDownloadStep(DownloadStep):
             "Download full-text articles from "
             "PubMed Central for the given query."
         )
+
+    def run(
+        self,
+        args: argparse.Namespace,
+        previous_steps_output: Mapping[str, Path],
+    ) -> Tuple[Path, int]:
+        return _download_articles_for_args(args)
