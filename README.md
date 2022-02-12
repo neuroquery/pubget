@@ -392,7 +392,7 @@ default `neuroquery` one for computing TFIDF features.
 
 This step is executed by the `nqdc extract_labelbuddy_data` command.
 When running the full pipeline this step is optional: we must use
-the `--labelbuddy` or `--labelbuddy_batch_size` option for it to be executed.
+the `--labelbuddy` or `--labelbuddy_part_size` option for it to be executed.
 
 It prepares the articles whose data was extracted for annotation with
 [labelbuddy](https://jeromedockes.github.io/labelbuddy/).
@@ -403,7 +403,7 @@ We pass the `_extractedData` directory created by `nqdc extract_data`:
 nqdc extract_labelbuddy_data nqdc_data/query-10c72245c52d7d4e6f535e2bcffb2572/subset_articlesWithCoords_extractedData
 ```
 
-This creates a directory whose name ends with `labelbuddyData` containig the batches of documents in JSONL format (in this case there is a single batch):
+This creates a directory whose name ends with `labelbuddyData` containing the batches of documents in JSONL format (in this case there is a single batch):
 
 ```
 · nqdc_data
@@ -412,7 +412,7 @@ This creates a directory whose name ends with `labelbuddyData` containig the bat
       ├── articlesets
       ├── subset_articlesWithCoords_extractedData
       ├── subset_articlesWithCoords_labelbuddyData
-      │   ├── documents_00000.jsonl
+      │   ├── documents_00001.jsonl
       │   └── info.json
       └── subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
 ```
@@ -420,7 +420,7 @@ This creates a directory whose name ends with `labelbuddyData` containig the bat
 The documents can be imported into `labelbuddy` using the GUI or with:
 
 ```
-labelbuddy mydb.labelbuddy --import-docs documents_00000.jsonl
+labelbuddy mydb.labelbuddy --import-docs documents_00001.jsonl
 ```
 
 See the [labelbuddy

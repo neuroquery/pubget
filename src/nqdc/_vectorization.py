@@ -169,13 +169,12 @@ def _extract_word_counts(
         str(vocabulary_file), use_idf=False, norm=None, voc_mapping={}
     ).fit()
     chunksize = 200
-    all_chunks = pd.read_csv(
-        corpus_file, encoding="utf-8", chunksize=chunksize
-    )
-    vectorized_chunks = Parallel(n_jobs=n_jobs, verbose=8)(
-        delayed(_vectorize_articles)(chunk, vectorizer=vectorizer)
-        for chunk in all_chunks
-    )
+    with open(corpus_file, encoding="utf-8") as corpus_fh:
+        all_chunks = pd.read_csv(corpus_fh, chunksize=chunksize)
+        vectorized_chunks = Parallel(n_jobs=n_jobs, verbose=8)(
+            delayed(_vectorize_articles)(chunk, vectorizer=vectorizer)
+            for chunk in all_chunks
+        )
     vectorized_fields = {}
     for field in _FIELDS:
         vectorized_fields[field] = sparse.vstack(

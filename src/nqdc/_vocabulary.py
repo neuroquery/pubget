@@ -2,7 +2,7 @@
 import argparse
 import logging
 from pathlib import Path
-from typing import Generator, Tuple, Optional, Mapping
+from typing import Generator, Tuple, Optional, Mapping, TextIO
 
 import numpy as np
 import pandas as pd
@@ -17,10 +17,10 @@ _STEP_NAME = "extract_vocabulary"
 _STEP_DESCRIPTION = "Extract vocabulary of word n-grams from text."
 
 
-def _iter_corpus(corpus_file: Path) -> Generator[str, None, None]:
+def _iter_corpus(corpus_fh: TextIO) -> Generator[str, None, None]:
     """Yield the concatenated text fields of articles one by one."""
     n_articles = 0
-    for chunk in pd.read_csv(corpus_file, encoding="utf-8", chunksize=500):
+    for chunk in pd.read_csv(corpus_fh, chunksize=500):
         chunk.fillna("", inplace=True)
         text = chunk["title"].str.cat(
             chunk.loc[:, ["keywords", "abstract", "body"]], sep="\n"
@@ -60,7 +60,8 @@ def extract_vocabulary(extracted_data_dir: PathLikeOrStr) -> pd.Series:
         dtype=np.float32,
         min_df=0.001,
     )
-    counts = vectorizer.fit_transform(_iter_corpus(corpus_file))
+    with open(corpus_file, encoding="utf-8") as corpus_fh:
+        counts = vectorizer.fit_transform(_iter_corpus(corpus_fh))
     n_docs = counts.shape[0]
     doc_counts = np.asarray(counts.sum(axis=0)).squeeze()
     doc_freq = pd.Series(

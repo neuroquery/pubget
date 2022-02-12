@@ -55,7 +55,8 @@ def mock_nimare(monkeypatch):
     [
         ("file", True, []),
         ("default", False, ["--labelbuddy"]),
-        ("extract", False, ["--labelbuddy_batch_size", "3"]),
+        ("extract", False, ["--labelbuddy_part_size", "3"]),
+        ("default", False, ["--labelbuddy_part_size", "-1"]),
     ],
 )
 def test_full_pipeline_command(
@@ -105,11 +106,14 @@ def test_full_pipeline_command(
         ).is_dir()
         mock_nimare.assert_called_once()
     if labelbuddy_params:
-        assert tmp_path.joinpath(
-            query_name,
-            "subset_allArticles_labelbuddyData",
-            "documents_00000.jsonl",
-        ).is_file()
+        with open(
+            tmp_path.joinpath(
+                query_name,
+                "subset_allArticles_labelbuddyData",
+                "documents_00001.jsonl",
+            )
+        ) as f:
+            assert len(list(f)) == (3 if "3" in labelbuddy_params else 7)
     assert len(list(log_dir.glob("*"))) == 1
 
 
@@ -151,7 +155,7 @@ def test_steps(
         ["extract_labelbuddy_data", str(extracted_data_dir)]
     )
     assert query_dir.joinpath(
-        "subset_allArticles_labelbuddyData", "documents_00000.jsonl"
+        "subset_allArticles_labelbuddyData", "documents_00001.jsonl"
     ).is_file()
     _commands.nqdc_command(["extract_nimare_data", str(vectorized_dir)])
     assert query_dir.joinpath(
