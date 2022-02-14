@@ -158,9 +158,11 @@ def _extract_coordinates_from_table(table: pd.DataFrame) -> pd.DataFrame:
     result = pd.concat(
         [
             pd.DataFrame(
-                table.iloc[:, index].values, columns=["x", "y", "z"], dtype=str
+                table.iloc[:, list(idx)].values,
+                columns=["x", "y", "z"],
+                dtype=str,
             )
-            for index in xyz_indices
+            for idx in xyz_indices
         ]
     )
     for column in result:
@@ -220,23 +222,32 @@ def _to_numeric(series: pd.Series) -> pd.Series:
     )
 
 
-def _find_xyz(table_columns: Sequence[str]) -> List[List[int]]:
+def _is_coord_triplet(columns: Sequence[str]) -> bool:
+    if (
+        re.search(r"\bx\b", columns[0], re.I)
+        and re.search(r"\by\b", columns[1], re.I)
+        and re.search(r"\bz\b", columns[2], re.I)
+    ):
+        return True
+    if (
+        re.match(_COORD_HEAD_NAME, columns[0])
+        and re.match(_COORD_HEAD_NAME, columns[1])
+        and re.match(_COORD_HEAD_NAME, columns[2])
+        and not re.search(r"\bx\b", columns[1], re.I)
+    ):
+        return True
+    return False
+
+
+def _find_xyz(table_columns: Sequence[str]) -> List[Tuple[int, int, int]]:
     found = []
     pos = 0
     while pos < len(table_columns) - 2:
-        if (
-            re.search(r"\bx\b", table_columns[pos], re.I)
-            and re.search(r"\by\b", table_columns[pos + 1], re.I)
-            and re.search(r"\bz\b", table_columns[pos + 2], re.I)
-        ) or (
-            re.match(_COORD_HEAD_NAME, table_columns[pos])
-            and re.match(_COORD_HEAD_NAME, table_columns[pos + 1])
-            and re.match(_COORD_HEAD_NAME, table_columns[pos + 2])
-            and not re.search(r"\bx\b", table_columns[pos + 1], re.I)
-        ):
-            found.append([pos, pos + 1, pos + 2])
-            pos += 2
-        pos += 1
+        if _is_coord_triplet(table_columns[pos : pos + 3]):
+            found.append((pos, pos + 1, pos + 2))
+            pos += 3
+        else:
+            pos += 1
     return found
 
 

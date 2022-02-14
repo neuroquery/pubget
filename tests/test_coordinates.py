@@ -108,9 +108,13 @@ def test_find_xyz():
             "Z.1",
             "x.2",
             "y.2",
+            "a",
+            "location ",
+            "location ",
+            "location ",
         ]
     )
-    assert found == [[1, 2, 3], [6, 7, 8]]
+    assert found == [(1, 2, 3), (6, 7, 8), (13, 14, 15)]
 
 
 def test_table_to_coordinates():
