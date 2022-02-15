@@ -1,7 +1,6 @@
 """Extracting stereotactic coordinates from XML articles."""
 import logging
 import re
-import html
 from typing import Tuple, Any, Sequence, List
 
 import numpy as np
@@ -14,6 +13,15 @@ from nqdc._typing import BaseExtractor
 
 
 _LOG = logging.getLogger(__name__)
+
+_CHAR_MAP = {
+    0x2212: "-",
+    0x2796: "-",
+    0x2013: "-",
+    0xFE63: "-",
+    0xFF0D: "-",
+    0xFF0B: "+",
+}
 
 _TRIPLET = r"""(?ix)
     ^{prefix}
@@ -101,13 +109,13 @@ def _extract_coordinates_from_article_tables(
         try:
             table_id = table.find("table-id").text
             table_label = table.find("table-label").text
-            kwargs = {"header": 0} if not table.find("th") else {}
+            kwargs = {}
+            if not table.xpath("(.//th|.//thead)"):
+                kwargs["header"] = 0
             table_data = pd.read_html(
-                _map_chars(
-                    etree.tostring(
-                        table.find("transformed-table//{*}table")
-                    ).decode("utf-8"),
-                ),
+                etree.tostring(
+                    table.find("transformed-table//{*}table")
+                ).decode("utf-8"),
                 thousands=None,
                 flavor="lxml",
                 **kwargs,
@@ -133,22 +141,14 @@ def _extract_coordinates_from_article_tables(
     return pd.DataFrame(columns=_COORD_FIELDS)
 
 
-def _map_chars(text: str) -> str:
-    _char_map = {
-        0x2212: "-",
-        0x2796: "-",
-        0x2013: "-",
-        0xFE63: "-",
-        0xFF0D: "-",
-        0xFF0B: "+",
-    }
-    return html.unescape(text).translate(_char_map)
-
-
 def _extract_coordinates_from_table(table: pd.DataFrame) -> pd.DataFrame:
-    table = table.copy()
+    table = table.applymap(
+        lambda x: x if not isinstance(x, str) else x.translate(_CHAR_MAP)
+    )
     if isinstance(table.columns, pd.MultiIndex):
-        table.columns = table.columns.get_level_values(-1)
+        table.columns = [
+            " ".join(map(str, level_values)) for level_values in table.columns
+        ]
     table.columns = list(map(str, table.columns))
     table = _expand_all_xyz_cols(table)
     xyz_indices = _find_xyz(table.columns)

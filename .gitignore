@@ -1,5 +1,6 @@
 doc_build/
 profile.svg
+flycheck__*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

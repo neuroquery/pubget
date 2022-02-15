@@ -22,6 +22,7 @@ def _example_table(values_start=20):
 
 
 def test_triplet():
+    """check what is matched as coordinate triplets in single column"""
     head_triplet = re.compile(_coordinates._COORD_HEAD_TRIPLET)
     head_triplet.match("(x, y, z)") is not None
     head_triplet.match("[x Y z ]") is not None
@@ -138,7 +139,68 @@ def test_check_empty_table():
     assert _coordinates._check_table(table)
 
 
+def test_multiple_header_rows():
+    """column names that indicate coordinates
+    are found even if buried in the middle of multiple header rows."""
+    tables = etree.XML(
+        """<extracted-tables-set>
+    <pmcid>123</pmcid>
+    <extracted-table>
+    <table-id />
+    <table-label />
+    <transformed-table>
+    <table>
+        <thead>
+            <tr><td>Task 1</td></tr>
+            <tr><td>x, y, z</td></tr>
+            <tr><td>Something</td></tr>
+        </thead>
+        <tbody>
+            <tr><td>-10,-15,+68 </td></tr>
+        </tbody>
+    </table>
+    </transformed-table>
+    </extracted-table>
+    </extracted-tables-set>
+    """
+    )
+    coords = _coordinates._extract_coordinates_from_article_tables(tables)
+    assert (
+        coords.loc[:, ["x", "y", "z"]].values.ravel() == [-10, -15, 68]
+    ).all()
+
+
+def test_inline_elems():
+    """Check that:
+    - docbook xhtml conversion is applied
+    - elements inside table cells match the default template (are replaced by
+      their value)
+    """
+    tables = etree.XML(
+        """<article><front><article-meta>
+        <article-id pub-id-type="pmc">123</article-id></article-meta></front>
+        <body>
+        <table-wrap>
+    <table>
+        <thead>
+            <tr><td>x, y, z</td></tr>
+        </thead>
+        <tbody>
+            <tr><td><inline-formula>-</inline-formula>10,-15,+68 </td></tr>
+        </tbody>
+    </table>
+        </table-wrap>
+    </body>
+        </article>"""
+    )
+    coords = _coordinates.CoordinateExtractor().extract(tables)
+    assert (
+        coords.loc[:, ["x", "y", "z"]].values.ravel() == [-10, -15, 68]
+    ).all()
+
+
 def test_char_mapping():
+    """unicode characters that look like + or - are correctly mapped"""
     tables = etree.XML(
         """<extracted-tables-set>
     <pmcid>123</pmcid>
@@ -162,6 +224,7 @@ def test_char_mapping():
 
 
 def test_coordinate_extraction_failures(monkeypatch):
+    """Bad articles for which extration fails don't raise an exception."""
     _coordinates._extract_coordinates_from_article(
         Mock(), Mock(side_effect=ValueError)
     )
