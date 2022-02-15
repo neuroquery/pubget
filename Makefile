@@ -1,4 +1,4 @@
-.PHONY: test_all test test_mypy test_flake8 run_full_pipeline doc clean
+.PHONY: test_all test test_coverage test_coverage_strict test_mypy test_flake8 test_pylint run_full_pipeline doc black clean clean_all
 
 test_all: test_mypy test_flake8 test_coverage_strict test test_pylint
 
@@ -34,3 +34,6 @@ black:
 
 clean:
 	rm -rf doc_build build dist htmlcov .coverage .coverage.*
+
+clean_all: clean
+	rm -rf .mypy_cache .pytest_cache .tox
