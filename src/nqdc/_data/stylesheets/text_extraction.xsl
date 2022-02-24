@@ -45,10 +45,24 @@
 </xsl:template>
 
 
+<xsl:template name="start-heading">
+  <xsl:param name="n"/>
+  <xsl:if test="$n &gt; 0">
+    <xsl:text>#</xsl:text>
+    <xsl:call-template name="start-heading">
+      <xsl:with-param name="n" select="$n - 1"/>
+    </xsl:call-template>
+  </xsl:if>
+</xsl:template>
+
 <xsl:template match="sec/title" >
-<xsl:text>## </xsl:text><xsl:apply-templates />
-<xsl:text>
-</xsl:text>
+  <xsl:call-template name="start-heading">
+    <xsl:with-param name="n" select="count(ancestor::sec) + 1"/>
+  </xsl:call-template>
+  <xsl:text> </xsl:text>
+  <xsl:apply-templates />
+  <xsl:text>
+  </xsl:text>
 </xsl:template>
 
 <xsl:template match="text()" >
