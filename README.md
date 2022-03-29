@@ -493,6 +493,24 @@ command-line argument, or if we define the `NQDC_LOG_DIR` environment variable
 specified, a new log file with a timestamp is created and all the output is
 written there as well.
 
+# Writing plugins
+
+It is possible to write plugins and define [entry
+points](https://setuptools.pypa.io/en/latest/userguide/entry_point.html) to add
+functionality that is automatically executed when `nqdc` is run.
+
+The name of the entry point should be `nqdc.plugin_processing_steps`. It must be
+a function taking no arguments and returning a dictionary with keys
+`pipeline_steps` and `standalone_steps`. The corresponding values must be lists
+of processing step objects, that must implement the interface defined by
+`nqdc.BaseProcessingStep` (their types do not need to inherit from
+`nqdc.BaseProcessingStep`).
+
+All steps in `pipeline_steps` will be run when `nqdc run` is used. All steps in
+`standalone_steps` will be added as additional nqdc commands; for example if the
+`name` of a standalone step is `my_plugin`, the `nqdc my_plugin` command will
+become available.
+
 # Contributing
 
 Feedback and contributions are welcome. Development happens at the

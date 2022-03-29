@@ -1,7 +1,8 @@
 import json
 import sys
 from pathlib import Path
-from unittest.mock import Mock
+from unittest.mock import Mock, MagicMock
+import importlib_metadata
 
 import numpy as np
 import pytest
@@ -162,3 +163,55 @@ def test_steps(
         f"subset_allArticles-voc_{voc_checksum}_nimareDataset",
         "nimare_dataset.json",
     ).is_file()
+
+
+class _PipelineStep:
+    name = "myplugin"
+    short_description = "myplugin"
+
+    def __init__(self):
+        self.arg_parser_called = False
+        self.run_called = False
+
+    def edit_argument_parser(self, argument_parser):
+        self.arg_parser_called = True
+
+    def run(self, args, previous_steps_output):
+        self.run_called = True
+        return "", 0
+
+
+class _StandaloneStep(_PipelineStep):
+    pass
+
+
+def test_plugins(
+    monkeypatch,
+    tmp_path,
+    nq_datasets_mock,
+    entrez_mock,
+):
+
+    pipeline_plugin = _PipelineStep()
+    standalone_plugin = _StandaloneStep()
+
+    def _mock_entry_point():
+        return {
+            "pipeline_steps": [pipeline_plugin],
+            "standalone_steps": [standalone_plugin],
+        }
+
+    ep = Mock()
+    ep.load.return_value = _mock_entry_point
+    all_ep = Mock()
+    all_ep.select.return_value = [ep]
+    metadata_ep = MagicMock()
+    metadata_ep.return_value = all_ep
+    monkeypatch.setattr(importlib_metadata, "entry_points", metadata_ep)
+    args = ["run", str(tmp_path), "-q", "fMRI[abstract]"]
+    _commands.nqdc_command(args)
+    assert pipeline_plugin.arg_parser_called
+    assert pipeline_plugin.run_called
+    _commands.nqdc_command(["myplugin"])
+    assert standalone_plugin.arg_parser_called
+    assert standalone_plugin.run_called

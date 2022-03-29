@@ -9,6 +9,7 @@ from nqdc._vocabulary import extract_vocabulary_to_csv
 from nqdc._vectorization import vectorize_corpus_to_npz
 from nqdc._nimare import make_nimare_dataset
 from nqdc._labelbuddy import make_labelbuddy_documents
+from nqdc._typing import BaseProcessingStep
 
 __version__ = _utils.get_nqdc_version()
 
@@ -20,4 +21,5 @@ __all__ = [
     "vectorize_corpus_to_npz",
     "make_nimare_dataset",
     "make_labelbuddy_documents",
+    "BaseProcessingStep",
 ]

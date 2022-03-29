@@ -20,6 +20,8 @@ from nqdc._vectorization import VectorizationStep, StandaloneVectorizationStep
 from nqdc._nimare import NimareStep, StandaloneNimareStep
 from nqdc._labelbuddy import LabelbuddyStep, StandaloneLabelbuddyStep
 from nqdc._pipeline import Pipeline
+from nqdc._typing import BaseProcessingStep
+from nqdc import _plugins
 
 
 _NQDC_DESCRIPTION = (
@@ -42,21 +44,21 @@ def _get_root_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def _add_step_subparsers(
-    subparsers: argparse._SubParsersAction,
-) -> None:
-    all_steps = [
-        Pipeline(
-            [
-                DownloadStep(),
-                ArticleExtractionStep(),
-                DataExtractionStep(),
-                VocabularyExtractionStep(),
-                VectorizationStep(),
-                LabelbuddyStep(),
-                NimareStep(),
-            ]
-        ),
+def _get_processing_steps() -> List[BaseProcessingStep]:
+    pipeline_steps = [
+        DownloadStep(),
+        ArticleExtractionStep(),
+        DataExtractionStep(),
+        VocabularyExtractionStep(),
+        VectorizationStep(),
+        LabelbuddyStep(),
+        NimareStep(),
+    ]
+    plugin_steps = _plugins.get_plugin_processing_steps()
+    pipeline_steps.extend(plugin_steps["pipeline_steps"])
+    pipeline = Pipeline(pipeline_steps)
+    standalone_steps = [
+        pipeline,
         StandaloneDownloadStep(),
         StandaloneArticleExtractionStep(),
         StandaloneDataExtractionStep(),
@@ -65,6 +67,14 @@ def _add_step_subparsers(
         StandaloneLabelbuddyStep(),
         StandaloneNimareStep(),
     ]
+    standalone_steps.extend(plugin_steps["standalone_steps"])
+    return standalone_steps
+
+
+def _add_step_subparsers(
+    subparsers: argparse._SubParsersAction,
+) -> None:
+    all_steps = _get_processing_steps()
     for step in all_steps:
         step_parser = subparsers.add_parser(
             step.name,
