@@ -36,23 +36,6 @@ def _get_vocabulary_name(vectorized_dir: Path) -> str:
     return match.group(1)
 
 
-def _get_extracted_data_dir(
-    vectorized_dir: Path, extracted_data_dir: Optional[PathLikeOrStr]
-) -> Path:
-    """Find extracted_data_dir if not specified."""
-    if extracted_data_dir is None:
-        dir_name = re.sub(
-            r"^(.*)-voc_.*_vectorizedText",
-            r"\1_extractedData",
-            vectorized_dir.name,
-        )
-        found_data_dir = vectorized_dir.with_name(dir_name)
-    else:
-        found_data_dir = Path(extracted_data_dir)
-    _utils.assert_exists(found_data_dir)
-    return found_data_dir
-
-
 def _get_nimare_dataset_name(vectorized_dir: Path) -> str:
     return re.sub(
         r"^(.*?)(_vectorizedText)?$",
@@ -189,7 +172,7 @@ def make_nimare_dataset(
 
     """
     vectorized_dir = Path(vectorized_dir)
-    extracted_data_dir = _get_extracted_data_dir(
+    extracted_data_dir = _utils.get_extracted_data_dir_from_tfidf_dir(
         vectorized_dir, extracted_data_dir
     )
     if output_dir is None:

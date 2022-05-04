@@ -33,7 +33,8 @@ strip_text_xsl = b"""<?xml version="1.0" encoding="UTF-8"?>
   <xsl:template
       match="/pmc-articleset/article/body">
     <xsl:copy>
-    <xsl:text>The text of the article with coordinates</xsl:text>
+    <xsl:text>The text of the article with coordinates,
+brains, auditory cortex, memory, memory</xsl:text>
     <table-wrap>
     <table>
     <tr><th>X</th><th>Y</th><th>Z</th></tr>
@@ -47,7 +48,8 @@ strip_text_xsl = b"""<?xml version="1.0" encoding="UTF-8"?>
   <xsl:template
       match="/pmc-articleset/article[position()=last()]/body">
     <xsl:copy>
-    <xsl:text>The text of the last article has no coordinates</xsl:text>
+    <xsl:text>The text of the last article
+has no coordinates, brains</xsl:text>
     <table-wrap>
     <table>
     <tr><th>a</th><th>b</th></tr>

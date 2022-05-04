@@ -27,7 +27,7 @@ def articles_dir(tmp_path, entrez_mock):
 
 def _check_extracted_data(data_dir, articles_with_coords_only):
     n_articles = 6 if articles_with_coords_only else 7
-    n_authors = 28 if articles_with_coords_only else 34
+    n_authors = 33 if articles_with_coords_only else 36
     metadata = pd.read_csv(data_dir.joinpath("metadata.csv"))
     assert metadata.shape == (n_articles, 7)
     space = pd.read_csv(data_dir.joinpath("coordinate_space.csv"))

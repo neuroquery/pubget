@@ -388,6 +388,74 @@ When running the whole pipeline (`nqdc run`), if we use the
 `--vocabulary_file`, the freshly-extracted vocabulary is used instead of the
 default `neuroquery` one for computing TFIDF features.
 
+## Optional step: fitting a NeuroQuery encoding model
+
+This step is executed by the `nqdc fit_neuroquery` command. When running the
+full pipeline it is optional: we must use the `--fit_neuroquery` option
+for it to be executed.
+
+In this step, once the TFIDF features and the coordinates have been extracted
+from downloaded articles, they are used to train a NeuroQuery encoding model --
+the same type of model that is exposed at
+[neuroquery.org](https://neuroquery.org). Details about this model are provided
+in [the NeuroQuery paper](https://elifesciences.org/articles/53385) and the
+documentation for the [neuroquery
+package](https://github.com/neuroquery/neuroquery).
+
+Note: for this model to give good results a large dataset is needed, ideally close to 10,000 articles (with coordinates).
+
+We pass the `_vectorizedText` directory created by `nqdc vectorize`:
+```
+nqdc fit_neuroquery nqdc_data/query-10c72245c52d7d4e6f535e2bcffb2572/subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
+```
+
+This creates a directory whose name ends with `_neuroqueryModel`:
+
+```
+· nqdc_data
+  └── query-10c72245c52d7d4e6f535e2bcffb2572
+      ├── articles
+      ├── articlesets
+      ├── subset_articlesWithCoords_extractedData
+      ├── subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_neuroqueryModel
+      │   ├── app.py
+      │   ├── info.json
+      │   ├── neuroquery_model
+      │   │   ├── corpus_metadata.csv
+      │   │   ├── corpus_tfidf.npz
+      │   │   ├── mask_img.nii.gz
+      │   │   ├── regression
+      │   │   │   ├── coef.npy
+      │   │   │   ├── intercept.npy
+      │   │   │   ├── M.npy
+      │   │   │   ├── original_n_features.npy
+      │   │   │   ├── residual_var.npy
+      │   │   │   └── selected_features.npy
+      │   │   ├── smoothing
+      │   │   │   ├── smoothing_weight.npy
+      │   │   │   └── V.npy
+      │   │   ├── vocabulary.csv
+      │   │   └── vocabulary.csv_voc_mapping_identity.json
+      │   ├── README.md
+      │   └── requirements.txt
+      └── subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
+```
+
+You do not need to care about the contents of the `neuroquery_model` subdirectory, that is data used by the `neuroquery` package.
+Just know that it can be used to initialize a `neuroquery.NeuroQueryModel` with:
+```python
+from neuroquery import NeuroQueryModel
+model = NeuroQueryModel.from_data_dir("neuroquery_model")
+```
+The `neuroquery` documentation provides information and examples on how to use this model.
+
+### Visualizing the newly trained model in an interactive web page
+
+It is easy to interact with the model through a small web (Flask) application.
+From inside the `[...]_neuroqueryModel` directory, just run `pip install -r requirements.txt` to install `flask`, `nilearn` and `neuroquery`.
+Then run `flask run` and point your web browser to `https://localhost:5000`: you can play with a local, simplified version of [neuroquery.org](https://neuroquery.org) built with the data we just downloaded.
+
+
 ## Optional step: preparing articles for annotation with `labelbuddy`
 
 This step is executed by the `nqdc extract_labelbuddy_data` command.
@@ -439,13 +507,19 @@ data in JSON format. See the NiMARE
 for details.
 
 We pass the `_vectorizedText` directory created by `nqdc vectorize`:
+
+```
+nqdc extract_nimare_data nqdc_data/query-10c72245c52d7d4e6f535e2bcffb2572/subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
+```
+
+The resulting directory contains a `nimare_dataset.json` file that can be used to initialize a `nimare.Dataset`. 
+
 ```
 · nqdc_data
   └── query-10c72245c52d7d4e6f535e2bcffb2572
       ├── articles
       ├── articlesets
       ├── subset_articlesWithCoords_extractedData
-      ├── subset_articlesWithCoords_labelbuddyData
       ├── subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_nimareDataset
       │   ├── info.json
       │   └── nimare_dataset.json
@@ -469,12 +543,19 @@ We can run all steps in one command by using `nqdc run`.
 The full procedure described above could be run by executing:
 
 ```
-nqdc run -q 'fMRI[Title] AND ("2019"[PubDate] : "2019"[PubDate])' --articles_with_coords_only nqdc_data
+nqdc run -q 'fMRI[Title] AND ("2019"[PubDate] : "2019"[PubDate])' \
+    --articles_with_coords_only                                   \
+    nqdc_data
 ```
 
 If we also want to apply the optional steps:
 ```
-nqdc run -q 'fMRI[Title] AND ("2019"[PubDate] : "2019"[PubDate])' --articles_with_coords_only nqdc_data --labelbuddy --nimare
+nqdc run -q 'fMRI[Title] AND ("2019"[PubDate] : "2019"[PubDate])' \
+    --articles_with_coords_only                                   \
+    --fit_neuroquery                                              \
+    --labelbuddy                                                  \
+    --nimare                                                      \
+    nqdc_data
 ```
 (remember that `--nimare` requires NiMARE to be installed).
 

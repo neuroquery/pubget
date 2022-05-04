@@ -20,14 +20,20 @@ _LOG_FORMAT = "%(levelname)s\t%(asctime)s\t%(name)s\t%(message)s"
 _LOG_DATE_FORMAT = "%Y-%m-%dT%H:%M:%S%z"
 
 
-def _get_package_data_dir() -> Path:
+def get_package_data_dir() -> Path:
+    """Path of the nqdc package data.
+
+    (data distributed with the code; not the same thing as data downloaded by
+    nqdc.)
+
+    """
     return Path(__file__).with_name("_data")
 
 
 def get_nqdc_version() -> str:
     """Find the package version."""
     return (
-        _get_package_data_dir().joinpath("VERSION").read_text("utf-8").strip()
+        get_package_data_dir().joinpath("VERSION").read_text("utf-8").strip()
     )
 
 
@@ -106,7 +112,7 @@ def checksum(value: Union[str, bytes]) -> str:
 
 def load_stylesheet(stylesheet_name: str) -> etree.XSLT:
     """Find and parse an XSLT stylesheet."""
-    stylesheet_path = _get_package_data_dir().joinpath(
+    stylesheet_path = get_package_data_dir().joinpath(
         "stylesheets", stylesheet_name
     )
     stylesheet_xml = etree.parse(str(stylesheet_path))
@@ -259,3 +265,20 @@ def get_output_dir(
         output_dir = Path(output_dir)
     output_dir.mkdir(exist_ok=True, parents=True)
     return output_dir
+
+
+def get_extracted_data_dir_from_tfidf_dir(
+    tfidf_dir: Path, extracted_data_dir: Optional[PathLikeOrStr]
+) -> Path:
+    """Find extracted_data_dir if not specified."""
+    if extracted_data_dir is None:
+        dir_name = re.sub(
+            r"^(.*)-voc_.*_vectorizedText",
+            r"\1_extractedData",
+            tfidf_dir.name,
+        )
+        found_data_dir = tfidf_dir.with_name(dir_name)
+    else:
+        found_data_dir = Path(extracted_data_dir)
+    assert_exists(found_data_dir)
+    return found_data_dir
