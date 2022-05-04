@@ -7,7 +7,7 @@ import neuroquery.img_utils
 from nqdc import _img_utils
 
 
-def test_coordinates_to_memmapped_maps(tmp_path):
+def test_neuroquery_coordinates_to_maps(tmp_path):
     # compare to neuroquery upstream version
     coords = pd.DataFrame.from_dict(
         {
@@ -17,14 +17,14 @@ def test_coordinates_to_memmapped_maps(tmp_path):
             "z": [27.0, 0.0, 30.0, 17.0, 177.0],
         }
     )
+    coords["pmcid"] = coords["pmid"]
     ref_maps, _ = neuroquery.img_utils.coordinates_to_maps(coords)
     memmap = tmp_path.joinpath("maps.dat")
     with contextlib.ExitStack() as context:
-        maps_vals, pmids, masker = _img_utils.coordinates_to_memmapped_maps(
+        maps_vals, pmids, masker = _img_utils.neuroquery_coordinates_to_maps(
             coords,
             output_memmap_file=memmap,
             context=context,
-            id_column="pmid",
         )
         assert isinstance(maps_vals, np.memmap)
         maps = pd.DataFrame(maps_vals, index=pmids, copy=True)

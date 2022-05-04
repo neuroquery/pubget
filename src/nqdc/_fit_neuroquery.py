@@ -101,10 +101,8 @@ class _NeuroQueryFit:
         tmp_dir = self.context.enter_context(tempfile.TemporaryDirectory())
         memmap_file = str(Path(tmp_dir).joinpath("brain_maps.dat"))
         _LOG.debug("Computing article maps for NeuroQuery model.")
-        brain_maps, pmcids, masker = _img_utils.coordinates_to_memmapped_maps(
+        brain_maps, pmcids, masker = _img_utils.neuroquery_coordinates_to_maps(
             self.coordinates,
-            target_affine=(4, 4, 4),
-            id_column="pmcid",
             output_memmap_file=memmap_file,
             n_jobs=self.n_jobs,
             context=self.context,
