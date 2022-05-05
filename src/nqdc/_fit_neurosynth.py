@@ -52,6 +52,10 @@ def _chi_square(brain_maps: np.memmap, term_vector: np.ndarray) -> np.ndarray:
     return z_values
 
 
+def _term_to_file_name(term: str) -> str:
+    return re.sub(r"\W", "_", term)
+
+
 def _compute_meta_analysis_map(
     output_dir: Path,
     term: str,
@@ -64,7 +68,7 @@ def _compute_meta_analysis_map(
         brain_maps, np.asarray(tfidf_vector.A).ravel() > tfidf_threshold
     )
     img = masker.inverse_transform(term_map)
-    term_name = re.sub(r"\W", "_", term)
+    term_name = _term_to_file_name(term)
     img_path = output_dir.joinpath(f"{term_name}.nii.gz")
     img.to_filename(str(img_path))
 
@@ -101,15 +105,27 @@ class _NeuroSynthFit(_model_fit_utils.DataManager):
     ) -> None:
         _img_utils._ball_coords_to_masked_map(coordinates, masker, output, idx)
 
+    def _save_term_list(self) -> None:
+        assert self.feature_names is not None
+        self.feature_names["file_name"] = self.feature_names["term"].map(
+            _term_to_file_name
+        )
+        self.feature_names.loc[:, ["term", "file_name"]].to_csv(
+            str(self.output_dir.joinpath("terms.csv")),
+            index=False,
+        )
+
     def _fit_model(self) -> None:
         assert self.feature_names is not None
         assert self.tfidf is not None
 
         n_terms = len(self.feature_names)
+        maps_dir = self.output_dir.joinpath("neurosynth_maps")
+        maps_dir.mkdir(exist_ok=True)
         _LOG.info(f"Running NeuroSynth analysis for {n_terms} terms.")
         joblib.Parallel(self.n_jobs, verbose=1)(
             joblib.delayed(_compute_meta_analysis_map)(
-                self.output_dir,
+                maps_dir,
                 term,
                 self.brain_maps,
                 self.masker,
@@ -117,9 +133,10 @@ class _NeuroSynthFit(_model_fit_utils.DataManager):
                 self._TFIDF_THRESHOLD,
             )
             for term, term_tfidf in zip(
-                self.feature_names.iloc[:, 0], self.tfidf.T
+                self.feature_names["term"].values, self.tfidf.T
             )
         )
+        self._save_term_list()
 
 
 def fit_neurosynth(

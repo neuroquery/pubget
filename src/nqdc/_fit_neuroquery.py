@@ -58,9 +58,9 @@ class _NeuroQueryFit(_model_fit_utils.DataManager):
         # false positive: pylint thinks read_csv returns a TextFileReader
         vectorizer = TextVectorizer.from_vocabulary(
             # pylint: disable-next=no-member
-            self.full_voc.iloc[:, 0].values,
+            self.full_voc["term"].values,
             # pylint: disable-next=no-member
-            self.full_voc.iloc[:, 1].values,
+            self.full_voc["document_frequency"].values,
             voc_mapping=self.voc_mapping,
             norm="l2",
         )

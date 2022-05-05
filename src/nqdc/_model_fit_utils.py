@@ -81,9 +81,11 @@ class DataManager(abc.ABC):
         self.feature_names = pd.read_csv(
             self.tfidf_dir.joinpath("feature_names.csv"), header=None
         )
+        self.feature_names.columns = ["term", "document_frequency"]
         self.full_voc = pd.read_csv(
             self.tfidf_dir.joinpath("vocabulary.csv"), header=None
         )
+        self.full_voc.columns = ["term", "document_frequency"]
         self.voc_mapping = json.loads(
             self.tfidf_dir.joinpath(
                 "vocabulary.csv_voc_mapping_identity.json"
@@ -173,14 +175,14 @@ class DataManager(abc.ABC):
         ).ravel()
         self.tfidf = self.tfidf[:, kept]
         self.feature_names = self.feature_names[kept]
-        feat_names_set = set(self.feature_names.iloc[:, 0].values)
+        feat_names_set = set(self.feature_names["term"].values)
         self.voc_mapping = {
             source: target
             for (source, target) in self.voc_mapping.items()
             if target in feat_names_set
         }
         voc_set = feat_names_set.union(self.voc_mapping.keys())
-        self.full_voc = self.full_voc[self.full_voc.iloc[:, 0].isin(voc_set)]
+        self.full_voc = self.full_voc[self.full_voc["term"].isin(voc_set)]
 
     def fit(self) -> None:
         """Load data and fit the model or meta-analysis."""
