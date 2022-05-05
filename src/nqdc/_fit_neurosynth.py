@@ -107,6 +107,8 @@ class _NeuroSynthFit(_model_fit_utils.DataManager):
 
     def _write_output_data(self) -> None:
         assert self.feature_names is not None
+        assert self.metadata is not None
+
         self.feature_names["file_name"] = self.feature_names["term"].map(
             _term_to_file_name
         )
@@ -166,6 +168,7 @@ def fit_neurosynth(
     _NeuroSynthFit(output_dir, tfidf_dir, extracted_data_dir, n_jobs).fit()
     _LOG.info(f"NeuroSynth results saved in {output_dir}.")
     is_complete = bool(status["previous_step_complete"])
+    _utils.copy_static_files("_fit_neurosynth", output_dir)
     _utils.write_info(output_dir, name=_STEP_NAME, is_complete=is_complete)
     return output_dir, 0
 

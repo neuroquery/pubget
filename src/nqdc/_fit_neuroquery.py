@@ -81,12 +81,6 @@ class _NeuroQueryFit(_model_fit_utils.DataManager):
         return self.encoder
 
 
-def _copy_static_files(output_dir: Path) -> None:
-    module_data = _utils.get_package_data_dir().joinpath("_fit_neuroquery")
-    for file_name in "app.py", "requirements.txt", "README.md":
-        shutil.copy(module_data.joinpath(file_name), output_dir)
-
-
 def fit_neuroquery(
     tfidf_dir: PathLikeOrStr,
     extracted_data_dir: Optional[PathLikeOrStr] = None,
@@ -146,7 +140,7 @@ def fit_neuroquery(
         shutil.rmtree(model_dir)
     encoder.to_data_dir(model_dir)
     _LOG.info(f"NeuroQuery model saved in {model_dir}.")
-    _copy_static_files(output_dir)
+    _utils.copy_static_files("_fit_neuroquery", output_dir)
     is_complete = bool(status["previous_step_complete"])
     _utils.write_info(output_dir, name=_STEP_NAME, is_complete=is_complete)
     return output_dir, 0
