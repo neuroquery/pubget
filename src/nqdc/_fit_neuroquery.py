@@ -142,6 +142,8 @@ def fit_neuroquery(
         n_jobs,
     ).get_fitted_model()
     model_dir = output_dir.joinpath("neuroquery_model")
+    if model_dir.exists():
+        shutil.rmtree(model_dir)
     encoder.to_data_dir(model_dir)
     _LOG.info(f"NeuroQuery model saved in {model_dir}.")
     _copy_static_files(output_dir)

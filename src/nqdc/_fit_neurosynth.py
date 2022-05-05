@@ -105,7 +105,7 @@ class _NeuroSynthFit(_model_fit_utils.DataManager):
     ) -> None:
         _img_utils._ball_coords_to_masked_map(coordinates, masker, output, idx)
 
-    def _save_term_list(self) -> None:
+    def _write_output_data(self) -> None:
         assert self.feature_names is not None
         self.feature_names["file_name"] = self.feature_names["term"].map(
             _term_to_file_name
@@ -114,6 +114,10 @@ class _NeuroSynthFit(_model_fit_utils.DataManager):
             str(self.output_dir.joinpath("terms.csv")),
             index=False,
         )
+        self.metadata.to_csv(
+            str(self.output_dir.joinpath("metadata.csv")), index=False
+        )
+        sparse.save_npz(str(self.output_dir.joinpath("tfidf.npz")), self.tfidf)
 
     def _fit_model(self) -> None:
         assert self.feature_names is not None
@@ -136,7 +140,7 @@ class _NeuroSynthFit(_model_fit_utils.DataManager):
                 self.feature_names["term"].values, self.tfidf.T
             )
         )
-        self._save_term_list()
+        self._write_output_data()
 
 
 def fit_neurosynth(
