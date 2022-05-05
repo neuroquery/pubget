@@ -12,6 +12,7 @@ from scipy import sparse
 import pandas as pd
 
 from nqdc import _img_utils
+from nqdc._typing import NiftiMasker
 
 _LOG = logging.getLogger(__name__)
 
@@ -54,13 +55,13 @@ class DataManager(abc.ABC):
         self.full_voc: Optional[pd.DataFrame] = None
         self.voc_mapping: Optional[Dict[str, str]] = None
         self.feature_names: Optional[pd.DataFrame] = None
-        self.masker: Optional[_img_utils.NiftiMasker] = None
+        self.masker: Optional[NiftiMasker] = None
         self.context: Optional[contextlib.ExitStack] = None
 
     @staticmethod
     def _img_filter(
         coordinates: pd.DataFrame,
-        masker: _img_utils.NiftiMasker,
+        masker: NiftiMasker,
         output: np.memmap,
         idx: int,
     ) -> None:

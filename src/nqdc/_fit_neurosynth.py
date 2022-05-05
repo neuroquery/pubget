@@ -1,3 +1,4 @@
+import argparse
 import logging
 from pathlib import Path
 import re
@@ -6,13 +7,19 @@ import numpy as np
 import pandas as pd
 import joblib
 from scipy import stats, sparse
-from typing import Optional, Tuple
+from typing import Optional, Tuple, Mapping
 
 from nqdc import _model_fit_utils, _img_utils, _utils
-from nqdc._typing import PathLikeOrStr  # , BaseProcessingStep, ArgparseActions
+from nqdc._typing import (
+    PathLikeOrStr,
+    BaseProcessingStep,
+    ArgparseActions,
+    NiftiMasker,
+)
 
 _LOG = logging.getLogger(__name__)
 _STEP_NAME = "fit_neurosynth"
+_STEP_DESCRIPTION = "Run a NeuroSynth meta-analysis on the downloaded data."
 
 
 def _chi_square(brain_maps: np.memmap, term_vector: np.ndarray) -> np.ndarray:
@@ -49,7 +56,7 @@ def _compute_meta_analysis_map(
     output_dir: Path,
     term: str,
     brain_maps: np.memmap,
-    masker: _img_utils.NiftiMasker,
+    masker: NiftiMasker,
     tfidf_vector: sparse.csr_matrix,
     tfidf_threshold: float,
 ) -> None:
@@ -63,7 +70,7 @@ def _compute_meta_analysis_map(
 
 
 class _NeuroSynthFit(_model_fit_utils.DataManager):
-    """Helper class to load data and fit the NeuroQuery model."""
+    """Helper class to load data and run the NeuroSynth analysis."""
 
     _BRAIN_MAP_DTYPE = "int8"
     # TODO _VOXEL_SIZE = 2.0
@@ -88,7 +95,7 @@ class _NeuroSynthFit(_model_fit_utils.DataManager):
     @staticmethod
     def _img_filter(
         coordinates: pd.DataFrame,
-        masker: _img_utils.NiftiMasker,
+        masker: NiftiMasker,
         output: np.memmap,
         idx: int,
     ) -> None:
@@ -98,6 +105,8 @@ class _NeuroSynthFit(_model_fit_utils.DataManager):
         assert self.feature_names is not None
         assert self.tfidf is not None
 
+        n_terms = len(self.feature_names)
+        _LOG.info(f"Running NeuroSynth analysis for {n_terms} terms.")
         joblib.Parallel(self.n_jobs, verbose=1)(
             joblib.delayed(_compute_meta_analysis_map)(
                 self.output_dir,
@@ -124,7 +133,7 @@ def fit_neurosynth(
         tfidf_dir, extracted_data_dir
     )
     output_dir = _utils.get_output_dir(
-        tfidf_dir, output_dir, "_vectorizedText", "_neuroqueryModel"
+        tfidf_dir, output_dir, "_vectorizedText", "_neurosynthResults"
     )
     status = _utils.check_steps_status(tfidf_dir, output_dir, __name__)
     if not status["need_run"]:
@@ -138,3 +147,58 @@ def fit_neurosynth(
     is_complete = bool(status["previous_step_complete"])
     _utils.write_info(output_dir, name=_STEP_NAME, is_complete=is_complete)
     return output_dir, 0
+
+
+class FitNeuroSynthStep(BaseProcessingStep):
+    """Running NeuroSynth meta-analysis as part of a pipeline (nqdc run)."""
+
+    name = _STEP_NAME
+    short_description = _STEP_DESCRIPTION
+
+    def edit_argument_parser(self, argument_parser: ArgparseActions) -> None:
+        argument_parser.add_argument(
+            "--fit_neurosynth",
+            action="store_true",
+            help="Run a NeuroSynth-like meta-analysis on the downloaded "
+            "data. This is a computationally intensive step for large "
+            "datasets.",
+        )
+        _utils.add_n_jobs_argument(argument_parser)
+
+    def run(
+        self,
+        args: argparse.Namespace,
+        previous_steps_output: Mapping[str, Path],
+    ) -> Tuple[Optional[Path], int]:
+        if not args.fit_neurosynth:
+            return None, 0
+        return fit_neurosynth(
+            previous_steps_output["vectorize"],
+            previous_steps_output["extract_data"],
+            n_jobs=args.n_jobs,
+        )
+
+
+class StandaloneFitNeuroSynthStep(BaseProcessingStep):
+    """Running NeuroSynth as a standalone command (nqdc fit_neurosynth)."""
+
+    name = _STEP_NAME
+    short_description = _STEP_DESCRIPTION
+
+    def edit_argument_parser(self, argument_parser: ArgparseActions) -> None:
+        argument_parser.add_argument(
+            "vectorized_data_dir",
+            help="Directory containing TFIDF features and vocabulary. "
+            "It is a directory created by nqdc whose name ends with "
+            "'_vectorizedText'. A sibling directory will be created for "
+            "the NeuroSynth results.",
+        )
+        _utils.add_n_jobs_argument(argument_parser)
+        argument_parser.description = self.short_description
+
+    def run(
+        self,
+        args: argparse.Namespace,
+        previous_steps_output: Mapping[str, Path],
+    ) -> Tuple[Path, int]:
+        return fit_neurosynth(args.vectorized_data_dir, n_jobs=args.n_jobs)

@@ -16,15 +16,9 @@ from scipy import ndimage
 from joblib import Parallel, delayed
 from nilearn import image
 
-try:
-    from nilearn.maskers import NiftiMasker
-# import only used for type annotations, was called input_data in old nilearn
-# versions
-except ImportError:  # pragma: nocover
-    from nilearn.input_data import NiftiMasker
-from neuroquery.img_utils import get_masker, coords_to_peaks_img
 
-from nqdc._typing import PathLikeOrStr
+from neuroquery.img_utils import get_masker, coords_to_peaks_img
+from nqdc._typing import PathLikeOrStr, NiftiMasker
 
 _ID_COLUMN_NAME = "pmcid"
 _GAUSSIAN_SMOOTHING_FWHM_MM = 9.0

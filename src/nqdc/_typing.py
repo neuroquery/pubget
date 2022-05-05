@@ -9,6 +9,16 @@ from typing import Union, Dict, Any, Tuple, Mapping, Optional
 from lxml import etree
 import pandas as pd
 
+try:
+    from nilearn import maskers
+# import only used for type annotations, was called input_data in old nilearn
+# versions
+except ImportError:  # pragma: nocover
+    from nilearn import input_data as maskers
+
+
+NiftiMasker = maskers.NiftiMasker
+
 PathLikeOrStr = Union[PathLike, str]
 # argparse public functions (add_argument_group) return a private type so we
 # have to use it here.

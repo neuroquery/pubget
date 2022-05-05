@@ -178,7 +178,7 @@ class FitNeuroQueryStep(BaseProcessingStep):
         )
 
 
-class StandaloneFitNeuroqueryStep(BaseProcessingStep):
+class StandaloneFitNeuroQueryStep(BaseProcessingStep):
     """Fitting NeuroQuery as a standalone command (nqdc fit_neuroquery)."""
 
     name = _STEP_NAME
