@@ -17,11 +17,11 @@ from joblib import Parallel, delayed
 from nilearn import image
 
 try:
-    from nilearn import maskers
+    from nilearn.maskers import NiftiMasker
 # import only used for type annotations, was called input_data in old nilearn
 # versions
 except ImportError:  # pragma: nocover
-    from nilearn import input_data as maskers
+    from nilearn.input_data import NiftiMasker
 from neuroquery.img_utils import get_masker, coords_to_peaks_img
 
 from nqdc._typing import PathLikeOrStr
@@ -43,14 +43,14 @@ def _ball_kernel(radius_mm: float, voxel_size_mm: float) -> np.ndarray:
 
 
 def _ball_coords_to_masked_map(
-    coords: pd.DataFrame,
-    masker: maskers.NiftiMasker,
+    coordinates: pd.DataFrame,
+    masker: NiftiMasker,
     output: np.memmap,
     idx: int,
 ) -> None:
     radius_mm = _BALL_SMOOTHING_RADIUS_MM
     voxel_size = np.abs(masker.mask_img_.affine[0, 0])
-    peaks_img = coords_to_peaks_img(coords, mask_img=masker.mask_img_)
+    peaks_img = coords_to_peaks_img(coordinates, mask_img=masker.mask_img_)
     peaks_data = image.get_data(peaks_img).astype(bool)
     kernel = _ball_kernel(radius_mm, voxel_size)
     smoothed = ndimage.maximum_filter(
@@ -61,7 +61,7 @@ def _ball_coords_to_masked_map(
 
 def _gaussian_coords_to_masked_map(
     coordinates: pd.DataFrame,
-    masker: maskers.NiftiMasker,
+    masker: NiftiMasker,
     output: np.memmap,
     idx: int,
 ) -> None:
@@ -76,13 +76,11 @@ def _coordinates_to_memmapped_maps(
     output_memmap_file: PathLikeOrStr,
     *,
     output_dtype: str,
-    img_filter: Callable[
-        [pd.DataFrame, maskers.NiftiMasker, np.memmap, int], None
-    ],
+    img_filter: Callable[[pd.DataFrame, NiftiMasker, np.memmap, int], None],
     target_affine: Tuple[float, float, float],
     n_jobs: int,
     context: Optional[contextlib.ExitStack],
-) -> Tuple[np.memmap, np.ndarray, maskers.NiftiMasker]:
+) -> Tuple[np.memmap, np.ndarray, NiftiMasker]:
     """Transform coordinates into (masked) brain images stored in a memmap."""
     masker = get_masker(mask_img=None, target_affine=target_affine)
     article_ids = np.unique(coordinates[_ID_COLUMN_NAME].values)
@@ -119,7 +117,7 @@ def neuroquery_coordinates_to_maps(
     *,
     n_jobs: int = 1,
     context: Optional[contextlib.ExitStack] = None,
-) -> Tuple[np.memmap, np.ndarray, maskers.NiftiMasker]:
+) -> Tuple[np.memmap, np.ndarray, NiftiMasker]:
     """Coordinates to masked images in a memmap for neuroquery model."""
     return _coordinates_to_memmapped_maps(
         coordinates,
@@ -138,7 +136,7 @@ def neurosynth_coordinates_to_maps(
     *,
     n_jobs: int = 1,
     context: Optional[contextlib.ExitStack] = None,
-) -> Tuple[np.memmap, np.ndarray, maskers.NiftiMasker]:
+) -> Tuple[np.memmap, np.ndarray, NiftiMasker]:
     """Coordinates to masked images in a memmap for neurosynth model."""
     return _coordinates_to_memmapped_maps(
         coordinates,

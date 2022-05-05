@@ -10,7 +10,6 @@ from typing import Optional, Dict
 import numpy as np
 from scipy import sparse
 import pandas as pd
-from nibabel import Nifti1Image
 
 from nqdc import _img_utils
 
@@ -35,6 +34,8 @@ class DataManager(abc.ABC):
     """
 
     _MIN_DOCUMENT_FREQUENCY = 10
+    _BRAIN_MAP_DTYPE = "float32"
+    _VOXEL_SIZE = 4.0
 
     def __init__(
         self,
@@ -53,8 +54,20 @@ class DataManager(abc.ABC):
         self.full_voc: Optional[pd.DataFrame] = None
         self.voc_mapping: Optional[Dict[str, str]] = None
         self.feature_names: Optional[pd.DataFrame] = None
-        self.mask_img: Optional[Nifti1Image] = None
+        self.masker: Optional[_img_utils.NiftiMasker] = None
         self.context: Optional[contextlib.ExitStack] = None
+
+    @staticmethod
+    def _img_filter(
+        coordinates: pd.DataFrame,
+        masker: _img_utils.NiftiMasker,
+        output: np.memmap,
+        idx: int,
+    ) -> None:
+        """"""
+        _img_utils._gaussian_coords_to_masked_map(
+            coordinates, masker, output, idx
+        )
 
     @abc.abstractmethod
     def _fit_model(self) -> None:
@@ -91,9 +104,13 @@ class DataManager(abc.ABC):
         tmp_dir = self.context.enter_context(tempfile.TemporaryDirectory())
         memmap_file = str(Path(tmp_dir).joinpath("brain_maps.dat"))
         _LOG.debug("Computing article maps.")
-        brain_maps, pmcids, masker = _img_utils.neuroquery_coordinates_to_maps(
-            self.coordinates,
+        target_affine = (self._VOXEL_SIZE, self._VOXEL_SIZE, self._VOXEL_SIZE)
+        brain_maps, pmcids, masker = _img_utils._coordinates_to_memmapped_maps(
+            coordinates=self.coordinates,
             output_memmap_file=memmap_file,
+            output_dtype=self._BRAIN_MAP_DTYPE,
+            img_filter=self._img_filter,
+            target_affine=target_affine,
             n_jobs=self.n_jobs,
             context=self.context,
         )
@@ -101,7 +118,13 @@ class DataManager(abc.ABC):
         non_empty = (brain_maps != 0).any(axis=1)
         self._brain_maps_pmcids = pmcids[non_empty]
         self.brain_maps = brain_maps[non_empty]
-        self.mask_img = masker.mask_img_
+        self.context.callback(self._reset_brain_maps)
+        self.masker = masker
+
+    def _reset_brain_maps(self) -> None:
+        # when exiting the context the brainmaps memmap is closed; we rest
+        # brain_maps here so that we don't keep a reference to a closed memmap
+        self.brain_maps = None
 
     def _set_pmcids(self) -> None:
         """Reindex metadata, tfidf and brain maps.

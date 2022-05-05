@@ -48,6 +48,7 @@ class _NeuroQueryFit(_model_fit_utils.DataManager):
         """Actual fitting of the NeuroQuerymodel."""
         assert self.full_voc is not None
         assert self.tfidf is not None
+        assert self.masker is not None
 
         normalize(self.tfidf, norm="l2", axis=1, copy=False)
         regressor = SmoothedRegression()
@@ -66,7 +67,7 @@ class _NeuroQueryFit(_model_fit_utils.DataManager):
         self.encoder = NeuroQueryModel(
             vectorizer,
             regressor,
-            self.mask_img,
+            self.masker.mask_img_,
             corpus_info={
                 "tfidf": self.tfidf,
                 "metadata": self.metadata,
