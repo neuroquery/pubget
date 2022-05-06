@@ -456,6 +456,67 @@ From inside the `[...]_neuroqueryModel` directory, just run `pip install -r requ
 Then run `flask run` and point your web browser to `https://localhost:5000`: you can play with a local, simplified version of [neuroquery.org](https://neuroquery.org) built with the data we just downloaded.
 
 
+## Optional step: running a NeuroSynth meta-analysis
+
+This step is executed by the `nqdc fit_neurosynth` command. When running the
+full pipeline it is optional: we must use the `--fit_neurosynth` option for it
+to be executed.
+
+
+In this step, once the TFIDF features and the coordinates have been extracted
+from downloaded articles, they are used to run meta-analyses using NeuroSynth's
+"association test" method: a Chi-squared test of independence between voxel
+activation and term occurrences. See [the NeuroSynth
+paper](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3146590/) and
+[neurosynth.org](https://neurosynth.org), as well as the
+[neurosynth](https://github.com/neurosynth/neurosynth) and
+[NiMARE](https://nimare.readthedocs.io/) documentation pages for more
+information.
+
+Note: this step is particularly computationally expensive.
+
+
+We pass the `_vectorizedText` directory created by `nqdc vectorize`:
+```
+nqdc fit_neurosynth nqdc_data/query-10c72245c52d7d4e6f535e2bcffb2572/subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
+```
+
+This creates a directory whose name ends with `_neurosynthResults`:
+
+```
+· nqdc_data
+  └── query-10c72245c52d7d4e6f535e2bcffb2572
+      ├── articles
+      ├── articlesets
+      ├── subset_articlesWithCoords_extractedData
+      ├── subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_neurosynthResults
+      │   ├── app.py
+      │   ├── info.json
+      │   ├── metadata.csv
+      │   ├── neurosynth_maps
+      │   │   ├── aberrant.nii.gz
+      │   │   ├── abilities.nii.gz
+      │   │   ├── ability.nii.gz
+      │   │   └── ...
+      │   ├── README.md
+      │   ├── requirements.txt
+      │   ├── terms.csv
+      │   └── tfidf.npz
+      └── subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
+```
+
+The meta-analytic maps for all the terms in the vocabulary can be found in the
+`neurosynth_maps` subdirectory.
+
+### Visualizing the meta-analytic maps in an interactive web page
+
+It is easy to interact with the NeuroSynth maps through a small web (Flask)
+application. From inside the `[...]_neurosynthResults` directory, just run `pip
+install -r requirements.txt` to install `flask` and other dependencies. Then run
+`flask run` and point your web browser to `https://localhost:5000`: you can
+search for a term and see the corresponding brain map and the documents that
+mention it.
+
 ## Optional step: preparing articles for annotation with `labelbuddy`
 
 This step is executed by the `nqdc extract_labelbuddy_data` command.

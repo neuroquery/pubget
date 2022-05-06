@@ -1,4 +1,6 @@
-.PHONY: test_all test test_coverage test_coverage_strict test_mypy test_flake8 test_pylint run_full_pipeline doc black clean clean_all
+.PHONY: test_all test test_coverage test_coverage_strict test_mypy \
+        test_flake8 test_pylint run_full_pipeline run_full_pipeline_neurosynth \
+        doc black clean clean_all
 
 test_all: test_mypy test_flake8 test_coverage_strict test test_pylint
 
@@ -25,6 +27,9 @@ test_pylint:
 
 run_full_pipeline:
 	python tests/run_full_pipeline.py -o /tmp/
+
+run_full_pipeline_neurosynth:
+	python tests/run_full_pipeline.py --fit_neurosynth -o /tmp/
 
 doc:
 	pdoc --no-search --no-show-source -d numpy -o doc_build ./src/nqdc

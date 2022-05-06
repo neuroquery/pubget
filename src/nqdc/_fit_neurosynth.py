@@ -25,12 +25,16 @@ from nqdc._typing import (
 _LOG = logging.getLogger(__name__)
 _STEP_NAME = "fit_neurosynth"
 _STEP_DESCRIPTION = "Run a NeuroSynth meta-analysis on the downloaded data."
+_STEP_HELP = (
+    "Run a NeuroSynth-like meta-analysis on the downloaded "
+    "data. This is a computationally intensive step."
+)
 
 
 # Note: we don't use implementations from the neurosynth or nimare packages
-# because (i) as of 2022-05-06 they use too much memory (ii) to avoid adding a
-# dependency. Users can easily run any nimare analysis on nqdc-generated data
-# thanks to the 'extract_nimare_data' step.
+# because (i) as of 2022-05-06 they use too much memory and (ii) to avoid
+# adding a dependency. Users can easily run any nimare analysis on
+# nqdc-generated data thanks to the 'extract_nimare_data' step.
 
 
 def _chi_square(brain_maps: np.memmap, term_vector: np.ndarray) -> np.ndarray:
@@ -230,11 +234,7 @@ class FitNeuroSynthStep(BaseProcessingStep):
 
     def edit_argument_parser(self, argument_parser: ArgparseActions) -> None:
         argument_parser.add_argument(
-            "--fit_neurosynth",
-            action="store_true",
-            help="Run a NeuroSynth-like meta-analysis on the downloaded "
-            "data. This is a computationally intensive step for large "
-            "datasets.",
+            "--fit_neurosynth", action="store_true", help=_STEP_HELP
         )
         _utils.add_n_jobs_argument(argument_parser)
 
@@ -267,7 +267,7 @@ class StandaloneFitNeuroSynthStep(BaseProcessingStep):
             "the NeuroSynth results.",
         )
         _utils.add_n_jobs_argument(argument_parser)
-        argument_parser.description = self.short_description
+        argument_parser.description = _STEP_HELP
 
     def run(
         self,

@@ -18,7 +18,7 @@ from nqdc import _utils, _model_fit_utils
 _LOG = logging.getLogger(__name__)
 _STEP_NAME = "fit_neuroquery"
 _STEP_DESCRIPTION = "Fit a NeuroQuery encoder on the downloaded data."
-_HELP = (
+_STEP_HELP = (
     "Fit a NeuroQuery encoder on the downloaded data. "
     "Note this can be a more computationally intensive step for "
     "large datasets. Moreover, it will not yield "
@@ -156,7 +156,7 @@ class FitNeuroQueryStep(BaseProcessingStep):
         argument_parser.add_argument(
             "--fit_neuroquery",
             action="store_true",
-            help=_HELP,
+            help=_STEP_HELP,
         )
         _utils.add_n_jobs_argument(argument_parser)
 
@@ -189,7 +189,7 @@ class StandaloneFitNeuroQueryStep(BaseProcessingStep):
             "the NeuroQuery model.",
         )
         _utils.add_n_jobs_argument(argument_parser)
-        argument_parser.description = _HELP
+        argument_parser.description = _STEP_HELP
 
     def run(
         self,

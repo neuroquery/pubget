@@ -289,4 +289,5 @@ def copy_static_files(input_dir_name: str, output_dir: Path) -> None:
     """Copy all files in a directory under package data to output directory."""
     data_dir = get_package_data_dir().joinpath(input_dir_name)
     for static_file in data_dir.glob("*"):
-        shutil.copy(static_file, output_dir)
+        if static_file.is_file():
+            shutil.copy(static_file, output_dir)
