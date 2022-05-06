@@ -30,7 +30,8 @@ def run_and_check():
             "4",
             "--extract_vocabulary",
             "--labelbuddy",
-            "--fit_neuroquery"
+            "--fit_neuroquery",
+            "--fit_neurosynth",
         ],
         check=True,
     )

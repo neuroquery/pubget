@@ -66,7 +66,7 @@ class DataManager(abc.ABC):
         idx: int,
     ) -> None:
         """"""
-        _img_utils._gaussian_coords_to_masked_map(
+        _img_utils.gaussian_coords_to_masked_map(
             coordinates, masker, output, idx
         )
 
@@ -108,7 +108,7 @@ class DataManager(abc.ABC):
         memmap_file = str(Path(tmp_dir).joinpath("brain_maps.dat"))
         _LOG.debug("Computing article maps.")
         target_affine = (self._VOXEL_SIZE, self._VOXEL_SIZE, self._VOXEL_SIZE)
-        brain_maps, pmcids, masker = _img_utils._coordinates_to_memmapped_maps(
+        brain_maps, pmcids, masker = _img_utils.coordinates_to_memmapped_maps(
             coordinates=self.coordinates,
             output_memmap_file=memmap_file,
             output_dtype=self._BRAIN_MAP_DTYPE,

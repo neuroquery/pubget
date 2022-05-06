@@ -36,12 +36,16 @@ def _ball_kernel(radius_mm: float, voxel_size_mm: float) -> np.ndarray:
     return mask
 
 
-def _ball_coords_to_masked_map(
+def ball_coords_to_masked_map(
     coordinates: pd.DataFrame,
     masker: NiftiMasker,
     output: np.memmap,
     idx: int,
 ) -> None:
+    """Smooth peaks with hard ball.
+
+    Resulting image is masked and stored in `output`.
+    """
     radius_mm = _BALL_SMOOTHING_RADIUS_MM
     voxel_size = np.abs(masker.mask_img_.affine[0, 0])
     peaks_img = coords_to_peaks_img(coordinates, mask_img=masker.mask_img_)
@@ -53,19 +57,23 @@ def _ball_coords_to_masked_map(
     output[idx] = smoothed[image.get_data(masker.mask_img_).astype(bool)]
 
 
-def _gaussian_coords_to_masked_map(
+def gaussian_coords_to_masked_map(
     coordinates: pd.DataFrame,
     masker: NiftiMasker,
     output: np.memmap,
     idx: int,
 ) -> None:
+    """Smooth peaks with Gaussian kernel.
+
+    Resulting image is masked and stored in `output`.
+    """
     fwhm = _GAUSSIAN_SMOOTHING_FWHM_MM
     peaks_img = coords_to_peaks_img(coordinates, mask_img=masker.mask_img_)
     img = image.smooth_img(peaks_img, fwhm=fwhm)
     output[idx] = masker.transform(img).squeeze()
 
 
-def _coordinates_to_memmapped_maps(
+def coordinates_to_memmapped_maps(
     coordinates: pd.DataFrame,
     output_memmap_file: PathLikeOrStr,
     *,
@@ -103,41 +111,3 @@ def _coordinates_to_memmapped_maps(
     )
     output.flush()
     return output, article_ids, masker
-
-
-def neuroquery_coordinates_to_maps(
-    coordinates: pd.DataFrame,
-    output_memmap_file: PathLikeOrStr,
-    *,
-    n_jobs: int = 1,
-    context: Optional[contextlib.ExitStack] = None,
-) -> Tuple[np.memmap, np.ndarray, NiftiMasker]:
-    """Coordinates to masked images in a memmap for neuroquery model."""
-    return _coordinates_to_memmapped_maps(
-        coordinates,
-        output_memmap_file,
-        output_dtype="float32",
-        img_filter=_gaussian_coords_to_masked_map,
-        target_affine=(4.0, 4.0, 4.0),
-        n_jobs=n_jobs,
-        context=context,
-    )
-
-
-def neurosynth_coordinates_to_maps(
-    coordinates: pd.DataFrame,
-    output_memmap_file: PathLikeOrStr,
-    *,
-    n_jobs: int = 1,
-    context: Optional[contextlib.ExitStack] = None,
-) -> Tuple[np.memmap, np.ndarray, NiftiMasker]:
-    """Coordinates to masked images in a memmap for neurosynth model."""
-    return _coordinates_to_memmapped_maps(
-        coordinates,
-        output_memmap_file,
-        output_dtype="int8",
-        img_filter=_ball_coords_to_masked_map,
-        target_affine=(2.0, 2.0, 2.0),
-        n_jobs=n_jobs,
-        context=context,
-    )
