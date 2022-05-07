@@ -2,7 +2,7 @@ import json
 from unittest.mock import Mock
 
 import numpy as np
-from scipy import stats
+from scipy import stats, sparse
 
 from nqdc import _fit_neurosynth
 
@@ -12,9 +12,14 @@ def test_chi_square():
     n_studies, n_voxels = 30, 40
     brain_maps = rng.integers(2, size=(n_studies, n_voxels)).astype(bool)
     assert brain_maps.sum()
-    term_vec = rng.integers(2, size=n_studies).astype(bool)
-    assert term_vec.sum()
-    z_vals = _fit_neurosynth._chi_square(brain_maps, term_vec)
+    term_vec_sp = sparse.csc_matrix(
+        rng.integers(2, size=n_studies, dtype="int32")[:, None]
+    )
+    assert term_vec_sp.sum()
+    z_vals = _fit_neurosynth._chi_square(
+        brain_maps, brain_maps.sum(axis=0), term_vec_sp
+    )
+    term_vec = term_vec_sp.A.ravel()
     stats_z_vals = []
     normal = stats.norm()
     for voxel in range(n_voxels):

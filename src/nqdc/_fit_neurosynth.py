@@ -37,23 +37,27 @@ _STEP_HELP = (
 # nqdc-generated data thanks to the 'extract_nimare_data' step.
 
 
-def _chi_square(brain_maps: np.memmap, term_vector: np.ndarray) -> np.ndarray:
+def _chi_square(
+    brain_maps: np.memmap,
+    brain_maps_sum: np.ndarray,
+    term_vector: sparse.csc_matrix,
+) -> np.ndarray:
     """Test independence of `term_vector` and each voxel in `brain_maps`.
 
     Transforms the output to Z values and returns a vector of Z values of size
     n_voxels ie `brain_maps.shape[1]`.
 
     """
-    term_vector = term_vector.astype("int32")
+    assert term_vector.dtype == "int32"
     n_studies = brain_maps.shape[0]
     observed = np.empty((2, 2, brain_maps.shape[1]))
     term = term_vector.sum()
     noterm = n_studies - term
-    vox = brain_maps.sum(axis=0)
+    vox = brain_maps_sum
     novox = n_studies - vox
 
-    observed[1, 1, :] = term_vector.dot(brain_maps)
-    observed[0, 1, :] = (1 - term_vector).dot(brain_maps)
+    observed[1, 1, :] = term_vector.T.dot(brain_maps)
+    observed[0, 1, :] = vox - observed[1, 1, :]
     observed[1, 0, :] = term - observed[1, 1, :]
     observed[0, 0, :] = noterm - observed[0, 1, :]
 
@@ -85,13 +89,15 @@ def _term_to_file_path(term: str, maps_dir: Path) -> Path:
 def _compute_meta_analysis_map(
     output_file: Path,
     brain_maps: np.memmap,
+    brain_maps_sum: np.ndarray,
     masker: NiftiMasker,
-    tfidf_vector: sparse.csr_matrix,
-    tfidf_threshold: float,
+    term_vector: sparse.csc_matrix,
 ) -> None:
     """Run chi2 test for every voxel; store resulting image in `output_dir`"""
     term_map = _chi_square(
-        brain_maps, np.asarray(tfidf_vector.A).ravel() > tfidf_threshold
+        brain_maps,
+        brain_maps_sum,
+        term_vector,
     )
     img = masker.inverse_transform(term_map)
     img.to_filename(str(output_file))
@@ -100,6 +106,9 @@ def _compute_meta_analysis_map(
 class _NeuroSynthFit(_model_fit_utils.DataManager):
     """Helper class to load data and run the NeuroSynth analysis."""
 
+    # storing in int32 is slightly faster (no conversion when computing sum or
+    # dot product with tfidf vectors), but the difference is small and we
+    # prefer to use less memory.
     _BRAIN_MAP_DTYPE = "int8"
     _VOXEL_SIZE = 2.0
     _TFIDF_THRESHOLD = 0.001
@@ -149,21 +158,26 @@ class _NeuroSynthFit(_model_fit_utils.DataManager):
         """Performs the actual analysis."""
         assert self.feature_names is not None
         assert self.tfidf is not None
+        assert self.brain_maps is not None
 
-        n_terms = len(self.feature_names)
         maps_dir = self.output_dir.joinpath("neurosynth_maps")
         maps_dir.mkdir(exist_ok=True)
+        n_terms = len(self.feature_names)
         _LOG.info(f"Running NeuroSynth analysis for {n_terms} terms.")
+        thresholded_tfidf = (
+            self.tfidf.tocsc() > self._TFIDF_THRESHOLD
+        ).astype("int32")
+        maps_sum = self.brain_maps.sum(axis=0)
         joblib.Parallel(self.n_jobs, verbose=1)(
             joblib.delayed(_compute_meta_analysis_map)(
                 _term_to_file_path(term, maps_dir),
                 self.brain_maps,
+                maps_sum,
                 self.masker,
-                term_tfidf,
-                self._TFIDF_THRESHOLD,
+                term_tfidf.T,
             )
             for term, term_tfidf in zip(
-                self.feature_names["term"].values, self.tfidf.T
+                self.feature_names["term"].values, thresholded_tfidf.T
             )
         )
         self._write_output_data()
