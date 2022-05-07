@@ -473,8 +473,6 @@ paper](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3146590/) and
 [NiMARE](https://nimare.readthedocs.io/) documentation pages for more
 information.
 
-Note: this step is particularly computationally expensive.
-
 
 We pass the `_vectorizedText` directory created by `nqdc vectorize`:
 ```

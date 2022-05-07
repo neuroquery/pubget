@@ -27,7 +27,8 @@ _STEP_NAME = "fit_neurosynth"
 _STEP_DESCRIPTION = "Run a NeuroSynth meta-analysis on the downloaded data."
 _STEP_HELP = (
     "Run a NeuroSynth-like meta-analysis on the downloaded "
-    "data. This is a computationally intensive step."
+    "data. This can be a more computationally intensive step for "
+    "large datasets."
 )
 
 

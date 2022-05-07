@@ -20,7 +20,7 @@ _STEP_NAME = "fit_neuroquery"
 _STEP_DESCRIPTION = "Fit a NeuroQuery encoder on the downloaded data."
 _STEP_HELP = (
     "Fit a NeuroQuery encoder on the downloaded data. "
-    "Note this can be a more computationally intensive step for "
+    "This can be a more computationally intensive step for "
     "large datasets. Moreover, it will not yield "
     "good results for small datasets (less than ~ 5 to 10K articles with "
     "coordinates). See details about neuroquery at neuroquery.org and "
