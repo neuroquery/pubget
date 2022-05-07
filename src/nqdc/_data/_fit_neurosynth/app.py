@@ -6,7 +6,14 @@ import flask
 import numpy as np
 from scipy import sparse
 import pandas as pd
+from nilearn import image, datasets
+
+try:
+    from nilearn import maskers
+except ImportError:
+    from nilearn import input_data as maskers
 from nilearn.plotting import view_img
+from nilearn.glm import fdr_threshold
 
 template = """<!doctype html>
 <head>
@@ -47,6 +54,7 @@ terms_info = pd.read_csv(str(data_dir.joinpath("terms.csv")), index_col=0)
 terms_info["pos"] = np.arange(terms_info.shape[0])
 metadata = pd.read_csv(str(data_dir.joinpath("metadata.csv")))
 tfidf = sparse.load_npz(str(data_dir.joinpath("tfidf.npz")))
+masker = maskers.NiftiMasker(str(data_dir.joinpath("brain_mask.nii.gz"))).fit()
 
 app = flask.Flask(__name__)
 
@@ -75,20 +83,16 @@ def download_image():
     return flask.send_from_directory(maps_dir, f"{file_name}.nii.gz")
 
 
-@app.route("/query", methods=["GET"])
-def query():
-    term = flask.request.args.get("term", "").strip()
-    if term not in terms_info.index:
-        return flask.render_template_string(
-            template,
-            term_missing=True,
-            term="",
-            all_terms=terms_info.index.values,
-        )
-
+def _get_image_viewer(term):
     term_file_name = terms_info.loc[term, "file_name"]
     img_path = maps_dir.joinpath(f"{term_file_name}.nii.gz")
-    img_viewer = view_img(str(img_path), threshold=3.1).get_iframe()
+    img = image.load_img(str(img_path))
+    threshold = fdr_threshold(masker.transform(img).ravel(), 0.01)
+    img_viewer = view_img(img, threshold=threshold).get_iframe()
+    return img_viewer
+
+
+def _get_similar_docs_table(term):
     loadings = tfidf[:, terms_info.loc[term, "pos"]].A.ravel()
     order = np.argpartition(-loadings, np.arange(20))[:20]
     similar_docs = metadata.iloc[order].copy()
@@ -101,6 +105,21 @@ def query():
         # pandas older than 1.4
         docs_style = docs_style.hide_index()
     similar_docs_table = docs_style.bar(color="lightgreen").to_html()
+    return similar_docs_table
+
+
+@app.route("/query", methods=["GET"])
+def query():
+    term = flask.request.args.get("term", "").strip()
+    if term not in terms_info.index:
+        return flask.render_template_string(
+            template,
+            term_missing=True,
+            term="",
+            all_terms=terms_info.index.values,
+        )
+    img_viewer = _get_image_viewer(term)
+    similar_docs_table = _get_similar_docs_table(term)
     return flask.render_template_string(
         template,
         term_missing=False,

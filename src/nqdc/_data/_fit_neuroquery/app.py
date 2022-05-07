@@ -18,8 +18,7 @@ template = """<!doctype html>
     <div>
         <form method="get">
             <label for="term">Enter query:</label><br/>
-            <textarea name="term" id="term" cols="60" rows="3" value={{ term }}>
-            </textarea>
+            <textarea name="term" id="term" cols="60" rows="3" value={{ term }}></textarea>
             <input type="submit" value="Run query"/>
         </form>
     </div>

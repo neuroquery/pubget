@@ -141,6 +141,7 @@ class _NeuroSynthFit(_model_fit_utils.DataManager):
         """Save metadata and tfidf features."""
         assert self.feature_names is not None
         assert self.metadata is not None
+        assert self.masker is not None
 
         self.feature_names["file_name"] = self.feature_names["term"].map(
             _term_to_file_name
@@ -153,6 +154,9 @@ class _NeuroSynthFit(_model_fit_utils.DataManager):
             str(self.output_dir.joinpath("metadata.csv")), index=False
         )
         sparse.save_npz(str(self.output_dir.joinpath("tfidf.npz")), self.tfidf)
+        self.masker.mask_img_.to_filename(
+            str(self.output_dir.joinpath("brain_mask.nii.gz"))
+        )
 
     def _fit_model(self) -> None:
         """Performs the actual analysis."""
