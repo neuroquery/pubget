@@ -61,12 +61,18 @@ def mock_nimare(monkeypatch):
 
 
 @pytest.mark.parametrize(
-    ("voc_source", "with_nimare", "labelbuddy_params", "with_fit_neuroquery"),
+    (
+        "voc_source",
+        "with_nimare",
+        "labelbuddy_params",
+        "with_fit_neuroquery",
+        "with_fit_neurosynth",
+    ),
     [
-        ("file", True, [], False),
-        ("default", False, ["--labelbuddy"], False),
-        ("extract", False, ["--labelbuddy_part_size", "3"], False),
-        ("default", False, ["--labelbuddy_part_size", "-1"], True),
+        ("file", True, [], False, True),
+        ("default", False, ["--labelbuddy"], False, False),
+        ("extract", False, ["--labelbuddy_part_size", "3"], False, False),
+        ("default", False, ["--labelbuddy_part_size", "-1"], True, False),
     ],
 )
 def test_full_pipeline_command(
@@ -77,6 +83,7 @@ def test_full_pipeline_command(
     voc_source,
     with_nimare,
     with_fit_neuroquery,
+    with_fit_neurosynth,
     labelbuddy_params,
     monkeypatch,
     mock_nimare,
@@ -89,6 +96,8 @@ def test_full_pipeline_command(
         args.append("--nimare")
     if with_fit_neuroquery:
         args.append("--fit_neuroquery")
+    if with_fit_neurosynth:
+        args.append("--fit_neurosynth")
     args.extend(labelbuddy_params)
     voc_file = test_data_dir.joinpath("vocabulary.csv")
     if voc_source == "file":
@@ -113,6 +122,16 @@ def test_full_pipeline_command(
         f"subset_allArticles-voc_{voc_checksum}_vectorizedText",
         "pmcid.txt",
     ).is_file()
+    if with_fit_neuroquery:
+        assert tmp_path.joinpath(
+            query_name,
+            f"subset_allArticles-voc_{voc_checksum}_neuroqueryModel",
+        ).is_dir()
+    if with_fit_neurosynth:
+        assert tmp_path.joinpath(
+            query_name,
+            f"subset_allArticles-voc_{voc_checksum}_neurosynthResults",
+        ).is_dir()
     if with_nimare:
         assert tmp_path.joinpath(
             query_name,
@@ -198,6 +217,19 @@ def _check_fit_neuroquery_step(vectorized_dir, voc_checksum, monkeypatch):
     return nq_dir
 
 
+def _check_fit_neurosynth_step(vectorized_dir, voc_checksum, monkeypatch):
+    monkeypatch.setattr(
+        "nqdc._fit_neurosynth._NeuroSynthFit._MIN_DOCUMENT_FREQUENCY", 1
+    )
+    _commands.nqdc_command(["fit_neurosynth", str(vectorized_dir)])
+    ns_dir = vectorized_dir.parent.joinpath(
+        f"subset_allArticles-voc_{voc_checksum}_neurosynthResults",
+        "neurosynth_maps",
+    )
+    assert list(ns_dir.glob("*.nii.gz"))
+    return ns_dir
+
+
 def _check_extract_labelbuddy_data_step(extracted_data_dir):
     _commands.nqdc_command(
         ["extract_labelbuddy_data", str(extracted_data_dir)]
@@ -234,6 +266,7 @@ def test_steps(
         extracted_data_dir, test_data_dir
     )
     _check_fit_neuroquery_step(vectorized_dir, voc_checksum, monkeypatch)
+    _check_fit_neurosynth_step(vectorized_dir, voc_checksum, monkeypatch)
     _check_extract_labelbuddy_data_step(extracted_data_dir)
     _check_extract_nimare_data_step(vectorized_dir, voc_checksum)
 

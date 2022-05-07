@@ -10,28 +10,30 @@ from neuroquery import NeuroQueryModel
 from neuroquery.tokenization import get_html_highlighted_text
 from nilearn.plotting import view_img
 
-template = """
-<!doctype html>
+template = """<!doctype html>
 <head>
-<title>NeuroQuery encoder</title>
+    <title>NeuroQuery encoder</title>
 </head>
 <body>
-<div>
-  <form method="get">
-    <textarea name="term" id="term" cols="60" rows="3">{{ term }}</textarea>
-    <input type="submit" value="Run query"/>
-  </form>
-</div>
-<div style="padding:15pt;">{{highlighted_text | safe}}</div>
-<div>{{ img_viewer | safe }}</div>
-<div>{{ download_link | safe }}</div>
-<div><h3>Similar words</h3>{{similar_words | safe}}</div>
-<div><h3>Similar documents</h3>{{similar_documents | safe}}</div>
+    <div>
+        <form method="get">
+            <label for="term">Enter query:</label><br/>
+            <textarea name="term" id="term" cols="60" rows="3" value={{ term }}></textarea>
+            <input type="submit" value="Run query"/>
+        </form>
+    </div>
+    <div><p>{{highlighted_text | safe}}</p></div>
+    <div>{{ img_viewer | safe }}</div>
+    <div>{{ download_link | safe }}</div>
+    <div><h3>Similar words</h3>{{similar_words | safe}}</div>
+    <div><h3>Similar documents</h3>{{similar_documents | safe}}</div>
 </body>
 """
 
 pmc_url = "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC{}"
-encoder = NeuroQueryModel.from_data_dir(Path(".").joinpath("neuroquery_model"))
+encoder = NeuroQueryModel.from_data_dir(
+    Path(__file__).resolve().parent.joinpath("neuroquery_model")
+)
 
 app = flask.Flask(__name__)
 
@@ -102,3 +104,7 @@ def query():
         similar_words=words_table,
         similar_documents=similar_docs_table,
     )
+
+
+if __name__ == "__main__":
+    app.run()

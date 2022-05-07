@@ -17,7 +17,8 @@ from nqdc._vocabulary import (
     StandaloneVocabularyExtractionStep,
 )
 from nqdc._vectorization import VectorizationStep, StandaloneVectorizationStep
-from nqdc._fit_neuroquery import FitNeuroQueryStep, StandaloneFitNeuroqueryStep
+from nqdc._fit_neuroquery import FitNeuroQueryStep, StandaloneFitNeuroQueryStep
+from nqdc._fit_neurosynth import FitNeuroSynthStep, StandaloneFitNeuroSynthStep
 from nqdc._nimare import NimareStep, StandaloneNimareStep
 from nqdc._labelbuddy import LabelbuddyStep, StandaloneLabelbuddyStep
 from nqdc._pipeline import Pipeline
@@ -53,6 +54,7 @@ def _get_processing_steps() -> List[BaseProcessingStep]:
         VocabularyExtractionStep(),
         VectorizationStep(),
         FitNeuroQueryStep(),
+        FitNeuroSynthStep(),
         LabelbuddyStep(),
         NimareStep(),
     ]
@@ -66,7 +68,8 @@ def _get_processing_steps() -> List[BaseProcessingStep]:
         StandaloneDataExtractionStep(),
         StandaloneVocabularyExtractionStep(),
         StandaloneVectorizationStep(),
-        StandaloneFitNeuroqueryStep(),
+        StandaloneFitNeuroQueryStep(),
+        StandaloneFitNeuroSynthStep(),
         StandaloneLabelbuddyStep(),
         StandaloneNimareStep(),
     ]

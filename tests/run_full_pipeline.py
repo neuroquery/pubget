@@ -1,3 +1,4 @@
+import os
 import subprocess
 import argparse
 from pathlib import Path
@@ -7,33 +8,40 @@ from scipy import sparse
 import pandas as pd
 
 
+def _get_n_jobs(args):
+    if args.n_jobs is not None:
+        return args.n_jobs
+    return os.environ.get("NQDC_N_JOBS", 4)
+
+
 def run_and_check():
     parser = argparse.ArgumentParser()
     parser.add_argument("-o", "--output_dir", type=str, default=".")
+    parser.add_argument("--n_jobs", type=int, default=None)
+    parser.add_argument("--fit_neurosynth", action="store_true")
     args = parser.parse_args()
 
     data_dir = Path(args.output_dir).joinpath(
         "nqdc_full_pipeline_run_"
         f"{datetime.now().isoformat().replace(':', '-')}"
     )
-
-    subprocess.run(
-        [
-            "nqdc",
-            "run",
-            str(data_dir),
-            "-q",
-            "fMRI[title]",
-            "--log_dir",
-            str(data_dir.joinpath("log")),
-            "--n_jobs",
-            "4",
-            "--extract_vocabulary",
-            "--labelbuddy",
-            "--fit_neuroquery"
-        ],
-        check=True,
-    )
+    nqdc_args = [
+        "nqdc",
+        "run",
+        str(data_dir),
+        "-q",
+        "fMRI[title]",
+        "--log_dir",
+        str(data_dir.joinpath("log")),
+        "--n_jobs",
+        str(_get_n_jobs(args)),
+        "--extract_vocabulary",
+        "--labelbuddy",
+        "--fit_neuroquery",
+    ]
+    if args.fit_neurosynth:
+        nqdc_args.append("--fit_neurosynth")
+    subprocess.run(nqdc_args, check=True)
 
     print("\n")
 
