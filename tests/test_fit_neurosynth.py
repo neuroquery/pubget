@@ -19,7 +19,7 @@ def test_chi_square():
     z_vals = _fit_neurosynth._chi_square(
         brain_maps, brain_maps.sum(axis=0), term_vec_sp
     )
-    term_vec = term_vec_sp.A.ravel()
+    term_vec = term_vec_sp.A.ravel().astype(bool)
     stats_z_vals = []
     normal = stats.norm()
     for voxel in range(n_voxels):
@@ -30,7 +30,10 @@ def test_chi_square():
         contingency[1, 0] = ((activations) & (~term_vec)).sum()
         contingency[1, 1] = ((activations) & (term_vec)).sum()
         p_val = stats.chi2_contingency(contingency, False)[1]
-        stats_z_vals.append(normal.isf(p_val / 2))
+        vox_z_val = normal.isf(p_val / 2)
+        if activations[term_vec].mean() < activations[~term_vec].mean():
+            vox_z_val = - vox_z_val
+        stats_z_vals.append(vox_z_val)
     assert np.allclose(z_vals, stats_z_vals)
 
 

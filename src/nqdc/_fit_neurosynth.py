@@ -33,9 +33,9 @@ _STEP_HELP = (
 
 
 # Note: we don't use implementations from the neurosynth or nimare packages
-# because (i) as of 2022-05-06 they use too much memory and (ii) to avoid
-# adding a dependency. Users can easily run any nimare analysis on
-# nqdc-generated data thanks to the 'extract_nimare_data' step.
+# because (i) as of 2022-05-06 they use too much memory and are too slow and
+# (ii) to avoid adding a dependency. Users can easily run any nimare analysis
+# on nqdc-generated data thanks to the 'extract_nimare_data' step.
 
 
 def _chi_square(
@@ -70,11 +70,13 @@ def _chi_square(
     expected_0 = expected == 0
     expected[expected_0] = 1
 
-    cells = (observed - expected) ** 2 / expected
+    diff = observed - expected
+    cells = diff**2 / expected
     cells[expected_0] = 0
     stat = np.sum(cells, axis=(0, 1))
     # degrees of freedom = (2 - 1) * (2 - 1) = 1
     z_values: np.ndarray = stats.norm().isf(stats.chi2(1).sf(stat) / 2)
+    z_values[diff[1, 1] < 0] *= -1
     return z_values
 
 
