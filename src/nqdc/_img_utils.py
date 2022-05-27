@@ -111,3 +111,54 @@ def coordinates_to_memmapped_maps(
     )
     output.flush()
     return output, article_ids, masker
+
+
+def tal_coordinates_to_mni(
+    coordinates: pd.DataFrame, coordinate_spaces: pd.DataFrame
+) -> pd.DataFrame:
+    """Transform the TAL coordinates to MNI space.
+
+    Coordinates in MNI or UNKNOWN space are not modified.
+
+    A new dataframe is returned containing the transformed coordinates, the
+    original is left unchanged.
+
+    The parameters of the affine transformation are taken from the
+    nimare.utils.tal2mni function (nimare 0.0.11), itself based on:
+
+        "the tal2icbm transform developed and validated by Jack Lancaster at
+        the Research Imaging Center in San Antonio, Texas.
+        http://www3.interscience.wiley.com/cgi-bin/abstract/114104479/ABSTRACT"
+
+
+    Parameters
+    ----------
+    coordinates: pmcid and x, y, z coordinates
+    coordinate_spaces: index is the pmcid and "coordinate_space" column is the
+        coordinate space, "TAL" for Talairach. All pmcids in coordinates must
+        be contained in the index.
+
+    Returns
+    -------
+    A dataframe of the same shape as `coordinates` where the TAL coordinates
+    have been transformed to MNI.
+
+    """
+    transform = np.linalg.inv(
+        [
+            [0.9357, 0.0029, -0.0072, -1.0423],
+            [-0.0065, 0.9396, -0.0726, -1.3940],
+            [0.0103, 0.0752, 0.8967, 3.6475],
+            [0.0000, 0.0000, 0.0000, 1.0000],
+        ]
+    )
+    spaces = coordinate_spaces.loc[
+        coordinates[_ID_COLUMN_NAME].values, "coordinate_space"
+    ].values
+    tal_idx = coordinates.index[spaces == "TAL"]
+    tal_coords = coordinates.loc[tal_idx, ["x", "y", "z"]].values
+    transformed_coords = transform[:3, :3].dot(tal_coords.T).T
+    transformed_coords += transform[:3, -1]
+    new_coords = coordinates.copy()
+    new_coords.loc[tal_idx, ["x", "y", "z"]] = transformed_coords
+    return new_coords

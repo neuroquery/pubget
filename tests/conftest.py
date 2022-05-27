@@ -1,6 +1,7 @@
 import os
 import shutil
 from pathlib import Path
+import itertools
 import json
 from unittest.mock import Mock
 
@@ -157,6 +158,15 @@ def extracted_and_tfidf_dir(tmp_path):
     ).sort_index()
     coords.index.name = "pmcid"
     coords.to_csv(extracted_dir.joinpath("coordinates.csv"))
+    c_spaces_idx = list(set(coords.index.values))
+    c_spaces_vals = list(
+        itertools.islice(
+            itertools.cycle(["TAL", "MNI", "UNKNOWN"]), len(c_spaces_idx)
+        )
+    )
+    pd.DataFrame(
+        {"pmcid": c_spaces_idx, "coordinate_space": c_spaces_vals}
+    ).to_csv(extracted_dir.joinpath("coordinate_space.csv"), index=False)
     voc = [f"term {i}" for i in range(100)]
     features = voc[:50]
     mapping = {f"term {i}": f"term {i //2}" for i in range(50, 100)}

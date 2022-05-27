@@ -92,13 +92,23 @@ class DataManager(abc.ABC):
             ).read_text("utf-8")
         )
 
+    def _load_coordinates(self) -> None:
+        coordinates = pd.read_csv(
+            self.extracted_data_dir.joinpath("coordinates.csv")
+        )
+        coord_spaces = pd.read_csv(
+            self.extracted_data_dir.joinpath("coordinate_space.csv"),
+            index_col="pmcid",
+        )
+        self.coordinates = _img_utils.tal_coordinates_to_mni(
+            coordinates, coord_spaces
+        )
+
     def _load_data(self) -> None:
         self.metadata = pd.read_csv(
             self.extracted_data_dir.joinpath("metadata.csv")
         )
-        self.coordinates = pd.read_csv(
-            self.extracted_data_dir.joinpath("coordinates.csv")
-        )
+        self._load_coordinates()
         self._load_tfidf()
 
     def _compute_brain_maps(self) -> None:

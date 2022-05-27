@@ -15,6 +15,11 @@ import neuroquery.img_utils
 from nqdc import _img_utils
 
 
+def _array_from_text(text, dtype):
+    buf = io.BytesIO(text)
+    return np.loadtxt(buf, dtype=dtype)
+
+
 def _neuroquery_coordinates_to_maps(
     coordinates, output_memmap_file, n_jobs, context
 ):
@@ -55,9 +60,8 @@ def test_ball_kernel():
     0 1 1 1 1 1 0
     0 0 1 1 1 0 0
     0 0 0 0 0 0 0
-    """.strip()
-    buf = io.BytesIO(mask_text)
-    mask = np.loadtxt(buf, dtype="int8")
+    """
+    mask = _array_from_text(mask_text, "int8")
     ball = _img_utils._ball_kernel(10, 3).astype("int8")
     assert (ball[2, :, :] == mask).all()
     assert (ball[:, 2, :] == mask).all()
@@ -114,3 +118,28 @@ def test_neurosynth_coordinates_to_maps(tmp_path):
     # don't perfectly overlap because NiftiSphereMasker's spheres are not
     # exactly round
     assert (masked != maps.loc[17].values).sum() <= 300
+
+
+def test_tal_coordinates_to_mni():
+    coords_text = b"""
+    63.70 26.98  4.10
+    1.65 81.33 91.28
+    60.66 72.95 54.36
+    93.51 81.59  0.27
+    85.74  3.36 72.97
+    """
+    coords_vals = _array_from_text(coords_text, float)
+    coords = pd.DataFrame(coords_vals, columns=list("xyz"))
+    coords["pmcid"] = np.arange(coords.shape[0]) % 2
+    spaces = pd.DataFrame({"coordinate_space": ["TAL", "TAL"]}, index=[1, 0])
+    new_coords = _img_utils.tal_coordinates_to_mni(coords, spaces)
+    # computed with NiMARE 0.0.11 nimare.utils.tal2mni
+    nimare_coords_text = b"""
+     69.075033    30.456140    -2.842951
+      3.273290    94.997018    89.723441
+     66.059616    83.351088    48.805714
+    100.682157    88.063905   -12.308388
+     93.289343    11.520897    75.270713
+    """
+    nimare_coords = _array_from_text(nimare_coords_text, float)
+    assert np.allclose(new_coords.loc[:, list("xyz")].values, nimare_coords)
