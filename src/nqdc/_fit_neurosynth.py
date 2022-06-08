@@ -97,7 +97,7 @@ def _compute_meta_analysis_map(
     masker: NiftiMasker,
     term_vector: sparse.csc_matrix,
 ) -> None:
-    """Run chi2 test for every voxel; store resulting image in `output_dir`"""
+    """Run chi2 test for every voxel; store resulting image in `output_dir`."""
     term_map = _chi_square(
         brain_maps,
         brain_maps_sum,
@@ -190,7 +190,7 @@ def fit_neurosynth(
     output_dir: Optional[PathLikeOrStr] = None,
     n_jobs: int = 1,
 ) -> Tuple[Path, int]:
-    """Run a NeuroSyth-style meta-analysis
+    """Run a NeuroSyth-style meta-analysis.
 
     (Chi2 test of independence between term occurrence and voxel activation).
 
