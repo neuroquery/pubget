@@ -13,7 +13,7 @@ from nqdc import _commands, _vectorization, _nimare
 
 def _patch_neuroquery(monkeypatch):
     monkeypatch.setattr(
-        "nqdc._fit_neuroquery._NeuroQueryFit._MIN_DOCUMENT_FREQUENCY", 1
+        "nqdc._model_fit_utils.DataManager._MIN_DOCUMENT_FREQUENCY", 1
     )
     monkeypatch.setattr("nqdc._fit_neuroquery.SmoothedRegression", MagicMock())
     monkeypatch.setattr("nqdc._fit_neuroquery.normalize", MagicMock())
@@ -219,7 +219,7 @@ def _check_fit_neuroquery_step(vectorized_dir, voc_checksum, monkeypatch):
 
 def _check_fit_neurosynth_step(vectorized_dir, voc_checksum, monkeypatch):
     monkeypatch.setattr(
-        "nqdc._fit_neurosynth._NeuroSynthFit._MIN_DOCUMENT_FREQUENCY", 1
+        "nqdc._model_fit_utils.DataManager._MIN_DOCUMENT_FREQUENCY", 1
     )
     _commands.nqdc_command(["fit_neurosynth", str(vectorized_dir)])
     ns_dir = vectorized_dir.parent.joinpath(

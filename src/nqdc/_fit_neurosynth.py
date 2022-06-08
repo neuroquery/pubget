@@ -31,6 +31,7 @@ _STEP_HELP = (
     "large datasets."
 )
 
+_TFIDF_THRESHOLD = 0.001
 
 # Note: we don't use implementations from the neurosynth or nimare packages
 # because (i) as of 2022-05-06 they use too much memory and are too slow and
@@ -106,30 +107,12 @@ def _compute_meta_analysis_map(
     img.to_filename(str(output_file))
 
 
-class _NeuroSynthFit(_model_fit_utils.DataManager):
-    """Helper class to load data and run the NeuroSynth analysis."""
-
+class _NeuroSynthData(_model_fit_utils.DataManager):
     # storing in int32 is slightly faster (no conversion when computing sum or
     # dot product with tfidf vectors), but the difference is small and we
     # prefer to use less memory.
     _BRAIN_MAP_DTYPE = "int8"
     _VOXEL_SIZE = 2.0
-    _TFIDF_THRESHOLD = 0.001
-
-    def __init__(
-        self,
-        output_dir: Path,
-        tfidf_dir: Path,
-        extracted_data_dir: Path,
-        n_jobs: int,
-    ) -> None:
-        super().__init__(
-            tfidf_dir=tfidf_dir,
-            extracted_data_dir=extracted_data_dir,
-            n_jobs=n_jobs,
-        )
-        self.output_dir = output_dir
-        self.output_dir.mkdir(exist_ok=True, parents=True)
 
     @staticmethod
     def _img_filter(
@@ -140,54 +123,65 @@ class _NeuroSynthFit(_model_fit_utils.DataManager):
     ) -> None:
         _img_utils.ball_coords_to_masked_map(coordinates, masker, output, idx)
 
-    def _write_output_data(self) -> None:
-        """Save metadata and tfidf features."""
-        assert self.feature_names is not None
-        assert self.metadata is not None
-        assert self.masker is not None
 
-        self.feature_names["file_name"] = self.feature_names["term"].map(
-            _term_to_file_name
-        )
-        self.feature_names.loc[:, ["term", "file_name"]].to_csv(
-            str(self.output_dir.joinpath("terms.csv")),
-            index=False,
-        )
-        self.metadata.to_csv(
-            str(self.output_dir.joinpath("metadata.csv")), index=False
-        )
-        sparse.save_npz(str(self.output_dir.joinpath("tfidf.npz")), self.tfidf)
-        self.masker.mask_img_.to_filename(
-            str(self.output_dir.joinpath("brain_mask.nii.gz"))
-        )
+def _write_output_data(data: _NeuroSynthData, output_dir: Path) -> None:
+    """Save metadata and tfidf features."""
+    assert data.feature_names is not None
+    assert data.metadata is not None
+    assert data.masker is not None
 
-    def _fit_model(self) -> None:
-        """Performs the actual analysis."""
-        assert self.feature_names is not None
-        assert self.tfidf is not None
-        assert self.brain_maps is not None
+    feature_names = data.feature_names.copy()
+    feature_names["file_name"] = feature_names["term"].map(_term_to_file_name)
+    feature_names.loc[:, ["term", "file_name"]].to_csv(
+        str(output_dir.joinpath("terms.csv")),
+        index=False,
+    )
+    data.metadata.to_csv(str(output_dir.joinpath("metadata.csv")), index=False)
+    sparse.save_npz(str(output_dir.joinpath("tfidf.npz")), data.tfidf)
+    data.masker.mask_img_.to_filename(
+        str(output_dir.joinpath("brain_mask.nii.gz"))
+    )
 
-        maps_dir = self.output_dir.joinpath("neurosynth_maps")
-        maps_dir.mkdir(exist_ok=True)
-        n_terms = len(self.feature_names)
+
+def _do_fit_neurosynth(
+    output_dir: Path,
+    tfidf_dir: Path,
+    extracted_data_dir: Path,
+    n_jobs: int,
+) -> None:
+    """Do the actual work of computing the Chi2 test maps."""
+    output_dir.mkdir(exist_ok=True, parents=True)
+    maps_dir = output_dir.joinpath("neurosynth_maps")
+    maps_dir.mkdir(exist_ok=True)
+
+    with _NeuroSynthData(
+        tfidf_dir=tfidf_dir,
+        extracted_data_dir=extracted_data_dir,
+        n_jobs=n_jobs,
+    ) as data:
+        assert data.feature_names is not None
+        assert data.tfidf is not None
+        assert data.brain_maps is not None
+
+        n_terms = len(data.feature_names)
         _LOG.info(f"Running NeuroSynth analysis for {n_terms} terms.")
-        thresholded_tfidf = (
-            self.tfidf.tocsc() > self._TFIDF_THRESHOLD
-        ).astype("int32")
-        maps_sum = self.brain_maps.sum(axis=0)
-        joblib.Parallel(self.n_jobs, verbose=1)(
+        thresholded_tfidf = (data.tfidf.tocsc() > _TFIDF_THRESHOLD).astype(
+            "int32"
+        )
+        maps_sum = data.brain_maps.sum(axis=0)
+        joblib.Parallel(n_jobs, verbose=1)(
             joblib.delayed(_compute_meta_analysis_map)(
                 _term_to_file_path(term, maps_dir),
-                self.brain_maps,
+                data.brain_maps,
                 maps_sum,
-                self.masker,
+                data.masker,
                 term_tfidf.T,
             )
             for term, term_tfidf in zip(
-                self.feature_names["term"].values, thresholded_tfidf.T
+                data.feature_names["term"].values, thresholded_tfidf.T
             )
         )
-        self._write_output_data()
+        _write_output_data(data, output_dir)
 
 
 def fit_neurosynth(
@@ -239,7 +233,7 @@ def fit_neurosynth(
         f"Performing NeuroSynth analysis with data from {tfidf_dir} "
         f"and {extracted_data_dir}."
     )
-    _NeuroSynthFit(output_dir, tfidf_dir, extracted_data_dir, n_jobs).fit()
+    _do_fit_neurosynth(output_dir, tfidf_dir, extracted_data_dir, n_jobs)
     _LOG.info(f"NeuroSynth results saved in {output_dir}.")
     is_complete = bool(status["previous_step_complete"])
     _utils.copy_static_files("_fit_neurosynth", output_dir)

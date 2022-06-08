@@ -5,7 +5,8 @@ import json
 import logging
 from pathlib import Path
 import tempfile
-from typing import Optional, Dict
+from typing import Optional, Dict, Type, TypeVar
+import types
 
 import numpy as np
 from scipy import sparse
@@ -16,9 +17,11 @@ from nqdc._typing import NiftiMasker
 
 _LOG = logging.getLogger(__name__)
 
+DataManagerT = TypeVar("DataManagerT", bound="DataManager")
+
 
 class DataManager(abc.ABC):
-    """Helper class to load data and fit an encoding model.
+    """Helper class to load data needed to fit an encoding or decoding model.
 
     It helps to:
     - load the data
@@ -27,10 +30,11 @@ class DataManager(abc.ABC):
       pmcids
     - drop the terms that are too rare
 
-    Clients should inherit from this class and redefine `_fit_model`.
+    It must be used as a context manager; the brain maps are stored in a memory
+    map that is cleaned up upon exiting the context.
 
-    In `_fit_model`, we can rely on the public attributes of this class such as
-    tfidf and brain_maps; they have been loaded and aligned on their pmcids.
+    It is possible to subclass it to redefine the `_img_filter` or the class
+    attributes `_MIN_DOCUMENT_FREQUENCY`, `_BRAIN_MAP_DTYPE` and `_VOXEL_SIZE`.
 
     """
 
@@ -56,7 +60,25 @@ class DataManager(abc.ABC):
         self.voc_mapping: Optional[Dict[str, str]] = None
         self.feature_names: Optional[pd.DataFrame] = None
         self.masker: Optional[NiftiMasker] = None
-        self.context: Optional[contextlib.ExitStack] = None
+        self._context: Optional[contextlib.ExitStack] = None
+
+    def __enter__(self: DataManagerT) -> DataManagerT:
+        with contextlib.ExitStack() as self._context:
+            self._load_data()
+            self._compute_brain_maps()
+            self._set_pmcids()
+            self._filter_out_rare_terms()
+            self._context = self._context.pop_all()
+        return self
+
+    def __exit__(
+        self,
+        exc_type: Type[BaseException],
+        exc_value: BaseException,
+        traceback: types.TracebackType,
+    ) -> None:
+        assert self._context is not None
+        self._context.close()
 
     @staticmethod
     def _img_filter(
@@ -69,10 +91,6 @@ class DataManager(abc.ABC):
         _img_utils.gaussian_coords_to_masked_map(
             coordinates, masker, output, idx
         )
-
-    @abc.abstractmethod
-    def _fit_model(self) -> None:
-        """Do the actual model fitting."""
 
     def _load_tfidf(self) -> None:
         self.tfidf = sparse.load_npz(
@@ -112,9 +130,11 @@ class DataManager(abc.ABC):
         self._load_tfidf()
 
     def _compute_brain_maps(self) -> None:
-        assert self.context is not None
+        assert self._context is not None
 
-        tmp_dir = self.context.enter_context(tempfile.TemporaryDirectory())
+        # false positive: the ExitStack takes care of calling __exit__
+        # pylint: disable-next=consider-using-with
+        tmp_dir = self._context.enter_context(tempfile.TemporaryDirectory())
         memmap_file = str(Path(tmp_dir).joinpath("brain_maps.dat"))
         _LOG.debug("Computing article maps.")
         target_affine = (self._VOXEL_SIZE, self._VOXEL_SIZE, self._VOXEL_SIZE)
@@ -125,13 +145,13 @@ class DataManager(abc.ABC):
             img_filter=self._img_filter,
             target_affine=target_affine,
             n_jobs=self.n_jobs,
-            context=self.context,
+            context=self._context,
         )
         _LOG.debug("Done computing article maps.")
         non_empty = (brain_maps != 0).any(axis=1)
         self._brain_maps_pmcids = pmcids[non_empty]
         self.brain_maps = brain_maps[non_empty]
-        self.context.callback(self._reset_brain_maps)
+        self._context.callback(self._reset_brain_maps)
         self.masker = masker
 
     def _reset_brain_maps(self) -> None:
@@ -193,12 +213,3 @@ class DataManager(abc.ABC):
         }
         voc_set = feat_names_set.union(self.voc_mapping.keys())
         self.full_voc = self.full_voc[self.full_voc["term"].isin(voc_set)]
-
-    def fit(self) -> None:
-        """Load data and fit the model or meta-analysis."""
-        with contextlib.ExitStack() as self.context:
-            self._load_data()
-            self._compute_brain_maps()
-            self._set_pmcids()
-            self._filter_out_rare_terms()
-            self._fit_model()
