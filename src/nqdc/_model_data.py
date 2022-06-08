@@ -1,4 +1,4 @@
-"""Utilities to prepare data for fitting a model or running a meta-analysis."""
+"""Utility to prepare data for fitting a model or running a meta-analysis."""
 import abc
 import contextlib
 import json
@@ -17,10 +17,10 @@ from nqdc._typing import NiftiMasker
 
 _LOG = logging.getLogger(__name__)
 
-DataManagerT = TypeVar("DataManagerT", bound="DataManager")
+ModelDataT = TypeVar("ModelDataT", bound="ModelData")
 
 
-class DataManager(abc.ABC):
+class ModelData(abc.ABC):
     """Helper class to load data needed to fit an encoding or decoding model.
 
     It helps to:
@@ -62,7 +62,7 @@ class DataManager(abc.ABC):
         self.masker: Optional[NiftiMasker] = None
         self._context: Optional[contextlib.ExitStack] = None
 
-    def __enter__(self: DataManagerT) -> DataManagerT:
+    def __enter__(self: ModelDataT) -> ModelDataT:
         with contextlib.ExitStack() as self._context:
             self._load_data()
             self._compute_brain_maps()
@@ -133,8 +133,8 @@ class DataManager(abc.ABC):
         assert self._context is not None
 
         # false positive: the ExitStack takes care of calling __exit__
-        # pylint: disable-next=consider-using-with
         tmp_dir = self._context.enter_context(
+            # pylint: disable-next=consider-using-with
             tempfile.TemporaryDirectory(suffix="_nqdc")
         )
         memmap_file = str(Path(tmp_dir).joinpath("brain_maps.dat"))

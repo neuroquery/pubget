@@ -14,7 +14,7 @@ import pandas as pd
 import joblib
 from scipy import stats, sparse
 
-from nqdc import _data_manager, _img_utils, _utils
+from nqdc import _model_data, _img_utils, _utils
 from nqdc._typing import (
     PathLikeOrStr,
     BaseProcessingStep,
@@ -107,7 +107,7 @@ def _compute_meta_analysis_map(
     img.to_filename(str(output_file))
 
 
-class _NeuroSynthDataManager(_data_manager.DataManager):
+class _NeuroSynthData(_model_data.ModelData):
     # storing in int32 is slightly faster (no conversion when computing sum or
     # dot product with tfidf vectors), but the difference is small and we
     # prefer to use less memory.
@@ -124,7 +124,7 @@ class _NeuroSynthDataManager(_data_manager.DataManager):
         _img_utils.ball_coords_to_masked_map(coordinates, masker, output, idx)
 
 
-def _write_output_data(data: _NeuroSynthDataManager, output_dir: Path) -> None:
+def _write_output_data(data: _NeuroSynthData, output_dir: Path) -> None:
     """Save metadata and tfidf features."""
     assert data.feature_names is not None
     assert data.metadata is not None
@@ -154,7 +154,7 @@ def _do_fit_neurosynth(
     maps_dir = output_dir.joinpath("neurosynth_maps")
     maps_dir.mkdir(exist_ok=True)
 
-    with _NeuroSynthDataManager(
+    with _NeuroSynthData(
         tfidf_dir=tfidf_dir,
         extracted_data_dir=extracted_data_dir,
         n_jobs=n_jobs,
