@@ -134,7 +134,9 @@ class DataManager(abc.ABC):
 
         # false positive: the ExitStack takes care of calling __exit__
         # pylint: disable-next=consider-using-with
-        tmp_dir = self._context.enter_context(tempfile.TemporaryDirectory())
+        tmp_dir = self._context.enter_context(
+            tempfile.TemporaryDirectory(suffix="_nqdc")
+        )
         memmap_file = str(Path(tmp_dir).joinpath("brain_maps.dat"))
         _LOG.debug("Computing article maps.")
         target_affine = (self._VOXEL_SIZE, self._VOXEL_SIZE, self._VOXEL_SIZE)
