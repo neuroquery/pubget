@@ -191,7 +191,7 @@ def make_nimare_dataset(
         return None, 1
     _LOG.info(f"Beginning creation of NiMARE dataset in {output_dir}")
     nimare_data = _collect_nimare_data(extracted_data_dir, vectorized_dir)
-    with tempfile.TemporaryDirectory() as tmp_dir:
+    with tempfile.TemporaryDirectory(suffix="_nqdc") as tmp_dir:
         nimare_params = _write_nimare_data(nimare_data, Path(tmp_dir))
         output_dir.mkdir(exist_ok=True, parents=True)
         nimare.io.convert_neurosynth_to_json(

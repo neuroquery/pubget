@@ -52,7 +52,7 @@ def test_does_not_rerun(tmp_path, monkeypatch):
         "utf-8",
     )
     mock = Mock()
-    monkeypatch.setattr("nqdc._fit_neurosynth._NeuroSynthFit.fit", mock)
+    monkeypatch.setattr("nqdc._fit_neurosynth._do_fit_neurosynth", mock)
     _, code = _fit_neurosynth.fit_neurosynth(tmp_path, tmp_path, tmp_path)
     assert code == 0
     assert len(mock.mock_calls) == 0

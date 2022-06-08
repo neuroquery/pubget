@@ -32,7 +32,7 @@ class BaseExtractor(ABC):
     @property
     @abstractmethod
     def fields(self) -> Tuple[str, ...]:
-        """Dict keys or DataFrame columns produced by this extractor."""
+        """Return Dict keys or DataFrame columns produced by this extractor."""
 
     @property
     @abstractmethod
@@ -43,7 +43,7 @@ class BaseExtractor(ABC):
     def extract(
         self, article: etree.ElementTree
     ) -> Union[Dict[str, Any], pd.DataFrame]:
-        """Extract data from an article"""
+        """Extract data from an article."""
 
 
 class BaseWriter(AbstractContextManager):

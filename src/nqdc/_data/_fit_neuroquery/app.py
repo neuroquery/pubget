@@ -46,7 +46,7 @@ def query_map_filename(s):
 
 
 def download_img_link(img, description):
-    with tempfile.TemporaryDirectory() as tmp_dir:
+    with tempfile.TemporaryDirectory(suffix="_nqdc") as tmp_dir:
         img_path = Path(tmp_dir).joinpath("image.nii")
         img.to_filename(str(img_path))
         img_data = img_path.read_bytes()

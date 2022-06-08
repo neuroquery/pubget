@@ -12,7 +12,7 @@ from neuroquery.tokenization import TextVectorizer
 from neuroquery.encoding import NeuroQueryModel
 
 from nqdc._typing import PathLikeOrStr, BaseProcessingStep, ArgparseActions
-from nqdc import _utils, _model_fit_utils
+from nqdc import _utils, _model_data
 
 
 _LOG = logging.getLogger(__name__)
@@ -28,57 +28,45 @@ _STEP_HELP = (
 )
 
 
-class _NeuroQueryFit(_model_fit_utils.DataManager):
-    """Helper class to load data and fit the NeuroQuery model."""
+def _do_fit_neuroquery(
+    tfidf_dir: Path,
+    extracted_data_dir: Path,
+    n_jobs: int,
+) -> NeuroQueryModel:
+    """Do the actual work of fitting the encoder."""
+    with _model_data.ModelData(
+        tfidf_dir=tfidf_dir,
+        extracted_data_dir=extracted_data_dir,
+        n_jobs=n_jobs,
+    ) as data:
+        assert data.full_voc is not None
+        assert data.tfidf is not None
+        assert data.masker is not None
 
-    def __init__(
-        self,
-        tfidf_dir: Path,
-        extracted_data_dir: Path,
-        n_jobs: int,
-    ) -> None:
-        super().__init__(
-            tfidf_dir=tfidf_dir,
-            extracted_data_dir=extracted_data_dir,
-            n_jobs=n_jobs,
-        )
-        self.encoder: Optional[NeuroQueryModel] = None
-
-    def _fit_model(self) -> None:
-        """Actual fitting of the NeuroQuerymodel."""
-        assert self.full_voc is not None
-        assert self.tfidf is not None
-        assert self.masker is not None
-
-        normalize(self.tfidf, norm="l2", axis=1, copy=False)
+        tfidf = normalize(data.tfidf, norm="l2", axis=1)
         regressor = SmoothedRegression()
-        _LOG.debug(f"Fitting NeuroQuery on {self.tfidf.shape[0]} samples.")
-        regressor.fit(self.tfidf, self.brain_maps)
+        _LOG.debug(f"Fitting NeuroQuery on {tfidf.shape[0]} samples.")
+        regressor.fit(tfidf, data.brain_maps)
         _LOG.debug("Done fitting NeuroQuery model.")
         # false positive: pylint thinks read_csv returns a TextFileReader
         vectorizer = TextVectorizer.from_vocabulary(
             # pylint: disable-next=no-member
-            self.full_voc["term"].values,
+            data.full_voc["term"].values,
             # pylint: disable-next=no-member
-            self.full_voc["document_frequency"].values,
-            voc_mapping=self.voc_mapping,
+            data.full_voc["document_frequency"].values,
+            voc_mapping=data.voc_mapping,
             norm="l2",
         )
-        self.encoder = NeuroQueryModel(
+        encoder = NeuroQueryModel(
             vectorizer,
             regressor,
-            self.masker.mask_img_,
+            data.masker.mask_img_,
             corpus_info={
-                "tfidf": self.tfidf,
-                "metadata": self.metadata,
+                "tfidf": tfidf,
+                "metadata": data.metadata,
             },
         )
-
-    def get_fitted_model(self) -> NeuroQueryModel:
-        """Fit and return the NeuroQuery encoder."""
-        self.fit()
-        assert self.encoder is not None
-        return self.encoder
+        return encoder
 
 
 def fit_neuroquery(
@@ -130,11 +118,11 @@ def fit_neuroquery(
         f"Training a NeuroQuery encoder with data from {tfidf_dir} "
         f"and {extracted_data_dir}."
     )
-    encoder = _NeuroQueryFit(
+    encoder = _do_fit_neuroquery(
         tfidf_dir,
         extracted_data_dir,
         n_jobs,
-    ).get_fitted_model()
+    )
     model_dir = output_dir.joinpath("neuroquery_model")
     if model_dir.exists():
         shutil.rmtree(model_dir)

@@ -31,7 +31,7 @@ def test_does_not_rerun(tmp_path, monkeypatch):
         "utf-8",
     )
     mock = Mock()
-    monkeypatch.setattr("nqdc._fit_neuroquery._NeuroQueryFit.fit", mock)
+    monkeypatch.setattr("nqdc._fit_neuroquery._do_fit_neuroquery", mock)
     _, code = _fit_neuroquery.fit_neuroquery(tmp_path, tmp_path, tmp_path)
     assert code == 0
     assert len(mock.mock_calls) == 0
