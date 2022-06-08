@@ -12,7 +12,7 @@ from neuroquery.tokenization import TextVectorizer
 from neuroquery.encoding import NeuroQueryModel
 
 from nqdc._typing import PathLikeOrStr, BaseProcessingStep, ArgparseActions
-from nqdc import _utils, _model_fit_utils
+from nqdc import _utils, _data_manager
 
 
 _LOG = logging.getLogger(__name__)
@@ -34,7 +34,7 @@ def _do_fit_neuroquery(
     n_jobs: int,
 ) -> NeuroQueryModel:
     """Do the actual work of fitting the encoder."""
-    with _model_fit_utils.DataManager(
+    with _data_manager.DataManager(
         tfidf_dir=tfidf_dir,
         extracted_data_dir=extracted_data_dir,
         n_jobs=n_jobs,
