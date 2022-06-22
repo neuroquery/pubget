@@ -86,11 +86,25 @@ def _parse_query(query):
 
 
 class EntrezMock:
+    """Mock the entrez API.
+
+    If we set `fail_efetch_after_n_articles` to an integer value, efetch
+    requests with a retstart greater than this value will fail with status code
+    500.
+
+    """
+
     def __init__(self):
         batch_file = Path(__file__).parent.joinpath("data", "articleset.xml")
-        self.article_set = etree.parse(str(batch_file))
-        self.count = len(self.article_set.getroot())
-        self.fail_efetch = False
+        self._article_set = etree.parse(str(batch_file))
+        self._count = len(self._article_set.getroot())
+        assert self._count == 7
+        self.fail_efetch_after_n_articles = None
+
+    @property
+    def count(self):
+        """Return the total number of articles matching the query."""
+        return self._count
 
     def __call__(self, request, *args, **kwargs):
         if "esearch.fcgi" in request.url:
@@ -103,7 +117,7 @@ class EntrezMock:
     def _esearch(self, request):
         response = {
             "esearchresult": {
-                "count": "7",
+                "count": str(self._count),
                 "retmax": "5",
                 "retstart": "0",
                 "querykey": "1",
@@ -115,16 +129,19 @@ class EntrezMock:
     def _efetch(self, request):
         params = _parse_query(request.body)
         retstart = int(params["retstart"])
-        if self.fail_efetch and retstart != 0:
+        if (
+            self.fail_efetch_after_n_articles is not None
+            and retstart >= self.fail_efetch_after_n_articles
+        ):
             return Response(
                 request.url, status_code=500, reason="Internal Server Error"
             )
         retmax = int(params["retmax"])
-        if retstart >= self.count:
+        if retstart >= self._count:
             return Response(request.url, status_code=400, reason="Bad Request")
         result = etree.Element("pmc-articleset")
         start, end = retstart, retstart + retmax
-        for article in self.article_set.getroot()[start:end]:
+        for article in self._article_set.getroot()[start:end]:
             result.append(article)
         content = etree.tostring(
             result, encoding="utf-8", xml_declaration=True

@@ -1,6 +1,7 @@
 """'extract_data' step: extract metadata, text and coordinates from XML."""
 from pathlib import Path
 import functools
+import json
 import multiprocessing
 import multiprocessing.synchronize
 import logging
@@ -30,6 +31,7 @@ from nqdc._typing import (
     BaseExtractor,
     BaseProcessingStep,
     ArgparseActions,
+    StopPipeline,
 )
 from nqdc import _utils
 
@@ -289,11 +291,20 @@ class DataExtractionStep(BaseProcessingStep):
         args: argparse.Namespace,
         previous_steps_output: Mapping[str, Path],
     ) -> Tuple[Path, int]:
-        return extract_data_to_csv(
+        output_dir, exit_code = extract_data_to_csv(
             previous_steps_output["extract_articles"],
             articles_with_coords_only=args.articles_with_coords_only,
             n_jobs=args.n_jobs,
         )
+        n_articles = json.loads(
+            output_dir.joinpath("info.json").read_text("utf-8")
+        )["n_articles"]
+        if n_articles == 0:
+            raise StopPipeline(
+                "No articles matching the query and selection criteria "
+                "could be extracted."
+            )
+        return output_dir, exit_code
 
 
 class StandaloneDataExtractionStep(BaseProcessingStep):

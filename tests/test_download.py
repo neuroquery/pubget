@@ -6,7 +6,7 @@ from nqdc import _download
 
 
 def test_download_articles_for_query(tmp_path, entrez_mock, monkeypatch):
-    entrez_mock.fail_efetch = True
+    entrez_mock.fail_efetch_after_n_articles = 1
     download_dir, code = _download.download_articles_for_query(
         "fMRI[abstract]", tmp_path, retmax=3
     )
@@ -20,7 +20,7 @@ def test_download_articles_for_query(tmp_path, entrez_mock, monkeypatch):
         download_dir.joinpath("info.json").read_text("utf-8")
     )["is_complete"]
 
-    entrez_mock.fail_efetch = False
+    entrez_mock.fail_efetch_after_n_articles = None
     download_dir, code = _download.download_articles_for_query(
         "fMRI[abstract]", tmp_path, retmax=3
     )

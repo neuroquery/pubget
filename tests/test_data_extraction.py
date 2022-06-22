@@ -1,3 +1,4 @@
+import argparse
 from pathlib import Path
 from unittest.mock import Mock, patch
 import json
@@ -7,7 +8,7 @@ import pytest
 import numpy as np
 import pandas as pd
 
-from nqdc import _download, _articles, _data_extraction
+from nqdc import _download, _articles, _data_extraction, _typing
 
 
 @pytest.fixture
@@ -22,6 +23,17 @@ def articles_dir(tmp_path, entrez_mock):
     bucket.mkdir(exist_ok=True)
     for i in range(150):
         bucket.joinpath(f"pmcid_745{i}.xml").write_bytes(b"")
+    return articles_dir
+
+
+@pytest.fixture
+def empty_articles_dir(tmp_path, entrez_mock):
+    entrez_mock.fail_efetch_after_n_articles = 0
+    download_dir, code = _download.download_articles_for_query(
+        "fMRI[abstract]", tmp_path
+    )
+    articles_dir = Path(f"{download_dir}-articles")
+    _articles.extract_articles(download_dir, articles_dir)
     return articles_dir
 
 
@@ -110,3 +122,11 @@ def test_extract_from_incomplete_articles(articles_dir, tmp_path):
 )
 def test_should_write(data, with_coords, expected):
     assert _data_extraction._should_write(data, with_coords) == expected
+
+
+def test_stop_pipeline(empty_articles_dir):
+    step = _data_extraction.DataExtractionStep()
+    args = argparse.Namespace(articles_with_coords_only=False, n_jobs=1)
+    previous_steps = {"extract_articles": empty_articles_dir}
+    with pytest.raises(_typing.StopPipeline, match=r"No articles.*"):
+        step.run(args, previous_steps)

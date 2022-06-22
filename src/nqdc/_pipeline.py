@@ -1,11 +1,13 @@
 """Pipeline: chain processing steps (used for the nqdc run command)."""
 import argparse
+import logging
 from pathlib import Path
 from typing import Sequence, Mapping, Tuple, Dict, Optional
 
-from nqdc._typing import BaseProcessingStep, ArgparseActions
+from nqdc._typing import BaseProcessingStep, ArgparseActions, StopPipeline
 from nqdc import _utils
 
+_LOG = logging.getLogger(__name__)
 _STEP_NAME = "run"
 _STEP_DESCRIPTION = "Run full nqdc pipeline."
 
@@ -45,8 +47,16 @@ class Pipeline(BaseProcessingStep):
         total_code = 0
         outputs: Dict[str, Path] = {}
         for step in self.steps:
-            step_output, code = step.run(args, outputs)
-            if step_output is not None:
-                outputs[step.name] = step_output
-            total_code = max(total_code, code)
+            try:
+                step_output, code = step.run(args, outputs)
+            except StopPipeline as stop_pipeline:
+                _LOG.error(
+                    "Interrupting nqdc run after "
+                    f"'{step.name}' step: {stop_pipeline.reason}"
+                )
+                return None, 10
+            else:
+                if step_output is not None:
+                    outputs[step.name] = step_output
+                total_code = max(total_code, code)
         return None, total_code

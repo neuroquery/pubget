@@ -78,3 +78,11 @@ class BaseProcessingStep(ABC):
         previous_steps_output: Mapping[str, Path],
     ) -> Tuple[Optional[Path], int]:
         """Execute this step. Return resulting directory and exit code."""
+
+
+class StopPipeline(Exception):
+    """Raised to indicate subsequent steps should not run."""
+
+    def __init__(self, reason: str) -> None:
+        super().__init__(reason)
+        self.reason = reason
