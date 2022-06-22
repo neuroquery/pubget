@@ -37,7 +37,7 @@ Once `nqdc` is installed, we can download and process neuroimaging articles so
 that we can later use them for meta-analysis.
 
 ```
-nqdc run ./nqdc_data -q 'fMRI[title]'
+nqdc run ./nqdc_data -q "fMRI[title]"
 ```
 
 See `nqdc run --help` for a description of this command. In
@@ -71,8 +71,8 @@ their PubMed Central ID (`pmcid`). Note this is not the same as the PubMed ID
 This step is executed by the `nqdc download` command.
 
 We must first define our query, with which Pubmed Central will be searched for
-articles. It can be simple such as `'fMRI'`, or more specific such as
-`'fMRI[Abstract] AND ("2000"[PubDate] : "2022"[PubDate])'`. You can build the
+articles. It can be simple such as `fMRI`, or more specific such as
+`fMRI[Abstract] AND (2000[PubDate] : 2022[PubDate])`. You can build the
 query using the [PMC advanced search
 interface](https://www.ncbi.nlm.nih.gov/pmc/advanced). For more information see
 [the E-Utilities help](https://www.ncbi.nlm.nih.gov/books/NBK3837/). The query
@@ -90,13 +90,27 @@ suppose we are storing our data in a directory called `nqdc_data`.
 
 We can thus download all articles with "fMRI" in their title published in 2019 by running:
 ```
-nqdc download -q 'fMRI[Title] AND ("2019"[PubDate] : "2019"[PubDate])' nqdc_data
+nqdc download -q "fMRI[Title] AND (2019[PubDate] : 2019[PubDate])" nqdc_data
 ```
+
+---
+
+> **Note:** writing the query in a file rather than passing it as an argument is more convenient for complex queries, for example those that contain whitespace, newlines or quotes. By storing it in a file we do not need to take care to quote or escape characters that would be interpreted by the shell. In this case we would store our query in a file, say `query.txt`:
+>
+> > fMRI[Title] AND (2019[PubDate] : 2019[PubDate])
+>
+> and run
+>
+> ```
+> nqdc download -f query.txt nqdc_data
+> ```
+
+---
 
 After running this command, these are the contents of our data directory:
 ```
 · nqdc_data
-  └── query-10c72245c52d7d4e6f535e2bcffb2572
+  └── query-3c0556e22a59e7d200f00ac8219dfd6c
       └── articlesets
           ├── articleset_00000.xml
           └── info.json
@@ -104,7 +118,7 @@ After running this command, these are the contents of our data directory:
 
 `nqdc` has created a subdirectory for this query. If we run the download again
 for the same query, the same subdirectory will be reused
-(`10c72245c52d7d4e6f535e2bcffb2572` is the md5 checksum of the query).
+(`3c0556e22a59e7d200f00ac8219dfd6c` is the md5 checksum of the query).
 
 Inside the query directory, the results of the bulk download are stored in the
 `articlesets` directory. The articles themselves are in XML files bundling up to
@@ -133,7 +147,7 @@ individual XML files. To do so, we pass the `articlesets` directory created by
 the `nqdc download` command in step 1:
 
 ```
-nqdc extract_articles nqdc_data/query-10c72245c52d7d4e6f535e2bcffb2572/articlesets
+nqdc extract_articles nqdc_data/query-3c0556e22a59e7d200f00ac8219dfd6c/articlesets
 ```
 
 This creates an `articles` subdirectory in the query directory, containing the
@@ -147,7 +161,7 @@ Our data directory now looks like:
 
 ```
 · nqdc_data
-  └── query-10c72245c52d7d4e6f535e2bcffb2572
+  └── query-3c0556e22a59e7d200f00ac8219dfd6c
       ├── articlesets
       │   ├── articleset_00000.xml
       │   └── info.json
@@ -188,14 +202,14 @@ We pass the path of the `articles` directory created by `nqdc extract_articles`
 in the previous step to the `nqdc extract_data` command:
 
 ```
-nqdc extract_data --articles_with_coords_only nqdc_data/query-10c72245c52d7d4e6f535e2bcffb2572/articles/
+nqdc extract_data --articles_with_coords_only nqdc_data/query-3c0556e22a59e7d200f00ac8219dfd6c/articles/
 ```
 
 Our data directory now contains (ommitting the contents of the previous steps):
 
 ```
 · nqdc_data
-  └── query-10c72245c52d7d4e6f535e2bcffb2572
+  └── query-3c0556e22a59e7d200f00ac8219dfd6c
       ├── articles
       ├── articlesets
       └── subset_articlesWithCoords_extractedData
@@ -269,7 +283,7 @@ vectorize, created by `nqdc extract_data` in step 3 (here we are using the
 default vocabulary):
 
 ```
-nqdc vectorize nqdc_data/query-10c72245c52d7d4e6f535e2bcffb2572/subset_articlesWithCoords_extractedData/
+nqdc vectorize nqdc_data/query-3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords_extractedData/
 ```
 
 This creates a new directory whose name reflects the data source (whether all
@@ -280,7 +294,7 @@ vocabulary file, concatenated with those of the vocabulary mapping file, see
 
 ```
 · nqdc_data
-  └── query-10c72245c52d7d4e6f535e2bcffb2572
+  └── query-3c0556e22a59e7d200f00ac8219dfd6c
       ├── articles
       ├── articlesets
       ├── subset_articlesWithCoords_extractedData
@@ -365,7 +379,7 @@ It builds a vocabulary of all the words and 2-grams (groups of 2
 words) that appear in the downloaded text, and computes their document frequency
 (the proportion of documents in which a term appears).
 ```
-nqdc extract_vocabulary nqdc_data/query-10c72245c52d7d4e6f535e2bcffb2572/subset_articlesWithCoords_extractedData
+nqdc extract_vocabulary nqdc_data/query-3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords_extractedData
 ```
 
 The vocabulary is stored in a csv file in a new directory. There is no header
@@ -373,7 +387,7 @@ and the 2 columns are the term and its document frequency.
 
 ```
 · nqdc_data
-  └── query-10c72245c52d7d4e6f535e2bcffb2572
+  └── query-3c0556e22a59e7d200f00ac8219dfd6c
       ├── articles
       ├── articlesets
       ├── subset_articlesWithCoords_extractedData
@@ -384,7 +398,7 @@ and the 2 columns are the term and its document frequency.
 ```
 
 When running the whole pipeline (`nqdc run`), if we use the
-`--extract_vocabulary` option and don't provide an explicit value for
+`--extract_vocabulary` option and do not provide an explicit value for
 `--vocabulary_file`, the freshly-extracted vocabulary is used instead of the
 default `neuroquery` one for computing TFIDF features.
 
@@ -406,14 +420,14 @@ Note: for this model to give good results a large dataset is needed, ideally clo
 
 We pass the `_vectorizedText` directory created by `nqdc vectorize`:
 ```
-nqdc fit_neuroquery nqdc_data/query-10c72245c52d7d4e6f535e2bcffb2572/subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
+nqdc fit_neuroquery nqdc_data/query-3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
 ```
 
 This creates a directory whose name ends with `_neuroqueryModel`:
 
 ```
 · nqdc_data
-  └── query-10c72245c52d7d4e6f535e2bcffb2572
+  └── query-3c0556e22a59e7d200f00ac8219dfd6c
       ├── articles
       ├── articlesets
       ├── subset_articlesWithCoords_extractedData
@@ -476,14 +490,14 @@ information.
 
 We pass the `_vectorizedText` directory created by `nqdc vectorize`:
 ```
-nqdc fit_neurosynth nqdc_data/query-10c72245c52d7d4e6f535e2bcffb2572/subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
+nqdc fit_neurosynth nqdc_data/query-3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
 ```
 
 This creates a directory whose name ends with `_neurosynthResults`:
 
 ```
 · nqdc_data
-  └── query-10c72245c52d7d4e6f535e2bcffb2572
+  └── query-3c0556e22a59e7d200f00ac8219dfd6c
       ├── articles
       ├── articlesets
       ├── subset_articlesWithCoords_extractedData
@@ -527,14 +541,14 @@ It prepares the articles whose data was extracted for annotation with
 We pass the `_extractedData` directory created by `nqdc extract_data`:
 
 ```
-nqdc extract_labelbuddy_data nqdc_data/query-10c72245c52d7d4e6f535e2bcffb2572/subset_articlesWithCoords_extractedData
+nqdc extract_labelbuddy_data nqdc_data/query-3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords_extractedData
 ```
 
 This creates a directory whose name ends with `labelbuddyData` containing the batches of documents in JSONL format (in this case there is a single batch):
 
 ```
 · nqdc_data
-  └── query-10c72245c52d7d4e6f535e2bcffb2572
+  └── query-3c0556e22a59e7d200f00ac8219dfd6c
       ├── articles
       ├── articlesets
       ├── subset_articlesWithCoords_extractedData
@@ -568,14 +582,14 @@ for details.
 We pass the `_vectorizedText` directory created by `nqdc vectorize`:
 
 ```
-nqdc extract_nimare_data nqdc_data/query-10c72245c52d7d4e6f535e2bcffb2572/subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
+nqdc extract_nimare_data nqdc_data/query-3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
 ```
 
 The resulting directory contains a `nimare_dataset.json` file that can be used to initialize a `nimare.Dataset`. 
 
 ```
 · nqdc_data
-  └── query-10c72245c52d7d4e6f535e2bcffb2572
+  └── query-3c0556e22a59e7d200f00ac8219dfd6c
       ├── articles
       ├── articlesets
       ├── subset_articlesWithCoords_extractedData
@@ -592,7 +606,7 @@ pip install nimare
 ```
 or install `nqdc` with
 ```
-pip install 'nqdc[nimare]'
+pip install "nqdc[nimare]"
 ```
 
 ## Full pipeline
@@ -602,18 +616,18 @@ We can run all steps in one command by using `nqdc run`.
 The full procedure described above could be run by executing:
 
 ```
-nqdc run -q 'fMRI[Title] AND ("2019"[PubDate] : "2019"[PubDate])' \
-    --articles_with_coords_only                                   \
+nqdc run -q "fMRI[Title] AND (2019[PubDate] : 2019[PubDate])" \
+    --articles_with_coords_only                               \
     nqdc_data
 ```
 
 If we also want to apply the optional steps:
 ```
-nqdc run -q 'fMRI[Title] AND ("2019"[PubDate] : "2019"[PubDate])' \
-    --articles_with_coords_only                                   \
-    --fit_neuroquery                                              \
-    --labelbuddy                                                  \
-    --nimare                                                      \
+nqdc run -q "fMRI[Title] AND (2019[PubDate] : 2019[PubDate])" \
+    --articles_with_coords_only                               \
+    --fit_neuroquery                                          \
+    --labelbuddy                                              \
+    --nimare                                                  \
     nqdc_data
 ```
 (remember that `--nimare` requires NiMARE to be installed).
@@ -657,13 +671,13 @@ Feedback and contributions are welcome. Development happens at the
 [nqdc GitHub repositiory](https://github.com/neuroquery/nqdc).
 To install the dependencies required for development, from the directory where you cloned `nqdc`, run:
 ```
-pip install -e '.[dev]'
+pip install -e ".[dev]"
 ```
 
 The tests can be run with `make test_all`, or `make test_coverage` to report
 test coverage. The documentation can be rendered with `make doc`. `make
 run_full_pipeline` runs the full `nqdc` pipeline on a query returning a
-realistic number of results (`'fMRI[title]'`).
+realistic number of results (`fMRI[title]`).
 
 # Python API
 
