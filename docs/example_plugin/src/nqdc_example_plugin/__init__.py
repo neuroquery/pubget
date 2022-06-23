@@ -2,7 +2,7 @@
 import argparse
 import logging
 from pathlib import Path
-from typing import Tuple, Mapping
+from typing import Tuple, Mapping, Optional
 
 import pandas as pd
 
@@ -54,7 +54,7 @@ def plot_publication_dates(extracted_data_dir: Path) -> Tuple[Path, int]:
 
 
 class PlotPubDatesStep:
-    """Plot the publication dates as part of a pipeline (nqdc run)."""
+    """Plot publication dates as part of a pipeline (nqdc run)."""
 
     name = _STEP_NAME
     short_description = _STEP_DESCRIPTION
@@ -73,14 +73,14 @@ class PlotPubDatesStep:
         self,
         args: argparse.Namespace,
         previous_steps_output: Mapping[str, Path],
-    ) -> Tuple[Path, int]:
+    ) -> Tuple[Optional[Path], int]:
         if not args.plot_pub_dates:
             return None, 0
         return plot_publication_dates(previous_steps_output["extract_data"])
 
 
 class StandalonePlotPubDatesStep:
-    """Plot the publication dates as a standalone step (nqdc plot_pub_dates)."""
+    """Plot publication dates as a standalone step (nqdc plot_pub_dates)."""
 
     name = _STEP_NAME
     short_description = _STEP_DESCRIPTION
@@ -104,6 +104,11 @@ class StandalonePlotPubDatesStep:
 
 
 def get_nqdc_processing_steps():
+    """Endpoint used by nqdc.
+
+    Needed to discover the plugin steps and add them to the command-line
+    interface. See the `[options.entry_points]` section in `setup.cfg`.
+    """
     return {
         "pipeline_steps": [PlotPubDatesStep()],
         "standalone_steps": [StandalonePlotPubDatesStep()],
