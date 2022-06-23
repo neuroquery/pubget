@@ -95,15 +95,15 @@ nqdc download -q "fMRI[Title] AND (2019[PubDate] : 2019[PubDate])" nqdc_data
 
 ---
 
-> **Note:** writing the query in a file rather than passing it as an argument is more convenient for complex queries, for example those that contain whitespace, newlines or quotes. By storing it in a file we do not need to take care to quote or escape characters that would be interpreted by the shell. In this case we would store our query in a file, say `query.txt`:
->
-> > fMRI[Title] AND (2019[PubDate] : 2019[PubDate])
->
-> and run
->
-> ```
-> nqdc download -f query.txt nqdc_data
-> ```
+**Note:** writing the query in a file rather than passing it as an argument is more convenient for complex queries, for example those that contain whitespace, newlines or quotes. By storing it in a file we do not need to take care to quote or escape characters that would be interpreted by the shell. In this case we would store our query in a file, say `query.txt`:
+
+> fMRI[Title] AND (2019[PubDate] : 2019[PubDate])
+
+and run
+
+```
+nqdc download -f query.txt nqdc_data
+```
 
 ---
 

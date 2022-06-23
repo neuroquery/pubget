@@ -1,5 +1,4 @@
 """Utility to prepare data for fitting a model or running a meta-analysis."""
-import abc
 import contextlib
 import json
 import logging
@@ -20,7 +19,7 @@ _LOG = logging.getLogger(__name__)
 ModelDataT = TypeVar("ModelDataT", bound="ModelData")
 
 
-class ModelData(abc.ABC):
+class ModelData:
     """Helper class to load data needed to fit an encoding or decoding model.
 
     It helps to:
@@ -54,7 +53,7 @@ class ModelData(abc.ABC):
         self.metadata: Optional[pd.DataFrame] = None
         self.tfidf: Optional[sparse.csr_matrix] = None
         self.coordinates: Optional[pd.DataFrame] = None
-        self.brain_maps: Optional[np.memmap] = None
+        self.brain_maps: Optional[np.ndarray] = None
         self._brain_maps_pmcids: Optional[np.ndarray] = None
         self.full_voc: Optional[pd.DataFrame] = None
         self.voc_mapping: Optional[Dict[str, str]] = None
@@ -84,7 +83,7 @@ class ModelData(abc.ABC):
     def _img_filter(
         coordinates: pd.DataFrame,
         masker: NiftiMasker,
-        output: np.memmap,
+        output: np.ndarray,
         idx: int,
     ) -> None:
         """"""

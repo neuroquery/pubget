@@ -39,7 +39,7 @@ def _ball_kernel(radius_mm: float, voxel_size_mm: float) -> np.ndarray:
 def ball_coords_to_masked_map(
     coordinates: pd.DataFrame,
     masker: NiftiMasker,
-    output: np.memmap,
+    output: np.ndarray,
     idx: int,
 ) -> None:
     """Smooth peaks with hard ball.
@@ -60,7 +60,7 @@ def ball_coords_to_masked_map(
 def gaussian_coords_to_masked_map(
     coordinates: pd.DataFrame,
     masker: NiftiMasker,
-    output: np.memmap,
+    output: np.ndarray,
     idx: int,
 ) -> None:
     """Smooth peaks with Gaussian kernel.
@@ -78,7 +78,7 @@ def coordinates_to_memmapped_maps(
     output_memmap_file: PathLikeOrStr,
     *,
     output_dtype: str,
-    img_filter: Callable[[pd.DataFrame, NiftiMasker, np.memmap, int], None],
+    img_filter: Callable[[pd.DataFrame, NiftiMasker, np.ndarray, int], None],
     target_affine: Tuple[float, float, float],
     n_jobs: int,
     context: Optional[contextlib.ExitStack],

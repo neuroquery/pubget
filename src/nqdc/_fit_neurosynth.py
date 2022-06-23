@@ -40,7 +40,7 @@ _TFIDF_THRESHOLD = 0.001
 
 
 def _chi_square(
-    brain_maps: np.memmap,
+    brain_maps: np.ndarray,
     brain_maps_sum: np.ndarray,
     term_vector: sparse.csc_matrix,
 ) -> np.ndarray:
@@ -92,7 +92,7 @@ def _term_to_file_path(term: str, maps_dir: Path) -> Path:
 
 def _compute_meta_analysis_map(
     output_file: Path,
-    brain_maps: np.memmap,
+    brain_maps: np.ndarray,
     brain_maps_sum: np.ndarray,
     masker: NiftiMasker,
     term_vector: sparse.csc_matrix,
@@ -118,7 +118,7 @@ class _NeuroSynthData(_model_data.ModelData):
     def _img_filter(
         coordinates: pd.DataFrame,
         masker: NiftiMasker,
-        output: np.memmap,
+        output: np.ndarray,
         idx: int,
     ) -> None:
         _img_utils.ball_coords_to_masked_map(coordinates, masker, output, idx)
