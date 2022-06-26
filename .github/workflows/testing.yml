@@ -73,6 +73,20 @@ jobs:
       - name: "run tests"
         run: tox -e py38-nimare
 
+  run_test_plugin:
+    name: "Test plugin"
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.10"
+        name: "setup python"
+      - name: "install tox"
+        run: pip install tox
+      - name: "run tests"
+        run: make test_plugin
+
   build_doc:
     name: "build documentation"
     runs-on: "ubuntu-latest"
