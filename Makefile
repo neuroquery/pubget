@@ -8,11 +8,11 @@ test:
 	tox
 
 test_coverage_strict:
-	pytest --cov=nqdc --cov-report=xml --cov-report=term --cov-fail-under=100
+	pytest --cov=nqdc --cov-report=xml --cov-report=term --cov-fail-under=100 tests
 	coverage html
 
 test_coverage:
-	pytest --cov=nqdc --cov-report=xml --cov-report=term
+	pytest --cov=nqdc --cov-report=xml --cov-report=term tests
 	coverage html
 
 test_mypy:
@@ -24,6 +24,10 @@ test_flake8:
 
 test_pylint:
 	pylint ./src
+
+test_plugin:
+	tox -e run_plugin
+	tox -c docs/example_plugin/tox.ini
 
 run_full_pipeline:
 	python tests/run_full_pipeline.py -o /tmp/
