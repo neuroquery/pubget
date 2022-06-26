@@ -116,7 +116,7 @@ def _get_api_key(args: argparse.Namespace) -> Optional[str]:
 def _get_query(args: argparse.Namespace) -> str:
     if args.query is not None:
         return str(args.query)
-    return Path(args.query_file).read_text("utf-8")
+    return Path(args.query_file).read_text("utf-8").strip()
 
 
 def _edit_argument_parser(argument_parser: ArgparseActions) -> None:
