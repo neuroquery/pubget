@@ -75,9 +75,11 @@ articles. It can be simple such as `fMRI`, or more specific such as
 `fMRI[Abstract] AND (2000[PubDate] : 2022[PubDate])`. You can build the
 query using the [PMC advanced search
 interface](https://www.ncbi.nlm.nih.gov/pmc/advanced). For more information see
-[the E-Utilities help](https://www.ncbi.nlm.nih.gov/books/NBK3837/). The query
-can be passed either as a string on the command-line or by passing the path of a
-text file containing the query.
+[the E-Utilities help](https://www.ncbi.nlm.nih.gov/books/NBK3837/).
+Some examples are provided in the `nqdc` git repository, in `docs/example_queries`.
+
+The query can be passed either as a string on the command-line or by passing the
+path of a text file containing the query.
 
 If we have an Entrez API key (see details in the [E-utilities
 documentation](https://www.ncbi.nlm.nih.gov/books/NBK25497/)), we can provide it
@@ -664,6 +666,9 @@ All steps in `pipeline_steps` will be run when `nqdc run` is used. All steps in
 `standalone_steps` will be added as additional nqdc commands; for example if the
 `name` of a standalone step is `my_plugin`, the `nqdc my_plugin` command will
 become available.
+
+An example plugin that can be used as a template, and more details, are provided
+in the `nqdc` git repository, in `docs/example_plugin`.
 
 # Contributing
 
