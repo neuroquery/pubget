@@ -2,9 +2,11 @@
 import argparse
 import logging
 from pathlib import Path
-from typing import Tuple, Mapping, Optional
+from typing import Tuple, Mapping, Optional, Union
 
 import pandas as pd
+
+ArgparseActions = Union[argparse.ArgumentParser, argparse._ArgumentGroup]
 
 _LOG = logging.getLogger(__name__)
 _STEP_NAME = "plot_pub_dates"
@@ -59,9 +61,7 @@ class PlotPubDatesStep:
     name = _STEP_NAME
     short_description = _STEP_DESCRIPTION
 
-    def edit_argument_parser(
-        self, argument_parser: argparse._ArgumentGroup
-    ) -> None:
+    def edit_argument_parser(self, argument_parser: ArgparseActions) -> None:
         argument_parser.add_argument(
             "--plot_pub_dates",
             action="store_true",
@@ -85,9 +85,7 @@ class StandalonePlotPubDatesStep:
     name = _STEP_NAME
     short_description = _STEP_DESCRIPTION
 
-    def edit_argument_parser(
-        self, argument_parser: argparse._ArgumentGroup
-    ) -> None:
+    def edit_argument_parser(self, argument_parser: ArgparseActions) -> None:
         argument_parser.add_argument(
             "extracted_data_dir",
             help="Directory containing extracted data CSV files."
