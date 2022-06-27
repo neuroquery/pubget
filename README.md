@@ -59,7 +59,7 @@ Each of these steps stores its output in a separate directory. Normally, you
 will run the whole procedure in one command by invoking `nqdc run`. However,
 separate commands are also provided to run each step separately. Below, we
 describe each step and its output. Use `nqdc -h` to see a list of all available
-commands.
+commands and `nqdc run -h` to see all the options of the main command.
 
 All articles downloaded by `nqdc` come from [PubMed
 Central](https://www.ncbi.nlm.nih.gov/pmc/), and are therefore identified by
@@ -86,9 +86,11 @@ documentation](https://www.ncbi.nlm.nih.gov/books/NBK25497/)), we can provide it
 through the `NQDC_API_KEY` environment variable or through the `--api_key`
 command line argument (the latter has higher precedence).
 
-We must also specify the directory in which all `nqdc` data will be stored.
-Subdirectories will be created for each different query. In the following we
-suppose we are storing our data in a directory called `nqdc_data`.
+We must also specify the directory in which all `nqdc` data will be stored. It
+can be provided either as a command-line argument (as in the examples below), or
+by exporting the `NQDC_DATA_DIR` environment variable. Subdirectories will be
+created for each different query. In the following we suppose we are storing our
+data in a directory called `nqdc_data`.
 
 We can thus download all articles with "fMRI" in their title published in 2019 by running:
 ```
@@ -622,6 +624,9 @@ nqdc run -q "fMRI[Title] AND (2019[PubDate] : 2019[PubDate])" \
     --articles_with_coords_only                               \
     nqdc_data
 ```
+
+(The output directory, `nqdc_data`, could also be provided by exporting the
+`NQDC_DATA_DIR` environment variable instead of passing it on the command line.)
 
 If we also want to apply the optional steps:
 ```

@@ -107,6 +107,22 @@ def download_articles_for_query(
     return output_dir, int(client.n_failures != 0)
 
 
+def _get_data_dir_env() -> Optional[str]:
+    return os.environ.get("NQDC_DATA_DIR", None)
+
+
+def _get_data_dir(args: argparse.Namespace) -> Path:
+    if args.data_dir is not None:
+        return Path(args.data_dir)
+    data_dir = _get_data_dir_env()
+    if not data_dir:
+        raise RuntimeError(
+            "The nqdc data directory must be provided either as a command "
+            "line argument or through the NQDC_DATA_DIR environment variable."
+        )
+    return Path(data_dir)
+
+
 def _get_api_key(args: argparse.Namespace) -> Optional[str]:
     if args.api_key is not None:
         return str(args.api_key)
@@ -120,10 +136,17 @@ def _get_query(args: argparse.Namespace) -> str:
 
 
 def _edit_argument_parser(argument_parser: ArgparseActions) -> None:
+    nargs_kw = {"nargs": "?"} if _get_data_dir_env() else {}
     argument_parser.add_argument(
         "data_dir",
         help="Directory in which all nqdc data should be stored. "
-        "A subdirectory will be created for the given query.",
+        "A subdirectory will be created for the given query. Can also be "
+        "provided by exporting the NQDC_DATA_DIR environment variable (if "
+        "both are specified the command-line argument has higher precedence).",
+        # False positive in this case; see
+        # https://github.com/python/mypy/issues/5382. could be avoided by using
+        # a TypedDict once we drop support for python 3.7.
+        **nargs_kw,  # type: ignore
     )
     group = argument_parser.add_mutually_exclusive_group(required=True)
     group.add_argument(
@@ -169,9 +192,10 @@ def _edit_argument_parser(argument_parser: ArgparseActions) -> None:
 def _download_articles_for_args(args: argparse.Namespace) -> Tuple[Path, int]:
     api_key = _get_api_key(args)
     query = _get_query(args)
+    data_dir = _get_data_dir(args)
     download_dir, code = download_articles_for_query(
         query=query,
-        data_dir=args.data_dir,
+        data_dir=data_dir,
         n_docs=args.n_docs,
         api_key=api_key,
     )

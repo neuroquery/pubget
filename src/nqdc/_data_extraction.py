@@ -1,7 +1,6 @@
 """'extract_data' step: extract metadata, text and coordinates from XML."""
 from pathlib import Path
 import functools
-import json
 import multiprocessing
 import multiprocessing.synchronize
 import logging
@@ -296,10 +295,7 @@ class DataExtractionStep(BaseProcessingStep):
             articles_with_coords_only=args.articles_with_coords_only,
             n_jobs=args.n_jobs,
         )
-        n_articles = json.loads(
-            output_dir.joinpath("info.json").read_text("utf-8")
-        )["n_articles"]
-        if n_articles == 0:
+        if not _utils.get_n_articles(output_dir):
             raise StopPipeline(
                 "No articles matching the query and selection criteria "
                 "could be extracted."

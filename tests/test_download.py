@@ -1,6 +1,9 @@
 import json
 import argparse
+from pathlib import Path
 from unittest.mock import Mock
+
+import pytest
 
 from nqdc import _download
 
@@ -50,3 +53,33 @@ def test_get_api_key(monkeypatch):
     args = argparse.Namespace(api_key="apikey1")
     key = _download._get_api_key(args)
     assert key == "apikey1"
+
+
+def test_get_data_dir(monkeypatch):
+    monkeypatch.delenv("NQDC_DATA_DIR", raising=False)
+    args = argparse.Namespace(data_dir=None)
+    with pytest.raises(RuntimeError):
+        _download._get_data_dir(args)
+    monkeypatch.setenv("NQDC_DATA_DIR", "nqdc_data_env")
+    data_dir = _download._get_data_dir(args)
+    assert data_dir == Path("nqdc_data_env")
+    args = argparse.Namespace(data_dir="nqdc_data_args")
+    data_dir = _download._get_data_dir(args)
+    assert data_dir == Path("nqdc_data_args")
+
+
+def test_data_dir_arg(monkeypatch):
+    monkeypatch.delenv("NQDC_DATA_DIR", raising=False)
+    parser = argparse.ArgumentParser()
+    _download._edit_argument_parser(parser)
+    with pytest.raises(SystemExit):
+        parser.parse_args(["-q", "fmri"])
+
+    parser = argparse.ArgumentParser()
+    _download._edit_argument_parser(parser)
+    parser.parse_args(["nqdc_data_arg", "-q", "fmri"])
+
+    monkeypatch.setenv("NQDC_DATA_DIR", "nqdc_data_env")
+    parser = argparse.ArgumentParser()
+    _download._edit_argument_parser(parser)
+    parser.parse_args(["-q", "fmri"])
