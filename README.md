@@ -5,9 +5,6 @@
 
 # NeuroQuery Data Collection
 
-**Warning: `nqdc` is in early development; its commands and functions are
-subject to change.**
-
 `nqdc` is a command-line tool for collecting data for large-scale
 coordinate-based neuroimaging meta-analysis. It exposes some of the machinery
 that was used to create the [neuroquery
