@@ -2,7 +2,7 @@
 import argparse
 from typing import Optional, List
 
-from nqdc._utils import configure_logging
+from nqdc import _utils
 from nqdc._download import DownloadStep, StandaloneDownloadStep
 from nqdc._articles import (
     ArticleExtractionStep,
@@ -93,6 +93,10 @@ def _add_step_subparsers(
 
 def _get_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=_NQDC_DESCRIPTION)
+    version = _utils.get_nqdc_version()
+    parser.add_argument(
+        "--version", action="version", version=f"%(prog)s {version}"
+    )
     subparsers = parser.add_subparsers(
         title="Commands",
         description="The nqdc action to execute. The main one "
@@ -112,5 +116,5 @@ def nqdc_command(argv: Optional[List[str]] = None) -> int:
     """Entry point: nqdc command-line tool."""
     parser = _get_parser()
     args = parser.parse_args(argv)
-    configure_logging(args.log_dir)
+    _utils.configure_logging(args.log_dir)
     return int(args.run_subcommand(args, {})[1])
