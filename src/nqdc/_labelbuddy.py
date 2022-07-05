@@ -95,7 +95,7 @@ def _prepare_document(
     fields = {**doc_text, **doc_meta}
     fields["authors"] = _format_authors(doc_authors)
     doc_info["text"] = _TEMPLATE.format(**fields)
-    doc_info["meta"] = {
+    doc_info["metadata"] = {
         "pmcid": int(doc_meta["pmcid"]),
         "text_md5": md5(doc_info["text"].encode("utf-8")).hexdigest(),
         "field_positions": _get_inserted_field_positions(_TEMPLATE, fields),
@@ -104,15 +104,15 @@ def _prepare_document(
         "page": page,
     }
     if not pd.isnull(doc_meta["pmid"]):
-        doc_info["meta"]["pmid"] = int(doc_meta["pmid"])
+        doc_info["metadata"]["pmid"] = int(doc_meta["pmid"])
     if not pd.isnull(doc_meta["doi"]):
-        doc_info["meta"]["doi"] = doc_meta["doi"]
+        doc_info["metadata"]["doi"] = doc_meta["doi"]
     url = f"https://www.ncbi.nlm.nih.gov/pmc/articles/PMC{doc_meta['pmcid']}"
-    doc_info["short_title"] = (
+    doc_info["display_title"] = (
         f"pmcid: <a href={url}>{doc_meta['pmcid']}</a>"
         f" — Part {part} Chapter {chapter} Page {page}"
     )
-    doc_info["long_title"] = f"{part}.{chapter}.{page: <2} {doc_text['title']}"
+    doc_info["list_title"] = f"{part}.{chapter}.{page: <2} {doc_text['title']}"
     return doc_info
 
 

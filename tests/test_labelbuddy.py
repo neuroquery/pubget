@@ -60,7 +60,7 @@ def test_make_labelbuddy_documents(
     assert any(
         "Abstract\n The abstract of the article" in d["text"] for d in docs
     )
-    assert [d["meta"]["chapter"] for d in docs] == [
+    assert [d["metadata"]["chapter"] for d in docs] == [
         i // 2 + 1 for i in range(len(docs))
     ]
 
