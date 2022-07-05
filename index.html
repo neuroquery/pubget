@@ -30,9 +30,15 @@
     <li><a href="#step-2-extracting-articles-from-bulk-download">Step 2: extracting articles from bulk download</a></li>
     <li><a href="#step-3-extracting-data-from-articles">Step 3: extracting data from articles</a></li>
     <li><a href="#step-4-vectorizing-computing-tfidf-features">Step 4: vectorizing (computing TFIDF features)</a></li>
+    <li><a href="#optional-step-extracting-a-new-vocabulary">Optional step: extracting a new vocabulary</a></li>
+    <li><a href="#optional-step-fitting-a-neuroquery-encoding-model">Optional step: fitting a NeuroQuery encoding model</a></li>
+    <li><a href="#optional-step-running-a-neurosynth-meta-analysis">Optional step: running a NeuroSynth meta-analysis</a></li>
+    <li><a href="#optional-step-preparing-articles-for-annotation-with-labelbuddy">Optional step: preparing articles for annotation with <code>labelbuddy</code></a></li>
+    <li><a href="#optional-step-creating-a-nimare-dataset">Optional step: creating a NiMARE dataset</a></li>
     <li><a href="#full-pipeline">Full pipeline</a></li>
     <li><a href="#logging">Logging</a></li>
   </ul></li>
+  <li><a href="#writing-plugins">Writing plugins</a></li>
   <li><a href="#contributing">Contributing</a></li>
   <li><a href="#python-api">Python API</a></li>
 </ul>
@@ -51,7 +57,40 @@
                     <a class="function" href="#extract_data_to_csv">extract_data_to_csv</a>
             </li>
             <li>
+                    <a class="function" href="#extract_vocabulary_to_csv">extract_vocabulary_to_csv</a>
+            </li>
+            <li>
                     <a class="function" href="#vectorize_corpus_to_npz">vectorize_corpus_to_npz</a>
+            </li>
+            <li>
+                    <a class="function" href="#fit_neuroquery">fit_neuroquery</a>
+            </li>
+            <li>
+                    <a class="function" href="#fit_neurosynth">fit_neurosynth</a>
+            </li>
+            <li>
+                    <a class="function" href="#make_nimare_dataset">make_nimare_dataset</a>
+            </li>
+            <li>
+                    <a class="function" href="#make_labelbuddy_documents">make_labelbuddy_documents</a>
+            </li>
+            <li>
+                    <a class="class" href="#BaseProcessingStep">BaseProcessingStep</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="variable" href="#BaseProcessingStep.name">name</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#BaseProcessingStep.short_description">short_description</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#BaseProcessingStep.edit_argument_parser">edit_argument_parser</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#BaseProcessingStep.run">run</a>
+                        </li>
+                </ul>
+
             </li>
     </ul>
 
@@ -75,9 +114,6 @@ nqdc    </h1>
 
 <h1 id="neuroquery-data-collection">NeuroQuery Data Collection</h1>
 
-<p><strong>Warning: <code><a href="">nqdc</a></code> is in early development; its commands and functions are
-subject to change.</strong></p>
-
 <p><code><a href="">nqdc</a></code> is a command-line tool for collecting data for large-scale
 coordinate-based neuroimaging meta-analysis. It exposes some of the machinery
 that was used to create the <a href="https://github.com/neuroquery/neuroquery_data">neuroquery
@@ -99,19 +135,19 @@ through its <a href="https://neuroquery.github.io/nqdc/#python-api">Python API</
 <pre><code>pip install nqdc
 </code></pre>
 
-<p>This will install the <code><a href="">nqdc</a></code> Python package, as well as the commands
-<code>nqdc_full_pipeline</code>, <code>nqdc_download</code>, <code>nqdc_extract_articles</code>,
-<code>nqdc_extract_data</code> and <code>nqdc_vectorize</code>.</p>
+<p>This will install the <code><a href="">nqdc</a></code> Python package, as well as the <code><a href="">nqdc</a></code> command.</p>
 
 <h1 id="quick-start">Quick Start</h1>
 
 <p>Once <code><a href="">nqdc</a></code> is installed, we can download and process neuroimaging articles so
 that we can later use them for meta-analysis.</p>
 
-<pre><code>nqdc_full_pipeline ./nqdc_data -q 'fMRI[title]'
+<pre><code>nqdc run ./nqdc_data -q "fMRI[title]"
 </code></pre>
 
-<p>See <code>nqdc_full_pipeline --help</code> for a description of this command.</p>
+<p>See <code>nqdc run --help</code> for a description of this command. In
+particular, the <code>--n_jobs</code> option allows running the data extraction in
+parallel, which can significantly speed up the pipeline.</p>
 
 <h1 id="usage">Usage</h1>
 
@@ -120,17 +156,18 @@ that we can later use them for meta-analysis.</p>
 <ul>
 <li>Downloading the articles in bulk from the
 <a href="https://www.ncbi.nlm.nih.gov/pmc/">PMC</a> API.</li>
-<li>Extracting the articles from the bulk download </li>
+<li>Extracting the articles from the bulk download</li>
 <li>Extracting text, stereotactic coordinates and metadata from the articles, and
 storing this information in CSV files.</li>
 <li>Vectorizing the text: transforming it into vectors of
 <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf">TFIDF</a> features.</li>
 </ul>
 
-<p>Each of these steps stores its output in a separate directory. The whole process
-can be run by using the <code>nqdc_full_pipeline</code> command. Moreover, separate
-commands are also provided to run each step separately so that we can re-run
-parts of the pipeline with different parameters.</p>
+<p>Each of these steps stores its output in a separate directory. Normally, you
+will run the whole procedure in one command by invoking <code>nqdc run</code>. However,
+separate commands are also provided to run each step separately. Below, we
+describe each step and its output. Use <code>nqdc -h</code> to see a list of all available
+commands and <code>nqdc run -h</code> to see all the options of the main command.</p>
 
 <p>All articles downloaded by <code><a href="">nqdc</a></code> come from <a href="https://www.ncbi.nlm.nih.gov/pmc/">PubMed
 Central</a>, and are therefore identified by
@@ -139,35 +176,54 @@ their PubMed Central ID (<code>pmcid</code>). Note this is not the same as the P
 
 <h2 id="step-1-downloading-articles-from-pmc">Step 1: Downloading articles from PMC</h2>
 
-<p>This step is executed by the <code>nqdc_download</code> command. </p>
+<p>This step is executed by the <code>nqdc download</code> command.</p>
 
 <p>We must first define our query, with which Pubmed Central will be searched for
-articles. It can be simple such as <code>'fMRI'</code>, or more specific such as
-<code>'fMRI[Abstract] AND ("2000"[PubDate] : "2022"[PubDate])'</code>. You can build the
+articles. It can be simple such as <code>fMRI</code>, or more specific such as
+<code>fMRI[Abstract] AND (2000[PubDate] : 2022[PubDate])</code>. You can build the
 query using the <a href="https://www.ncbi.nlm.nih.gov/pmc/advanced">PMC advanced search
 interface</a>. For more information see
-<a href="https://www.ncbi.nlm.nih.gov/books/NBK3837/">the E-Utilities help</a>. The query
-can be passed either as a string on the command-line or by passing the path of a
-text file containing the query.</p>
+<a href="https://www.ncbi.nlm.nih.gov/books/NBK3837/">the E-Utilities help</a>.
+Some examples are provided in the <code><a href="">nqdc</a></code> git repository, in <code>docs/example_queries</code>.</p>
+
+<p>The query can be passed either as a string on the command-line or by passing the
+path of a text file containing the query.</p>
 
 <p>If we have an Entrez API key (see details in the <a href="https://www.ncbi.nlm.nih.gov/books/NBK25497/">E-utilities
 documentation</a>), we can provide it
 through the <code>NQDC_API_KEY</code> environment variable or through the <code>--api_key</code>
 command line argument (the latter has higher precedence).</p>
 
-<p>We must also specify the directory in which all <code><a href="">nqdc</a></code> data will be stored.
-Subdirectories will be created for each different query. In the following we
-suppose we are storing our data in a directory called <code>nqdc_data</code>.</p>
+<p>We must also specify the directory in which all <code><a href="">nqdc</a></code> data will be stored. It
+can be provided either as a command-line argument (as in the examples below), or
+by exporting the <code>NQDC_DATA_DIR</code> environment variable. Subdirectories will be
+created for each different query. In the following we suppose we are storing our
+data in a directory called <code>nqdc_data</code>.</p>
 
 <p>We can thus download all articles with "fMRI" in their title published in 2019 by running:</p>
 
-<pre><code>nqdc_download -q 'fMRI[Title] AND ("2019"[PubDate] : "2019"[PubDate])' nqdc_data
+<pre><code>nqdc download -q "fMRI[Title] AND (2019[PubDate] : 2019[PubDate])" nqdc_data
 </code></pre>
+
+<hr />
+
+<p><strong>Note:</strong> writing the query in a file rather than passing it as an argument is more convenient for complex queries, for example those that contain whitespace, newlines or quotes. By storing it in a file we do not need to take care to quote or escape characters that would be interpreted by the shell. In this case we would store our query in a file, say <code>query.txt</code>:</p>
+
+<blockquote>
+  <p>fMRI[Title] AND (2019[PubDate] : 2019[PubDate])</p>
+</blockquote>
+
+<p>and run</p>
+
+<pre><code>nqdc download -f query.txt nqdc_data
+</code></pre>
+
+<hr />
 
 <p>After running this command, these are the contents of our data directory:</p>
 
 <pre><code>· nqdc_data
-  └── query-10c72245c52d7d4e6f535e2bcffb2572
+  └── query-3c0556e22a59e7d200f00ac8219dfd6c
       └── articlesets
           ├── articleset_00000.xml
           └── info.json
@@ -175,7 +231,7 @@ suppose we are storing our data in a directory called <code>nqdc_data</code>.</p
 
 <p><code><a href="">nqdc</a></code> has created a subdirectory for this query. If we run the download again
 for the same query, the same subdirectory will be reused
-(<code>10c72245c52d7d4e6f535e2bcffb2572</code> is the md5 checksum of the query).</p>
+(<code>3c0556e22a59e7d200f00ac8219dfd6c</code> is the md5 checksum of the query).</p>
 
 <p>Inside the query directory, the results of the bulk download are stored in the
 <code>articlesets</code> directory. The articles themselves are in XML files bundling up to
@@ -183,10 +239,10 @@ for the same query, the same subdirectory will be reused
 search returned less than 500 articles.</p>
 
 <p>Some information about the download is stored in <code>info.json</code>. In particular,
-<code>download_complete</code> indicates if all articles matching the search have been
+<code>is_complete</code> indicates if all articles matching the search have been
 downloaded. If the download was interrupted, some batches failed to download, or
 the number of results was limited by using the <code>--n_docs</code> parameter,
-<code>download_complete</code> will be <code>false</code> and the exit status of the program will
+<code>is_complete</code> will be <code>false</code> and the exit status of the program will
 be 1. You may want to re-run the command before moving on to the next step if
 the download is incomplete.</p>
 
@@ -196,13 +252,13 @@ remove the <code>articlesets</code> directory.</p>
 
 <h2 id="step-2-extracting-articles-from-bulk-download">Step 2: extracting articles from bulk download</h2>
 
-<p>This step is executed by the <code>nqdc_extract_articles</code> command.</p>
+<p>This step is executed by the <code>nqdc extract_articles</code> command.</p>
 
 <p>Once our download is complete, we extract articles directory and store them in
 individual XML files. To do so, we pass the <code>articlesets</code> directory created by
-the <code>nqdc_download</code> command in step 1:</p>
+the <code>nqdc download</code> command in step 1:</p>
 
-<pre><code>nqdc_extract_articles nqdc_data/query-10c72245c52d7d4e6f535e2bcffb2572/articlesets
+<pre><code>nqdc extract_articles nqdc_data/query-3c0556e22a59e7d200f00ac8219dfd6c/articlesets
 </code></pre>
 
 <p>This creates an <code>articles</code> subdirectory in the query directory, containing the
@@ -215,18 +271,23 @@ the first 3 hexidecimal digits of the md5 hash of its <code>pmcid</code>.</p>
 <p>Our data directory now looks like:</p>
 
 <pre><code>· nqdc_data
-  └── query-10c72245c52d7d4e6f535e2bcffb2572
+  └── query-3c0556e22a59e7d200f00ac8219dfd6c
       ├── articlesets
-      │   ├── articleset_00000.xml
-      │   └── info.json
+      │   ├── articleset_00000.xml
+      │   └── info.json
       └── articles
           ├── 019
-          │   └── pmcid_6759467.xml
+          │   └── pmcid_6759467.xml
           ├── 01f
-          │   └── pmcid_6781806.xml
+          │   └── pmcid_6781806.xml
           ├── 03f
-          │   └── pmcid_6625472.xml
+          │   └── pmcid_6625472.xml
           ├── ...
+          ├── 27d
+          │   ├── pmcid_6657681.xml
+          │   └── pmcid_6790327.xml
+          ├── ...
+          │
           └── info.json
 </code></pre>
 
@@ -237,7 +298,7 @@ the article extraction we need to remove the <code>articles</code> directory (or
 
 <h2 id="step-3-extracting-data-from-articles">Step 3: extracting data from articles</h2>
 
-<p>This step is executed by the <code>nqdc_extract_data</code> command.</p>
+<p>This step is executed by the <code>nqdc extract_data</code> command.</p>
 
 <p>It creates another directory that contains CSV files, containing the text,
 metadata and coordinates extracted from all the articles.</p>
@@ -246,21 +307,22 @@ metadata and coordinates extracted from all the articles.</p>
 <code><a href="">nqdc</a></code> finds stereotactic coordinates are kept. The name of the resulting
 directory will reflect that choice.</p>
 
-<p>We pass the path of the <code>articles</code> directory created by <code>nqdc_extract_articles</code>
-in the previous step to the <code>nqdc_extract_data</code> command:</p>
+<p>We pass the path of the <code>articles</code> directory created by <code>nqdc extract_articles</code>
+in the previous step to the <code>nqdc extract_data</code> command:</p>
 
-<pre><code>nqdc_extract_data --articles_with_coords_only nqdc_data/query-10c72245c52d7d4e6f535e2bcffb2572/articles/
+<pre><code>nqdc extract_data --articles_with_coords_only nqdc_data/query-3c0556e22a59e7d200f00ac8219dfd6c/articles/
 </code></pre>
 
 <p>Our data directory now contains (ommitting the contents of the previous steps):</p>
 
 <pre><code>· nqdc_data
-  └── query-10c72245c52d7d4e6f535e2bcffb2572
+  └── query-3c0556e22a59e7d200f00ac8219dfd6c
       ├── articles
       ├── articlesets
       └── subset_articlesWithCoords_extractedData
           ├── authors.csv
           ├── coordinates.csv
+          ├── coordinate_space.csv
           ├── info.json
           ├── metadata.csv
           └── text.csv
@@ -271,9 +333,9 @@ named <code>subset_allArticles_extractedData</code> instead.</p>
 
 <ul>
 <li><code>metadata.csv</code> contains one row per article, with some metadata: <code>pmcid</code>
-(PubMed Central ID), <code>pmid</code> (PubMed ID), <code>doi</code>, <code>title</code>, <code>journal</code>, and
-<code>publication_year</code>. Note some values may be missing (for example not all
-articles have a <code>pmid</code> or <code>doi</code>).</li>
+(PubMed Central ID), <code>pmid</code> (PubMed ID), <code>doi</code>, <code>title</code>, <code>journal</code>,
+<code>publication_year</code> and <code>license</code>. Note some values may be missing (for example
+not all articles have a <code>pmid</code> or <code>doi</code>).</li>
 <li><code>authors.csv</code> contains one row per article per author. Fields are <code>pmcid</code>,
 <code>surname</code>, <code>given-names</code>.</li>
 <li><code>text.csv</code> contains one row per article. The first field is the <code>pmcid</code>, and
@@ -281,7 +343,12 @@ the other fields are <code>title</code>, <code>keywords</code>, <code>abstract</
 the text extracted from these parts of the article.</li>
 <li><code>coordinates.csv</code> contains one row for each <code>(x, y, z)</code> stereotactic
 coordinate found in any article. Its fields are the <code>pmcid</code> of the article,
-the table label and id the coordinates came from, and <code>x</code>, <code>y</code>, <code>z</code>. </li>
+the table label and id the coordinates came from, and <code>x</code>, <code>y</code>, <code>z</code>.</li>
+<li><code>coordinate_space.csv</code> has fields <code>pmcid</code> and <code>coordinate_space</code>. It contains
+a guess about the stereotactic space coordinates are reported in, based on a
+heuristic derived from <a href="https://github.com/neurosynth/ACE">neurosynth</a>.
+Possible values for the space are the terms used by <code>neurosynth</code>: "MNI", "TAL"
+(for Talairach space), and "UNKNOWN".</li>
 </ul>
 
 <p>The different files can be joined on the <code>pmcid</code> field.</p>
@@ -293,7 +360,7 @@ data extraction we need to remove the corresponding directory (or the
 
 <h2 id="step-4-vectorizing-computing-tfidf-features">Step 4: vectorizing (computing TFIDF features)</h2>
 
-<p>This step is executed by the <code>nqdc_vectorize</code> command.</p>
+<p>This step is executed by the <code>nqdc vectorize</code> command.</p>
 
 <p>Some large-scale meta-analysis methods such as
 <a href="https://neurosynth.org/">neurosynth</a> and <a href="https://neuroquery.org">neuroquery</a>
@@ -310,25 +377,34 @@ occurs in the text divided by the length of the text) and a decreasing function
 of the <em>document frequency</em> (the total number of times the term occurs in the
 whole corpus or dataset).</p>
 
-<p>To extract the TFIDF features we must therefore choose a vocabulary. By default,
-<code><a href="">nqdc</a></code> will download and use the vocabulary used by
-<a href="https://neuroquery.org">neuroquery.org</a>. If we want to use a different
-vocabulary we can specify it with the <code>--vocabulary_file</code> option. This file will
-be parsed as a CSV file with no header, whose first column contains the terms.
-Other columns are ignored.</p>
+<p>To extract the TFIDF features we must therefore choose a vocabulary.</p>
 
-<p>We also pass to <code>nqdc_vectorize</code> the directory containing the text we want to
-vectorize, created by <code>nqdc_extract_data</code> in step 3 (here we are using the
+<ul>
+<li>By default, <code><a href="">nqdc</a></code> will download and use the vocabulary used by
+<a href="https://neuroquery.org">neuroquery.org</a>.</li>
+<li>If we use the <code>--extract_vocabulary</code> option, a new vocabulary is created from
+the downloaded text and used for computing TFIDF features (see "extracting a
+new vocabulary" below).</li>
+<li>If we want to use a different vocabulary we can specify it with the
+<code>--vocabulary_file</code> option. This file will be parsed as a CSV file with no
+header, whose first column contains the terms. Other columns are ignored.</li>
+</ul>
+
+<p>We also pass to <code>nqdc vectorize</code> the directory containing the text we want to
+vectorize, created by <code>nqdc extract_data</code> in step 3 (here we are using the
 default vocabulary):</p>
 
-<pre><code>nqdc_vectorize nqdc_data/query-10c72245c52d7d4e6f535e2bcffb2572/subset_articlesWithCoords_extractedData/
+<pre><code>nqdc vectorize nqdc_data/query-3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords_extractedData/
 </code></pre>
 
 <p>This creates a new directory whose name reflects the data source (whether all
-articles are kept or only those with coordinates) and the chosen vocabulary:</p>
+articles are kept or only those with coordinates) and the chosen vocabulary
+(<code>e6f7a7e9c6ebc4fb81118ccabfee8bd7</code> is the md5 checksum of the contents of the
+vocabulary file, concatenated with those of the vocabulary mapping file, see
+"vocabulary mapping" below):</p>
 
 <pre><code>· nqdc_data
-  └── query-10c72245c52d7d4e6f535e2bcffb2572
+  └── query-3c0556e22a59e7d200f00ac8219dfd6c
       ├── articles
       ├── articlesets
       ├── subset_articlesWithCoords_extractedData
@@ -403,17 +479,267 @@ tokenization pipeline, and you can safely ignore this – just remember that the
 file providing the terms corresponding to the TFIDF <em>features</em> is
 <code>feature_names.csv</code>.</p>
 
+<h2 id="optional-step-extracting-a-new-vocabulary">Optional step: extracting a new vocabulary</h2>
+
+<p>This step is executed by the <code>nqdc extract_vocabulary</code> command.
+When running the full pipeline this step is optional: we must use
+the <code>--extract_vocabulary</code> option for it to be executed.</p>
+
+<p>It builds a vocabulary of all the words and 2-grams (groups of 2 
+words) that appear in the downloaded text, and computes their document frequency
+(the proportion of documents in which a term appears).</p>
+
+<pre><code>nqdc extract_vocabulary nqdc_data/query-3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords_extractedData
+</code></pre>
+
+<p>The vocabulary is stored in a csv file in a new directory. There is no header
+and the 2 columns are the term and its document frequency.</p>
+
+<pre><code>· nqdc_data
+  └── query-3c0556e22a59e7d200f00ac8219dfd6c
+      ├── articles
+      ├── articlesets
+      ├── subset_articlesWithCoords_extractedData
+      ├── subset_articlesWithCoords_extractedVocabulary
+      │   ├── info.json
+      │   └── vocabulary.csv
+      └── subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
+</code></pre>
+
+<p>When running the whole pipeline (<code>nqdc run</code>), if we use the
+<code>--extract_vocabulary</code> option and do not provide an explicit value for
+<code>--vocabulary_file</code>, the freshly-extracted vocabulary is used instead of the
+default <code>neuroquery</code> one for computing TFIDF features.</p>
+
+<h2 id="optional-step-fitting-a-neuroquery-encoding-model">Optional step: fitting a NeuroQuery encoding model</h2>
+
+<p>This step is executed by the <code>nqdc fit_neuroquery</code> command. When running the
+full pipeline it is optional: we must use the <code>--fit_neuroquery</code> option
+for it to be executed.</p>
+
+<p>In this step, once the TFIDF features and the coordinates have been extracted
+from downloaded articles, they are used to train a NeuroQuery encoding model --
+the same type of model that is exposed at
+<a href="https://neuroquery.org">neuroquery.org</a>. Details about this model are provided
+in <a href="https://elifesciences.org/articles/53385">the NeuroQuery paper</a> and the
+documentation for the <a href="https://github.com/neuroquery/neuroquery">neuroquery
+package</a>.</p>
+
+<p>Note: for this model to give good results a large dataset is needed, ideally close to 10,000 articles (with coordinates).</p>
+
+<p>We pass the <code>_vectorizedText</code> directory created by <code>nqdc vectorize</code>:</p>
+
+<pre><code>nqdc fit_neuroquery nqdc_data/query-3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
+</code></pre>
+
+<p>This creates a directory whose name ends with <code>_neuroqueryModel</code>:</p>
+
+<pre><code>· nqdc_data
+  └── query-3c0556e22a59e7d200f00ac8219dfd6c
+      ├── articles
+      ├── articlesets
+      ├── subset_articlesWithCoords_extractedData
+      ├── subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_neuroqueryModel
+      │   ├── app.py
+      │   ├── info.json
+      │   ├── neuroquery_model
+      │   │   ├── corpus_metadata.csv
+      │   │   ├── corpus_tfidf.npz
+      │   │   ├── mask_img.nii.gz
+      │   │   ├── regression
+      │   │   │   ├── coef.npy
+      │   │   │   ├── intercept.npy
+      │   │   │   ├── M.npy
+      │   │   │   ├── original_n_features.npy
+      │   │   │   ├── residual_var.npy
+      │   │   │   └── selected_features.npy
+      │   │   ├── smoothing
+      │   │   │   ├── smoothing_weight.npy
+      │   │   │   └── V.npy
+      │   │   ├── vocabulary.csv
+      │   │   └── vocabulary.csv_voc_mapping_identity.json
+      │   ├── README.md
+      │   └── requirements.txt
+      └── subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
+</code></pre>
+
+<p>You do not need to care about the contents of the <code>neuroquery_model</code> subdirectory, that is data used by the <code>neuroquery</code> package.
+Just know that it can be used to initialize a <code>neuroquery.NeuroQueryModel</code> with:</p>
+
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">neuroquery</span> <span class="kn">import</span> <span class="n">NeuroQueryModel</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">NeuroQueryModel</span><span class="o">.</span><span class="n">from_data_dir</span><span class="p">(</span><span class="s2">&quot;neuroquery_model&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>The <code>neuroquery</code> documentation provides information and examples on how to use this model.</p>
+
+<h3 id="visualizing-the-newly-trained-model-in-an-interactive-web-page">Visualizing the newly trained model in an interactive web page</h3>
+
+<p>It is easy to interact with the model through a small web (Flask) application.
+From inside the <code>[...]_neuroqueryModel</code> directory, just run <code>pip install -r requirements.txt</code> to install <code>flask</code>, <code>nilearn</code> and <code>neuroquery</code>.
+Then run <code>flask run</code> and point your web browser to <code>https://localhost:5000</code>: you can play with a local, simplified version of <a href="https://neuroquery.org">neuroquery.org</a> built with the data we just downloaded.</p>
+
+<h2 id="optional-step-running-a-neurosynth-meta-analysis">Optional step: running a NeuroSynth meta-analysis</h2>
+
+<p>This step is executed by the <code>nqdc fit_neurosynth</code> command. When running the
+full pipeline it is optional: we must use the <code>--fit_neurosynth</code> option for it
+to be executed.</p>
+
+<p>In this step, once the TFIDF features and the coordinates have been extracted
+from downloaded articles, they are used to run meta-analyses using NeuroSynth's
+"association test" method: a Chi-squared test of independence between voxel
+activation and term occurrences. See <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3146590/">the NeuroSynth
+paper</a> and
+<a href="https://neurosynth.org">neurosynth.org</a>, as well as the
+<a href="https://github.com/neurosynth/neurosynth">neurosynth</a> and
+<a href="https://nimare.readthedocs.io/">NiMARE</a> documentation pages for more
+information.</p>
+
+<p>We pass the <code>_vectorizedText</code> directory created by <code>nqdc vectorize</code>:</p>
+
+<pre><code>nqdc fit_neurosynth nqdc_data/query-3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
+</code></pre>
+
+<p>This creates a directory whose name ends with <code>_neurosynthResults</code>:</p>
+
+<pre><code>· nqdc_data
+  └── query-3c0556e22a59e7d200f00ac8219dfd6c
+      ├── articles
+      ├── articlesets
+      ├── subset_articlesWithCoords_extractedData
+      ├── subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_neurosynthResults
+      │   ├── app.py
+      │   ├── info.json
+      │   ├── metadata.csv
+      │   ├── neurosynth_maps
+      │   │   ├── aberrant.nii.gz
+      │   │   ├── abilities.nii.gz
+      │   │   ├── ability.nii.gz
+      │   │   └── ...
+      │   ├── README.md
+      │   ├── requirements.txt
+      │   ├── terms.csv
+      │   └── tfidf.npz
+      └── subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
+</code></pre>
+
+<p>The meta-analytic maps for all the terms in the vocabulary can be found in the
+<code>neurosynth_maps</code> subdirectory.</p>
+
+<h3 id="visualizing-the-meta-analytic-maps-in-an-interactive-web-page">Visualizing the meta-analytic maps in an interactive web page</h3>
+
+<p>It is easy to interact with the NeuroSynth maps through a small web (Flask)
+application. From inside the <code>[...]_neurosynthResults</code> directory, just run <code>pip
+install -r requirements.txt</code> to install <code>flask</code> and other dependencies. Then run
+<code>flask run</code> and point your web browser to <code>https://localhost:5000</code>: you can
+search for a term and see the corresponding brain map and the documents that
+mention it.</p>
+
+<h2 id="optional-step-preparing-articles-for-annotation-with-labelbuddy">Optional step: preparing articles for annotation with <code>labelbuddy</code></h2>
+
+<p>This step is executed by the <code>nqdc extract_labelbuddy_data</code> command.
+When running the full pipeline this step is optional: we must use
+the <code>--labelbuddy</code> or <code>--labelbuddy_part_size</code> option for it to be executed.</p>
+
+<p>It prepares the articles whose data was extracted for annotation with
+<a href="https://jeromedockes.github.io/labelbuddy/">labelbuddy</a>.</p>
+
+<p>We pass the <code>_extractedData</code> directory created by <code>nqdc extract_data</code>:</p>
+
+<pre><code>nqdc extract_labelbuddy_data nqdc_data/query-3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords_extractedData
+</code></pre>
+
+<p>This creates a directory whose name ends with <code>labelbuddyData</code> containing the batches of documents in JSONL format (in this case there is a single batch):</p>
+
+<pre><code>· nqdc_data
+  └── query-3c0556e22a59e7d200f00ac8219dfd6c
+      ├── articles
+      ├── articlesets
+      ├── subset_articlesWithCoords_extractedData
+      ├── subset_articlesWithCoords_labelbuddyData
+      │   ├── documents_00001.jsonl
+      │   └── info.json
+      └── subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
+</code></pre>
+
+<p>The documents can be imported into <code>labelbuddy</code> using the GUI or with:</p>
+
+<pre><code>labelbuddy mydb.labelbuddy --import-docs documents_00001.jsonl
+</code></pre>
+
+<p>See the <a href="https://jeromedockes.github.io/labelbuddy/labelbuddy/current/documentation/">labelbuddy
+documentation</a>
+for details.</p>
+
+<h2 id="optional-step-creating-a-nimare-dataset">Optional step: creating a NiMARE dataset</h2>
+
+<p>This step is executed by the <code>nqdc extract_nimare_data</code> command. When running
+the full pipeline this step is optional: we must use the <code>--nimare</code> option for
+it to be executed.</p>
+
+<p>It creates a <a href="https://nimare.readthedocs.io/">NiMARE</a> dataset for the extracted
+data in JSON format. See the NiMARE
+<a href="https://nimare.readthedocs.io/en/latest/generated/nimare.dataset.Dataset.html#nimare.dataset.Dataset">documentation</a>
+for details.</p>
+
+<p>We pass the <code>_vectorizedText</code> directory created by <code>nqdc vectorize</code>:</p>
+
+<pre><code>nqdc extract_nimare_data nqdc_data/query-3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
+</code></pre>
+
+<p>The resulting directory contains a <code>nimare_dataset.json</code> file that can be used to initialize a <code>nimare.Dataset</code>. </p>
+
+<pre><code>· nqdc_data
+  └── query-3c0556e22a59e7d200f00ac8219dfd6c
+      ├── articles
+      ├── articlesets
+      ├── subset_articlesWithCoords_extractedData
+      ├── subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_nimareDataset
+      │   ├── info.json
+      │   └── nimare_dataset.json
+      └── subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
+</code></pre>
+
+<p>Using this option requires installing NiMARE, which is not installed by default
+with <code><a href="">nqdc</a></code>. To use this option, install NiMARE separately with</p>
+
+<pre><code>pip install nimare
+</code></pre>
+
+<p>or install <code><a href="">nqdc</a></code> with</p>
+
+<pre><code>pip install "nqdc[nimare]"
+</code></pre>
+
 <h2 id="full-pipeline">Full pipeline</h2>
 
-<p>We can run all steps in one command by using <code>nqdc_full_pipeline</code>.</p>
+<p>We can run all steps in one command by using <code>nqdc run</code>.</p>
 
 <p>The full procedure described above could be run by executing:</p>
 
-<pre><code>nqdc_full_pipeline -q 'fMRI[Title] AND ("2019"[PubDate] : "2019"[PubDate])' --articles_with_coords_only nqdc_data
+<pre><code>nqdc run -q "fMRI[Title] AND (2019[PubDate] : 2019[PubDate])" \
+    --articles_with_coords_only                               \
+    nqdc_data
 </code></pre>
+
+<p>(The output directory, <code>nqdc_data</code>, could also be provided by exporting the
+<code>NQDC_DATA_DIR</code> environment variable instead of passing it on the command line.)</p>
+
+<p>If we also want to apply the optional steps:</p>
+
+<pre><code>nqdc run -q "fMRI[Title] AND (2019[PubDate] : 2019[PubDate])" \
+    --articles_with_coords_only                               \
+    --fit_neuroquery                                          \
+    --labelbuddy                                              \
+    --nimare                                                  \
+    nqdc_data
+</code></pre>
+
+<p>(remember that <code>--nimare</code> requires NiMARE to be installed).</p>
 
 <p>Here also, steps that had already been completed are skipped; we need to remove
 the corresponding directories if we want to force running these steps again.</p>
+
+<p>See <code>nqdc run --help</code> for a description of all options.</p>
 
 <h2 id="logging">Logging</h2>
 
@@ -424,19 +750,40 @@ command-line argument, or if we define the <code>NQDC_LOG_DIR</code> environment
 specified, a new log file with a timestamp is created and all the output is
 written there as well.</p>
 
+<h1 id="writing-plugins">Writing plugins</h1>
+
+<p>It is possible to write plugins and define <a href="https://setuptools.pypa.io/en/latest/userguide/entry_point.html">entry
+points</a> to add
+functionality that is automatically executed when <code><a href="">nqdc</a></code> is run.</p>
+
+<p>The name of the entry point should be <code><a href="#plugin_processing_steps">nqdc.plugin_processing_steps</a></code>. It must be
+a function taking no arguments and returning a dictionary with keys
+<code>pipeline_steps</code> and <code>standalone_steps</code>. The corresponding values must be lists
+of processing step objects, that must implement the interface defined by
+<code><a href="#BaseProcessingStep">nqdc.BaseProcessingStep</a></code> (their types do not need to inherit from
+<code><a href="#BaseProcessingStep">nqdc.BaseProcessingStep</a></code>).</p>
+
+<p>All steps in <code>pipeline_steps</code> will be run when <code>nqdc run</code> is used. All steps in
+<code>standalone_steps</code> will be added as additional nqdc commands; for example if the
+<code>name</code> of a standalone step is <code>my_plugin</code>, the <code>nqdc my_plugin</code> command will
+become available.</p>
+
+<p>An example plugin that can be used as a template, and more details, are provided
+in the <code><a href="">nqdc</a></code> git repository, in <code>docs/example_plugin</code>.</p>
+
 <h1 id="contributing">Contributing</h1>
 
-<p>Feedback and contributions are welcome. Development happens at the 
+<p>Feedback and contributions are welcome. Development happens at the
 <a href="https://github.com/neuroquery/nqdc">nqdc GitHub repositiory</a>.
 To install the dependencies required for development, from the directory where you cloned <code><a href="">nqdc</a></code>, run:</p>
 
-<pre><code>pip install -e '.[dev]'
+<pre><code>pip install -e ".[dev]"
 </code></pre>
 
 <p>The tests can be run with <code>make test_all</code>, or <code>make test_coverage</code> to report
 test coverage. The documentation can be rendered with <code>make doc</code>. <code>make
 run_full_pipeline</code> runs the full <code><a href="">nqdc</a></code> pipeline on a query returning a
-realistic number of results (<code>'fMRI[title]'</code>).</p>
+realistic number of results (<code>fMRI[title]</code>).</p>
 
 <h1 id="python-api">Python API</h1>
 
@@ -505,7 +852,8 @@ and 1 otherwise. Used by the <code><a href="">nqdc</a></code> command-line inter
             <span class="def">def</span>
             <span class="name">extract_articles</span><span class="signature">(
     articlesets_dir: Union[os.PathLike, str],
-    output_dir: Union[os.PathLike, str, NoneType] = None
+    output_dir: Union[os.PathLike, str, NoneType] = None,
+    n_jobs: int = 1
 ) -&gt; Tuple[pathlib.Path, int]</span>:
     </div>
 
@@ -521,6 +869,8 @@ contains the bulk download files <code>articleset_00000.xml</code>,
 <code>articleset_00001.xml</code>, etc.</li>
 <li><strong>output_dir</strong>: Directory where to store the extracted articles. If not specified, a
 sibling directory of <code>articlesets_dir</code> called <code>articles</code> will be used.</li>
+<li><strong>n_jobs</strong>: Number of processes to run in parallel. <code>-1</code> means using all
+processors.</li>
 </ul>
 
 <h6 id="returns">Returns</h6>
@@ -560,7 +910,8 @@ command-line interface.</li>
     articles_dir: Union[os.PathLike, str],
     output_dir: Union[os.PathLike, str, NoneType] = None,
     *,
-    articles_with_coords_only: bool = False
+    articles_with_coords_only: bool = False,
+    n_jobs: int = 1
 ) -&gt; Tuple[pathlib.Path, int]</span>:
     </div>
 
@@ -580,6 +931,8 @@ sibling directory of <code>articles_dir</code> is used. Its name is
 <code>subset_articlesWithCoords_extractedData</code>, depending on the value of
 <code>articles_with_coords_only</code>.</li>
 <li><strong>articles_with_coords_only</strong>: If True, articles that contain no stereotactic coordinates are ignored.</li>
+<li><strong>n_jobs</strong>: Number of processes to run in parallel. <code>-1</code> means using all
+processors.</li>
 </ul>
 
 <h6 id="returns">Returns</h6>
@@ -594,6 +947,41 @@ command-line interface.</li>
 
 
                 </section>
+                <section id="extract_vocabulary_to_csv">
+                            <div class="attr function"><a class="headerlink" href="#extract_vocabulary_to_csv">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">extract_vocabulary_to_csv</span><span class="signature">(
+    extracted_data_dir: Union[os.PathLike, str],
+    output_dir: Union[os.PathLike, str, NoneType] = None
+) -&gt; Tuple[pathlib.Path, int]</span>:
+    </div>
+
+        
+            <div class="docstring"><p>Extract vocabulary and document frequencies and write to csv.</p>
+
+<h6 id="parameters">Parameters</h6>
+
+<ul>
+<li><strong>extracted_data_dir</strong>: The directory containing the text of articles to vectorize. It is a
+directory created by <code><a href="#extract_data_to_csv">nqdc.extract_data_to_csv</a></code>: it contains a file
+named <code>text.csv</code> with fields <code>pmcid</code>, <code>title</code>, <code>keywords</code>, <code>abstract</code>,
+<code>body</code>.</li>
+</ul>
+
+<h6 id="returns">Returns</h6>
+
+<ul>
+<li><strong>output_dir</strong>: The directory in which the vocabulary is stored.</li>
+<li><strong>exit_code</strong>: 0 if previous (data extraction) step was complete and this step
+(vocabulary extraction) finished normally as well. Used by the <code><a href="">nqdc</a></code>
+command-line interface.</li>
+</ul>
+</div>
+
+
+                </section>
                 <section id="vectorize_corpus_to_npz">
                             <div class="attr function"><a class="headerlink" href="#vectorize_corpus_to_npz">#&nbsp;&nbsp</a>
 
@@ -602,7 +990,8 @@ command-line interface.</li>
             <span class="name">vectorize_corpus_to_npz</span><span class="signature">(
     extracted_data_dir: Union[os.PathLike, str],
     output_dir: Union[os.PathLike, str, NoneType] = None,
-    vocabulary: Union[os.PathLike, str, <a href="#_vectorization.Vocabulary">nqdc._vectorization.Vocabulary</a>] = &lt;Vocabulary.NEUROQUERY_VOCABULARY: &#39;https://github.com/neuroquery/neuroquery_data/blob/main/neuroquery_model/vocabulary.csv&#39;&gt;
+    vocabulary: Union[os.PathLike, str, <a href="#_vectorization.Vocabulary">nqdc._vectorization.Vocabulary</a>] = &lt;Vocabulary.NEUROQUERY_VOCABULARY: &#39;https://github.com/neuroquery/neuroquery_data/blob/main/neuroquery_model/vocabulary.csv&#39;&gt;,
+    n_jobs: int = 1
 ) -&gt; Tuple[pathlib.Path, int]</span>:
     </div>
 
@@ -623,6 +1012,8 @@ end with <code>-voc_&lt;md5 checksum of the vocabulary&gt;_vectorizedText</code>
 or phrase per line. Each dimension in the output will correspond to the
 frequency of one entry in this vocabulary. By default, the vocabulary
 used by https://neuroquery.org will be downloaded and used.</li>
+<li><strong>n_jobs</strong>: Number of processes to run in parallel. <code>-1</code> means using all
+processors.</li>
 </ul>
 
 <h6 id="returns">Returns</h6>
@@ -636,6 +1027,252 @@ command-line interface.</li>
 </div>
 
 
+                </section>
+                <section id="fit_neuroquery">
+                            <div class="attr function"><a class="headerlink" href="#fit_neuroquery">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">fit_neuroquery</span><span class="signature">(
+    tfidf_dir: Union[os.PathLike, str],
+    extracted_data_dir: Union[os.PathLike, str, NoneType] = None,
+    output_dir: Union[os.PathLike, str, NoneType] = None,
+    n_jobs: int = 1
+) -&gt; Tuple[pathlib.Path, int]</span>:
+    </div>
+
+        
+            <div class="docstring"><p>Fit a NeuroQuery encoder.</p>
+
+<h6 id="parameters">Parameters</h6>
+
+<ul>
+<li><strong>vectorized_dir</strong>: The directory containing the vectorized text (TFIDF features). It is
+the directory created by <code><a href="#vectorize_corpus_to_npz">nqdc.vectorize_corpus_to_npz</a></code> using
+<code>extracted_data_dir</code> as input.</li>
+<li><strong>extracted_data_dir</strong>: The directory containing extracted metadata and coordinates. It is a
+directory created by <code><a href="#extract_data_to_csv">nqdc.extract_data_to_csv</a></code>. If <code>None</code>, this
+function looks for a sibling directory of the <code>vectorized_dir</code> whose
+name ends with <code>_extractedData</code>.</li>
+<li><strong>output_dir</strong>: Directory in which to store the NeuroQuery model. If not specified, a
+sibling directory of <code>vectorized_dir</code> whose name ends with
+<code>_neuroqueryModel</code> is created. It will contain a <code>neuroquery_model</code>
+subdirectory that can be loaded with
+<code>neuroquery.NeuroQueryModel.from_data_dir</code></li>
+</ul>
+
+<h6 id="returns">Returns</h6>
+
+<ul>
+<li><strong>output_dir</strong>: The directory in which the neuroquery model is stored.</li>
+<li><strong>exit_code</strong>: 0 if the neuroquery model was fitted and 1 otherwise. Used by the
+<code><a href="">nqdc</a></code> command-line interface.</li>
+</ul>
+</div>
+
+
+                </section>
+                <section id="fit_neurosynth">
+                            <div class="attr function"><a class="headerlink" href="#fit_neurosynth">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">fit_neurosynth</span><span class="signature">(
+    tfidf_dir: Union[os.PathLike, str],
+    extracted_data_dir: Union[os.PathLike, str, NoneType] = None,
+    output_dir: Union[os.PathLike, str, NoneType] = None,
+    n_jobs: int = 1
+) -&gt; Tuple[pathlib.Path, int]</span>:
+    </div>
+
+        
+            <div class="docstring"><p>Run a NeuroSyth-style meta-analysis.</p>
+
+<p>(Chi2 test of independence between term occurrence and voxel activation).</p>
+
+<h6 id="parameters">Parameters</h6>
+
+<ul>
+<li><strong>vectorized_dir</strong>: The directory containing the vectorized text (TFIDF features). It is
+the directory created by <code><a href="#vectorize_corpus_to_npz">nqdc.vectorize_corpus_to_npz</a></code> using
+<code>extracted_data_dir</code> as input.</li>
+<li><strong>extracted_data_dir</strong>: The directory containing extracted metadata and coordinates. It is a
+directory created by <code><a href="#extract_data_to_csv">nqdc.extract_data_to_csv</a></code>. If <code>None</code>, this
+function looks for a sibling directory of the <code>vectorized_dir</code> whose
+name ends with <code>_extractedData</code>.</li>
+<li><strong>output_dir</strong>: Directory in which to store the NeuroSynth maps. If not specified, a
+sibling directory of <code>vectorized_dir</code> whose name ends with
+<code>_neurosynthResults</code> is created. It will contain the images (of Z
+values) resulting from the analysis.</li>
+</ul>
+
+<h6 id="returns">Returns</h6>
+
+<ul>
+<li><strong>output_dir</strong>: The directory in which the meta-analysis maps are stored.</li>
+<li><strong>exit_code</strong>: 0 if the analysis ran successfully and 1 otherwise. Used by the
+<code><a href="">nqdc</a></code> command-line interface.</li>
+</ul>
+</div>
+
+
+                </section>
+                <section id="make_nimare_dataset">
+                            <div class="attr function"><a class="headerlink" href="#make_nimare_dataset">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">make_nimare_dataset</span><span class="signature">(
+    vectorized_dir: Union[os.PathLike, str],
+    extracted_data_dir: Union[os.PathLike, str, NoneType] = None,
+    output_dir: Union[os.PathLike, str, NoneType] = None
+) -&gt; Tuple[Optional[pathlib.Path], int]</span>:
+    </div>
+
+        
+            <div class="docstring"><p>Create a NiMARE JSON dataset from data collected by <code><a href="">nqdc</a></code>.</p>
+
+<p>See the <a href="https://nimare.readthedocs.io/">NiMARE documentation</a> for details.
+This function requires <code>nimare</code> to be installed.</p>
+
+<h6 id="parameters">Parameters</h6>
+
+<ul>
+<li><strong>vectorized_dir</strong>: The directory containing the vectorized text (TFIDF features). It is
+the directory created by <code><a href="#vectorize_corpus_to_npz">nqdc.vectorize_corpus_to_npz</a></code> using
+<code>extracted_data_dir</code> as input.</li>
+<li><strong>extracted_data_dir</strong>: The directory containing extracted metadata and coordinates. It is a
+directory created by <code><a href="#extract_data_to_csv">nqdc.extract_data_to_csv</a></code>. If <code>None</code>, this
+function looks for a sibling directory of the <code>vectorized_dir</code> whose
+name ends with <code>_extractedData</code>.</li>
+<li><strong>output_dir</strong>: Directory in which to store the extracted data. If not specified, a
+sibling directory of <code>vectorized_dir</code> whose name ends with
+<code>_nimareDataset</code> is created.</li>
+</ul>
+
+<h6 id="returns">Returns</h6>
+
+<ul>
+<li><strong>output_dir</strong>: The directory in which the NiMARE dataset is stored. It contains a
+<code>nimare_dataset.json</code> file.</li>
+<li><strong>exit_code</strong>: 0 if the NiMARE was created and 1 otherwise. Used by the <code><a href="">nqdc</a></code>
+command-line interface.</li>
+</ul>
+</div>
+
+
+                </section>
+                <section id="make_labelbuddy_documents">
+                            <div class="attr function"><a class="headerlink" href="#make_labelbuddy_documents">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">make_labelbuddy_documents</span><span class="signature">(
+    extracted_data_dir: Union[os.PathLike, str],
+    output_dir: Union[os.PathLike, str, NoneType] = None,
+    part_size: Optional[int] = 500
+) -&gt; Tuple[pathlib.Path, int]</span>:
+    </div>
+
+        
+            <div class="docstring"><p>Prepare articles for annotation with labelbuddy.</p>
+
+<p>The documents are prepared in JSONL format, with <code>part_size</code> documents in
+each <code>.jsonl</code> file. They can thus be imported into labelbuddy with, for
+example: <code>labelbuddy mydb.labelbuddy --import-docs documents_00001.jsonl</code>.</p>
+
+<p>See the
+<a href="https://jeromedockes.github.io/labelbuddy/">labelbuddy documentation</a>
+for details.</p>
+
+<h6 id="parameters">Parameters</h6>
+
+<ul>
+<li><strong>extracted_data_dir</strong>: The directory containing extracted text and metadata. It is a directory
+created by <code><a href="#extract_data_to_csv">nqdc.extract_data_to_csv</a></code>.</li>
+<li><strong>output_dir</strong>: Directory in which to store the created data. If not specified, a
+sibling directory of <code>extracted_data_dir</code> whose name ends with
+<code>_labelbuddyData</code> is created.</li>
+<li><strong>part_size</strong>: Number of articles stored in each <code>.jsonl</code> file.
+If <code>None</code>, put all articles in one file.</li>
+</ul>
+</div>
+
+
+                </section>
+                <section id="BaseProcessingStep">
+                                <div class="attr class">
+        <a class="headerlink" href="#BaseProcessingStep">#&nbsp;&nbsp</a>
+
+        
+        <span class="def">class</span>
+        <span class="name">BaseProcessingStep</span><wbr>(<span class="base">abc.ABC</span>):
+    </div>
+
+        
+            <div class="docstring"><p>A processing step in the <code><a href="">nqdc</a></code> pipeline.</p>
+</div>
+
+
+                            <div id="BaseProcessingStep.name" class="classattr">
+                                            <div class="attr variable"><a class="headerlink" href="#BaseProcessingStep.name">#&nbsp;&nbsp</a>
+
+        <span class="name">name</span><span class="annotation">: str</span>
+    </div>
+
+            <div class="docstring"><p>Name for this step.</p>
+</div>
+
+
+                            </div>
+                            <div id="BaseProcessingStep.short_description" class="classattr">
+                                            <div class="attr variable"><a class="headerlink" href="#BaseProcessingStep.short_description">#&nbsp;&nbsp</a>
+
+        <span class="name">short_description</span><span class="annotation">: str</span>
+    </div>
+
+            <div class="docstring"><p>Name for this step.</p>
+</div>
+
+
+                            </div>
+                            <div id="BaseProcessingStep.edit_argument_parser" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#BaseProcessingStep.edit_argument_parser">#&nbsp;&nbsp</a>
+
+                <div class="decorator">@abstractmethod</div>
+
+            <span class="def">def</span>
+            <span class="name">edit_argument_parser</span><span class="signature">(
+    self,
+    argument_parser: Union[argparse.ArgumentParser, argparse._ArgumentGroup]
+) -&gt; None</span>:
+    </div>
+
+        
+            <div class="docstring"><p>Add arguments needed by this step to parser.</p>
+</div>
+
+
+                            </div>
+                            <div id="BaseProcessingStep.run" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#BaseProcessingStep.run">#&nbsp;&nbsp</a>
+
+                <div class="decorator">@abstractmethod</div>
+
+            <span class="def">def</span>
+            <span class="name">run</span><span class="signature">(
+    self,
+    args: argparse.Namespace,
+    previous_steps_output: Mapping[str, pathlib.Path]
+) -&gt; Tuple[Optional[pathlib.Path], int]</span>:
+    </div>
+
+        
+            <div class="docstring"><p>Execute this step. Return resulting directory and exit code.</p>
+</div>
+
+
+                            </div>
                 </section>
     </main>
 </body>
