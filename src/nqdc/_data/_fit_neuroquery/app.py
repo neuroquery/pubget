@@ -42,18 +42,18 @@ def query_map_filename(s):
     s = re.sub(r"([^\sa-zA-Z0-9])+", "", s).strip()
     s = re.sub(r"\s+", "_", s).lower()[:72]
     s = s or "map"
-    return f"{s}.nii"
+    return f"{s}.nii.gz"
 
 
 def download_img_link(img, description):
+    file_name = query_map_filename(description)
     with tempfile.TemporaryDirectory(suffix="_nqdc") as tmp_dir:
-        img_path = Path(tmp_dir).joinpath("image.nii")
+        img_path = Path(tmp_dir).joinpath(file_name)
         img.to_filename(str(img_path))
         img_data = img_path.read_bytes()
-    file_name = query_map_filename(description)
     b64_data = base64.b64encode(img_data).decode("utf-8")
     return (
-        f"<a href='data:application/gzip;base64,{b64_data}' "
+        f"<a href='data:application/octet-stream;base64,{b64_data}' "
         f"download='{file_name}'>Download brain map</a>"
     )
 

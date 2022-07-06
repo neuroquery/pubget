@@ -80,7 +80,13 @@ def download_image():
     if term not in terms_info.index:
         flask.abort(404)
     file_name = terms_info.loc[term]["file_name"]
-    return flask.send_from_directory(maps_dir, f"{file_name}.nii.gz")
+    return flask.send_from_directory(
+        maps_dir,
+        f"{file_name}.nii.gz",
+        f"{file_name}.nii.gz",
+        as_attachment=True,
+        mimetype="application/octet-stream",
+    )
 
 
 def _get_image_viewer(term):
