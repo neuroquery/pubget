@@ -63,10 +63,7 @@ def _collapse_authors(authors: pd.DataFrame) -> pd.Series:
     return pd.Series(collapsed_authors, index=author_pmcids, name="authors")
 
 
-def _collect_nimare_data(
-    extracted_data_dir: Path, vectorized_dir: Path
-) -> Dict[str, Any]:
-    """Extract data needed for a NiMARE dataset from nqdc data dir."""
+def _load_metadata(extracted_data_dir: Path) -> pd.DataFrame:
     metadata = pd.read_csv(extracted_data_dir.joinpath("metadata.csv"))
     metadata.rename(
         columns={"pmcid": "id", "publication_year": "year"}, inplace=True
@@ -80,8 +77,27 @@ def _collect_nimare_data(
     # false positive: pylint thinks read_csv returns a TextFileReader
     # pylint: disable-next=no-member
     metadata = metadata.join(collapsed_authors, on="id")
-    coordinates = pd.read_csv(extracted_data_dir.joinpath("coordinates.csv"))
+    return metadata
+
+
+def _load_coordinates(extracted_data_dir: Path) -> pd.DataFrame:
+    coordinates = pd.read_csv(
+        extracted_data_dir.joinpath("coordinates.csv"),
+        # make sure x, y, z are represented with floats; if they look like ints
+        # and get converted to np.int64 nimare.io.convert_neurosynth_to_json
+        # fails (json.dump does not handle np.int64)
+        dtype={c: "float" for c in ("x", "y", "z")},
+    )
     coordinates.rename(columns={"pmcid": "id"}, inplace=True)
+    return coordinates
+
+
+def _collect_nimare_data(
+    extracted_data_dir: Path, vectorized_dir: Path
+) -> Dict[str, Any]:
+    """Extract data needed for a NiMARE dataset from nqdc data dir."""
+    metadata = _load_metadata(extracted_data_dir)
+    coordinates = _load_coordinates(extracted_data_dir)
     vocabulary = pd.read_csv(
         vectorized_dir.joinpath("feature_names.csv"), header=None
     )
