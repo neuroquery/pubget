@@ -86,7 +86,11 @@ class ModelData:
         output: np.ndarray,
         idx: int,
     ) -> None:
-        """"""
+        """Create a brain map from the reported peak coordinates.
+
+        Derived classes can redefine this function, eg neurosynth uses a ball
+        kernel rather than gaussian.
+        """
         _img_utils.gaussian_coords_to_masked_map(
             coordinates, masker, output, idx
         )
