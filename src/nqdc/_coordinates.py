@@ -9,7 +9,7 @@ import pandas as pd
 from lxml import etree
 
 from nqdc import _utils
-from nqdc._typing import BaseExtractor
+from nqdc._typing import Extractor
 
 
 _LOG = logging.getLogger(__name__)
@@ -65,7 +65,7 @@ _COORD_DATA_TRIPLET = _TRIPLET.format(
 _COORD_FIELDS = ("pmcid", "table_id", "table_label", "x", "y", "z")
 
 
-class CoordinateExtractor(BaseExtractor):
+class CoordinateExtractor(Extractor):
     """Extracting coordinates from articles."""
 
     fields = _COORD_FIELDS

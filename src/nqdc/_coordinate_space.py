@@ -4,11 +4,11 @@ from typing import Dict, Any
 
 from lxml import etree
 
-from nqdc._typing import BaseExtractor
+from nqdc._typing import Extractor
 from nqdc._utils import get_pmcid
 
 
-class CoordinateSpaceExtractor(BaseExtractor):
+class CoordinateSpaceExtractor(Extractor):
     """Extracting coordinate space from article XML"""
 
     fields = ("pmcid", "coordinate_space")

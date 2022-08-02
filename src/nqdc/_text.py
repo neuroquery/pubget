@@ -5,12 +5,12 @@ from typing import Dict, Union
 from lxml import etree
 
 from nqdc import _utils
-from nqdc._typing import BaseExtractor
+from nqdc._typing import Extractor
 
 _LOG = logging.getLogger(__name__)
 
 
-class TextExtractor(BaseExtractor):
+class TextExtractor(Extractor):
     """Extracting text from XML articles."""
 
     fields = ("pmcid", "title", "keywords", "abstract", "body")

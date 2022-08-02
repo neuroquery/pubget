@@ -21,7 +21,7 @@ from typing import (
 
 import pandas as pd
 
-from nqdc._typing import PathLikeOrStr, BaseProcessingStep, ArgparseActions
+from nqdc._typing import PathLikeOrStr, Command, PipelineStep, ArgparseActions
 from nqdc import _utils
 
 _LOG = logging.getLogger(__name__)
@@ -254,7 +254,7 @@ def _get_part_size(args: argparse.Namespace) -> Optional[int]:
     return part_size
 
 
-class LabelbuddyStep(BaseProcessingStep):
+class LabelbuddyStep(PipelineStep):
     """labelbuddy as part of a pipeline (nqdc run)."""
 
     name = _STEP_NAME
@@ -292,7 +292,7 @@ class LabelbuddyStep(BaseProcessingStep):
         )
 
 
-class StandaloneLabelbuddyStep(BaseProcessingStep):
+class LabelbuddyCommand(Command):
     """labelbuddy as a standalone command (nqdc extract_labelbuddy_data)."""
 
     name = _STEP_NAME
@@ -315,12 +315,8 @@ class StandaloneLabelbuddyStep(BaseProcessingStep):
             "-1 means put all articles in one file. ",
         )
 
-    def run(
-        self,
-        args: argparse.Namespace,
-        previous_steps_output: Mapping[str, Path],
-    ) -> Tuple[Optional[Path], int]:
+    def run(self, args: argparse.Namespace) -> int:
         return make_labelbuddy_documents(
             args.extracted_data_dir,
             part_size=_get_part_size(args),
-        )
+        )[1]

@@ -2,11 +2,11 @@
 import pandas as pd
 from lxml import etree
 
-from nqdc._typing import BaseExtractor
+from nqdc._typing import Extractor
 from nqdc import _utils
 
 
-class AuthorsExtractor(BaseExtractor):
+class AuthorsExtractor(Extractor):
     """Extracting list of authors from article XML."""
 
     fields = ("pmcid", "surname", "given-names")

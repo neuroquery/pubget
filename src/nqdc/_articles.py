@@ -8,7 +8,7 @@ from lxml import etree
 from joblib import Parallel, delayed
 
 from nqdc import _utils
-from nqdc._typing import PathLikeOrStr, BaseProcessingStep, ArgparseActions
+from nqdc._typing import PathLikeOrStr, PipelineStep, Command, ArgparseActions
 
 _LOG = logging.getLogger(__name__)
 _STEP_NAME = "extract_articles"
@@ -114,7 +114,7 @@ def _extract_from_articleset(batch_file: Path, output_dir: Path) -> int:
     return n_articles
 
 
-class ArticleExtractionStep(BaseProcessingStep):
+class ArticleExtractionStep(PipelineStep):
     """Article extraction as part of a pipeline (nqdc run)."""
 
     name = _STEP_NAME
@@ -132,7 +132,7 @@ class ArticleExtractionStep(BaseProcessingStep):
         return extract_articles(download_dir, n_jobs=args.n_jobs)
 
 
-class StandaloneArticleExtractionStep(BaseProcessingStep):
+class ArticleExtractionCommand(Command):
     """Article extraction as a standalone command (nqdc extract_articles)."""
 
     name = _STEP_NAME
@@ -155,7 +155,6 @@ class StandaloneArticleExtractionStep(BaseProcessingStep):
     def run(
         self,
         args: argparse.Namespace,
-        previous_steps_output: Mapping[str, Path],
-    ) -> Tuple[Path, int]:
+    ) -> int:
         download_dir = Path(args.articlesets_dir)
-        return extract_articles(download_dir, n_jobs=args.n_jobs)
+        return extract_articles(download_dir, n_jobs=args.n_jobs)[1]

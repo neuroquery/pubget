@@ -8,7 +8,7 @@ from typing import Optional, Tuple, Mapping
 
 from nqdc._entrez import EntrezClient
 from nqdc import _utils
-from nqdc._typing import PathLikeOrStr, BaseProcessingStep, ArgparseActions
+from nqdc._typing import PathLikeOrStr, Command, PipelineStep, ArgparseActions
 
 _LOG = logging.getLogger(__name__)
 _STEP_NAME = "download"
@@ -202,7 +202,7 @@ def _download_articles_for_args(args: argparse.Namespace) -> Tuple[Path, int]:
     return download_dir, code
 
 
-class DownloadStep(BaseProcessingStep):
+class DownloadStep(PipelineStep):
     """Download as part of a pipeline (nqdc run)."""
 
     name = _STEP_NAME
@@ -219,7 +219,7 @@ class DownloadStep(BaseProcessingStep):
         return _download_articles_for_args(args)
 
 
-class StandaloneDownloadStep(BaseProcessingStep):
+class DownloadCommand(Command):
     """Download as a standalone command (nqdc download)."""
 
     name = _STEP_NAME
@@ -235,6 +235,5 @@ class StandaloneDownloadStep(BaseProcessingStep):
     def run(
         self,
         args: argparse.Namespace,
-        previous_steps_output: Mapping[str, Path],
-    ) -> Tuple[Path, int]:
-        return _download_articles_for_args(args)
+    ) -> int:
+        return _download_articles_for_args(args)[1]

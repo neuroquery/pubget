@@ -10,7 +10,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from neuroquery import tokenization
 
 from nqdc import _utils
-from nqdc._typing import PathLikeOrStr, BaseProcessingStep, ArgparseActions
+from nqdc._typing import PathLikeOrStr, Command, PipelineStep, ArgparseActions
 
 _LOG = logging.getLogger(__name__)
 _STEP_NAME = "extract_vocabulary"
@@ -115,7 +115,7 @@ def extract_vocabulary_to_csv(
     return output_dir, int(not is_complete)
 
 
-class VocabularyExtractionStep(BaseProcessingStep):
+class VocabularyExtractionStep(PipelineStep):
     """Extracting vocabulary as part of a pipeline (nqdc run)."""
 
     name = _STEP_NAME
@@ -141,7 +141,7 @@ class VocabularyExtractionStep(BaseProcessingStep):
         )
 
 
-class StandaloneVocabularyExtractionStep(BaseProcessingStep):
+class VocabularyExtractionCommand(Command):
     """Extracting voc as a standalone command (nqdc extract_vocabulary)."""
 
     name = _STEP_NAME
@@ -162,6 +162,5 @@ class StandaloneVocabularyExtractionStep(BaseProcessingStep):
     def run(
         self,
         args: argparse.Namespace,
-        previous_steps_output: Mapping[str, Path],
-    ) -> Tuple[Path, int]:
-        return extract_vocabulary_to_csv(args.extracted_data_dir)
+    ) -> int:
+        return extract_vocabulary_to_csv(args.extracted_data_dir)[1]

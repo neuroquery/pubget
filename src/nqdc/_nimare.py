@@ -21,7 +21,7 @@ except ImportError:
 else:
     _NIMARE_INSTALLED = True
 
-from nqdc._typing import PathLikeOrStr, BaseProcessingStep, ArgparseActions
+from nqdc._typing import PathLikeOrStr, Command, PipelineStep, ArgparseActions
 from nqdc import _utils
 
 _LOG = logging.getLogger(__name__)
@@ -222,7 +222,7 @@ def make_nimare_dataset(
     return output_dir, 0
 
 
-class NimareStep(BaseProcessingStep):
+class NimareStep(PipelineStep):
     """nimare as part of a pipeline (nqdc run)."""
 
     name = _STEP_NAME
@@ -251,7 +251,7 @@ class NimareStep(BaseProcessingStep):
         )
 
 
-class StandaloneNimareStep(BaseProcessingStep):
+class NimareCommand(Command):
     """nimare as a standalone command (nqdc extract_nimare_data)."""
 
     name = _STEP_NAME
@@ -270,6 +270,5 @@ class StandaloneNimareStep(BaseProcessingStep):
     def run(
         self,
         args: argparse.Namespace,
-        previous_steps_output: Mapping[str, Path],
-    ) -> Tuple[Optional[Path], int]:
-        return make_nimare_dataset(args.vectorized_data_dir)
+    ) -> int:
+        return make_nimare_dataset(args.vectorized_data_dir)[1]

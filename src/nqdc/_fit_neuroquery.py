@@ -11,7 +11,7 @@ from neuroquery.smoothed_regression import SmoothedRegression
 from neuroquery.tokenization import TextVectorizer
 from neuroquery.encoding import NeuroQueryModel
 
-from nqdc._typing import PathLikeOrStr, BaseProcessingStep, ArgparseActions
+from nqdc._typing import PathLikeOrStr, Command, PipelineStep, ArgparseActions
 from nqdc import _utils, _model_data
 
 
@@ -134,7 +134,7 @@ def fit_neuroquery(
     return output_dir, 0
 
 
-class FitNeuroQueryStep(BaseProcessingStep):
+class FitNeuroQueryStep(PipelineStep):
     """Fitting NeuroQuery model as part of a pipeline (nqdc run)."""
 
     name = _STEP_NAME
@@ -162,7 +162,7 @@ class FitNeuroQueryStep(BaseProcessingStep):
         )
 
 
-class StandaloneFitNeuroQueryStep(BaseProcessingStep):
+class FitNeuroQueryCommand(Command):
     """Fitting NeuroQuery as a standalone command (nqdc fit_neuroquery)."""
 
     name = _STEP_NAME
@@ -182,6 +182,5 @@ class StandaloneFitNeuroQueryStep(BaseProcessingStep):
     def run(
         self,
         args: argparse.Namespace,
-        previous_steps_output: Mapping[str, Path],
-    ) -> Tuple[Path, int]:
-        return fit_neuroquery(args.vectorized_data_dir, n_jobs=args.n_jobs)
+    ) -> int:
+        return fit_neuroquery(args.vectorized_data_dir, n_jobs=args.n_jobs)[1]

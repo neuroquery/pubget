@@ -17,7 +17,8 @@ from scipy import stats, sparse
 from nqdc import _model_data, _img_utils, _utils
 from nqdc._typing import (
     PathLikeOrStr,
-    BaseProcessingStep,
+    Command,
+    PipelineStep,
     ArgparseActions,
     NiftiMasker,
 )
@@ -241,7 +242,7 @@ def fit_neurosynth(
     return output_dir, 0
 
 
-class FitNeuroSynthStep(BaseProcessingStep):
+class FitNeuroSynthStep(PipelineStep):
     """Running NeuroSynth meta-analysis as part of a pipeline (nqdc run)."""
 
     name = _STEP_NAME
@@ -267,7 +268,7 @@ class FitNeuroSynthStep(BaseProcessingStep):
         )
 
 
-class StandaloneFitNeuroSynthStep(BaseProcessingStep):
+class FitNeuroSynthCommand(Command):
     """Running NeuroSynth as a standalone command (nqdc fit_neurosynth)."""
 
     name = _STEP_NAME
@@ -287,6 +288,5 @@ class StandaloneFitNeuroSynthStep(BaseProcessingStep):
     def run(
         self,
         args: argparse.Namespace,
-        previous_steps_output: Mapping[str, Path],
-    ) -> Tuple[Path, int]:
-        return fit_neurosynth(args.vectorized_data_dir, n_jobs=args.n_jobs)
+    ) -> int:
+        return fit_neurosynth(args.vectorized_data_dir, n_jobs=args.n_jobs)[1]

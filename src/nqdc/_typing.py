@@ -26,7 +26,7 @@ PathLikeOrStr = Union[PathLike, str]
 ArgparseActions = Union[argparse.ArgumentParser, argparse._ArgumentGroup]
 
 
-class BaseExtractor(ABC):
+class Extractor(ABC):
     """Extractors used by the `_data_extraction` module."""
 
     @property
@@ -46,7 +46,7 @@ class BaseExtractor(ABC):
         """Extract data from an article."""
 
 
-class BaseWriter(AbstractContextManager):
+class Writer(AbstractContextManager):
     """Writers used by the `_data_extraction` module."""
 
     @abstractmethod
@@ -54,8 +54,33 @@ class BaseWriter(AbstractContextManager):
         """Write part of data extracted from article to storage."""
 
 
-class BaseProcessingStep(ABC):
-    """A processing step in the `nqdc` pipeline."""
+class Command:
+    """An `nqdc` subcommand."""
+
+    @property
+    @abstractmethod
+    def name(self) -> str:
+        """Name for this command."""
+
+    @property
+    @abstractmethod
+    def short_description(self) -> str:
+        """A short description of the command."""
+
+    @abstractmethod
+    def edit_argument_parser(self, argument_parser: ArgparseActions) -> None:
+        """Add arguments needed by this command to parser."""
+
+    @abstractmethod
+    def run(
+        self,
+        args: argparse.Namespace,
+    ) -> int:
+        """Execute this command. Return exit code."""
+
+
+class PipelineStep:
+    """An individual step in the `nqdc` pipeline (`nqdc run`)."""
 
     @property
     @abstractmethod
@@ -65,7 +90,7 @@ class BaseProcessingStep(ABC):
     @property
     @abstractmethod
     def short_description(self) -> str:
-        """Name for this step."""
+        """A short description of the processing step."""
 
     @abstractmethod
     def edit_argument_parser(self, argument_parser: ArgparseActions) -> None:

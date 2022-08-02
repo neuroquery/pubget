@@ -27,8 +27,9 @@ from nqdc._text import TextExtractor
 from nqdc._writers import CSVWriter
 from nqdc._typing import (
     PathLikeOrStr,
-    BaseExtractor,
-    BaseProcessingStep,
+    Extractor,
+    PipelineStep,
+    Command,
     ArgparseActions,
     StopPipeline,
 )
@@ -51,7 +52,7 @@ def _config_worker_logging() -> None:
 
 def _extract_data(
     articles_dir: Path,
-    data_extractors: Sequence[BaseExtractor],
+    data_extractors: Sequence[Extractor],
     n_jobs: int,
     articles_semaphore: multiprocessing.synchronize.Semaphore,
 ) -> Generator[Optional[Dict[str, Any]], None, None]:
@@ -86,7 +87,7 @@ def _extract_data(
 
 
 def _extract_article_data(
-    article_file: Path, data_extractors: Sequence[BaseExtractor]
+    article_file: Path, data_extractors: Sequence[Extractor]
 ) -> Optional[Dict[str, Any]]:
     """Extract data from one article. Returns `None` if parsing fails."""
     try:
@@ -276,7 +277,7 @@ def _edit_argument_parser(
     _utils.add_n_jobs_argument(argument_parser)
 
 
-class DataExtractionStep(BaseProcessingStep):
+class DataExtractionStep(PipelineStep):
     """Data extraction as part of a pipeline (nqdc run)."""
 
     name = _STEP_NAME
@@ -303,7 +304,7 @@ class DataExtractionStep(BaseProcessingStep):
         return output_dir, exit_code
 
 
-class StandaloneDataExtractionStep(BaseProcessingStep):
+class DataExtractionCommand(Command):
     """Data extraction as a standalone command (nqdc extract_data)."""
 
     name = _STEP_NAME
@@ -323,13 +324,9 @@ class StandaloneDataExtractionStep(BaseProcessingStep):
             "Extract text, metadata and coordinates from articles."
         )
 
-    def run(
-        self,
-        args: argparse.Namespace,
-        previous_steps_output: Mapping[str, Path],
-    ) -> Tuple[Path, int]:
+    def run(self, args: argparse.Namespace) -> int:
         return extract_data_to_csv(
             args.articles_dir,
             articles_with_coords_only=args.articles_with_coords_only,
             n_jobs=args.n_jobs,
-        )
+        )[1]

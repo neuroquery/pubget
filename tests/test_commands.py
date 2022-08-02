@@ -150,7 +150,7 @@ def test_full_pipeline_command(
     assert len(list(log_dir.glob("*"))) == 1
 
 
-def _check_download_step(tmp_path):
+def _check_download_output(tmp_path):
     query_file = tmp_path.joinpath("query")
     query_file.write_text("fMRI[abstract]", "utf-8")
     _commands.nqdc_command(["download", str(tmp_path), "-f", str(query_file)])
@@ -160,14 +160,14 @@ def _check_download_step(tmp_path):
     return articlesets_dir
 
 
-def _check_extract_articles_step(articlesets_dir):
+def _check_extract_articles_output(articlesets_dir):
     _commands.nqdc_command(["extract_articles", str(articlesets_dir)])
     articles_dir = articlesets_dir.parent.joinpath("articles")
     assert len(list(articles_dir.glob("**/*.xml"))) == 7
     return articles_dir
 
 
-def _check_extract_data_step(articles_dir):
+def _check_extract_data_output(articles_dir):
     _commands.nqdc_command(["extract_data", str(articles_dir)])
     extracted_data_dir = articles_dir.parent.joinpath(
         "subset_allArticles_extractedData"
@@ -181,8 +181,8 @@ def _check_extract_data_step(articles_dir):
     return extracted_data_dir
 
 
-def _check_extract_vocabulary_step(extracted_data_dir, articles_dir):
-    extracted_data_dir = _check_extract_data_step(articles_dir)
+def _check_extract_vocabulary_output(extracted_data_dir, articles_dir):
+    extracted_data_dir = _check_extract_data_output(articles_dir)
     _commands.nqdc_command(["extract_vocabulary", str(extracted_data_dir)])
     voc_dir = extracted_data_dir.parent.joinpath(
         "subset_allArticles_extractedVocabulary"
@@ -191,7 +191,7 @@ def _check_extract_vocabulary_step(extracted_data_dir, articles_dir):
     return voc_dir
 
 
-def _check_vectorize_step(extracted_data_dir, test_data_dir):
+def _check_vectorize_output(extracted_data_dir, test_data_dir):
     _commands.nqdc_command(["vectorize", str(extracted_data_dir)])
     voc_checksum = _vectorization._checksum_vocabulary(
         test_data_dir.joinpath("vocabulary.csv")
@@ -205,7 +205,7 @@ def _check_vectorize_step(extracted_data_dir, test_data_dir):
     return vectorized_dir, voc_checksum
 
 
-def _check_fit_neuroquery_step(vectorized_dir, voc_checksum, monkeypatch):
+def _check_fit_neuroquery_output(vectorized_dir, voc_checksum, monkeypatch):
     _patch_neuroquery(monkeypatch)
     _commands.nqdc_command(["fit_neuroquery", str(vectorized_dir)])
     nq_dir = vectorized_dir.parent.joinpath(
@@ -217,7 +217,7 @@ def _check_fit_neuroquery_step(vectorized_dir, voc_checksum, monkeypatch):
     return nq_dir
 
 
-def _check_fit_neurosynth_step(vectorized_dir, voc_checksum, monkeypatch):
+def _check_fit_neurosynth_output(vectorized_dir, voc_checksum, monkeypatch):
     monkeypatch.setattr(
         "nqdc._model_data.ModelData._MIN_DOCUMENT_FREQUENCY", 1
     )
@@ -230,7 +230,7 @@ def _check_fit_neurosynth_step(vectorized_dir, voc_checksum, monkeypatch):
     return ns_dir
 
 
-def _check_extract_labelbuddy_data_step(extracted_data_dir):
+def _check_extract_labelbuddy_data_output(extracted_data_dir):
     _commands.nqdc_command(
         ["extract_labelbuddy_data", str(extracted_data_dir)]
     )
@@ -241,7 +241,7 @@ def _check_extract_labelbuddy_data_step(extracted_data_dir):
     return labelbuddy_dir
 
 
-def _check_extract_nimare_data_step(vectorized_dir, voc_checksum):
+def _check_extract_nimare_data_output(vectorized_dir, voc_checksum):
     _commands.nqdc_command(["extract_nimare_data", str(vectorized_dir)])
     nimare_dir = vectorized_dir.parent.joinpath(
         f"subset_allArticles-voc_{voc_checksum}_nimareDataset",
@@ -250,7 +250,7 @@ def _check_extract_nimare_data_step(vectorized_dir, voc_checksum):
     return nimare_dir
 
 
-def test_steps(
+def test_commands(
     tmp_path,
     nq_datasets_mock,
     entrez_mock,
@@ -258,20 +258,20 @@ def test_steps(
     mock_nimare,
     monkeypatch,
 ):
-    articlesets_dir = _check_download_step(tmp_path)
-    articles_dir = _check_extract_articles_step(articlesets_dir)
-    extracted_data_dir = _check_extract_data_step(articles_dir)
-    _check_extract_vocabulary_step(extracted_data_dir, articles_dir)
-    vectorized_dir, voc_checksum = _check_vectorize_step(
+    articlesets_dir = _check_download_output(tmp_path)
+    articles_dir = _check_extract_articles_output(articlesets_dir)
+    extracted_data_dir = _check_extract_data_output(articles_dir)
+    _check_extract_vocabulary_output(extracted_data_dir, articles_dir)
+    vectorized_dir, voc_checksum = _check_vectorize_output(
         extracted_data_dir, test_data_dir
     )
-    _check_fit_neuroquery_step(vectorized_dir, voc_checksum, monkeypatch)
-    _check_fit_neurosynth_step(vectorized_dir, voc_checksum, monkeypatch)
-    _check_extract_labelbuddy_data_step(extracted_data_dir)
-    _check_extract_nimare_data_step(vectorized_dir, voc_checksum)
+    _check_fit_neuroquery_output(vectorized_dir, voc_checksum, monkeypatch)
+    _check_fit_neurosynth_output(vectorized_dir, voc_checksum, monkeypatch)
+    _check_extract_labelbuddy_data_output(extracted_data_dir)
+    _check_extract_nimare_data_output(vectorized_dir, voc_checksum)
 
 
-class _PipelineStep:
+class _PluginPipelineStep:
     name = "myplugin"
     short_description = "myplugin"
 
@@ -287,8 +287,20 @@ class _PipelineStep:
         return "", 0
 
 
-class _StandaloneStep(_PipelineStep):
-    pass
+class _PluginCommand:
+    name = "myplugin"
+    short_description = "myplugin"
+
+    def __init__(self):
+        self.arg_parser_called = False
+        self.run_called = False
+
+    def edit_argument_parser(self, argument_parser):
+        self.arg_parser_called = True
+
+    def run(self, args):
+        self.run_called = True
+        return 0
 
 
 def test_plugins(
@@ -298,13 +310,13 @@ def test_plugins(
     entrez_mock,
 ):
 
-    pipeline_plugin = _PipelineStep()
-    standalone_plugin = _StandaloneStep()
+    pipeline_plugin = _PluginPipelineStep()
+    command_plugin = _PluginCommand()
 
     def _mock_entry_point():
         return {
             "pipeline_steps": [pipeline_plugin],
-            "standalone_steps": [standalone_plugin],
+            "commands": [command_plugin],
         }
 
     ep = Mock()
@@ -319,5 +331,5 @@ def test_plugins(
     assert pipeline_plugin.arg_parser_called
     assert pipeline_plugin.run_called
     _commands.nqdc_command(["myplugin"])
-    assert standalone_plugin.arg_parser_called
-    assert standalone_plugin.run_called
+    assert command_plugin.arg_parser_called
+    assert command_plugin.run_called

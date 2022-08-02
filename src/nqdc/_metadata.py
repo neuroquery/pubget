@@ -3,10 +3,10 @@ from typing import Dict, Any
 
 from lxml import etree
 
-from nqdc._typing import BaseExtractor
+from nqdc._typing import Extractor
 
 
-class MetadataExtractor(BaseExtractor):
+class MetadataExtractor(Extractor):
     """Extracting metatada from article XML."""
     fields = (
         "pmcid",

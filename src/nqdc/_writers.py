@@ -7,15 +7,15 @@ from types import TracebackType
 
 import pandas as pd
 
-from nqdc._typing import PathLikeOrStr, BaseWriter, BaseExtractor
+from nqdc._typing import PathLikeOrStr, Writer, Extractor
 
 
-class CSVWriter(BaseWriter):
+class CSVWriter(Writer):
     """Writing extracted data to a csv file."""
 
     @classmethod
     def from_extractor(
-        cls, extractor: BaseExtractor, output_dir: PathLikeOrStr
+        cls, extractor: Extractor, output_dir: PathLikeOrStr
     ) -> CSVWriter:
         """Initialize the writer based on an extractor's name and fields."""
         output_dir = Path(output_dir)

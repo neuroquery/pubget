@@ -8,7 +8,7 @@ def test_stop_pipeline():
         step.run.return_value = None, 0
     all_steps[1].run.side_effect = _typing.StopPipeline("fatal error")
     pipeline = _pipeline.Pipeline(all_steps)
-    pipeline.run(Mock(), {})
+    pipeline.run(Mock())
     for step in all_steps[:2]:
         assert step.run.called
     assert not all_steps[2].called

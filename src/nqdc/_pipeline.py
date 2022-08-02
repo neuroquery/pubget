@@ -2,9 +2,9 @@
 import argparse
 import logging
 from pathlib import Path
-from typing import Sequence, Mapping, Tuple, Dict, Optional
+from typing import Sequence, Dict
 
-from nqdc._typing import BaseProcessingStep, ArgparseActions, StopPipeline
+from nqdc._typing import Command, PipelineStep, ArgparseActions, StopPipeline
 from nqdc import _utils
 
 _LOG = logging.getLogger(__name__)
@@ -21,13 +21,13 @@ _FULL_PIPELINE_DESCRIPTION = (
 )
 
 
-class Pipeline(BaseProcessingStep):
+class Pipeline(Command):
     """Chaining several processing steps."""
 
     name = _STEP_NAME
     short_description = _STEP_DESCRIPTION
 
-    def __init__(self, steps: Sequence[BaseProcessingStep]):
+    def __init__(self, steps: Sequence[PipelineStep]):
         self.steps = steps
 
     def edit_argument_parser(self, argument_parser: ArgparseActions) -> None:
@@ -42,8 +42,7 @@ class Pipeline(BaseProcessingStep):
     def run(
         self,
         args: argparse.Namespace,
-        previous_steps_output: Mapping[str, Path],
-    ) -> Tuple[Optional[Path], int]:
+    ) -> int:
         total_code = 0
         outputs: Dict[str, Path] = {}
         for step in self.steps:
@@ -54,9 +53,9 @@ class Pipeline(BaseProcessingStep):
                     "Interrupting nqdc run after "
                     f"'{step.name}' step: {stop_pipeline.reason}"
                 )
-                return None, 10
+                return 10
             else:
                 if step_output is not None:
                     outputs[step.name] = step_output
                 total_code = max(total_code, code)
-        return None, total_code
+        return total_code

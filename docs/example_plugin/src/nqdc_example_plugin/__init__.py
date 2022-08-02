@@ -92,7 +92,7 @@ class PlotPubDatesStep:
         return plot_publication_dates(previous_steps_output["extract_data"])
 
 
-class StandalonePlotPubDatesStep:
+class PlotPubDatesCommand:
     """Plot publication dates as a standalone step (`nqdc plot_pub_dates`)."""
 
     name = _STEP_NAME
@@ -115,16 +115,15 @@ class StandalonePlotPubDatesStep:
     def run(
         self,
         args: argparse.Namespace,
-        previous_steps_output: Mapping[str, Path],
-    ) -> Tuple[Path, int]:
+    ) -> int:
         """Execute the `nqdc plot_pub_dates` command."""
         # In this case the plugin is run on its own rather than as a step in
         # the full pipeline, so the `extracted_data_dir` is not produced by a
         # previous step but it is passed as a command-line argument.
-        return plot_publication_dates(args.extracted_data_dir)
+        return plot_publication_dates(args.extracted_data_dir)[1]
 
 
-def get_nqdc_processing_steps() -> Dict[str, List]:
+def get_nqdc_actions() -> Dict[str, List]:
     """Entry point used by nqdc.
 
     Needed to discover the plugin steps and add them to the command-line
@@ -134,8 +133,9 @@ def get_nqdc_processing_steps() -> Dict[str, List]:
     added as separate subcommands, in this case `nqdc plot_pub_dates`).
 
     The values are lists of objects that provide the same interface as
-    `nqdc.BaseProcessingStep`: they have `name` and `short_description`
-    attributes, and `edit_argument_parser` and `run` methods.
+    `nqdc.PipelineStep` and `nqdc.Command` respectively: they have `name` and
+    `short_description` attributes, and `edit_argument_parser` and `run`
+    methods.
 
     This entry point must be referenced in the `[options.entry_points]` section
     in `setup.cfg`.
@@ -143,5 +143,5 @@ def get_nqdc_processing_steps() -> Dict[str, List]:
     """
     return {
         "pipeline_steps": [PlotPubDatesStep()],
-        "standalone_steps": [StandalonePlotPubDatesStep()],
+        "commands": [PlotPubDatesCommand()],
     }

@@ -3,26 +3,26 @@ import argparse
 from typing import Optional, List
 
 from nqdc import _utils
-from nqdc._download import DownloadStep, StandaloneDownloadStep
+from nqdc._download import DownloadStep, DownloadCommand
 from nqdc._articles import (
     ArticleExtractionStep,
-    StandaloneArticleExtractionStep,
+    ArticleExtractionCommand,
 )
 from nqdc._data_extraction import (
     DataExtractionStep,
-    StandaloneDataExtractionStep,
+    DataExtractionCommand,
 )
 from nqdc._vocabulary import (
     VocabularyExtractionStep,
-    StandaloneVocabularyExtractionStep,
+    VocabularyExtractionCommand,
 )
-from nqdc._vectorization import VectorizationStep, StandaloneVectorizationStep
-from nqdc._fit_neuroquery import FitNeuroQueryStep, StandaloneFitNeuroQueryStep
-from nqdc._fit_neurosynth import FitNeuroSynthStep, StandaloneFitNeuroSynthStep
-from nqdc._nimare import NimareStep, StandaloneNimareStep
-from nqdc._labelbuddy import LabelbuddyStep, StandaloneLabelbuddyStep
+from nqdc._vectorization import VectorizationStep, VectorizationCommand
+from nqdc._fit_neuroquery import FitNeuroQueryStep, FitNeuroQueryCommand
+from nqdc._fit_neurosynth import FitNeuroSynthStep, FitNeuroSynthCommand
+from nqdc._nimare import NimareStep, NimareCommand
+from nqdc._labelbuddy import LabelbuddyStep, LabelbuddyCommand
 from nqdc._pipeline import Pipeline
-from nqdc._typing import BaseProcessingStep
+from nqdc._typing import Command
 from nqdc import _plugins
 
 
@@ -46,7 +46,7 @@ def _get_root_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def _get_processing_steps() -> List[BaseProcessingStep]:
+def _get_commands() -> List[Command]:
     pipeline_steps = [
         DownloadStep(),
         ArticleExtractionStep(),
@@ -58,37 +58,37 @@ def _get_processing_steps() -> List[BaseProcessingStep]:
         LabelbuddyStep(),
         NimareStep(),
     ]
-    plugin_steps = _plugins.get_plugin_processing_steps()
+    plugin_steps = _plugins.get_plugin_actions()
     pipeline_steps.extend(plugin_steps["pipeline_steps"])
     pipeline = Pipeline(pipeline_steps)
-    standalone_steps = [
+    commands = [
         pipeline,
-        StandaloneDownloadStep(),
-        StandaloneArticleExtractionStep(),
-        StandaloneDataExtractionStep(),
-        StandaloneVocabularyExtractionStep(),
-        StandaloneVectorizationStep(),
-        StandaloneFitNeuroQueryStep(),
-        StandaloneFitNeuroSynthStep(),
-        StandaloneLabelbuddyStep(),
-        StandaloneNimareStep(),
+        DownloadCommand(),
+        ArticleExtractionCommand(),
+        DataExtractionCommand(),
+        VocabularyExtractionCommand(),
+        VectorizationCommand(),
+        FitNeuroQueryCommand(),
+        FitNeuroSynthCommand(),
+        LabelbuddyCommand(),
+        NimareCommand(),
     ]
-    standalone_steps.extend(plugin_steps["standalone_steps"])
-    return standalone_steps
+    commands.extend(plugin_steps["commands"])
+    return commands
 
 
-def _add_step_subparsers(
+def _add_command_subparsers(
     subparsers: argparse._SubParsersAction,
 ) -> None:
-    all_steps = _get_processing_steps()
-    for step in all_steps:
-        step_parser = subparsers.add_parser(
-            step.name,
+    all_commands = _get_commands()
+    for command in all_commands:
+        command_parser = subparsers.add_parser(
+            command.name,
             parents=[_get_root_parser()],
-            help=step.short_description,
+            help=command.short_description,
         )
-        step_parser.set_defaults(run_subcommand=step.run)
-        step.edit_argument_parser(step_parser)
+        command_parser.set_defaults(run_subcommand=command.run)
+        command.edit_argument_parser(command_parser)
 
 
 def _get_parser() -> argparse.ArgumentParser:
@@ -108,7 +108,7 @@ def _get_parser() -> argparse.ArgumentParser:
         metavar="COMMAND",
         help="DESCRIPTION",
     )
-    _add_step_subparsers(subparsers)
+    _add_command_subparsers(subparsers)
     return parser
 
 
@@ -117,4 +117,5 @@ def nqdc_command(argv: Optional[List[str]] = None) -> int:
     parser = _get_parser()
     args = parser.parse_args(argv)
     _utils.configure_logging(args.log_dir)
-    return int(args.run_subcommand(args, {})[1])
+    # int() is for mypy
+    return int(args.run_subcommand(args))

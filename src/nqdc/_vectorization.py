@@ -15,7 +15,7 @@ from neuroquery.tokenization import TextVectorizer
 from neuroquery.datasets import fetch_neuroquery_model
 
 from nqdc._utils import checksum, assert_exists
-from nqdc._typing import PathLikeOrStr, BaseProcessingStep, ArgparseActions
+from nqdc._typing import PathLikeOrStr, Command, PipelineStep, ArgparseActions
 from nqdc import _utils
 
 _LOG = logging.getLogger(__name__)
@@ -404,7 +404,7 @@ def _voc_kwarg(
     return {}
 
 
-class VectorizationStep(BaseProcessingStep):
+class VectorizationStep(PipelineStep):
     """Vectorizing text as part of a pipeline (nqdc run)."""
 
     name = _STEP_NAME
@@ -426,7 +426,7 @@ class VectorizationStep(BaseProcessingStep):
         )
 
 
-class StandaloneVectorizationStep(BaseProcessingStep):
+class VectorizationCommand(Command):
     """Vectorizing text as a standalone command (nqdc vectorize)."""
 
     name = _STEP_NAME
@@ -450,10 +450,9 @@ class StandaloneVectorizationStep(BaseProcessingStep):
     def run(
         self,
         args: argparse.Namespace,
-        previous_steps_output: Mapping[str, Path],
-    ) -> Tuple[Path, int]:
+    ) -> int:
         return vectorize_corpus_to_npz(
             args.extracted_data_dir,
             n_jobs=args.n_jobs,
-            **_voc_kwarg(args, previous_steps_output),
-        )
+            **_voc_kwarg(args, {}),
+        )[1]
