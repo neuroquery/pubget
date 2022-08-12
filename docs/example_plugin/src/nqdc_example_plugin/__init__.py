@@ -3,7 +3,13 @@ import argparse
 import logging
 from pathlib import Path
 from typing import Tuple, Mapping, Optional, Union, Dict, List
-from nqdc import ExitCode
+
+try:
+    from nqdc import ExitCode
+except ImportError:
+    import enum
+
+    ExitCode = enum.IntEnum("ExitCode", "COMPLETED INCOMPLETE ERROR")
 
 import pandas as pd
 
@@ -29,8 +35,10 @@ def plot_publication_dates(extracted_data_dir: Path) -> Tuple[Path, ExitCode]:
     output_dir
         The directory where the plot is stored.
     exit_code
-        Always 0, used by nqdc command-line interface.
-
+        Status of this step, used by nqdc command-line interface. In this
+        simple example it is always COMPLETED. If a plugin doesn't want to
+        import `nqdc.ExitCode`, it can return an `int` instead -- see the
+        values of the `nqdc.ExitCode` enumaration for their meaning.
     """
     output_dir = extracted_data_dir.with_name(
         extracted_data_dir.name.replace(
@@ -136,7 +144,8 @@ def get_nqdc_actions() -> Dict[str, List]:
     The values are lists of objects that provide the same interface as
     `nqdc.PipelineStep` and `nqdc.Command` respectively: they have `name` and
     `short_description` attributes, and `edit_argument_parser` and `run`
-    methods.
+    methods. If several `pipeline_steps` are provided they will be run in the
+    specified order.
 
     This entry point must be referenced in the `[options.entry_points]` section
     in `setup.cfg`.
