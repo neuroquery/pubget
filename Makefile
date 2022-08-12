@@ -38,8 +38,8 @@ run_full_pipeline_neurosynth:
 doc:
 	pdoc --no-search --no-show-source -d numpy -o doc_build ./src/nqdc
 
-black:
-	black src tests
+format:
+	black .
 
 clean:
 	rm -rf doc_build build dist htmlcov .coverage .coverage.*

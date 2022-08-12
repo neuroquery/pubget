@@ -14,4 +14,4 @@ ignore_missing_imports = true
 
 [tool.black]
 line-length = 79
-exclude = ["_data", "data"]
+extend-exclude = '/(_data|data)/'
