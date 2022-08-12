@@ -4,7 +4,7 @@ import math
 
 import pytest
 
-from nqdc import _labelbuddy, _download, _articles, _data_extraction
+from nqdc import _labelbuddy, _download, _articles, _data_extraction, ExitCode
 
 
 def test_does_not_rerun(tmp_path, monkeypatch):
@@ -15,7 +15,7 @@ def test_does_not_rerun(tmp_path, monkeypatch):
     mock = Mock()
     monkeypatch.setattr("nqdc._nimare._collect_nimare_data", mock)
     _, code = _labelbuddy.make_labelbuddy_documents(tmp_path, tmp_path)
-    assert code == 0
+    assert code == ExitCode.COMPLETED
     assert len(mock.mock_calls) == 0
 
 
@@ -41,7 +41,7 @@ def test_make_labelbuddy_documents(
     labelbuddy_dir, code = _labelbuddy.make_labelbuddy_documents(
         data_dir, part_size=part_size
     )
-    assert code == 0
+    assert code == ExitCode.COMPLETED
     assert labelbuddy_dir.name == "subset_allArticles_labelbuddyData"
     n_articles = json.loads(
         articles_dir.joinpath("info.json").read_text("utf-8")

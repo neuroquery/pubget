@@ -7,7 +7,7 @@ from unittest.mock import Mock
 
 import pytest
 
-from nqdc import _nimare
+from nqdc import _nimare, ExitCode
 
 
 @pytest.fixture
@@ -32,7 +32,7 @@ def test_nimare_import_failure(can_not_import_nimare, tmp_path):
     assert _nimare._NIMARE_INSTALLED is False
     output_dir, code = _nimare.make_nimare_dataset(tmp_path, tmp_path)
     assert output_dir is None
-    assert code == 1
+    assert code == ExitCode.ERROR
 
 
 @pytest.fixture
@@ -68,5 +68,5 @@ def test_does_not_rerun(tmp_path, monkeypatch):
     mock = Mock()
     monkeypatch.setattr("nqdc._nimare._collect_nimare_data", mock)
     _, code = _nimare.make_nimare_dataset(tmp_path, tmp_path, tmp_path)
-    assert code == 0
+    assert code == ExitCode.COMPLETED
     assert len(mock.mock_calls) == 0

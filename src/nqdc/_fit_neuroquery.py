@@ -11,7 +11,13 @@ from neuroquery.smoothed_regression import SmoothedRegression
 from neuroquery.tokenization import TextVectorizer
 from neuroquery.encoding import NeuroQueryModel
 
-from nqdc._typing import PathLikeOrStr, Command, PipelineStep, ArgparseActions
+from nqdc._typing import (
+    PathLikeOrStr,
+    Command,
+    PipelineStep,
+    ArgparseActions,
+    ExitCode,
+)
 from nqdc import _utils, _model_data
 
 
@@ -74,7 +80,7 @@ def fit_neuroquery(
     extracted_data_dir: Optional[PathLikeOrStr] = None,
     output_dir: Optional[PathLikeOrStr] = None,
     n_jobs: int = 1,
-) -> Tuple[Path, int]:
+) -> Tuple[Path, ExitCode]:
     """Fit a NeuroQuery encoder.
 
     Parameters
@@ -100,9 +106,9 @@ def fit_neuroquery(
     output_dir
         The directory in which the neuroquery model is stored.
     exit_code
-        0 if the neuroquery model was fitted and 1 otherwise. Used by the
-        `nqdc` command-line interface.
-
+        COMPLETED if the neuroquery model was fitted and previous steps were
+        complete and INCOMPLETE otherwise. Used by the `nqdc` command-line
+        interface.
     """
     tfidf_dir = Path(tfidf_dir)
     extracted_data_dir = _utils.get_extracted_data_dir_from_tfidf_dir(
@@ -113,7 +119,7 @@ def fit_neuroquery(
     )
     status = _utils.check_steps_status(tfidf_dir, output_dir, __name__)
     if not status["need_run"]:
-        return output_dir, 0
+        return output_dir, ExitCode.COMPLETED
     _LOG.info(
         f"Training a NeuroQuery encoder with data from {tfidf_dir} "
         f"and {extracted_data_dir}."
@@ -131,7 +137,8 @@ def fit_neuroquery(
     _utils.copy_static_files("_fit_neuroquery", output_dir)
     is_complete = bool(status["previous_step_complete"])
     _utils.write_info(output_dir, name=_STEP_NAME, is_complete=is_complete)
-    return output_dir, 0
+    exit_code = ExitCode.COMPLETED if is_complete else ExitCode.INCOMPLETE
+    return output_dir, exit_code
 
 
 class FitNeuroQueryStep(PipelineStep):
@@ -152,9 +159,9 @@ class FitNeuroQueryStep(PipelineStep):
         self,
         args: argparse.Namespace,
         previous_steps_output: Mapping[str, Path],
-    ) -> Tuple[Optional[Path], int]:
+    ) -> Tuple[Optional[Path], ExitCode]:
         if not args.fit_neuroquery:
-            return None, 0
+            return None, ExitCode.COMPLETED
         return fit_neuroquery(
             previous_steps_output["vectorize"],
             previous_steps_output["extract_data"],
@@ -182,5 +189,5 @@ class FitNeuroQueryCommand(Command):
     def run(
         self,
         args: argparse.Namespace,
-    ) -> int:
+    ) -> ExitCode:
         return fit_neuroquery(args.vectorized_data_dir, n_jobs=args.n_jobs)[1]

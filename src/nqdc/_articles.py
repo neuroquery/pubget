@@ -8,7 +8,13 @@ from lxml import etree
 from joblib import Parallel, delayed
 
 from nqdc import _utils
-from nqdc._typing import PathLikeOrStr, PipelineStep, Command, ArgparseActions
+from nqdc._typing import (
+    PathLikeOrStr,
+    PipelineStep,
+    Command,
+    ArgparseActions,
+    ExitCode,
+)
 
 _LOG = logging.getLogger(__name__)
 _STEP_NAME = "extract_articles"
@@ -19,7 +25,7 @@ def extract_articles(
     articlesets_dir: PathLikeOrStr,
     output_dir: Optional[PathLikeOrStr] = None,
     n_jobs: int = 1,
-) -> Tuple[Path, int]:
+) -> Tuple[Path, ExitCode]:
     """Extract articles from bulk download files.
 
     Parameters
@@ -54,9 +60,9 @@ def extract_articles(
               └── pmcid_5102699.xml
         ```
     exit_code
-        0 if the download in `articlesets_dir` was complete and the article
-        extraction finished normally and 1 otherwise. Used by the `nqdc`
-        command-line interface.
+        COMPLETED if the download in `articlesets_dir` was complete and the
+        article extraction finished normally and INCOMPLETE otherwise. Used by
+        the `nqdc` command-line interface.
     """
     articlesets_dir = Path(articlesets_dir)
     if output_dir is None:
@@ -65,7 +71,7 @@ def extract_articles(
         output_dir = Path(output_dir)
     status = _utils.check_steps_status(articlesets_dir, output_dir, __name__)
     if not status["need_run"]:
-        return output_dir, 0
+        return output_dir, ExitCode.COMPLETED
     _LOG.info(f"Extracting articles from {articlesets_dir} to {output_dir}")
     output_dir.mkdir(exist_ok=True, parents=True)
     n_jobs = _utils.check_n_jobs(n_jobs)
@@ -81,7 +87,8 @@ def extract_articles(
         is_complete=is_complete,
         n_articles=n_articles,
     )
-    return output_dir, int(not is_complete)
+    exit_code = ExitCode.COMPLETED if is_complete else ExitCode.INCOMPLETE
+    return output_dir, exit_code
 
 
 def _do_extract_articles(
@@ -127,7 +134,7 @@ class ArticleExtractionStep(PipelineStep):
         self,
         args: argparse.Namespace,
         previous_steps_output: Mapping[str, Path],
-    ) -> Tuple[Path, int]:
+    ) -> Tuple[Path, ExitCode]:
         download_dir = previous_steps_output["download"]
         return extract_articles(download_dir, n_jobs=args.n_jobs)
 
@@ -155,6 +162,6 @@ class ArticleExtractionCommand(Command):
     def run(
         self,
         args: argparse.Namespace,
-    ) -> int:
+    ) -> ExitCode:
         download_dir = Path(args.articlesets_dir)
         return extract_articles(download_dir, n_jobs=args.n_jobs)[1]

@@ -21,6 +21,7 @@ from nqdc._typing import (
     PipelineStep,
     ArgparseActions,
     NiftiMasker,
+    ExitCode,
 )
 
 _LOG = logging.getLogger(__name__)
@@ -190,7 +191,7 @@ def fit_neurosynth(
     extracted_data_dir: Optional[PathLikeOrStr] = None,
     output_dir: Optional[PathLikeOrStr] = None,
     n_jobs: int = 1,
-) -> Tuple[Path, int]:
+) -> Tuple[Path, ExitCode]:
     """Run a NeuroSyth-style meta-analysis.
 
     (Chi2 test of independence between term occurrence and voxel activation).
@@ -217,8 +218,9 @@ def fit_neurosynth(
     output_dir
         The directory in which the meta-analysis maps are stored.
     exit_code
-        0 if the analysis ran successfully and 1 otherwise. Used by the
-        `nqdc` command-line interface.
+        COMPLETED if the analysis ran successfully and previous steps were
+        complete and INCOMPLETE otherwise. Used by the `nqdc` command-line
+        interface.
     """
     tfidf_dir = Path(tfidf_dir)
     extracted_data_dir = _utils.get_extracted_data_dir_from_tfidf_dir(
@@ -229,17 +231,18 @@ def fit_neurosynth(
     )
     status = _utils.check_steps_status(tfidf_dir, output_dir, __name__)
     if not status["need_run"]:
-        return output_dir, 0
+        return output_dir, ExitCode.COMPLETED
     _LOG.info(
         f"Performing NeuroSynth analysis with data from {tfidf_dir} "
         f"and {extracted_data_dir}."
     )
     _do_fit_neurosynth(output_dir, tfidf_dir, extracted_data_dir, n_jobs)
     _LOG.info(f"NeuroSynth results saved in {output_dir}.")
-    is_complete = bool(status["previous_step_complete"])
     _utils.copy_static_files("_fit_neurosynth", output_dir)
+    is_complete = bool(status["previous_step_complete"])
     _utils.write_info(output_dir, name=_STEP_NAME, is_complete=is_complete)
-    return output_dir, 0
+    exit_code = ExitCode.COMPLETED if is_complete else ExitCode.INCOMPLETE
+    return output_dir, exit_code
 
 
 class FitNeuroSynthStep(PipelineStep):
@@ -258,9 +261,9 @@ class FitNeuroSynthStep(PipelineStep):
         self,
         args: argparse.Namespace,
         previous_steps_output: Mapping[str, Path],
-    ) -> Tuple[Optional[Path], int]:
+    ) -> Tuple[Optional[Path], ExitCode]:
         if not args.fit_neurosynth:
-            return None, 0
+            return None, ExitCode.COMPLETED
         return fit_neurosynth(
             previous_steps_output["vectorize"],
             previous_steps_output["extract_data"],
@@ -288,5 +291,5 @@ class FitNeuroSynthCommand(Command):
     def run(
         self,
         args: argparse.Namespace,
-    ) -> int:
+    ) -> ExitCode:
         return fit_neurosynth(args.vectorized_data_dir, n_jobs=args.n_jobs)[1]

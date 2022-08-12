@@ -21,7 +21,13 @@ except ImportError:
 else:
     _NIMARE_INSTALLED = True
 
-from nqdc._typing import PathLikeOrStr, Command, PipelineStep, ArgparseActions
+from nqdc._typing import (
+    PathLikeOrStr,
+    Command,
+    PipelineStep,
+    ArgparseActions,
+    ExitCode,
+)
 from nqdc import _utils
 
 _LOG = logging.getLogger(__name__)
@@ -155,7 +161,7 @@ def make_nimare_dataset(
     vectorized_dir: PathLikeOrStr,
     extracted_data_dir: Optional[PathLikeOrStr] = None,
     output_dir: Optional[PathLikeOrStr] = None,
-) -> Tuple[Optional[Path], int]:
+) -> Tuple[Optional[Path], ExitCode]:
     """Create a NiMARE JSON dataset from data collected by `nqdc`.
 
     See the [NiMARE documentation](https://nimare.readthedocs.io/) for details.
@@ -183,9 +189,9 @@ def make_nimare_dataset(
         The directory in which the NiMARE dataset is stored. It contains a
         `nimare_dataset.json` file.
     exit_code
-        0 if the NiMARE was created and 1 otherwise. Used by the `nqdc`
-        command-line interface.
-
+        COMPLETED if previous steps were complete and the NiMARE dataset was
+        created, INCOMPLETE if previous steps were incomplete, ERROR if NiMARE
+        is not installed. Used by the `nqdc` command-line interface.
     """
     vectorized_dir = Path(vectorized_dir)
     extracted_data_dir = _utils.get_extracted_data_dir_from_tfidf_dir(
@@ -199,12 +205,12 @@ def make_nimare_dataset(
         output_dir = Path(output_dir)
     status = _utils.check_steps_status(vectorized_dir, output_dir, __name__)
     if not status["need_run"]:
-        return output_dir, 0
+        return output_dir, ExitCode.COMPLETED
     if not _NIMARE_INSTALLED:
         _LOG.error(
             "NiMARE is not installed. Skipping creation of NiMARE dataset."
         )
-        return None, 1
+        return None, ExitCode.ERROR
     _LOG.info(f"Beginning creation of NiMARE dataset in {output_dir}")
     nimare_data = _collect_nimare_data(extracted_data_dir, vectorized_dir)
     with tempfile.TemporaryDirectory(suffix="_nqdc") as tmp_dir:
@@ -219,7 +225,8 @@ def make_nimare_dataset(
     is_complete = bool(status["previous_step_complete"])
     _utils.write_info(output_dir, name=_STEP_NAME, is_complete=is_complete)
     _LOG.info(f"Done creating NiMARE dataset in {output_dir}")
-    return output_dir, 0
+    exit_code = ExitCode.COMPLETED if is_complete else ExitCode.INCOMPLETE
+    return output_dir, exit_code
 
 
 class NimareStep(PipelineStep):
@@ -242,9 +249,9 @@ class NimareStep(PipelineStep):
         self,
         args: argparse.Namespace,
         previous_steps_output: Mapping[str, Path],
-    ) -> Tuple[Optional[Path], int]:
+    ) -> Tuple[Optional[Path], ExitCode]:
         if not args.nimare:
-            return None, 0
+            return None, ExitCode.COMPLETED
         return make_nimare_dataset(
             previous_steps_output["vectorize"],
             previous_steps_output["extract_data"],
@@ -270,5 +277,5 @@ class NimareCommand(Command):
     def run(
         self,
         args: argparse.Namespace,
-    ) -> int:
+    ) -> ExitCode:
         return make_nimare_dataset(args.vectorized_data_dir)[1]

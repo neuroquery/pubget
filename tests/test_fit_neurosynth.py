@@ -4,7 +4,7 @@ from unittest.mock import Mock
 import numpy as np
 from scipy import stats, sparse
 
-from nqdc import _fit_neurosynth
+from nqdc import _fit_neurosynth, ExitCode
 
 
 def test_chi_square():
@@ -41,7 +41,7 @@ def test_fit_neurosynth(extracted_data_dir, tfidf_dir):
     output_dir, code = _fit_neurosynth.fit_neurosynth(
         tfidf_dir, extracted_data_dir, n_jobs=2
     )
-    assert code == 0
+    assert code == ExitCode.COMPLETED
     assert output_dir.joinpath("app.py").is_file()
     assert list(output_dir.joinpath("neurosynth_maps").glob("*.nii.gz"))
 
@@ -54,5 +54,5 @@ def test_does_not_rerun(tmp_path, monkeypatch):
     mock = Mock()
     monkeypatch.setattr("nqdc._fit_neurosynth._do_fit_neurosynth", mock)
     _, code = _fit_neurosynth.fit_neurosynth(tmp_path, tmp_path, tmp_path)
-    assert code == 0
+    assert code == ExitCode.COMPLETED
     assert len(mock.mock_calls) == 0

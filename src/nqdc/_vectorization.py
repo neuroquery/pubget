@@ -15,7 +15,13 @@ from neuroquery.tokenization import TextVectorizer
 from neuroquery.datasets import fetch_neuroquery_model
 
 from nqdc._utils import checksum, assert_exists
-from nqdc._typing import PathLikeOrStr, Command, PipelineStep, ArgparseActions
+from nqdc._typing import (
+    PathLikeOrStr,
+    Command,
+    PipelineStep,
+    ArgparseActions,
+    ExitCode,
+)
 from nqdc import _utils
 
 _LOG = logging.getLogger(__name__)
@@ -43,7 +49,7 @@ def vectorize_corpus_to_npz(
         PathLikeOrStr, Vocabulary
     ] = Vocabulary.NEUROQUERY_VOCABULARY,
     n_jobs: int = 1,
-) -> Tuple[Path, int]:
+) -> Tuple[Path, ExitCode]:
     """Compute word counts and TFIDF features and store them in `.npz` files.
 
     Parameters
@@ -71,7 +77,7 @@ def vectorize_corpus_to_npz(
     output_dir
         The directory in which the vectorized data is stored.
     exit_code
-        0 if previous (data extraction) step was complete and this step
+        COMPLETED if previous (data extraction) step was complete and this step
         (vectorization) finished normally as well. Used by the `nqdc`
         command-line interface.
     """
@@ -90,7 +96,7 @@ def vectorize_corpus_to_npz(
         extracted_data_dir, output_dir, __name__
     )
     if not status["need_run"]:
-        return output_dir, 0
+        return output_dir, ExitCode.COMPLETED
     _LOG.info(
         f"vectorizing {extracted_data_dir} using vocabulary "
         f"{vocabulary_file} to {output_dir}"
@@ -106,7 +112,8 @@ def vectorize_corpus_to_npz(
         n_articles=n_articles,
     )
     _LOG.info(f"Done creating BOW features .npz files in {output_dir}")
-    return output_dir, int(not is_complete)
+    exit_code = ExitCode.COMPLETED if is_complete else ExitCode.INCOMPLETE
+    return output_dir, exit_code
 
 
 def _do_vectorize_corpus_to_npz(
@@ -418,7 +425,7 @@ class VectorizationStep(PipelineStep):
         self,
         args: argparse.Namespace,
         previous_steps_output: Mapping[str, Path],
-    ) -> Tuple[Path, int]:
+    ) -> Tuple[Path, ExitCode]:
         return vectorize_corpus_to_npz(
             previous_steps_output["extract_data"],
             n_jobs=args.n_jobs,
@@ -450,7 +457,7 @@ class VectorizationCommand(Command):
     def run(
         self,
         args: argparse.Namespace,
-    ) -> int:
+    ) -> ExitCode:
         return vectorize_corpus_to_npz(
             args.extracted_data_dir,
             n_jobs=args.n_jobs,

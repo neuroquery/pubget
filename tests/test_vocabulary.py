@@ -4,7 +4,7 @@ import json
 
 import pandas as pd
 
-from nqdc import _vocabulary
+from nqdc import _vocabulary, ExitCode
 
 
 def test_extract_vocabulary(tmp_path, test_data_dir, monkeypatch):
@@ -26,5 +26,5 @@ def test_extract_vocabulary(tmp_path, test_data_dir, monkeypatch):
     mock = Mock()
     monkeypatch.setattr(_vocabulary, "extract_vocabulary", mock)
     _, code = _vocabulary.extract_vocabulary_to_csv(input_dir, output_dir)
-    assert code == 0
+    assert code == ExitCode.COMPLETED
     assert not mock.called

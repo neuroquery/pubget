@@ -32,6 +32,7 @@ from nqdc._typing import (
     Command,
     ArgparseActions,
     StopPipeline,
+    ExitCode,
 )
 from nqdc import _utils
 
@@ -133,7 +134,7 @@ def extract_data_to_csv(
     *,
     articles_with_coords_only: bool = False,
     n_jobs: int = 1,
-) -> Tuple[Path, int]:
+) -> Tuple[Path, ExitCode]:
     """Extract text and coordinates from articles and store in csv files.
 
     Parameters
@@ -160,8 +161,8 @@ def extract_data_to_csv(
     output_dir
         The directory in which extracted data is stored.
     exit_code
-        0 if previous (article extraction) step was complete and this step
-        (data extraction) finished normally as well. Used by the `nqdc`
+        COMPLETED if previous (article extraction) step was complete and this
+        step (data extraction) finished normally as well. Used by the `nqdc`
         command-line interface.
     """
     articles_dir = Path(articles_dir)
@@ -177,7 +178,7 @@ def extract_data_to_csv(
     )
     status = _utils.check_steps_status(articles_dir, output_dir, __name__)
     if not status["need_run"]:
-        return output_dir, 0
+        return output_dir, ExitCode.COMPLETED
     _LOG.info(
         f"Extracting data from articles in {articles_dir} to {output_dir}"
     )
@@ -193,7 +194,8 @@ def extract_data_to_csv(
         n_articles=n_articles,
     )
     _LOG.info(f"Done extracting article data to csv files in {output_dir}")
-    return output_dir, int(not is_complete)
+    exit_code = ExitCode.COMPLETED if is_complete else ExitCode.INCOMPLETE
+    return output_dir, exit_code
 
 
 def _do_extract_data_to_csv(
@@ -290,7 +292,7 @@ class DataExtractionStep(PipelineStep):
         self,
         args: argparse.Namespace,
         previous_steps_output: Mapping[str, Path],
-    ) -> Tuple[Path, int]:
+    ) -> Tuple[Path, ExitCode]:
         output_dir, exit_code = extract_data_to_csv(
             previous_steps_output["extract_articles"],
             articles_with_coords_only=args.articles_with_coords_only,
@@ -324,7 +326,7 @@ class DataExtractionCommand(Command):
             "Extract text, metadata and coordinates from articles."
         )
 
-    def run(self, args: argparse.Namespace) -> int:
+    def run(self, args: argparse.Namespace) -> ExitCode:
         return extract_data_to_csv(
             args.articles_dir,
             articles_with_coords_only=args.articles_with_coords_only,

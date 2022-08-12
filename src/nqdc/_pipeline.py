@@ -4,7 +4,13 @@ import logging
 from pathlib import Path
 from typing import Sequence, Dict
 
-from nqdc._typing import Command, PipelineStep, ArgparseActions, StopPipeline
+from nqdc._typing import (
+    Command,
+    PipelineStep,
+    ArgparseActions,
+    StopPipeline,
+    ExitCode,
+)
 from nqdc import _utils
 
 _LOG = logging.getLogger(__name__)
@@ -42,8 +48,8 @@ class Pipeline(Command):
     def run(
         self,
         args: argparse.Namespace,
-    ) -> int:
-        total_code = 0
+    ) -> ExitCode:
+        total_code = ExitCode.COMPLETED
         outputs: Dict[str, Path] = {}
         for step in self.steps:
             try:
@@ -53,9 +59,9 @@ class Pipeline(Command):
                     "Interrupting nqdc run after "
                     f"'{step.name}' step: {stop_pipeline.reason}"
                 )
-                return 10
+                return ExitCode.ERROR
             else:
                 if step_output is not None:
                     outputs[step.name] = step_output
                 total_code = max(total_code, code)
-        return total_code
+        return ExitCode(total_code)

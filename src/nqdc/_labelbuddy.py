@@ -21,7 +21,13 @@ from typing import (
 
 import pandas as pd
 
-from nqdc._typing import PathLikeOrStr, Command, PipelineStep, ArgparseActions
+from nqdc._typing import (
+    PathLikeOrStr,
+    Command,
+    PipelineStep,
+    ArgparseActions,
+    ExitCode,
+)
 from nqdc import _utils
 
 _LOG = logging.getLogger(__name__)
@@ -202,7 +208,7 @@ def make_labelbuddy_documents(
     extracted_data_dir: PathLikeOrStr,
     output_dir: Optional[PathLikeOrStr] = None,
     part_size: Optional[int] = _DEFAULT_PART_SIZE,
-) -> Tuple[Path, int]:
+) -> Tuple[Path, ExitCode]:
     """Prepare articles for annotation with labelbuddy.
 
     The documents are prepared in JSONL format, with `part_size` documents in
@@ -225,6 +231,13 @@ def make_labelbuddy_documents(
     part_size
         Number of articles stored in each `.jsonl` file.
         If `None`, put all articles in one file.
+    Returns
+    -------
+    output_dir
+        The directory in which the prepared documents are stored.
+    exit_code
+        COMPLETED if previous steps were complete and INCOMPLETE otherwise.
+        Used by the `nqdc` command-line interface.
     """
     extracted_data_dir = Path(extracted_data_dir)
     output_dir = _utils.get_output_dir(
@@ -234,7 +247,7 @@ def make_labelbuddy_documents(
         extracted_data_dir, output_dir, __name__
     )
     if not status["need_run"]:
-        return output_dir, 0
+        return output_dir, ExitCode.COMPLETED
     if part_size is not None and part_size < 1:
         raise ValueError(f"part_size must be at least 1, got {part_size}.")
     _LOG.info(f"Creating labelbuddy data in {output_dir}")
@@ -242,7 +255,8 @@ def make_labelbuddy_documents(
     is_complete = bool(status["previous_step_complete"])
     _utils.write_info(output_dir, name=_STEP_NAME, is_complete=is_complete)
     _LOG.info(f"Done creating labelbuddy data in {output_dir}")
-    return output_dir, 0
+    exit_code = ExitCode.COMPLETED if is_complete else ExitCode.INCOMPLETE
+    return output_dir, exit_code
 
 
 def _get_part_size(args: argparse.Namespace) -> Optional[int]:
@@ -283,9 +297,9 @@ class LabelbuddyStep(PipelineStep):
         self,
         args: argparse.Namespace,
         previous_steps_output: Mapping[str, Path],
-    ) -> Tuple[Optional[Path], int]:
+    ) -> Tuple[Optional[Path], ExitCode]:
         if not args.labelbuddy and args.labelbuddy_part_size is None:
-            return None, 0
+            return None, ExitCode.COMPLETED
         return make_labelbuddy_documents(
             previous_steps_output["extract_data"],
             part_size=_get_part_size(args),
@@ -315,7 +329,7 @@ class LabelbuddyCommand(Command):
             "-1 means put all articles in one file. ",
         )
 
-    def run(self, args: argparse.Namespace) -> int:
+    def run(self, args: argparse.Namespace) -> ExitCode:
         return make_labelbuddy_documents(
             args.extracted_data_dir,
             part_size=_get_part_size(args),
