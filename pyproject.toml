@@ -19,3 +19,5 @@ extend-exclude = '/(_data|data)/'
 [tool.isort]
 profile = "black"
 extend_skip = ["data", "_data"]
+skip_gitignore = true
+line_length = 79
