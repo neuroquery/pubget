@@ -10,7 +10,13 @@ from sklearn.feature_extraction.text import CountVectorizer
 from neuroquery import tokenization
 
 from nqdc import _utils
-from nqdc._typing import PathLikeOrStr, Command, PipelineStep, ArgparseActions
+from nqdc._typing import (
+    PathLikeOrStr,
+    Command,
+    PipelineStep,
+    ArgparseActions,
+    ExitCode,
+)
 
 _LOG = logging.getLogger(__name__)
 _STEP_NAME = "extract_vocabulary"
@@ -74,7 +80,7 @@ def extract_vocabulary(extracted_data_dir: PathLikeOrStr) -> pd.Series:
 def extract_vocabulary_to_csv(
     extracted_data_dir: PathLikeOrStr,
     output_dir: Optional[PathLikeOrStr] = None,
-) -> Tuple[Path, int]:
+) -> Tuple[Path, ExitCode]:
     """Extract vocabulary and document frequencies and write to csv.
 
     Parameters
@@ -90,7 +96,7 @@ def extract_vocabulary_to_csv(
     output_dir
         The directory in which the vocabulary is stored.
     exit_code
-        0 if previous (data extraction) step was complete and this step
+        COMPLETED if previous (data extraction) step was complete and this step
         (vocabulary extraction) finished normally as well. Used by the `nqdc`
         command-line interface.
     """
@@ -105,14 +111,15 @@ def extract_vocabulary_to_csv(
         extracted_data_dir, output_dir, __name__
     )
     if not status["need_run"]:
-        return output_dir, 0
+        return output_dir, ExitCode.COMPLETED
     _LOG.info(f"Extracting vocabulary from {extracted_data_dir}")
     doc_freq = extract_vocabulary(extracted_data_dir)
     doc_freq.to_csv(output_dir.joinpath("vocabulary.csv"), header=None)
     is_complete = bool(status["previous_step_complete"])
     _utils.write_info(output_dir, name=_STEP_NAME, is_complete=is_complete)
     _LOG.info(f"Done extracting vocabulary to {output_dir}")
-    return output_dir, int(not is_complete)
+    exit_code = ExitCode.COMPLETED if is_complete else ExitCode.INCOMPLETE
+    return output_dir, exit_code
 
 
 class VocabularyExtractionStep(PipelineStep):
@@ -133,9 +140,9 @@ class VocabularyExtractionStep(PipelineStep):
         self,
         args: argparse.Namespace,
         previous_steps_output: Mapping[str, Path],
-    ) -> Tuple[Optional[Path], int]:
+    ) -> Tuple[Optional[Path], ExitCode]:
         if not args.extract_vocabulary:
-            return None, 0
+            return None, ExitCode.COMPLETED
         return extract_vocabulary_to_csv(
             previous_steps_output["extract_data"],
         )
@@ -162,5 +169,5 @@ class VocabularyExtractionCommand(Command):
     def run(
         self,
         args: argparse.Namespace,
-    ) -> int:
+    ) -> ExitCode:
         return extract_vocabulary_to_csv(args.extracted_data_dir)[1]

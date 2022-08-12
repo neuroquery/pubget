@@ -5,7 +5,7 @@ from unittest.mock import Mock
 
 import pytest
 
-from nqdc import _download
+from nqdc import _download, ExitCode
 
 
 def test_download_articles_for_query(tmp_path, entrez_mock, monkeypatch):
@@ -13,7 +13,7 @@ def test_download_articles_for_query(tmp_path, entrez_mock, monkeypatch):
     download_dir, code = _download.download_articles_for_query(
         "fMRI[abstract]", tmp_path, retmax=3
     )
-    assert code == 1
+    assert code == ExitCode.ERROR
     assert download_dir == tmp_path.joinpath(
         "query-7838640309244685021f9954f8aa25fc", "articlesets"
     )
@@ -24,10 +24,19 @@ def test_download_articles_for_query(tmp_path, entrez_mock, monkeypatch):
     )["is_complete"]
 
     entrez_mock.fail_efetch_after_n_articles = None
+
+    download_dir, code = _download.download_articles_for_query(
+        "fMRI[abstract]", tmp_path, retmax=3, n_docs=1
+    )
+    assert code == ExitCode.INCOMPLETE
+    assert not json.loads(
+        download_dir.joinpath("info.json").read_text("utf-8")
+    )["is_complete"]
+
     download_dir, code = _download.download_articles_for_query(
         "fMRI[abstract]", tmp_path, retmax=3
     )
-    assert code == 0
+    assert code == ExitCode.COMPLETED
     assert download_dir.joinpath("articleset_00001.xml").is_file()
     assert download_dir.joinpath("articleset_00002.xml").is_file()
     assert json.loads(download_dir.joinpath("info.json").read_text("utf-8"))[
@@ -38,7 +47,7 @@ def test_download_articles_for_query(tmp_path, entrez_mock, monkeypatch):
     download_dir, code = _download.download_articles_for_query(
         "fMRI[abstract]", tmp_path, retmax=3
     )
-    assert code == 0
+    assert code == ExitCode.COMPLETED
     assert not mock.called
 
 

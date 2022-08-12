@@ -8,7 +8,7 @@ import pytest
 import numpy as np
 import pandas as pd
 
-from nqdc import _download, _articles, _data_extraction, _typing
+from nqdc import _download, _articles, _data_extraction, _typing, ExitCode
 
 
 @pytest.fixture
@@ -16,7 +16,7 @@ def articles_dir(tmp_path, entrez_mock):
     download_dir, code = _download.download_articles_for_query(
         "fMRI[abstract]", tmp_path
     )
-    assert code == 0
+    assert code == ExitCode.COMPLETED
     articles_dir = Path(f"{download_dir}-articles")
     _articles.extract_articles(download_dir, articles_dir)
     bucket = articles_dir.joinpath("000")
@@ -75,7 +75,7 @@ def test_extract_data_to_csv(
         articles_with_coords_only=articles_with_coords_only,
         n_jobs=n_jobs,
     )
-    assert code == 0
+    assert code == ExitCode.COMPLETED
 
     # check does not repeat completed extraction
     with patch("nqdc._data_extraction._do_extract_data_to_csv") as mock:
@@ -84,7 +84,7 @@ def test_extract_data_to_csv(
             data_dir,
             articles_with_coords_only=articles_with_coords_only,
         )
-        assert code == 0
+        assert code == ExitCode.COMPLETED
         assert len(mock.mock_calls) == 0
 
     _check_extracted_data(data_dir, articles_with_coords_only)
@@ -107,7 +107,7 @@ def test_extract_from_incomplete_articles(articles_dir, tmp_path):
     data_dir, code = _data_extraction.extract_data_to_csv(
         articles_dir, tmp_path.joinpath("extracted_data")
     )
-    assert code == 1
+    assert code == ExitCode.INCOMPLETE
 
 
 @pytest.mark.parametrize(

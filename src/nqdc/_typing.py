@@ -3,6 +3,7 @@ from os import PathLike
 from pathlib import Path
 from abc import ABC, abstractmethod
 from contextlib import AbstractContextManager
+import enum
 import argparse
 from typing import Union, Dict, Any, Tuple, Mapping, Optional
 
@@ -24,6 +25,22 @@ PathLikeOrStr = Union[PathLike, str]
 # have to use it here.
 # pylint: disable-next=protected-access
 ArgparseActions = Union[argparse.ArgumentParser, argparse._ArgumentGroup]
+
+
+class StopPipeline(Exception):
+    """Raised to indicate subsequent steps should not run."""
+
+    def __init__(self, reason: str) -> None:
+        super().__init__(reason)
+        self.reason = reason
+
+
+class ExitCode(enum.IntEnum):
+    """Exit code for a processing step."""
+
+    COMPLETED = 0
+    INCOMPLETE = 1
+    ERROR = 2
 
 
 class Extractor(ABC):
@@ -75,7 +92,7 @@ class Command:
     def run(
         self,
         args: argparse.Namespace,
-    ) -> int:
+    ) -> ExitCode:
         """Execute this command. Return exit code."""
 
 
@@ -101,13 +118,5 @@ class PipelineStep:
         self,
         args: argparse.Namespace,
         previous_steps_output: Mapping[str, Path],
-    ) -> Tuple[Optional[Path], int]:
+    ) -> Tuple[Optional[Path], ExitCode]:
         """Execute this step. Return resulting directory and exit code."""
-
-
-class StopPipeline(Exception):
-    """Raised to indicate subsequent steps should not run."""
-
-    def __init__(self, reason: str) -> None:
-        super().__init__(reason)
-        self.reason = reason

@@ -8,7 +8,13 @@ from typing import Optional, Tuple, Mapping
 
 from nqdc._entrez import EntrezClient
 from nqdc import _utils
-from nqdc._typing import PathLikeOrStr, Command, PipelineStep, ArgparseActions
+from nqdc._typing import (
+    PathLikeOrStr,
+    Command,
+    PipelineStep,
+    ArgparseActions,
+    ExitCode,
+)
 
 _LOG = logging.getLogger(__name__)
 _STEP_NAME = "download"
@@ -22,7 +28,7 @@ def download_articles_for_query(
     n_docs: Optional[int] = None,
     retmax: int = 500,
     api_key: Optional[str] = None,
-) -> Tuple[Path, int]:
+) -> Tuple[Path, ExitCode]:
     """Download full-text articles matching the given query.
 
     Parameters
@@ -53,8 +59,9 @@ def download_articles_for_query(
     output_dir
         The directory that was created in which downloaded data is stored.
     exit_code
-        0 if all articles matching the search have been successfully downloaded
-        and 1 otherwise. Used by the `nqdc` command-line interface.
+        COMPLETED if all articles matching the search have been successfully
+        downloaded and INCOMPLETE otherwise. Used by the `nqdc` command-line
+        interface.
     """
     data_dir = Path(data_dir)
     output_dir = data_dir.joinpath(
@@ -62,7 +69,7 @@ def download_articles_for_query(
     )
     status = _utils.check_steps_status(None, output_dir, __name__)
     if not status["need_run"]:
-        return output_dir, 0
+        return output_dir, ExitCode.COMPLETED
     info_file = output_dir.joinpath("info.json")
     if info_file.is_file():
         info = json.loads(info_file.read_text("utf-8"))
@@ -93,10 +100,14 @@ def download_articles_for_query(
         retmax=info["retmax"],
     )
     _LOG.info(f"Finished downloading articles in {output_dir}")
-    info["is_complete"] = client.n_failures == 0 and (
-        n_docs is None or n_docs >= int(info["search_result"]["count"])
-    )
-    if info["is_complete"]:
+    if client.n_failures != 0:
+        exit_code = ExitCode.ERROR
+    elif n_docs is not None and n_docs < int(info["search_result"]["count"]):
+        exit_code = ExitCode.INCOMPLETE
+    else:
+        exit_code = ExitCode.COMPLETED
+        info["is_complete"] = True
+    if exit_code == ExitCode.COMPLETED:
         _LOG.info("All articles matching the query have been downloaded")
     else:
         _LOG.warning(
@@ -104,7 +115,7 @@ def download_articles_for_query(
             "the query have been downloaded"
         )
     _utils.write_info(output_dir, **info)
-    return output_dir, int(client.n_failures != 0)
+    return output_dir, exit_code
 
 
 def _get_data_dir_env() -> Optional[str]:
@@ -189,17 +200,18 @@ def _edit_argument_parser(argument_parser: ArgparseActions) -> None:
     )
 
 
-def _download_articles_for_args(args: argparse.Namespace) -> Tuple[Path, int]:
+def _download_articles_for_args(
+    args: argparse.Namespace,
+) -> Tuple[Path, ExitCode]:
     api_key = _get_api_key(args)
     query = _get_query(args)
     data_dir = _get_data_dir(args)
-    download_dir, code = download_articles_for_query(
+    return download_articles_for_query(
         query=query,
         data_dir=data_dir,
         n_docs=args.n_docs,
         api_key=api_key,
     )
-    return download_dir, code
 
 
 class DownloadStep(PipelineStep):
@@ -215,7 +227,7 @@ class DownloadStep(PipelineStep):
         self,
         args: argparse.Namespace,
         previous_steps_output: Mapping[str, Path],
-    ) -> Tuple[Path, int]:
+    ) -> Tuple[Path, ExitCode]:
         return _download_articles_for_args(args)
 
 
@@ -235,5 +247,5 @@ class DownloadCommand(Command):
     def run(
         self,
         args: argparse.Namespace,
-    ) -> int:
+    ) -> ExitCode:
         return _download_articles_for_args(args)[1]

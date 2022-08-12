@@ -11,7 +11,7 @@ from nqdc._fit_neuroquery import fit_neuroquery
 from nqdc._fit_neurosynth import fit_neurosynth
 from nqdc._nimare import make_nimare_dataset
 from nqdc._labelbuddy import make_labelbuddy_documents
-from nqdc._typing import PipelineStep, Command
+from nqdc._typing import PipelineStep, Command, ExitCode
 
 __version__ = _utils.get_nqdc_version()
 
@@ -27,4 +27,5 @@ __all__ = [
     "make_labelbuddy_documents",
     "PipelineStep",
     "Command",
+    "ExitCode",
 ]

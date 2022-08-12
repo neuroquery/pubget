@@ -7,7 +7,7 @@ import pandas as pd
 from scipy import sparse
 import pytest
 
-from nqdc import _vectorization
+from nqdc import _vectorization, ExitCode
 
 
 @pytest.mark.parametrize(("with_voc", "n_jobs"), [(True, 3), (False, 1)])
@@ -22,14 +22,14 @@ def test_vectorize_corpus_to_npz(
     output_dir, code = _vectorization.vectorize_corpus_to_npz(
         input_dir, output_dir=tmp_path, n_jobs=n_jobs, **kwargs
     )
-    assert code == 1
+    assert code == ExitCode.INCOMPLETE
     input_dir.joinpath("info.json").write_text(
         json.dumps({"is_complete": True, "name": "extract_data"}), "utf-8"
     )
     output_dir, code = _vectorization.vectorize_corpus_to_npz(
         input_dir, output_dir=tmp_path, n_jobs=n_jobs, **kwargs
     )
-    assert code == 0
+    assert code == ExitCode.COMPLETED
     _check_pmcids(tmp_path)
     _check_doc_frequencies(tmp_path)
     _check_matrices(tmp_path)
@@ -37,7 +37,7 @@ def test_vectorize_corpus_to_npz(
         output_dir, code = _vectorization.vectorize_corpus_to_npz(
             input_dir, output_dir=tmp_path, n_jobs=n_jobs, **kwargs
         )
-        assert code == 0
+        assert code == ExitCode.COMPLETED
         assert len(mock.mock_calls) == 0
 
 
