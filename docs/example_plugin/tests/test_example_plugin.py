@@ -1,5 +1,5 @@
-import pandas as pd
 import nqdc_example_plugin
+import pandas as pd
 
 
 def test_example_plugin(tmp_path):

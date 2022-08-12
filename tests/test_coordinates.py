@@ -1,9 +1,9 @@
 import re
 from unittest.mock import Mock
 
-from lxml import etree
 import numpy as np
 import pandas as pd
+from lxml import etree
 
 from nqdc import _coordinates
 

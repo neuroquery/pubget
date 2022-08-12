@@ -1,28 +1,28 @@
 """'vectorize' step: compute TFIDF from extracted text."""
-from pathlib import Path
 import argparse
-import logging
 import json
+import logging
 from enum import Enum
-from typing import Tuple, Dict, Any, Sequence, Optional, Union, Mapping
+from pathlib import Path
+from typing import Any, Dict, Mapping, Optional, Sequence, Tuple, Union
 
 import numpy as np
+import pandas as pd
+from joblib import Parallel, delayed
+from neuroquery.datasets import fetch_neuroquery_model
+from neuroquery.tokenization import TextVectorizer
 from scipy import sparse
 from sklearn.preprocessing import normalize
-from joblib import Parallel, delayed
-import pandas as pd
-from neuroquery.tokenization import TextVectorizer
-from neuroquery.datasets import fetch_neuroquery_model
 
-from nqdc._utils import checksum, assert_exists
-from nqdc._typing import (
-    PathLikeOrStr,
-    Command,
-    PipelineStep,
-    ArgparseActions,
-    ExitCode,
-)
 from nqdc import _utils
+from nqdc._typing import (
+    ArgparseActions,
+    Command,
+    ExitCode,
+    PathLikeOrStr,
+    PipelineStep,
+)
+from nqdc._utils import assert_exists, checksum
 
 _LOG = logging.getLogger(__name__)
 _STEP_NAME = "vectorize"

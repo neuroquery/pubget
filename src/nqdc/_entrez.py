@@ -1,10 +1,10 @@
 """Client for the Entrez E-utilities needed for downloading articles."""
-from pathlib import Path
 import logging
-from urllib.parse import urljoin
 import math
 import time
-from typing import Optional, Mapping, Union, Dict, Any
+from pathlib import Path
+from typing import Any, Dict, Mapping, Optional, Union
+from urllib.parse import urljoin
 
 import requests
 

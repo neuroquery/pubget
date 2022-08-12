@@ -3,7 +3,7 @@ from unittest.mock import Mock
 
 import neuroquery
 
-from nqdc import _fit_neuroquery, ExitCode
+from nqdc import ExitCode, _fit_neuroquery
 
 
 def test_fit_neuroquery(extracted_data_dir, tfidf_dir):

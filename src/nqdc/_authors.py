@@ -2,8 +2,8 @@
 import pandas as pd
 from lxml import etree
 
-from nqdc._typing import Extractor
 from nqdc import _utils
+from nqdc._typing import Extractor
 
 
 class AuthorsExtractor(Extractor):

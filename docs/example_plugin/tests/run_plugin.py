@@ -1,8 +1,8 @@
 #! /usr/bin/env python3
 
-from pathlib import Path
 import subprocess
 import tempfile
+from pathlib import Path
 
 with tempfile.TemporaryDirectory(suffix="_nqdc") as tmp_dir:
     subprocess.run(

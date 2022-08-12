@@ -1,10 +1,10 @@
-from unittest.mock import Mock
 import json
 import math
+from unittest.mock import Mock
 
 import pytest
 
-from nqdc import _labelbuddy, _download, _articles, _data_extraction, ExitCode
+from nqdc import ExitCode, _articles, _data_extraction, _download, _labelbuddy
 
 
 def test_does_not_rerun(tmp_path, monkeypatch):

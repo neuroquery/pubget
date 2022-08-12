@@ -1,11 +1,11 @@
+import argparse
 import os
 import subprocess
-import argparse
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
-from scipy import sparse
 import pandas as pd
+from scipy import sparse
 
 
 def _get_n_jobs(args):

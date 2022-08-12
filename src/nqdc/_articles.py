@@ -1,19 +1,19 @@
 """'extract_articles' step: extract articles from bulk PMC download."""
-import logging
 import argparse
+import logging
 from pathlib import Path
-from typing import Tuple, Optional, Mapping
+from typing import Mapping, Optional, Tuple
 
-from lxml import etree
 from joblib import Parallel, delayed
+from lxml import etree
 
 from nqdc import _utils
 from nqdc._typing import (
+    ArgparseActions,
+    Command,
+    ExitCode,
     PathLikeOrStr,
     PipelineStep,
-    Command,
-    ArgparseActions,
-    ExitCode,
 )
 
 _LOG = logging.getLogger(__name__)

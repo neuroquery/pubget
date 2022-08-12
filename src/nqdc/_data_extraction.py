@@ -1,41 +1,32 @@
 """'extract_data' step: extract metadata, text and coordinates from XML."""
-from pathlib import Path
+import argparse
 import functools
+import logging
 import multiprocessing
 import multiprocessing.synchronize
-import logging
-import argparse
 from contextlib import ExitStack
-from typing import (
-    Generator,
-    Dict,
-    Optional,
-    Tuple,
-    Any,
-    Mapping,
-    Sequence,
-)
+from pathlib import Path
+from typing import Any, Dict, Generator, Mapping, Optional, Sequence, Tuple
 
-from lxml import etree
 import pandas as pd
+from lxml import etree
 
+from nqdc import _utils
 from nqdc._authors import AuthorsExtractor
-from nqdc._coordinates import CoordinateExtractor
 from nqdc._coordinate_space import CoordinateSpaceExtractor
+from nqdc._coordinates import CoordinateExtractor
 from nqdc._metadata import MetadataExtractor
 from nqdc._text import TextExtractor
-from nqdc._writers import CSVWriter
 from nqdc._typing import (
-    PathLikeOrStr,
-    Extractor,
-    PipelineStep,
-    Command,
     ArgparseActions,
-    StopPipeline,
+    Command,
     ExitCode,
+    Extractor,
+    PathLikeOrStr,
+    PipelineStep,
+    StopPipeline,
 )
-from nqdc import _utils
-
+from nqdc._writers import CSVWriter
 
 _LOG = logging.getLogger(__name__)
 _STEP_NAME = "extract_data"

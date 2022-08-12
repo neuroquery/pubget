@@ -5,23 +5,23 @@ voxel activation (called "association test" on NeuroSynth website).
 """
 import argparse
 import logging
-from pathlib import Path
 import re
-from typing import Optional, Tuple, Mapping
+from pathlib import Path
+from typing import Mapping, Optional, Tuple
 
+import joblib
 import numpy as np
 import pandas as pd
-import joblib
-from scipy import stats, sparse
+from scipy import sparse, stats
 
-from nqdc import _model_data, _img_utils, _utils
+from nqdc import _img_utils, _model_data, _utils
 from nqdc._typing import (
-    PathLikeOrStr,
-    Command,
-    PipelineStep,
     ArgparseActions,
-    NiftiMasker,
+    Command,
     ExitCode,
+    NiftiMasker,
+    PathLikeOrStr,
+    PipelineStep,
 )
 
 _LOG = logging.getLogger(__name__)

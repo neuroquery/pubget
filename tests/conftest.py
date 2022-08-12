@@ -1,15 +1,15 @@
+import itertools
+import json
 import os
 import shutil
 from pathlib import Path
-import itertools
-import json
 from unittest.mock import Mock
 
 import numpy as np
 import pandas as pd
-from scipy import sparse
-from lxml import etree
 import pytest
+from lxml import etree
+from scipy import sparse
 
 
 @pytest.fixture(autouse=True)

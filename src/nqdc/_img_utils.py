@@ -8,17 +8,16 @@ some future neuroquery release.
 
 """
 import contextlib
-from typing import Optional, Tuple, Callable
+from typing import Callable, Optional, Tuple
 
 import numpy as np
 import pandas as pd
-from scipy import ndimage
 from joblib import Parallel, delayed
+from neuroquery.img_utils import coords_to_peaks_img, get_masker
 from nilearn import image
+from scipy import ndimage
 
-
-from neuroquery.img_utils import get_masker, coords_to_peaks_img
-from nqdc._typing import PathLikeOrStr, NiftiMasker
+from nqdc._typing import NiftiMasker, PathLikeOrStr
 
 _ID_COLUMN_NAME = "pmcid"
 _GAUSSIAN_SMOOTHING_FWHM_MM = 9.0

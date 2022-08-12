@@ -1,5 +1,5 @@
-import io
 import contextlib
+import io
 
 import numpy as np
 import pandas as pd
@@ -9,6 +9,7 @@ try:
     from nilearn import maskers
 except ImportError:
     from nilearn import input_data as maskers
+
 import neuroquery
 import neuroquery.img_utils
 

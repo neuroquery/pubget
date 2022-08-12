@@ -2,16 +2,16 @@
 import argparse
 import logging
 from pathlib import Path
-from typing import Sequence, Dict
+from typing import Dict, Sequence
 
-from nqdc._typing import (
-    Command,
-    PipelineStep,
-    ArgparseActions,
-    StopPipeline,
-    ExitCode,
-)
 from nqdc import _utils
+from nqdc._typing import (
+    ArgparseActions,
+    Command,
+    ExitCode,
+    PipelineStep,
+    StopPipeline,
+)
 
 _LOG = logging.getLogger(__name__)
 _STEP_NAME = "run"

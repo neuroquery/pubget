@@ -1,14 +1,13 @@
 import argparse
+import json
 from pathlib import Path
 from unittest.mock import Mock, patch
-import json
-
-import pytest
 
 import numpy as np
 import pandas as pd
+import pytest
 
-from nqdc import _download, _articles, _data_extraction, _typing, ExitCode
+from nqdc import ExitCode, _articles, _data_extraction, _download, _typing
 
 
 @pytest.fixture

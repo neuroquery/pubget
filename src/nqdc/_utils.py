@@ -1,19 +1,19 @@
 """Various utility functions for internal use."""
-from pathlib import Path
 import argparse
-import logging
-import logging.config
 import hashlib
 import json
-import re
-from datetime import datetime
+import logging
+import logging.config
 import os
+import re
 import shutil
-from typing import Union, Optional, Dict, Any
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, Optional, Union
 
 from lxml import etree
 
-from nqdc._typing import PathLikeOrStr, ArgparseActions
+from nqdc._typing import ArgparseActions, PathLikeOrStr
 
 _LOG = logging.getLogger(__name__)
 

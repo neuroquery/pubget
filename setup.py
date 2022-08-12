@@ -1,4 +1,5 @@
 from pathlib import Path
+
 from setuptools import setup
 
 package_dir = Path(__file__).parent.joinpath("src", "nqdc")

@@ -2,7 +2,7 @@
 import argparse
 import logging
 from pathlib import Path
-from typing import Tuple, Mapping, Optional, Union, Dict, List
+from typing import Dict, List, Mapping, Optional, Tuple, Union
 
 try:
     from nqdc import ExitCode

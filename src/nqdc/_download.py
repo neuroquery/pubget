@@ -1,19 +1,19 @@
 """'download' step: bulk download from PubMedCentral."""
-import logging
+import argparse
 import json
+import logging
 import os
 from pathlib import Path
-import argparse
-from typing import Optional, Tuple, Mapping
+from typing import Mapping, Optional, Tuple
 
-from nqdc._entrez import EntrezClient
 from nqdc import _utils
+from nqdc._entrez import EntrezClient
 from nqdc._typing import (
-    PathLikeOrStr,
-    Command,
-    PipelineStep,
     ArgparseActions,
+    Command,
     ExitCode,
+    PathLikeOrStr,
+    PipelineStep,
 )
 
 _LOG = logging.getLogger(__name__)

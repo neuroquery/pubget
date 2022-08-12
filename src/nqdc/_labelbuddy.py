@@ -2,33 +2,33 @@
 
 https://jeromedockes.github.io/labelbuddy/
 """
-from pathlib import Path
-import re
 import argparse
-import logging
-from hashlib import md5
 import json
+import logging
+import re
+from hashlib import md5
+from pathlib import Path
 from typing import (
-    Mapping,
     Any,
     Dict,
-    Tuple,
-    Optional,
     Generator,
-    TextIO,
     Iterator,
+    Mapping,
+    Optional,
+    TextIO,
+    Tuple,
 )
 
 import pandas as pd
 
-from nqdc._typing import (
-    PathLikeOrStr,
-    Command,
-    PipelineStep,
-    ArgparseActions,
-    ExitCode,
-)
 from nqdc import _utils
+from nqdc._typing import (
+    ArgparseActions,
+    Command,
+    ExitCode,
+    PathLikeOrStr,
+    PipelineStep,
+)
 
 _LOG = logging.getLogger(__name__)
 _STEP_NAME = "extract_labelbuddy_data"

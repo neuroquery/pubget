@@ -1,13 +1,14 @@
 """Writers for the `_extract_data` module."""
 from __future__ import annotations
+
 import csv
 from pathlib import Path
-from typing import Tuple, Union, Mapping, Any, Optional, Type, TextIO
 from types import TracebackType
+from typing import Any, Mapping, Optional, TextIO, Tuple, Type, Union
 
 import pandas as pd
 
-from nqdc._typing import PathLikeOrStr, Writer, Extractor
+from nqdc._typing import Extractor, PathLikeOrStr, Writer
 
 
 class CSVWriter(Writer):
