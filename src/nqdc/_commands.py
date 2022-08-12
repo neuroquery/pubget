@@ -1,30 +1,22 @@
 """Implementation of the nqdc command."""
 import argparse
-from typing import Optional, List
+from typing import List, Optional
 
-from nqdc import _utils
-from nqdc._download import DownloadStep, DownloadCommand
-from nqdc._articles import (
-    ArticleExtractionStep,
-    ArticleExtractionCommand,
-)
-from nqdc._data_extraction import (
-    DataExtractionStep,
-    DataExtractionCommand,
-)
-from nqdc._vocabulary import (
-    VocabularyExtractionStep,
-    VocabularyExtractionCommand,
-)
-from nqdc._vectorization import VectorizationStep, VectorizationCommand
-from nqdc._fit_neuroquery import FitNeuroQueryStep, FitNeuroQueryCommand
-from nqdc._fit_neurosynth import FitNeuroSynthStep, FitNeuroSynthCommand
-from nqdc._nimare import NimareStep, NimareCommand
-from nqdc._labelbuddy import LabelbuddyStep, LabelbuddyCommand
+from nqdc import _plugins, _utils
+from nqdc._articles import ArticleExtractionCommand, ArticleExtractionStep
+from nqdc._data_extraction import DataExtractionCommand, DataExtractionStep
+from nqdc._download import DownloadCommand, DownloadStep
+from nqdc._fit_neuroquery import FitNeuroQueryCommand, FitNeuroQueryStep
+from nqdc._fit_neurosynth import FitNeuroSynthCommand, FitNeuroSynthStep
+from nqdc._labelbuddy import LabelbuddyCommand, LabelbuddyStep
+from nqdc._nimare import NimareCommand, NimareStep
 from nqdc._pipeline import Pipeline
 from nqdc._typing import Command
-from nqdc import _plugins
-
+from nqdc._vectorization import VectorizationCommand, VectorizationStep
+from nqdc._vocabulary import (
+    VocabularyExtractionCommand,
+    VocabularyExtractionStep,
+)
 
 _NQDC_DESCRIPTION = (
     "Download articles from PubMedCentral and extract "

@@ -1,5 +1,5 @@
-import re
 import json
+import re
 from unittest.mock import Mock
 
 import pytest

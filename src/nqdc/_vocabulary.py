@@ -2,20 +2,20 @@
 import argparse
 import logging
 from pathlib import Path
-from typing import Generator, Tuple, Optional, Mapping, TextIO
+from typing import Generator, Mapping, Optional, TextIO, Tuple
 
 import numpy as np
 import pandas as pd
-from sklearn.feature_extraction.text import CountVectorizer
 from neuroquery import tokenization
+from sklearn.feature_extraction.text import CountVectorizer
 
 from nqdc import _utils
 from nqdc._typing import (
-    PathLikeOrStr,
-    Command,
-    PipelineStep,
     ArgparseActions,
+    Command,
     ExitCode,
+    PathLikeOrStr,
+    PipelineStep,
 )
 
 _LOG = logging.getLogger(__name__)

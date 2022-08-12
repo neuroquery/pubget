@@ -4,10 +4,10 @@ from unittest.mock import patch
 
 import numpy as np
 import pandas as pd
-from scipy import sparse
 import pytest
+from scipy import sparse
 
-from nqdc import _vectorization, ExitCode
+from nqdc import ExitCode, _vectorization
 
 
 @pytest.mark.parametrize(("with_voc", "n_jobs"), [(True, 3), (False, 1)])

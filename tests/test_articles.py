@@ -1,10 +1,10 @@
-from pathlib import Path
 import json
+from pathlib import Path
 from unittest.mock import patch
 
 import pytest
 
-from nqdc import _download, _articles, ExitCode
+from nqdc import ExitCode, _articles, _download
 
 
 @pytest.mark.parametrize("n_jobs", [1, 3])

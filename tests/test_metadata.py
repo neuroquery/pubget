@@ -1,5 +1,5 @@
-from lxml import etree
 import pytest
+from lxml import etree
 
 from nqdc import _metadata
 

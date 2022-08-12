@@ -1,14 +1,14 @@
 """Base classes and utilities for typing."""
-from os import PathLike
-from pathlib import Path
+import argparse
+import enum
 from abc import ABC, abstractmethod
 from contextlib import AbstractContextManager
-import enum
-import argparse
-from typing import Union, Dict, Any, Tuple, Mapping, Optional
+from os import PathLike
+from pathlib import Path
+from typing import Any, Dict, Mapping, Optional, Tuple, Union
 
-from lxml import etree
 import pandas as pd
+from lxml import etree
 
 try:
     from nilearn import maskers

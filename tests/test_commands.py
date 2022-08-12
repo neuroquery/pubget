@@ -1,14 +1,14 @@
 import json
 import sys
 from pathlib import Path
-from unittest.mock import Mock, MagicMock
-import importlib_metadata
+from unittest.mock import MagicMock, Mock
 
+import importlib_metadata
 import numpy as np
 import pandas as pd
 import pytest
 
-from nqdc import _commands, _vectorization, _nimare
+from nqdc import _commands, _nimare, _vectorization
 
 
 def _patch_neuroquery(monkeypatch):

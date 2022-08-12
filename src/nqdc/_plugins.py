@@ -1,6 +1,6 @@
 """Utilities for loading nqdc plug-in functionality."""
 
-from typing import Dict, List, Any
+from typing import Any, Dict, List
 
 import importlib_metadata
 

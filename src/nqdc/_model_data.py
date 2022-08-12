@@ -2,14 +2,14 @@
 import contextlib
 import json
 import logging
-from pathlib import Path
 import tempfile
-from typing import Optional, Dict, Type, TypeVar
 import types
+from pathlib import Path
+from typing import Dict, Optional, Type, TypeVar
 
 import numpy as np
-from scipy import sparse
 import pandas as pd
+from scipy import sparse
 
 from nqdc import _img_utils
 from nqdc._typing import NiftiMasker

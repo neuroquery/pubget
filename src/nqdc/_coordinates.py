@@ -1,16 +1,15 @@
 """Extracting stereotactic coordinates from XML articles."""
 import logging
 import re
-from typing import Tuple, Any, Sequence, List
+from typing import Any, List, Sequence, Tuple
 
 import numpy as np
-from scipy import stats
 import pandas as pd
 from lxml import etree
+from scipy import stats
 
 from nqdc import _utils
 from nqdc._typing import Extractor
-
 
 _LOG = logging.getLogger(__name__)
 

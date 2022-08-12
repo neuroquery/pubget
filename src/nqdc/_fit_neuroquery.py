@@ -1,25 +1,23 @@
 """'fit_neuroquery' step: fit a neuroquery.NeuroQueryModel."""
-from pathlib import Path
-import logging
 import argparse
+import logging
 import shutil
-from typing import Optional, Mapping, Tuple
+from pathlib import Path
+from typing import Mapping, Optional, Tuple
 
-from sklearn.preprocessing import normalize
-
+from neuroquery.encoding import NeuroQueryModel
 from neuroquery.smoothed_regression import SmoothedRegression
 from neuroquery.tokenization import TextVectorizer
-from neuroquery.encoding import NeuroQueryModel
+from sklearn.preprocessing import normalize
 
+from nqdc import _model_data, _utils
 from nqdc._typing import (
-    PathLikeOrStr,
-    Command,
-    PipelineStep,
     ArgparseActions,
+    Command,
     ExitCode,
+    PathLikeOrStr,
+    PipelineStep,
 )
-from nqdc import _utils, _model_data
-
 
 _LOG = logging.getLogger(__name__)
 _STEP_NAME = "fit_neuroquery"

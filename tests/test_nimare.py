@@ -1,13 +1,13 @@
 import builtins
 import importlib
-from pathlib import Path
 import json
 import sys
+from pathlib import Path
 from unittest.mock import Mock
 
 import pytest
 
-from nqdc import _nimare, ExitCode
+from nqdc import ExitCode, _nimare
 
 
 @pytest.fixture

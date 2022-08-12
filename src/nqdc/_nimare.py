@@ -2,16 +2,16 @@
 
 https://nimare.readthedocs.io/
 """
-from pathlib import Path
-import logging
-import tempfile
-import re
 import argparse
-from typing import Dict, Any, Mapping, Tuple, Optional
+import logging
+import re
+import tempfile
+from pathlib import Path
+from typing import Any, Dict, Mapping, Optional, Tuple
 
 import numpy as np
-from scipy import sparse
 import pandas as pd
+from scipy import sparse
 
 try:
     import nimare
@@ -21,14 +21,14 @@ except ImportError:
 else:
     _NIMARE_INSTALLED = True
 
-from nqdc._typing import (
-    PathLikeOrStr,
-    Command,
-    PipelineStep,
-    ArgparseActions,
-    ExitCode,
-)
 from nqdc import _utils
+from nqdc._typing import (
+    ArgparseActions,
+    Command,
+    ExitCode,
+    PathLikeOrStr,
+    PipelineStep,
+)
 
 _LOG = logging.getLogger(__name__)
 _STEP_NAME = "extract_nimare_data"

@@ -1,6 +1,6 @@
 """Extracting coordinate space from articles, based on NeuroSynth heuristic."""
 import re
-from typing import Dict, Any
+from typing import Any, Dict
 
 from lxml import etree
 

@@ -1,11 +1,11 @@
-import json
 import argparse
+import json
 from pathlib import Path
 from unittest.mock import Mock
 
 import pytest
 
-from nqdc import _download, ExitCode
+from nqdc import ExitCode, _download
 
 
 def test_download_articles_for_query(tmp_path, entrez_mock, monkeypatch):

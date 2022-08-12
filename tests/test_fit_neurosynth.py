@@ -2,9 +2,9 @@ import json
 from unittest.mock import Mock
 
 import numpy as np
-from scipy import stats, sparse
+from scipy import sparse, stats
 
-from nqdc import _fit_neurosynth, ExitCode
+from nqdc import ExitCode, _fit_neurosynth
 
 
 def test_chi_square():

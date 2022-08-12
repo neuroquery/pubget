@@ -1,4 +1,5 @@
 from unittest.mock import Mock
+
 from nqdc import _pipeline, _typing
 
 
