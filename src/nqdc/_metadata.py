@@ -8,6 +8,7 @@ from nqdc._typing import Extractor
 
 class MetadataExtractor(Extractor):
     """Extracting metatada from article XML."""
+
     fields = (
         "pmcid",
         "pmid",

@@ -32,7 +32,7 @@ def test_chi_square():
         p_val = stats.chi2_contingency(contingency, False)[1]
         vox_z_val = normal.isf(p_val / 2)
         if activations[term_vec].mean() < activations[~term_vec].mean():
-            vox_z_val = - vox_z_val
+            vox_z_val = -vox_z_val
         stats_z_vals.append(vox_z_val)
     assert np.allclose(z_vals, stats_z_vals)
 
