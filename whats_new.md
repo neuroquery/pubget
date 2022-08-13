@@ -1,5 +1,9 @@
 # `nqdc` releases
 
+## 0.0.3.dev
+
+- external links are now extracted from articles and stored in `links.csv` during the `extract_data` step.
+
 ## 0.0.2
 
 - Changes to the command-line interface; now all in one command `nqdc`; `nqdc_full_pipeline` becomes `nqdc run`.

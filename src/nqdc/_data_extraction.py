@@ -15,6 +15,7 @@ from nqdc import _utils
 from nqdc._authors import AuthorsExtractor
 from nqdc._coordinate_space import CoordinateSpaceExtractor
 from nqdc._coordinates import CoordinateExtractor
+from nqdc._links import LinkExtractor
 from nqdc._metadata import MetadataExtractor
 from nqdc._text import TextExtractor
 from nqdc._typing import (
@@ -206,6 +207,7 @@ def _do_extract_data_to_csv(
         TextExtractor(),
         CoordinateExtractor(),
         CoordinateSpaceExtractor(),
+        LinkExtractor(),
     ]
     all_writers = [
         CSVWriter.from_extractor(extractor, output_dir)

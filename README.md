@@ -218,6 +218,7 @@ Our data directory now contains (ommitting the contents of the previous steps):
           ├── coordinates.csv
           ├── coordinate_space.csv
           ├── info.json
+          ├── links.csv
           ├── metadata.csv
           └── text.csv
 ```
@@ -234,6 +235,9 @@ named `subset_allArticles_extractedData` instead.
 - `text.csv` contains one row per article. The first field is the `pmcid`, and
   the other fields are `title`, `keywords`, `abstract`, and `body`, and contain
   the text extracted from these parts of the article.
+- `links.csv` contains the external links found in the articles. The fields are
+  `pmcid`, `ext-link-type` (the type of link, for example "uri", "doi"), and
+  `href` (usually an URL).
 - `coordinates.csv` contains one row for each `(x, y, z)` stereotactic
   coordinate found in any article. Its fields are the `pmcid` of the article,
   the table label and id the coordinates came from, and `x`, `y`, `z`.

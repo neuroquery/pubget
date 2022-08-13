@@ -51,6 +51,9 @@ def _check_extracted_data(data_dir, articles_with_coords_only):
     authors = pd.read_csv(data_dir.joinpath("authors.csv"))
     assert authors.shape == (n_authors, 3)
     assert authors["pmcid"].nunique() == n_articles
+    n_links = 7 if articles_with_coords_only else 10
+    links = pd.read_csv(data_dir.joinpath("links.csv"))
+    assert links.shape == (n_links, 3)
     info = json.loads(data_dir.joinpath("info.json").read_text("utf-8"))
     assert info["is_complete"] is True
     assert info["n_articles"] == n_articles
