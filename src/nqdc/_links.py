@@ -26,4 +26,4 @@ class LinkExtractor(Extractor):
             all_links.append(
                 {"pmcid": pmcid, "ext-link-type": link_type, "href": href}
             )
-        return pd.DataFrame(all_links, columns=self.fields)
+        return pd.DataFrame(all_links, columns=self.fields).drop_duplicates()

@@ -20,10 +20,10 @@ def test_link_extractor(n_links):
 </article>
     """
     one_link = (
-        b'one link <ext-link xlink:href="http:example.com">'
+        b'link <ext-link xlink:href="http:example.com/%d">'
         b"http:example.com</ext-link>"
     )
-    links_text = b"\n".join([one_link for i in range(n_links)])
+    links_text = b"\n".join([one_link % i for i in range(n_links)])
     xml = xml_template % links_text
     document = etree.ElementTree(etree.XML(xml))
     extracted = _links.LinkExtractor().extract(document)
