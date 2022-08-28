@@ -1,11 +1,13 @@
 """'extract_articles' step: extract articles from bulk PMC download."""
 import argparse
+import json
 import logging
 from pathlib import Path
 from typing import Mapping, Optional, Tuple
 
 from joblib import Parallel, delayed
 from lxml import etree
+import pandas as pd
 
 from nqdc import _utils
 from nqdc._typing import (
@@ -103,20 +105,74 @@ def _do_extract_articles(
     return sum(article_counts)
 
 
+def _extract_tables_content(
+    tables_xhtml: etree.Element, tables_dir: Path
+) -> None:
+    for table_nb, table in enumerate(tables_xhtml.iterfind("extracted-table")):
+        try:
+            table_info = {}
+            table_info["table_id"] = table.find("table-id").text
+            table_info["table_label"] = table.find("table-label").text
+            table_info["table_caption"] = table.find("table-caption").text
+            kwargs = {}
+            if not table.xpath("(.//th|.//thead)"):
+                kwargs["header"] = 0
+            table_data = pd.read_html(
+                etree.tostring(
+                    table.find("transformed-table//{*}table")
+                ).decode("utf-8"),
+                thousands=None,
+                flavor="lxml",
+                **kwargs,
+            )[0]
+        except Exception:
+            # tables may fail to be parsed for various reasons eg they can be
+            # empty.
+            continue
+        table_data.to_csv(
+            tables_dir.joinpath(f"table_{table_nb}.csv"), index=False
+        )
+        tables_dir.joinpath(f"table_{table_nb}_info.json").write_text(
+            json.dumps(table_info), "UTF-8"
+        )
+
+
+def _extract_tables(article_dir: Path, stylesheet: etree.XSLT) -> None:
+    try:
+        # We re-parse the article to make sure it is a standalone document to
+        # avoid XSLT errors.
+        tables_xhtml = stylesheet(
+            etree.parse(str(article_dir.joinpath("article.xml")))
+        )
+    except Exception:
+        _LOG.exception(f"failed to transform article: {stylesheet.error_log}")
+        return
+    tables_dir = article_dir.joinpath("tables")
+    tables_dir.mkdir(exist_ok=True, parents=True)
+    tables_file = tables_dir.joinpath("tables.xhtml")
+    tables_file.write_bytes(
+        etree.tostring(tables_xhtml, encoding="UTF-8", xml_declaration=True)
+    )
+    _extract_tables_content(tables_xhtml, tables_dir)
+
+
 def _extract_from_articleset(batch_file: Path, output_dir: Path) -> int:
     """Extract articles from one batch and return the number of articles."""
     _LOG.debug(f"Extracting articles from {batch_file.name}")
     with open(batch_file, "rb") as batch_fh:
         tree = etree.parse(batch_fh)
+    stylesheet = _utils.load_stylesheet("table_extraction.xsl")
     n_articles = 0
     for article in tree.iterfind("article"):
         pmcid = _utils.get_pmcid(article)
-        subdir = output_dir.joinpath(_utils.checksum(str(pmcid))[:3])
-        subdir.mkdir(exist_ok=True, parents=True)
-        target_file = subdir.joinpath(f"pmcid_{pmcid}.xml")
-        target_file.write_bytes(
+        bucket = _utils.checksum(str(pmcid))[:3]
+        article_dir = output_dir.joinpath(bucket, f"pmcid_{pmcid}")
+        article_dir.mkdir(exist_ok=True, parents=True)
+        article_file = article_dir.joinpath(f"article.xml")
+        article_file.write_bytes(
             etree.tostring(article, encoding="UTF-8", xml_declaration=True)
         )
+        _extract_tables(article_dir, stylesheet)
         n_articles += 1
     return n_articles
 
