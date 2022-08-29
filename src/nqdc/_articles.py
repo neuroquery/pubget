@@ -3,7 +3,7 @@ import argparse
 import json
 import logging
 from pathlib import Path
-from typing import Mapping, Optional, Tuple
+from typing import Generator, Mapping, Optional, Tuple
 
 from joblib import Parallel, delayed
 from lxml import etree
@@ -98,11 +98,71 @@ def _do_extract_articles(
 ) -> int:
     """Do the extraction and return number of articles found."""
     output_dir.mkdir(exist_ok=True, parents=True)
-    article_counts = Parallel(n_jobs=n_jobs, verbose=8)(
-        delayed(_extract_from_articleset)(batch_file, output_dir=output_dir)
-        for batch_file in articlesets_dir.glob("articleset_*.xml")
-    )
+    with Parallel(n_jobs=n_jobs, verbose=8) as parallel:
+        _LOG.debug("Extracting articles from PMC articlesets.")
+        article_counts = parallel(
+            delayed(_extract_from_articleset)(
+                batch_file, output_dir=output_dir
+            )
+            for batch_file in articlesets_dir.glob("articleset_*.xml")
+        )
+        _LOG.debug("Done extracting articles from PMC articlesets.")
+        _LOG.debug("Extracting tables from articles.")
+        parallel(
+            delayed(_extract_tables)(article_dir)
+            for article_dir in _iter_articles(output_dir)
+        )
+        _LOG.debug("Done extracting tables from articles.")
     return sum(article_counts)
+
+
+def _iter_articles(all_articles_dir: Path) -> Generator[Path, None, None]:
+    for bucket in all_articles_dir.glob("*"):
+        if bucket.is_dir():
+            for article_dir in bucket.glob("pmcid_*"):
+                yield article_dir
+
+
+def _extract_from_articleset(batch_file: Path, output_dir: Path) -> int:
+    """Extract articles from one batch and return the number of articles."""
+    _LOG.debug(f"Extracting articles from {batch_file.name}")
+    with open(batch_file, "rb") as batch_fh:
+        tree = etree.parse(batch_fh)
+    n_articles = 0
+    for article in tree.iterfind("article"):
+        pmcid = _utils.get_pmcid(article)
+        bucket = _utils.checksum(str(pmcid))[:3]
+        article_dir = output_dir.joinpath(bucket, f"pmcid_{pmcid}")
+        article_dir.mkdir(exist_ok=True, parents=True)
+        article_file = article_dir.joinpath(f"article.xml")
+        article_file.write_bytes(
+            etree.tostring(article, encoding="UTF-8", xml_declaration=True)
+        )
+        n_articles += 1
+    return n_articles
+
+
+def _extract_tables(article_dir: Path) -> None:
+    # a parsed stylesheet (lxml.XSLT) cannot be pickled so we parse it here
+    # rather than outside the joblib.Parallel call. Parsing the stylesheet
+    # takes little time compared to applying the transform in this case.
+    stylesheet = _utils.load_stylesheet("table_extraction.xsl")
+    try:
+        # We re-parse the article to make sure it is a standalone document to
+        # avoid XSLT errors.
+        tables_xhtml = stylesheet(
+            etree.parse(str(article_dir.joinpath("article.xml")))
+        )
+    except Exception:
+        _LOG.exception(f"failed to transform article: {stylesheet.error_log}")
+        return
+    tables_dir = article_dir.joinpath("tables")
+    tables_dir.mkdir(exist_ok=True, parents=True)
+    tables_file = tables_dir.joinpath("tables.xhtml")
+    tables_file.write_bytes(
+        etree.tostring(tables_xhtml, encoding="UTF-8", xml_declaration=True)
+    )
+    _extract_tables_content(tables_xhtml, tables_dir)
 
 
 def _extract_tables_content(
@@ -128,53 +188,14 @@ def _extract_tables_content(
         except Exception:
             # tables may fail to be parsed for various reasons eg they can be
             # empty.
-            continue
-        table_data.to_csv(
-            tables_dir.joinpath(f"table_{table_nb}.csv"), index=False
-        )
-        tables_dir.joinpath(f"table_{table_nb}_info.json").write_text(
-            json.dumps(table_info), "UTF-8"
-        )
-
-
-def _extract_tables(article_dir: Path, stylesheet: etree.XSLT) -> None:
-    try:
-        # We re-parse the article to make sure it is a standalone document to
-        # avoid XSLT errors.
-        tables_xhtml = stylesheet(
-            etree.parse(str(article_dir.joinpath("article.xml")))
-        )
-    except Exception:
-        _LOG.exception(f"failed to transform article: {stylesheet.error_log}")
-        return
-    tables_dir = article_dir.joinpath("tables")
-    tables_dir.mkdir(exist_ok=True, parents=True)
-    tables_file = tables_dir.joinpath("tables.xhtml")
-    tables_file.write_bytes(
-        etree.tostring(tables_xhtml, encoding="UTF-8", xml_declaration=True)
-    )
-    _extract_tables_content(tables_xhtml, tables_dir)
-
-
-def _extract_from_articleset(batch_file: Path, output_dir: Path) -> int:
-    """Extract articles from one batch and return the number of articles."""
-    _LOG.debug(f"Extracting articles from {batch_file.name}")
-    with open(batch_file, "rb") as batch_fh:
-        tree = etree.parse(batch_fh)
-    stylesheet = _utils.load_stylesheet("table_extraction.xsl")
-    n_articles = 0
-    for article in tree.iterfind("article"):
-        pmcid = _utils.get_pmcid(article)
-        bucket = _utils.checksum(str(pmcid))[:3]
-        article_dir = output_dir.joinpath(bucket, f"pmcid_{pmcid}")
-        article_dir.mkdir(exist_ok=True, parents=True)
-        article_file = article_dir.joinpath(f"article.xml")
-        article_file.write_bytes(
-            etree.tostring(article, encoding="UTF-8", xml_declaration=True)
-        )
-        _extract_tables(article_dir, stylesheet)
-        n_articles += 1
-    return n_articles
+            pass
+        else:
+            table_data.to_csv(
+                tables_dir.joinpath(f"table_{table_nb}.csv"), index=False
+            )
+            tables_dir.joinpath(f"table_{table_nb}_info.json").write_text(
+                json.dumps(table_info), "UTF-8"
+            )
 
 
 class ArticleExtractionStep(PipelineStep):
