@@ -1,5 +1,6 @@
 """Various utility functions for internal use."""
 import argparse
+import functools
 import hashlib
 import json
 import logging
@@ -111,6 +112,7 @@ def checksum(value: Union[str, bytes]) -> str:
     return hashlib.md5(value).hexdigest()
 
 
+@functools.cache
 def load_stylesheet(stylesheet_name: str) -> etree.XSLT:
     """Find and parse an XSLT stylesheet."""
     stylesheet_path = get_package_data_dir().joinpath(

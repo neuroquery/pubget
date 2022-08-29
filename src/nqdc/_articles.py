@@ -19,6 +19,7 @@ from nqdc._typing import (
 )
 
 _LOG = logging.getLogger(__name__)
+_LOG_PERIOD = 500
 _STEP_NAME = "extract_articles"
 _STEP_DESCRIPTION = "Extract articles from bulk PMC download."
 
@@ -99,28 +100,40 @@ def _do_extract_articles(
     """Do the extraction and return number of articles found."""
     output_dir.mkdir(exist_ok=True, parents=True)
     with Parallel(n_jobs=n_jobs, verbose=8) as parallel:
-        _LOG.debug("Extracting articles from PMC articlesets.")
+        _LOG.info("Extracting articles from PMC articlesets.")
         article_counts = parallel(
             delayed(_extract_from_articleset)(
                 batch_file, output_dir=output_dir
             )
             for batch_file in articlesets_dir.glob("articleset_*.xml")
         )
-        _LOG.debug("Done extracting articles from PMC articlesets.")
-        _LOG.debug("Extracting tables from articles.")
+        n_articles = int(sum(article_counts))  # int() is for mypy
+        _LOG.info(
+            f"Done extracting {n_articles} articles from PMC articlesets."
+        )
+        _LOG.info("Extracting tables from articles.")
         parallel(
             delayed(_extract_tables)(article_dir)
-            for article_dir in _iter_articles(output_dir)
+            for article_dir in _iter_articles(
+                output_dir,
+                f"Extracted tables from {{}} / {n_articles} articles.",
+            )
         )
-        _LOG.debug("Done extracting tables from articles.")
-    return sum(article_counts)
+        _LOG.info("Done extracting tables from articles.")
+    return n_articles
 
 
-def _iter_articles(all_articles_dir: Path) -> Generator[Path, None, None]:
+def _iter_articles(
+    all_articles_dir: Path, message: str
+) -> Generator[Path, None, None]:
+    n_articles = 0
     for bucket in all_articles_dir.glob("*"):
         if bucket.is_dir():
             for article_dir in bucket.glob("pmcid_*"):
+                n_articles += 1
                 yield article_dir
+                if not n_articles % _LOG_PERIOD:
+                    _LOG.info(message.format(n_articles))
 
 
 def _extract_from_articleset(batch_file: Path, output_dir: Path) -> int:
@@ -134,7 +147,7 @@ def _extract_from_articleset(batch_file: Path, output_dir: Path) -> int:
         bucket = _utils.checksum(str(pmcid))[:3]
         article_dir = output_dir.joinpath(bucket, f"pmcid_{pmcid}")
         article_dir.mkdir(exist_ok=True, parents=True)
-        article_file = article_dir.joinpath(f"article.xml")
+        article_file = article_dir.joinpath("article.xml")
         article_file.write_bytes(
             etree.tostring(article, encoding="UTF-8", xml_declaration=True)
         )
@@ -144,8 +157,7 @@ def _extract_from_articleset(batch_file: Path, output_dir: Path) -> int:
 
 def _extract_tables(article_dir: Path) -> None:
     # a parsed stylesheet (lxml.XSLT) cannot be pickled so we parse it here
-    # rather than outside the joblib.Parallel call. Parsing the stylesheet
-    # takes little time compared to applying the transform in this case.
+    # rather than outside the joblib.Parallel call. Parsing is cached.
     stylesheet = _utils.load_stylesheet("table_extraction.xsl")
     try:
         # We re-parse the article to make sure it is a standalone document to

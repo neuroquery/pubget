@@ -75,9 +75,6 @@ class CoordinateExtractor(Extractor):
     def extract(
         self, article: etree.ElementTree, article_dir: pathlib.Path
     ) -> pd.DataFrame:
-        # lazy loading the stylesheet because lxml.XSLT cannot be pickled so
-        # loading it in __init__ would prevent passing extractor to child
-        # processes
         coords = _extract_coordinates_from_article_dir(article_dir)
         return coords.loc[:, self.fields]
 
