@@ -1,4 +1,5 @@
 """Extracting coordinate space from articles, based on NeuroSynth heuristic."""
+import pathlib
 import re
 from typing import Any, Dict
 
@@ -14,7 +15,9 @@ class CoordinateSpaceExtractor(Extractor):
     fields = ("pmcid", "coordinate_space")
     name = "coordinate_space"
 
-    def extract(self, article: etree.ElementTree) -> Dict[str, Any]:
+    def extract(
+        self, article: etree.ElementTree, article_dir: pathlib.Path
+    ) -> Dict[str, Any]:
         return {
             "pmcid": get_pmcid(article),
             "coordinate_space": _neurosynth_guess_space(

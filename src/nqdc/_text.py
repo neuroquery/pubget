@@ -1,5 +1,6 @@
 """Extracting text from XML articles."""
 import logging
+import pathlib
 from typing import Dict, Union
 
 from lxml import etree
@@ -20,7 +21,7 @@ class TextExtractor(Extractor):
         self._stylesheet = None
 
     def extract(
-        self, article: etree.ElementTree
+        self, article: etree.ElementTree, article_dir: pathlib.Path
     ) -> Dict[str, Union[str, int]]:
         # lazy loading the stylesheet because lxml.XSLT cannot be pickled so
         # loading it in __init__ would prevent passing extractor to child

@@ -1,5 +1,6 @@
 """Extracting metatada from article XML."""
 from typing import Any, Dict
+import pathlib
 
 from lxml import etree
 
@@ -20,7 +21,9 @@ class MetadataExtractor(Extractor):
     )
     name = "metadata"
 
-    def extract(self, article: etree.ElementTree) -> Dict[str, Any]:
+    def extract(
+        self, article: etree.ElementTree, article_dir: pathlib.Path
+    ) -> Dict[str, Any]:
         metadata: Dict[str, Any] = {}
         for article_id in article.iterfind("front/article-meta/article-id"):
             _add_id(article_id, metadata)

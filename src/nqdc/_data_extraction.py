@@ -57,9 +57,9 @@ def _extract_data(
     extract = functools.partial(
         _extract_article_data, data_extractors=data_extractors
     )
-    article_files = _iter_article_files(articles_dir, articles_semaphore)
+    articles = _iter_articles(articles_dir, articles_semaphore)
     if n_jobs == 1:
-        yield from map(extract, article_files)
+        yield from map(extract, articles)
     else:
         # if we use the context manager it can cause pytest-cov to hang as
         # __exit__ uses terminate() rather than close(); see
@@ -71,7 +71,7 @@ def _extract_data(
         try:
             yield from pool.imap_unordered(
                 extract,
-                article_files,
+                articles,
                 chunksize=_CHUNK_SIZE,
             )
         finally:
@@ -80,9 +80,10 @@ def _extract_data(
 
 
 def _extract_article_data(
-    article_file: Path, data_extractors: Sequence[Extractor]
+    article_dir: Path, data_extractors: Sequence[Extractor]
 ) -> Optional[Dict[str, Any]]:
     """Extract data from one article. Returns `None` if parsing fails."""
+    article_file = article_dir.joinpath("article.xml")
     try:
         article = etree.parse(str(article_file))
     except Exception:
@@ -91,7 +92,9 @@ def _extract_article_data(
     article_data = {}
     for extractor in data_extractors:
         try:
-            article_data[extractor.name] = extractor.extract(article)
+            article_data[extractor.name] = extractor.extract(
+                article, article_dir
+            )
         except Exception:
             _LOG.exception(
                 f"Extractor '{extractor.name}' failed on {article_file}."
@@ -99,7 +102,7 @@ def _extract_article_data(
     return article_data
 
 
-def _iter_article_files(
+def _iter_articles(
     articles_dir: Path,
     articles_semaphore: multiprocessing.synchronize.Semaphore,
 ) -> Generator[Path, None, None]:
@@ -112,12 +115,12 @@ def _iter_article_files(
     articles_dir = Path(articles_dir)
     for subdir in articles_dir.glob("*"):
         if subdir.is_dir():
-            for article_file in subdir.glob("pmcid_*.xml"):
+            for article_dir in subdir.glob("pmcid_*"):
                 # Throttle processing articles so they don't accumulate in the
                 # Pool's output queue. When joblib.Parallel starts returning
                 # iterators we can use it instead of Pool
                 articles_semaphore.acquire()
-                yield article_file
+                yield article_dir
 
 
 def extract_data_to_csv(

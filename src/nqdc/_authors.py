@@ -1,4 +1,5 @@
 """Extracting list of authors from article XML."""
+import pathlib
 import pandas as pd
 from lxml import etree
 
@@ -12,7 +13,9 @@ class AuthorsExtractor(Extractor):
     fields = ("pmcid", "surname", "given-names")
     name = "authors"
 
-    def extract(self, article: etree.ElementTree) -> pd.DataFrame:
+    def extract(
+        self, article: etree.ElementTree, article_dir: pathlib.Path
+    ) -> pd.DataFrame:
         authors = []
         pmcid = _utils.get_pmcid(article)
         for author_elem in article.iterfind(

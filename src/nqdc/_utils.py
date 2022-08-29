@@ -128,6 +128,13 @@ def get_pmcid(article: Union[etree.ElementTree, etree.Element]) -> int:
     )
 
 
+def get_pmcid_from_article_dir(article_dir: Path) -> int:
+    """Extract the PubMedCentral ID from an article's data dir."""
+    match = re.match(r"pmcid_(\d+)", article_dir.name)
+    assert match is not None
+    return int(match.group(1))
+
+
 def assert_exists(path: Path) -> None:
     """raise a FileNotFoundError if path doesn't exist."""
     path.resolve(strict=True)

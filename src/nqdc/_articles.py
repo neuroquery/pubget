@@ -190,8 +190,10 @@ def _extract_tables_content(
             # empty.
             pass
         else:
+            table_data_file = f"table_{table_nb}.csv"
+            table_info["table_data_file"] = table_data_file
             table_data.to_csv(
-                tables_dir.joinpath(f"table_{table_nb}.csv"), index=False
+                tables_dir.joinpath(table_data_file), index=False
             )
             tables_dir.joinpath(f"table_{table_nb}_info.json").write_text(
                 json.dumps(table_info), "UTF-8"
