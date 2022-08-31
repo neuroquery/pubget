@@ -1,5 +1,4 @@
 """Extracting stereotactic coordinates from XML articles."""
-import json
 import logging
 import pathlib
 import re
@@ -84,12 +83,9 @@ def _extract_coordinates_from_article_dir(
 ) -> pd.DataFrame:
     pmcid = _utils.get_pmcid_from_article_dir(article_dir)
     all_coordinates = []
-    tables_dir = article_dir.joinpath("tables")
-    for table_json in tables_dir.glob("table_*_info.json"):
-        table_info = json.loads(table_json.read_text("UTF-8"))
-        table_data = pd.read_csv(
-            tables_dir.joinpath(table_info["table_data_file"])
-        )
+    for table_info, table_data in _utils.get_tables_from_article_dir(
+        article_dir
+    ):
         try:
             coordinates = _extract_coordinates_from_table(table_data)
         except Exception:

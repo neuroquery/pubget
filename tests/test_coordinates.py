@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 from lxml import etree
 
-from nqdc import _coordinates
+from nqdc import _coordinates, _articles
 
 
 def _example_table(values_start=20):
@@ -24,15 +24,15 @@ def _example_table(values_start=20):
 def test_triplet():
     """check what is matched as coordinate triplets in single column"""
     head_triplet = re.compile(_coordinates._COORD_HEAD_TRIPLET)
-    head_triplet.match("(x, y, z)") is not None
-    head_triplet.match("[x Y z ]") is not None
-    head_triplet.match("{ x;y;z }") is not None
-    head_triplet.match("x, y, z.1") is not None
-    head_triplet.match("x, y, z") is not None
-    head_triplet.match("[x, y, z)") is not None
-    head_triplet.match("(x, y; z)") is not None
-    head_triplet.match("peak(x, y; z)") is not None
-    head_triplet.match("(x y, z)") is not None
+    assert head_triplet.match("(x, y, z)") is not None
+    assert head_triplet.match("[x Y z ]") is not None
+    assert head_triplet.match("{ x;y;z }") is not None
+    assert head_triplet.match("x, y, z.1") is not None
+    assert head_triplet.match("x, y, z") is not None
+    assert head_triplet.match("[x, y, z)") is not None
+    assert head_triplet.match("(x, y; z)") is not None
+    assert head_triplet.match("peak(x, y; z)") is not None
+    assert head_triplet.match("(x y, z)") is not None
     assert head_triplet.match("(x, y)") is None
     assert head_triplet.match("region") is None
 
@@ -136,10 +136,17 @@ def test_table_to_coordinates():
 
 def test_check_empty_table():
     table = pd.DataFrame(columns=list("xyz"))
-    assert _coordinates._check_table(table)
+    assert _coordinates._check_table(table.values)
 
 
-def test_multiple_header_rows():
+def _make_article_dir(tables, tmp_path):
+    tables_dir = tmp_path.joinpath("pmcid_0", "tables")
+    tables_dir.mkdir(parents=True)
+    _articles._extract_tables_content(tables, tables_dir)
+    return tables_dir.parent
+
+
+def test_multiple_header_rows(tmp_path):
     """column names that indicate coordinates
     are found even if buried in the middle of multiple header rows."""
     tables = etree.XML(
@@ -148,6 +155,7 @@ def test_multiple_header_rows():
     <extracted-table>
     <table-id />
     <table-label />
+    <table-caption />
     <transformed-table>
     <table>
         <thead>
@@ -164,42 +172,14 @@ def test_multiple_header_rows():
     </extracted-tables-set>
     """
     )
-    coords = _coordinates._extract_coordinates_from_article_tables(tables)
+    article_dir = _make_article_dir(tables, tmp_path)
+    coords = _coordinates._extract_coordinates_from_article_dir(article_dir)
     assert (
         coords.loc[:, ["x", "y", "z"]].values.ravel() == [-10, -15, 68]
     ).all()
 
 
-def test_inline_elems():
-    """Check that:
-    - docbook xhtml conversion is applied
-    - elements inside table cells match the default template (are replaced by
-      their value)
-    """
-    tables = etree.XML(
-        """<article><front><article-meta>
-        <article-id pub-id-type="pmc">123</article-id></article-meta></front>
-        <body>
-        <table-wrap>
-    <table>
-        <thead>
-            <tr><td>x, y, z</td></tr>
-        </thead>
-        <tbody>
-            <tr><td><inline-formula>-</inline-formula>10,-15,+68 </td></tr>
-        </tbody>
-    </table>
-        </table-wrap>
-    </body>
-        </article>"""
-    )
-    coords = _coordinates.CoordinateExtractor().extract(tables)
-    assert (
-        coords.loc[:, ["x", "y", "z"]].values.ravel() == [-10, -15, 68]
-    ).all()
-
-
-def test_char_mapping():
+def test_char_mapping(tmp_path):
     """unicode characters that look like + or - are correctly mapped"""
     tables = etree.XML(
         """<extracted-tables-set>
@@ -207,6 +187,7 @@ def test_char_mapping():
     <extracted-table>
     <table-id />
     <table-label />
+    <table-caption />
     <transformed-table>
     <table>
     <tr><td>x, y, z</td></tr>
@@ -217,29 +198,22 @@ def test_char_mapping():
     </extracted-tables-set>
     """
     )
-    coords = _coordinates._extract_coordinates_from_article_tables(tables)
+    article_dir = _make_article_dir(tables, tmp_path)
+    coords = _coordinates._extract_coordinates_from_article_dir(article_dir)
     assert (
         coords.loc[:, ["x", "y", "z"]].values.ravel() == [-10, -15, 68]
     ).all()
 
 
-def test_coordinate_extraction_failures(monkeypatch):
+def test_coordinate_extraction_failures(monkeypatch, tmp_path):
     """Bad articles for which extration fails don't raise an exception."""
-    _coordinates._extract_coordinates_from_article(
-        Mock(), Mock(side_effect=ValueError)
-    )
-    xml_mock = Mock()
-    xml_mock.find.side_effect = ValueError
-    stylesheet_mock = Mock()
-    stylesheet_mock.side_effect = xml_mock
-    _coordinates._extract_coordinates_from_article(Mock(), stylesheet_mock)
     tables = etree.XML(
         """<extracted-tables-set>
     <pmcid>123</pmcid>
-    <extracted-table/>
     <extracted-table>
     <table-id />
     <table-label />
+    <table-caption />
     <transformed-table>
     <table>
     <tr><td>x, y, z</td></tr>
@@ -250,9 +224,12 @@ def test_coordinate_extraction_failures(monkeypatch):
     </extracted-tables-set>
     """
     )
+
+    extract_mock = Mock()
+    extract_mock.side_effect = ValueError
     monkeypatch.setattr(
-        _coordinates,
-        "_extract_coordinates_from_table",
-        Mock(side_effect=ValueError),
+        _coordinates, "_extract_coordinates_from_table", extract_mock
     )
-    _coordinates._extract_coordinates_from_article_tables(tables)
+    article_dir = _make_article_dir(tables, tmp_path)
+    _coordinates._extract_coordinates_from_article_dir(article_dir)
+    extract_mock.assert_called_once()

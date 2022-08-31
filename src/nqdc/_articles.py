@@ -57,15 +57,18 @@ def extract_articles(
         ```
         · articles
           ├── 001
-          │   └── pmcid_4150635.xml
+          │   └── pmcid_4150635
           └── 00b
-              ├── pmcid_2568959.xml
-              └── pmcid_5102699.xml
+              ├── pmcid_2568959
+              └── pmcid_5102699
         ```
+        Each article gets its own subdirectory, containing the article's XML
+        and its tables.
     exit_code
         COMPLETED if the download in `articlesets_dir` was complete and the
         article extraction finished normally and INCOMPLETE otherwise. Used by
         the `nqdc` command-line interface.
+
     """
     articlesets_dir = Path(articlesets_dir)
     if output_dir is None:
@@ -144,7 +147,7 @@ def _extract_from_articleset(batch_file: Path, output_dir: Path) -> int:
     n_articles = 0
     for article in tree.iterfind("article"):
         pmcid = _utils.get_pmcid(article)
-        bucket = _utils.checksum(str(pmcid))[:3]
+        bucket = _utils.article_bucket_from_pmcid(pmcid)
         article_dir = output_dir.joinpath(bucket, f"pmcid_{pmcid}")
         article_dir.mkdir(exist_ok=True, parents=True)
         article_file = article_dir.joinpath("article.xml")
@@ -197,17 +200,19 @@ def _extract_tables_content(
                 flavor="lxml",
                 **kwargs,
             )[0]
+            table_info["n_header_rows"] = table_data.columns.nlevels
         except Exception:
             # tables may fail to be parsed for various reasons eg they can be
             # empty.
             pass
         else:
-            table_data_file = f"table_{table_nb}.csv"
+            table_name = f"table_{table_nb:0>3}"
+            table_data_file = f"{table_name}.csv"
             table_info["table_data_file"] = table_data_file
             table_data.to_csv(
                 tables_dir.joinpath(table_data_file), index=False
             )
-            tables_dir.joinpath(f"table_{table_nb}_info.json").write_text(
+            tables_dir.joinpath(f"{table_name}_info.json").write_text(
                 json.dumps(table_info), "UTF-8"
             )
 

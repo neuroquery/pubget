@@ -1,3 +1,4 @@
+import pathlib
 import pytest
 from lxml import etree
 
@@ -26,5 +27,7 @@ def test_link_extractor(n_links):
     links_text = b"\n".join([one_link % i for i in range(n_links)])
     xml = xml_template % links_text
     document = etree.ElementTree(etree.XML(xml))
-    extracted = _links.LinkExtractor().extract(document)
+    extracted = _links.LinkExtractor().extract(
+        document, pathlib.Path("pmc_9057060")
+    )
     assert extracted.shape == (n_links, 3)
