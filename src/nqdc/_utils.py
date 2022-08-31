@@ -114,6 +114,7 @@ def checksum(value: Union[str, bytes]) -> str:
 
 
 def article_bucket_from_pmcid(pmcid: int) -> str:
+    """Get the bucket name (in 'articles' dir) from PMCID."""
     return checksum(str(pmcid))[:3]
 
 
@@ -146,6 +147,11 @@ def get_pmcid_from_article_dir(article_dir: Path) -> int:
 def read_article_table(
     table_info_json: Path,
 ) -> Tuple[Dict[str, Any], pd.DataFrame]:
+    """Load information and data for an article table.
+
+    Takes care to create a MultiIndex if the table had several header rows.
+    Returns a tuple (table metadata, table data).
+    """
     table_info = json.loads(table_info_json.read_text("UTF-8"))
     table_csv = table_info_json.with_name(table_info["table_data_file"])
     table_data = pd.read_csv(
@@ -157,11 +163,7 @@ def read_article_table(
 def get_tables_from_article_dir(
     article_dir: Path,
 ) -> Generator[Tuple[Dict[str, Any], pd.DataFrame], None, None]:
-    """Load information and data for an article table.
-
-    Takes care to create a MultiIndex if the table had several header rows.
-    Returns a tuple (table metadata, table data).
-    """
+    """Load information and data for all tables belonging to an article."""
     for table_info_json in sorted(
         article_dir.joinpath("tables").glob("table_*_info.json")
     ):
