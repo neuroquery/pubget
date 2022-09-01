@@ -5,7 +5,7 @@ from lxml import etree
 from nqdc import _entrez
 
 
-def test_entrez(entrez_mock, tmp_path):
+def test_esearch(entrez_mock, tmp_path):
     client = _entrez.EntrezClient()
     client.esearch("fmri")
     client.efetch(output_dir=tmp_path, n_docs=10, retmax=3)
@@ -13,6 +13,15 @@ def test_entrez(entrez_mock, tmp_path):
         batch = etree.parse(str(batch)).getroot()
         assert batch.tag == "pmc-articleset"
     assert i == min(10, entrez_mock.count) // 3
+
+
+def test_epost(entrez_mock):
+    client = _entrez.EntrezClient()
+    assert client.epost([]) == {}
+    result = client.epost([1, 10, 78])
+    assert result["webenv"] == "WEBENV_1"
+    assert result["querykey"] == "1"
+    assert result["count"] == "3"
 
 
 def test_entrez_api_key(requests_mock):
@@ -26,6 +35,24 @@ def test_entrez_api_key(requests_mock):
     req = requests_mock.call_args_list[1][0][0]
     assert "api_key=MYAPIKEY" in req.body
     assert "api_key" not in req.url
+
+
+def test_epost_failure(requests_mock):
+    requests_mock.side_effect = RuntimeError
+    client = _entrez.EntrezClient()
+    res = client.epost([1, 2, 3])
+    assert res == {}
+    assert client.n_failures == 1
+    assert client.last_search_result is None
+
+    resp = Mock()
+    requests_mock.side_effect = None
+    resp.content = "<broken>xml<"
+    requests_mock.return_value = resp
+    res = client.epost([1, 2, 3])
+    assert res == {}
+    assert client.n_failures == 1
+    assert client.last_search_result is None
 
 
 def test_esearch_failure(requests_mock, tmp_path):

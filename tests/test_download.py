@@ -8,9 +8,9 @@ import pytest
 from nqdc import ExitCode, _download
 
 
-def test_download_articles_for_query(tmp_path, entrez_mock, monkeypatch):
+def test_download_query_results(tmp_path, entrez_mock, monkeypatch):
     entrez_mock.fail_efetch_after_n_articles = 1
-    download_dir, code = _download.download_articles_for_query(
+    download_dir, code = _download.download_query_results(
         "fMRI[abstract]", tmp_path, retmax=3
     )
     assert code == ExitCode.ERROR
@@ -25,7 +25,7 @@ def test_download_articles_for_query(tmp_path, entrez_mock, monkeypatch):
 
     entrez_mock.fail_efetch_after_n_articles = None
 
-    download_dir, code = _download.download_articles_for_query(
+    download_dir, code = _download.download_query_results(
         "fMRI[abstract]", tmp_path, retmax=3, n_docs=1
     )
     assert code == ExitCode.INCOMPLETE
@@ -33,7 +33,7 @@ def test_download_articles_for_query(tmp_path, entrez_mock, monkeypatch):
         download_dir.joinpath("info.json").read_text("utf-8")
     )["is_complete"]
 
-    download_dir, code = _download.download_articles_for_query(
+    download_dir, code = _download.download_query_results(
         "fMRI[abstract]", tmp_path, retmax=3
     )
     assert code == ExitCode.COMPLETED
@@ -44,11 +44,23 @@ def test_download_articles_for_query(tmp_path, entrez_mock, monkeypatch):
     ]
     mock = Mock()
     monkeypatch.setattr(_download, "EntrezClient", mock)
-    download_dir, code = _download.download_articles_for_query(
+    download_dir, code = _download.download_query_results(
         "fMRI[abstract]", tmp_path, retmax=3
     )
     assert code == ExitCode.COMPLETED
     assert not mock.called
+
+
+def test_download_pmcids(tmp_path, entrez_mock):
+    download_dir, code = _download.download_pmcids([1, 2, 3], tmp_path)
+    assert code == ExitCode.COMPLETED
+    assert download_dir == tmp_path.joinpath(
+        "pmcidList-55b84a9d317184fe61224bfb4a060fb0", "articlesets"
+    )
+    assert (
+        download_dir.joinpath("requested_pmcids.txt").read_text("UTF-8")
+        == "1\n2\n3\n"
+    )
 
 
 def test_get_api_key(monkeypatch):

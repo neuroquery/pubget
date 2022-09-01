@@ -83,7 +83,8 @@ class EntrezClient:
         efetch part is handled in the same way for queries and id lists.
 
         """
-        if not len(all_pmcids):
+        # not 'if not all_pmcids' in case someone passes a numpy array
+        if len(all_pmcids) == 0:
             _LOG.error("Empty PMCID list.")
             return {}
         params = {"db": "pmc", "id": ",".join(map(str, all_pmcids))}

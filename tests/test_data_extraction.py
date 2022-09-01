@@ -12,7 +12,7 @@ from nqdc import ExitCode, _articles, _data_extraction, _download, _typing
 
 @pytest.fixture
 def articles_dir(tmp_path, entrez_mock):
-    download_dir, code = _download.download_articles_for_query(
+    download_dir, code = _download.download_query_results(
         "fMRI[abstract]", tmp_path
     )
     assert code == ExitCode.COMPLETED
@@ -28,7 +28,7 @@ def articles_dir(tmp_path, entrez_mock):
 @pytest.fixture
 def empty_articles_dir(tmp_path, entrez_mock):
     entrez_mock.fail_efetch_after_n_articles = 0
-    download_dir, code = _download.download_articles_for_query(
+    download_dir, code = _download.download_query_results(
         "fMRI[abstract]", tmp_path
     )
     articles_dir = Path(f"{download_dir}-articles")

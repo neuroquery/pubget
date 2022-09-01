@@ -12,7 +12,7 @@ from nqdc import ExitCode, _articles, _download, _utils
 @pytest.mark.parametrize("n_jobs", [1, 3])
 def test_extract_articles(n_jobs, tmp_path, entrez_mock, monkeypatch):
     monkeypatch.setattr(_articles, "_LOG_PERIOD", 2)
-    download_dir, code = _download.download_articles_for_query(
+    download_dir, code = _download.download_query_results(
         "fMRI[abstract]", tmp_path
     )
     assert code == ExitCode.COMPLETED

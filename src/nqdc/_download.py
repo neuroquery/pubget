@@ -335,7 +335,7 @@ def download_pmcids(
     n_docs: Optional[int] = None,
     retmax: int = 500,
     api_key: Optional[str] = None,
-):
+) -> Tuple[Path, ExitCode]:
     """Download articles in a provided list of PMCIDs.
 
     Parameters
@@ -383,7 +383,7 @@ def download_query_results(
     n_docs: Optional[int] = None,
     retmax: int = 500,
     api_key: Optional[str] = None,
-):
+) -> Tuple[Path, ExitCode]:
     """Download articles matching a query from PubMedCentral.
 
     Parameters
