@@ -1,6 +1,6 @@
 """Extracting metatada from article XML."""
-from typing import Any, Dict
 import pathlib
+from typing import Any, Dict
 
 from lxml import etree
 

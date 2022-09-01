@@ -12,8 +12,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, Generator, Optional, Tuple, Union
 
-from lxml import etree
 import pandas as pd
+from lxml import etree
 
 from nqdc._typing import ArgparseActions, PathLikeOrStr
 

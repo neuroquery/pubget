@@ -1,5 +1,6 @@
 """Extracting list of authors from article XML."""
 import pathlib
+
 import pandas as pd
 from lxml import etree
 

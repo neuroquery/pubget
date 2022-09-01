@@ -1,5 +1,6 @@
 """Extracting all URLs from an article XML."""
 import pathlib
+
 import pandas as pd
 from lxml import etree
 

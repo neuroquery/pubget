@@ -5,9 +5,9 @@ import logging
 from pathlib import Path
 from typing import Generator, Mapping, Optional, Tuple
 
+import pandas as pd
 from joblib import Parallel, delayed
 from lxml import etree
-import pandas as pd
 
 from nqdc import _utils
 from nqdc._typing import (

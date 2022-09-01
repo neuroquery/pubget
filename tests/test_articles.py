@@ -2,12 +2,11 @@ import json
 from pathlib import Path
 from unittest.mock import patch
 
-from lxml import etree
 import pandas as pd
 import pytest
+from lxml import etree
 
-from nqdc import ExitCode, _articles, _download
-from nqdc import _utils
+from nqdc import ExitCode, _articles, _download, _utils
 
 
 @pytest.mark.parametrize("n_jobs", [1, 3])
