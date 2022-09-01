@@ -3,14 +3,16 @@ import logging
 import math
 import time
 from pathlib import Path
-from typing import Any, Dict, Mapping, Optional, Union
+from typing import Any, Dict, Mapping, Optional, Sequence, Union
 from urllib.parse import urljoin
 
+from lxml import etree
 import requests
 
 from nqdc._typing import PathLikeOrStr
 
 _LOG = logging.getLogger(__name__)
+_EFETCH_DEFAULT_BATCH_SIZE = 500
 
 
 class EntrezClient:
@@ -20,6 +22,7 @@ class EntrezClient:
     _entrez_base_url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
     _esearch_base_url = urljoin(_entrez_base_url, "esearch.fcgi")
     _efetch_base_url = urljoin(_entrez_base_url, "efetch.fcgi")
+    _epost_base_url = urljoin(_entrez_base_url, "epost.fcgi")
 
     def __init__(
         self,
@@ -69,6 +72,39 @@ class EntrezClient:
             f"reason: {resp.reason}; from: {resp.url}"
         )
         return resp
+
+    def epost(self, all_pmcids: Sequence[int]) -> Dict[str, str]:
+        """Post a list of PMCIDs to the Entrez history server.
+
+        If post fails, returns an empty dictionary. Otherwise returns a
+        dictionary with keys "count" "webenv" and "querykey".
+
+        IDs can be posted directly to efetch but by posting them first the
+        efetch part is handled in the same way for queries and id lists.
+
+        """
+        if not len(all_pmcids):
+            _LOG.error("Empty PMCID list.")
+            return {}
+        params = {"db": "pmc", "id": ",".join(map(str, all_pmcids))}
+        data = {**params, **self._entrez_id}
+        resp = self._send_request(self._epost_base_url, data=data, verb="POST")
+        if resp is None:
+            self.n_failures = 1
+            return {}
+        try:
+            resp_xml = etree.fromstring(resp.content)
+            webenv = resp_xml.find("WebEnv").text
+            querykey = resp_xml.find("QueryKey").text
+        except Exception:
+            self.n_failures = 1
+            return {}
+        self.last_search_result = {
+            "webenv": webenv,
+            "querykey": querykey,
+            "count": str(len(all_pmcids)),
+        }
+        return self.last_search_result
 
     def esearch(
         self,
@@ -130,7 +166,7 @@ class EntrezClient:
         output_dir: PathLikeOrStr,
         search_result: Optional[Mapping[str, str]] = None,
         n_docs: Optional[int] = None,
-        retmax: int = 500,
+        retmax: int = _EFETCH_DEFAULT_BATCH_SIZE,
     ) -> None:
         """Performs the download.
 

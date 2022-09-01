@@ -1,10 +1,11 @@
 """'download' step: bulk download from PubMedCentral."""
+import abc
 import argparse
 import json
 import logging
 import os
 from pathlib import Path
-from typing import Mapping, Optional, Tuple
+from typing import Dict, Mapping, Optional, Sequence, Tuple
 
 from nqdc import _utils
 from nqdc._entrez import EntrezClient
@@ -21,101 +22,172 @@ _STEP_NAME = "download"
 _STEP_DESCRIPTION = "Download articles from PubMed Central."
 
 
-def download_articles_for_query(
-    query: str,
-    data_dir: PathLikeOrStr,
-    *,
-    n_docs: Optional[int] = None,
-    retmax: int = 500,
-    api_key: Optional[str] = None,
-) -> Tuple[Path, ExitCode]:
-    """Download full-text articles matching the given query.
+class _Downloader(abc.ABC):
+    def __init__(
+        self,
+        data_dir: PathLikeOrStr,
+        *,
+        n_docs: Optional[int] = None,
+        retmax: int = 500,
+        api_key: Optional[str] = None,
+    ) -> None:
 
-    Parameters
-    ----------
+        """
+        Parameters
+        ----------
+        data_dir
+            Path to the directory where all nqdc data is stored; a subdirectory
+            will be created for this query.
+        n_docs
+            Approximate maximum number of articles to download. By default, all
+            results returned for the search are downloaded. If n_docs is specified,
+            at most n_docs rounded up to the nearest multiple of 500 articles will
+            be downloaded.
+        retmax
+            Batch size -- number of articles that are downloaded per request.
+        api_key
+            API key for the Entrez E-utilities (see [the E-utilities
+            help](https://www.ncbi.nlm.nih.gov/books/NBK25497/)). If the API key is
+            provided, it is included in all requests to the Entrez E-utilities.
+
+
+        """
+        self._data_dir = Path(data_dir)
+        self._n_docs = n_docs
+        self._retmax = retmax
+        self._api_key = api_key
+
+    def download(
+        self,
+    ) -> Tuple[Path, ExitCode]:
+        """Download full-text articles matching the given query.
+
+        Returns
+        -------
+        output_dir
+            The directory that was created in which downloaded data is stored.
+        exit_code
+            COMPLETED if all articles matching the search have been successfully
+            downloaded and INCOMPLETE otherwise. Used by the `nqdc` command-line
+            interface.
+        """
+        output_dir = self._data_dir.joinpath(
+            self._output_dir_name(), "articlesets"
+        )
+        status = _utils.check_steps_status(None, output_dir, __name__)
+        if not status["need_run"]:
+            return output_dir, ExitCode.COMPLETED
+        info_file = output_dir.joinpath("info.json")
+        if info_file.is_file():
+            info = json.loads(info_file.read_text("utf-8"))
+        else:
+            output_dir.mkdir(exist_ok=True, parents=True)
+            info = {
+                "retmax": self._retmax,
+                "is_complete": False,
+                "name": _STEP_NAME,
+            }
+        _LOG.info(f"Downloading data in {output_dir}")
+        client = EntrezClient(api_key=self._api_key)
+        if "search_result" in info and "webenv" in info["search_result"]:
+            _LOG.info(
+                "Found partial download, resuming download of webenv "
+                f"{info['search_result']['webenv']}, "
+                f"query key {info['search_result']['querykey']}"
+            )
+        else:
+            info["search_result"] = self._prepare_webenv(client)
+            _utils.write_info(output_dir, **info)
+        client.efetch(
+            output_dir,
+            search_result=info["search_result"],
+            n_docs=self._n_docs,
+            retmax=info["retmax"],
+        )
+        _LOG.info(f"Finished downloading articles in {output_dir}")
+        if client.n_failures != 0:
+            exit_code = ExitCode.ERROR
+        elif self._n_docs is not None and self._n_docs < int(
+            info["search_result"]["count"]
+        ):
+            exit_code = ExitCode.INCOMPLETE
+        else:
+            exit_code = ExitCode.COMPLETED
+            info["is_complete"] = True
+        if exit_code == ExitCode.COMPLETED:
+            _LOG.info("All articles matching the query have been downloaded")
+        else:
+            _LOG.warning(
+                "Download is incomplete -- not all articles matching "
+                "the query have been downloaded"
+            )
+        _utils.write_info(output_dir, **info)
+        return output_dir, exit_code
+
+    @abc.abstractmethod
+    def _output_dir_name(self) -> str:
+        """Get the name of the output directory."""
+
+    @abc.abstractmethod
+    def _prepare_webenv(self, client: EntrezClient) -> Dict[str, str]:
+        """Query the Entrez API to build a result set on the history server."""
+
+
+class _QueryDownloader(_Downloader):
+    """
     query
         Search term for querying the PMC database. You can build the query
         using the [PMC advanced search
         interface](https://www.ncbi.nlm.nih.gov/pmc/advanced). For more
         information see [the E-Utilities
         help](https://www.ncbi.nlm.nih.gov/books/NBK3837/).
-    data_dir
-        Path to the directory where all nqdc data is stored; a subdirectory
-        will be created for this query.
-    n_docs
-        Approximate maximum number of articles to download. By default, all
-        results returned for the search are downloaded. If n_docs is specified,
-        at most n_docs rounded up to the nearest multiple of 500 articles will
-        be downloaded.
-    retmax
-        Batch size -- number of articles that are downloaded per request.
-    api_key
-        API key for the Entrez E-utilities (see [the E-utilities
-        help](https://www.ncbi.nlm.nih.gov/books/NBK25497/)). If the API key is
-        provided, it is included in all requests to the Entrez E-utilities.
 
-    Returns
-    -------
-    output_dir
-        The directory that was created in which downloaded data is stored.
-    exit_code
-        COMPLETED if all articles matching the search have been successfully
-        downloaded and INCOMPLETE otherwise. Used by the `nqdc` command-line
-        interface.
     """
-    data_dir = Path(data_dir)
-    output_dir = data_dir.joinpath(
-        f"query-{_utils.checksum(query)}", "articlesets"
-    )
-    status = _utils.check_steps_status(None, output_dir, __name__)
-    if not status["need_run"]:
-        return output_dir, ExitCode.COMPLETED
-    info_file = output_dir.joinpath("info.json")
-    if info_file.is_file():
-        info = json.loads(info_file.read_text("utf-8"))
-    else:
-        output_dir.mkdir(exist_ok=True, parents=True)
-        info = {
-            "query": query,
-            "retmax": retmax,
-            "is_complete": False,
-            "name": _STEP_NAME,
-        }
-    _LOG.info(f"Downloading data in {output_dir}")
-    client = EntrezClient(api_key=api_key)
-    if "search_result" in info and "webenv" in info["search_result"]:
-        _LOG.info(
-            "Found partial download, resuming download of webenv "
-            f"{info['search_result']['webenv']}, "
-            f"query key {info['search_result']['querykey']}"
+
+    def __init__(
+        self,
+        query: str,
+        data_dir: PathLikeOrStr,
+        *,
+        n_docs: Optional[int] = None,
+        retmax: int = 500,
+        api_key: Optional[str] = None,
+    ) -> None:
+        super().__init__(
+            data_dir, n_docs=n_docs, retmax=retmax, api_key=api_key
         )
-    else:
+        self._query = query
+
+    def _output_dir_name(self) -> str:
+        return f"query-{_utils.checksum(self._query)}"
+
+    def _prepare_webenv(self, client: EntrezClient) -> Dict[str, str]:
         _LOG.info("Performing search")
-        info["search_result"] = client.esearch(query)
-        _utils.write_info(output_dir, **info)
-    client.efetch(
-        output_dir,
-        search_result=info["search_result"],
-        n_docs=n_docs,
-        retmax=info["retmax"],
-    )
-    _LOG.info(f"Finished downloading articles in {output_dir}")
-    if client.n_failures != 0:
-        exit_code = ExitCode.ERROR
-    elif n_docs is not None and n_docs < int(info["search_result"]["count"]):
-        exit_code = ExitCode.INCOMPLETE
-    else:
-        exit_code = ExitCode.COMPLETED
-        info["is_complete"] = True
-    if exit_code == ExitCode.COMPLETED:
-        _LOG.info("All articles matching the query have been downloaded")
-    else:
-        _LOG.warning(
-            "Download is incomplete -- not all articles matching "
-            "the query have been downloaded"
+        return client.esearch(self._query)
+
+
+class _PMCIDListDownloader(_Downloader):
+    def __init__(
+        self,
+        pmcids: Sequence[int],
+        data_dir: PathLikeOrStr,
+        *,
+        n_docs: Optional[int] = None,
+        retmax: int = 500,
+        api_key: Optional[str] = None,
+    ) -> None:
+        super().__init__(
+            data_dir, n_docs=n_docs, retmax=retmax, api_key=api_key
         )
-    _utils.write_info(output_dir, **info)
-    return output_dir, exit_code
+        self._pmcids = pmcids
+
+    def _output_dir_name(self) -> str:
+        checksum = _utils.checksum(b",".join(map(bytes, self._pmcids)))
+        return f"pmcidList-{checksum}"
+
+    def _prepare_webenv(self, client: EntrezClient) -> Dict[str, str]:
+        _LOG.info("Performing search")
+        return client.epost(self._pmcids)
 
 
 def _get_data_dir_env() -> Optional[str]:
