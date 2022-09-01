@@ -32,6 +32,9 @@
       <table-label>
         <xsl:value-of select="label"/>
       </table-label>
+      <table-caption>
+        <xsl:value-of select="caption"/>
+      </table-caption>
       <original-table>
         <xsl:copy-of select="."/>
       </original-table>

@@ -1,3 +1,5 @@
+import pathlib
+
 import pytest
 from lxml import etree
 
@@ -28,7 +30,9 @@ def test_metadata_extractor():
     </article>
     """
     )
-    metadata = _metadata.MetadataExtractor().extract(xml)
+    metadata = _metadata.MetadataExtractor().extract(
+        xml, pathlib.Path("pmcid_123")
+    )
     assert metadata["pmcid"] == 123
     assert metadata["pmid"] == 456
     assert metadata["doi"] == "doi789"

@@ -143,9 +143,9 @@ remove the `articlesets` directory.
 
 This step is executed by the `nqdc extract_articles` command.
 
-Once our download is complete, we extract articles directory and store them in
-individual XML files. To do so, we pass the `articlesets` directory created by
-the `nqdc download` command in step 1:
+Once our download is complete, we extract articles and store each of them in a
+separate directory. To do so, we pass the `articlesets` directory created by the
+`nqdc download` command in step 1:
 
 ```
 nqdc extract_articles nqdc_data/query-3c0556e22a59e7d200f00ac8219dfd6c/articlesets
@@ -158,29 +158,46 @@ articles are spread over many subdirectories. The names of these subdirectories
 range from `000` to `fff` and an article goes in the subdirectory that matches
 the first 3 hexidecimal digits of the md5 hash of its `pmcid`.
 
-Our data directory now looks like:
+Our data directory now looks like this (with many articles ommitted for
+conciseness):
 
 ```
 · nqdc_data
   └── query-3c0556e22a59e7d200f00ac8219dfd6c
-      ├── articlesets
-      │   ├── articleset_00000.xml
-      │   └── info.json
-      └── articles
-          ├── 019
-          │   └── pmcid_6759467.xml
-          ├── 01f
-          │   └── pmcid_6781806.xml
-          ├── 03f
-          │   └── pmcid_6625472.xml
-          ├── ...
-          ├── 27d
-          │   ├── pmcid_6657681.xml
-          │   └── pmcid_6790327.xml
-          ├── ...
-          │
-          └── info.json
+      ├── articles
+      │   ├── 019
+      │   │   └── pmcid_6759467
+      │   │       ├── article.xml
+      │   │       └── tables
+      │   │           └── tables.xml
+      │   ├── 01f
+      │   │   └── pmcid_6781806
+      │   │       ├── article.xml
+      │   │       └── tables
+      │   │           ├── table_000.csv
+      │   │           ├── table_000_info.json
+      │   │           ├── table_001.csv
+      │   │           ├── table_001_info.json
+      │   │           └── tables.xml
+      │   ├── ...
+      │   └── info.json
+      └── articlesets
 ```
+
+Note that the subdirectories such as `articles/01f` can contain one or more
+articles, even though the examples that appear here only contain one.
+
+Each article directory, such as `articles/01f/pmcid_6781806`, contains:
+- `article.xml`: the XML file containing the full article in its original
+  format.
+- a `tables` subdirectory, containing:
+  - `tables.xml`: all the article's tables, each provided in 2 formats: its
+    original version, and converted to XHTML using the
+    [DocBook](https://docbook.org/) stylesheets.
+  - For each table, a CSV file containing the extracted data and a JSON file
+    providing information such as the table label, id, caption, and
+    `n_header_rows`, the number of rows at the start of the CSV that should be
+    treated as part of the table header.
 
 If the download and article extraction were successfully run and we run the same
 query again, the article extraction is skipped. If we want to force re-running

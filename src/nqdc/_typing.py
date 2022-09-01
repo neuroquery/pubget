@@ -58,7 +58,7 @@ class Extractor(ABC):
 
     @abstractmethod
     def extract(
-        self, article: etree.ElementTree
+        self, article: etree.ElementTree, article_dir: Path
     ) -> Union[Dict[str, Any], pd.DataFrame]:
         """Extract data from an article."""
 

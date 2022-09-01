@@ -1,9 +1,11 @@
 """'extract_articles' step: extract articles from bulk PMC download."""
 import argparse
+import json
 import logging
 from pathlib import Path
-from typing import Mapping, Optional, Tuple
+from typing import Generator, Mapping, Optional, Tuple
 
+import pandas as pd
 from joblib import Parallel, delayed
 from lxml import etree
 
@@ -17,6 +19,7 @@ from nqdc._typing import (
 )
 
 _LOG = logging.getLogger(__name__)
+_LOG_PERIOD = 500
 _STEP_NAME = "extract_articles"
 _STEP_DESCRIPTION = "Extract articles from bulk PMC download."
 
@@ -54,15 +57,18 @@ def extract_articles(
         ```
         · articles
           ├── 001
-          │   └── pmcid_4150635.xml
+          │   └── pmcid_4150635
           └── 00b
-              ├── pmcid_2568959.xml
-              └── pmcid_5102699.xml
+              ├── pmcid_2568959
+              └── pmcid_5102699
         ```
+        Each article gets its own subdirectory, containing the article's XML
+        and its tables.
     exit_code
         COMPLETED if the download in `articlesets_dir` was complete and the
         article extraction finished normally and INCOMPLETE otherwise. Used by
         the `nqdc` command-line interface.
+
     """
     articlesets_dir = Path(articlesets_dir)
     if output_dir is None:
@@ -96,11 +102,41 @@ def _do_extract_articles(
 ) -> int:
     """Do the extraction and return number of articles found."""
     output_dir.mkdir(exist_ok=True, parents=True)
-    article_counts = Parallel(n_jobs=n_jobs, verbose=8)(
-        delayed(_extract_from_articleset)(batch_file, output_dir=output_dir)
-        for batch_file in articlesets_dir.glob("articleset_*.xml")
-    )
-    return sum(article_counts)
+    with Parallel(n_jobs=n_jobs, verbose=8) as parallel:
+        _LOG.info("Extracting articles from PMC articlesets.")
+        article_counts = parallel(
+            delayed(_extract_from_articleset)(
+                batch_file, output_dir=output_dir
+            )
+            for batch_file in articlesets_dir.glob("articleset_*.xml")
+        )
+        n_articles = int(sum(article_counts))  # int() is for mypy
+        _LOG.info(
+            f"Done extracting {n_articles} articles from PMC articlesets."
+        )
+        _LOG.info("Extracting tables from articles.")
+        parallel(
+            delayed(_extract_tables)(article_dir)
+            for article_dir in _iter_articles(
+                output_dir,
+                f"Extracted tables from {{}} / {n_articles} articles.",
+            )
+        )
+        _LOG.info("Done extracting tables from articles.")
+    return n_articles
+
+
+def _iter_articles(
+    all_articles_dir: Path, message: str
+) -> Generator[Path, None, None]:
+    n_articles = 0
+    for bucket in all_articles_dir.glob("*"):
+        if bucket.is_dir():
+            for article_dir in bucket.glob("pmcid_*"):
+                n_articles += 1
+                yield article_dir
+                if not n_articles % _LOG_PERIOD:
+                    _LOG.info(message.format(n_articles))
 
 
 def _extract_from_articleset(batch_file: Path, output_dir: Path) -> int:
@@ -111,14 +147,76 @@ def _extract_from_articleset(batch_file: Path, output_dir: Path) -> int:
     n_articles = 0
     for article in tree.iterfind("article"):
         pmcid = _utils.get_pmcid(article)
-        subdir = output_dir.joinpath(_utils.checksum(str(pmcid))[:3])
-        subdir.mkdir(exist_ok=True, parents=True)
-        target_file = subdir.joinpath(f"pmcid_{pmcid}.xml")
-        target_file.write_bytes(
+        bucket = _utils.article_bucket_from_pmcid(pmcid)
+        article_dir = output_dir.joinpath(bucket, f"pmcid_{pmcid}")
+        article_dir.mkdir(exist_ok=True, parents=True)
+        article_file = article_dir.joinpath("article.xml")
+        article_file.write_bytes(
             etree.tostring(article, encoding="UTF-8", xml_declaration=True)
         )
         n_articles += 1
     return n_articles
+
+
+def _extract_tables(article_dir: Path) -> None:
+    # a parsed stylesheet (lxml.XSLT) cannot be pickled so we parse it here
+    # rather than outside the joblib.Parallel call. Parsing is cached.
+    stylesheet = _utils.load_stylesheet("table_extraction.xsl")
+    try:
+        # We re-parse the article to make sure it is a standalone document to
+        # avoid XSLT errors.
+        tables_xml = stylesheet(
+            etree.parse(str(article_dir.joinpath("article.xml")))
+        )
+        # remove the DTD added by docbook
+        tables_xml.docinfo.clear()
+    except Exception:
+        _LOG.exception(f"failed to transform article: {stylesheet.error_log}")
+        return
+    tables_dir = article_dir.joinpath("tables")
+    tables_dir.mkdir(exist_ok=True, parents=True)
+    tables_file = tables_dir.joinpath("tables.xml")
+    tables_file.write_bytes(
+        etree.tostring(tables_xml, encoding="UTF-8", xml_declaration=True)
+    )
+    _extract_tables_content(tables_xml, tables_dir)
+
+
+def _extract_tables_content(
+    tables_xml: etree.Element, tables_dir: Path
+) -> None:
+    for table_nb, table in enumerate(tables_xml.iterfind("extracted-table")):
+        try:
+            table_info = {}
+            table_info["table_id"] = table.find("table-id").text
+            table_info["table_label"] = table.find("table-label").text
+            table_info["table_caption"] = table.find("table-caption").text
+            kwargs = {}
+            if not table.xpath("(.//th|.//thead)"):
+                kwargs["header"] = 0
+            table_data = pd.read_html(
+                etree.tostring(
+                    table.find("transformed-table//{*}table")
+                ).decode("utf-8"),
+                thousands=None,
+                flavor="lxml",
+                **kwargs,
+            )[0]
+            table_info["n_header_rows"] = table_data.columns.nlevels
+        except Exception:
+            # tables may fail to be parsed for various reasons eg they can be
+            # empty.
+            pass
+        else:
+            table_name = f"table_{table_nb:0>3}"
+            table_data_file = f"{table_name}.csv"
+            table_info["table_data_file"] = table_data_file
+            table_data.to_csv(
+                tables_dir.joinpath(table_data_file), index=False
+            )
+            tables_dir.joinpath(f"{table_name}_info.json").write_text(
+                json.dumps(table_info), "UTF-8"
+            )
 
 
 class ArticleExtractionStep(PipelineStep):

@@ -32,7 +32,7 @@ def test_make_labelbuddy_documents(
     part_size, tmp_path, entrez_mock, monkeypatch
 ):
     monkeypatch.setattr(_labelbuddy, "_CHAPTER_SIZE", 2)
-    monkeypatch.setattr(_labelbuddy, "_LOG_FREQUENCY", 2)
+    monkeypatch.setattr(_labelbuddy, "_LOG_PERIOD", 2)
     download_dir, _ = _download.download_articles_for_query(
         "fMRI[abstract]", tmp_path.joinpath("query-abc")
     )
@@ -57,9 +57,7 @@ def test_make_labelbuddy_documents(
     ) as f:
         docs = [json.loads(doc_json) for doc_json in f]
     assert len(docs) == expected_part_size
-    assert all(
-        "Body\n The text of" in d["text"] for d in docs
-    )
+    assert all("Body\n The text of" in d["text"] for d in docs)
     assert [d["metadata"]["chapter"] for d in docs] == [
         i // 2 + 1 for i in range(len(docs))
     ]

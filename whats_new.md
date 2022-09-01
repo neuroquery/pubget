@@ -2,6 +2,7 @@
 
 ## 0.0.3.dev
 
+- articles in `query_dir/articles` are now each stored in a separate subdirectory; that also contains a `tables` subdirectory with the tables extracted from the article.
 - external links are now extracted from articles and stored in `links.csv` during the `extract_data` step.
 
 ## 0.0.2

@@ -1,5 +1,6 @@
 """Various utility functions for internal use."""
 import argparse
+import functools
 import hashlib
 import json
 import logging
@@ -9,8 +10,9 @@ import re
 import shutil
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, Generator, Optional, Tuple, Union
 
+import pandas as pd
 from lxml import etree
 
 from nqdc._typing import ArgparseActions, PathLikeOrStr
@@ -111,6 +113,13 @@ def checksum(value: Union[str, bytes]) -> str:
     return hashlib.md5(value).hexdigest()
 
 
+def article_bucket_from_pmcid(pmcid: int) -> str:
+    """Get the bucket name (in 'articles' dir) from PMCID."""
+    return checksum(str(pmcid))[:3]
+
+
+# functools.cache is new in python3.9
+@functools.lru_cache(maxsize=None)
 def load_stylesheet(stylesheet_name: str) -> etree.XSLT:
     """Find and parse an XSLT stylesheet."""
     stylesheet_path = get_package_data_dir().joinpath(
@@ -126,6 +135,39 @@ def get_pmcid(article: Union[etree.ElementTree, etree.Element]) -> int:
     return int(
         article.find("front/article-meta/article-id[@pub-id-type='pmc']").text
     )
+
+
+def get_pmcid_from_article_dir(article_dir: Path) -> int:
+    """Extract the PubMedCentral ID from an article's data dir."""
+    match = re.match(r"pmcid_(\d+)", article_dir.name)
+    assert match is not None
+    return int(match.group(1))
+
+
+def read_article_table(
+    table_info_json: Path,
+) -> Tuple[Dict[str, Any], pd.DataFrame]:
+    """Load information and data for an article table.
+
+    Takes care to create a MultiIndex if the table had several header rows.
+    Returns a tuple (table metadata, table data).
+    """
+    table_info = json.loads(table_info_json.read_text("UTF-8"))
+    table_csv = table_info_json.with_name(table_info["table_data_file"])
+    table_data = pd.read_csv(
+        table_csv, header=list(range(table_info["n_header_rows"]))
+    )
+    return table_info, table_data
+
+
+def get_tables_from_article_dir(
+    article_dir: Path,
+) -> Generator[Tuple[Dict[str, Any], pd.DataFrame], None, None]:
+    """Load information and data for all tables belonging to an article."""
+    for table_info_json in sorted(
+        article_dir.joinpath("tables").glob("table_*_info.json")
+    ):
+        yield read_article_table(table_info_json)
 
 
 def assert_exists(path: Path) -> None:

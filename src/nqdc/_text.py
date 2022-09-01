@@ -1,5 +1,6 @@
 """Extracting text from XML articles."""
 import logging
+import pathlib
 from typing import Dict, Union
 
 from lxml import etree
@@ -16,23 +17,14 @@ class TextExtractor(Extractor):
     fields = ("pmcid", "title", "keywords", "abstract", "body")
     name = "text"
 
-    def __init__(self) -> None:
-        self._stylesheet = None
-
     def extract(
-        self, article: etree.ElementTree
-    ) -> Dict[str, Union[str, int]]:
-        # lazy loading the stylesheet because lxml.XSLT cannot be pickled so
-        # loading it in __init__ would prevent passing extractor to child
-        # processes
-        if self._stylesheet is None:
-            self._stylesheet = _utils.load_stylesheet("text_extraction.xsl")
-        return self._extract_text_from_article(article, self._stylesheet)
-
-    def _extract_text_from_article(
-        self, article: etree.ElementTree, stylesheet: etree.XSLT
+        self, article: etree.ElementTree, article_dir: pathlib.Path
     ) -> Dict[str, Union[str, int]]:
         result: Dict[str, Union[str, int]] = {}
+        # Stylesheet is not parsed in init because lxml.XSLT cannot be pickled
+        # so that would prevent the extractor from being passed to
+        # multiprocessing map. Parsing is cached.
+        stylesheet = _utils.load_stylesheet("text_extraction.xsl")
         try:
             transformed = stylesheet(article)
         except Exception:

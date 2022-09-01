@@ -1,5 +1,6 @@
 """Extracting stereotactic coordinates from XML articles."""
 import logging
+import pathlib
 import re
 from typing import Any, List, Sequence, Tuple
 
@@ -70,70 +71,33 @@ class CoordinateExtractor(Extractor):
     fields = _COORD_FIELDS
     name = "coordinates"
 
-    def __init__(self) -> None:
-        self._stylesheet = None
-
-    def extract(self, article: etree.ElementTree) -> pd.DataFrame:
-        # lazy loading the stylesheet because lxml.XSLT cannot be pickled so
-        # loading it in __init__ would prevent passing extractor to child
-        # processes
-        if self._stylesheet is None:
-            self._stylesheet = _utils.load_stylesheet("table_extraction.xsl")
-        coords = _extract_coordinates_from_article(article, self._stylesheet)
+    def extract(
+        self, article: etree.ElementTree, article_dir: pathlib.Path
+    ) -> pd.DataFrame:
+        coords = _extract_coordinates_from_article_dir(article_dir)
         return coords.loc[:, self.fields]
 
 
-def _extract_coordinates_from_article(
-    article: etree.ElementTree, stylesheet: etree.XSLT
+def _extract_coordinates_from_article_dir(
+    article_dir: pathlib.Path,
 ) -> pd.DataFrame:
-    try:
-        transformed = stylesheet(article)
-    except Exception:
-        _LOG.exception(f"failed to transform article: {stylesheet.error_log}")
-        return pd.DataFrame(columns=_COORD_FIELDS)
-    try:
-        coordinates = _extract_coordinates_from_article_tables(transformed)
-        return coordinates
-    except Exception:
-        _LOG.exception("failed to extract coords from article")
-        return pd.DataFrame(columns=_COORD_FIELDS)
-
-
-def _extract_coordinates_from_article_tables(
-    article_tables: etree.Element,
-) -> pd.DataFrame:
-    pmcid = int(article_tables.find("pmcid").text)
+    pmcid = _utils.get_pmcid_from_article_dir(article_dir)
     all_coordinates = []
-    for table in article_tables.iterfind("extracted-table"):
-        try:
-            table_id = table.find("table-id").text
-            table_label = table.find("table-label").text
-            kwargs = {}
-            if not table.xpath("(.//th|.//thead)"):
-                kwargs["header"] = 0
-            table_data = pd.read_html(
-                etree.tostring(
-                    table.find("transformed-table//{*}table")
-                ).decode("utf-8"),
-                thousands=None,
-                flavor="lxml",
-                **kwargs,
-            )[0]
-        except Exception:
-            # tables may fail to be parsed for various reasons eg they can be
-            # empty.
-            continue
+    for table_info, table_data in _utils.get_tables_from_article_dir(
+        article_dir
+    ):
         try:
             coordinates = _extract_coordinates_from_table(table_data)
         except Exception:
             _LOG.debug(
-                f"Failed to extract coordinates from table {table_id} "
+                "Failed to extract coordinates from table "
+                f"{table_info['table_id']} "
                 f"in article pmcid {pmcid}"
             )
             continue
         coordinates["pmcid"] = pmcid
-        coordinates["table_id"] = table_id
-        coordinates["table_label"] = table_label
+        coordinates["table_id"] = table_info["table_id"]
+        coordinates["table_label"] = table_info["table_label"]
         all_coordinates.append(coordinates)
     if all_coordinates:
         return pd.concat(all_coordinates)

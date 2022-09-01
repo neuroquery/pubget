@@ -37,7 +37,7 @@ _STEP_DESCRIPTION = (
 )
 _DEFAULT_PART_SIZE = 500
 _CHAPTER_SIZE = 20
-_LOG_FREQUENCY = 1000
+_LOG_PERIOD = 1000
 _TEMPLATE = """{authors}
 {journal}, {publication_year}
 
@@ -138,7 +138,7 @@ def _iter_corpus(
             n_articles += 1
             assert doc_meta["pmcid"] == doc_text["pmcid"]
             doc_authors = authors[authors["pmcid"] == doc_meta["pmcid"]]
-            if not n_articles % _LOG_FREQUENCY:
+            if not n_articles % _LOG_PERIOD:
                 _LOG.info(f"Read {n_articles} articles.")
             yield doc_text, doc_meta, doc_authors
     _LOG.info(f"Read {n_articles} articles.")
