@@ -98,6 +98,7 @@ class _Downloader(abc.ABC):
         else:
             info["search_result"] = self._prepare_webenv(client)
             _utils.write_info(output_dir, **info)
+            self._save_input(output_dir)
         client.efetch(
             output_dir,
             search_result=info["search_result"],
@@ -135,6 +136,10 @@ class _Downloader(abc.ABC):
         Returns a dictionary containing the information needed to download in
         the result set, ie the `count`, `webenv` and `querykey`.
         """
+
+    @abc.abstractmethod
+    def _save_input(self, output_dir: Path) -> None:
+        """Save the input (eg query, PMCIDs) used to download articles."""
 
 
 class _QueryDownloader(_Downloader):
@@ -175,6 +180,12 @@ class _QueryDownloader(_Downloader):
         _LOG.info("Performing search")
         return client.esearch(self._query)
 
+    def _save_input(self, output_dir: Path) -> None:
+        """Save the query used to find articles."""
+        output_dir.joinpath("query.txt").write_text(
+            self._query, encoding="UTF-8"
+        )
+
 
 class _PMCIDListDownloader(_Downloader):
     """Download articles in a provided list of PMCIDs.
@@ -212,6 +223,14 @@ class _PMCIDListDownloader(_Downloader):
         """Use EPost to upload PMCIDs to the history server."""
         _LOG.info("Performing search")
         return client.epost(self._pmcids)
+
+    def _save_input(self, output_dir: Path) -> None:
+        """Save the PMCIDs the user asked to download."""
+        pmcids_file_path = output_dir.joinpath("requested_pmcids.txt")
+        with open(pmcids_file_path, "w", encoding="UTF-8") as pmcids_f:
+            for pmcid in self._pmcids:
+                pmcids_f.write(str(pmcid))
+                pmcids_f.write("\n")
 
 
 def _get_data_dir_env() -> Optional[str]:
