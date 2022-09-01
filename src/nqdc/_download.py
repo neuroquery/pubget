@@ -5,7 +5,7 @@ import json
 import logging
 import os
 from pathlib import Path
-from typing import Dict, Mapping, Optional, Sequence, Tuple
+from typing import Dict, List, Mapping, Optional, Sequence, Tuple
 
 from nqdc import _utils
 from nqdc._entrez import EntrezClient
@@ -31,45 +31,45 @@ class _Downloader(abc.ABC):
         retmax: int = 500,
         api_key: Optional[str] = None,
     ) -> None:
+        """Download articles from PubMed Central.
 
-        """
+        Subclasses must define how the output directory is named and how to
+        build the WebEnv on the Entrez History Server from which results are
+        downloaded.
+
         Parameters
         ----------
         data_dir
             Path to the directory where all nqdc data is stored; a subdirectory
-            will be created for this query.
+            will be created for this download.
         n_docs
             Approximate maximum number of articles to download. By default, all
-            results returned for the search are downloaded. If n_docs is specified,
-            at most n_docs rounded up to the nearest multiple of 500 articles will
-            be downloaded.
+            results returned for the search are downloaded. If n_docs is
+            specified, at most n_docs rounded up to the nearest multiple of
+            `retmax` articles will be downloaded.
         retmax
             Batch size -- number of articles that are downloaded per request.
         api_key
             API key for the Entrez E-utilities (see [the E-utilities
-            help](https://www.ncbi.nlm.nih.gov/books/NBK25497/)). If the API key is
-            provided, it is included in all requests to the Entrez E-utilities.
-
-
+            help](https://www.ncbi.nlm.nih.gov/books/NBK25497/)). If the API
+            key is provided, it is included in all requests to the Entrez
+            E-utilities.
         """
         self._data_dir = Path(data_dir)
         self._n_docs = n_docs
         self._retmax = retmax
         self._api_key = api_key
 
-    def download(
-        self,
-    ) -> Tuple[Path, ExitCode]:
-        """Download full-text articles matching the given query.
+    def download(self) -> Tuple[Path, ExitCode]:
+        """Perform the download.
 
         Returns
         -------
         output_dir
             The directory that was created in which downloaded data is stored.
         exit_code
-            COMPLETED if all articles matching the search have been successfully
-            downloaded and INCOMPLETE otherwise. Used by the `nqdc` command-line
-            interface.
+            COMPLETED if all articles have been successfully downloaded and
+            INCOMPLETE otherwise. Used by the `nqdc` command-line interface.
         """
         output_dir = self._data_dir.joinpath(
             self._output_dir_name(), "articlesets"
@@ -130,11 +130,18 @@ class _Downloader(abc.ABC):
 
     @abc.abstractmethod
     def _prepare_webenv(self, client: EntrezClient) -> Dict[str, str]:
-        """Query the Entrez API to build a result set on the history server."""
+        """Build a result set on the history server (WebEnv and querykey).
+
+        Returns a dictionary containing the information needed to download in
+        the result set, ie the `count`, `webenv` and `querykey`.
+        """
 
 
 class _QueryDownloader(_Downloader):
-    """
+    """Download articles matching a query from PubMedCentral.
+
+    Parameters
+    ----------
     query
         Search term for querying the PMC database. You can build the query
         using the [PMC advanced search
@@ -142,6 +149,7 @@ class _QueryDownloader(_Downloader):
         information see [the E-Utilities
         help](https://www.ncbi.nlm.nih.gov/books/NBK3837/).
 
+    other parameters are forwarded to `_Downloader`.
     """
 
     def __init__(
@@ -159,14 +167,26 @@ class _QueryDownloader(_Downloader):
         self._query = query
 
     def _output_dir_name(self) -> str:
+        """Directory name containing the checksum of the query string."""
         return f"query-{_utils.checksum(self._query)}"
 
     def _prepare_webenv(self, client: EntrezClient) -> Dict[str, str]:
+        """Use ESearch to build the result set."""
         _LOG.info("Performing search")
         return client.esearch(self._query)
 
 
 class _PMCIDListDownloader(_Downloader):
+    """Download articles in a provided list of PMCIDs.
+
+    Parameters
+    ----------
+    pmcids
+        List of PubMed Central IDs to download.
+
+    other parameters are forwarded to `_Downloader`.
+    """
+
     def __init__(
         self,
         pmcids: Sequence[int],
@@ -182,10 +202,14 @@ class _PMCIDListDownloader(_Downloader):
         self._pmcids = pmcids
 
     def _output_dir_name(self) -> str:
-        checksum = _utils.checksum(b",".join(map(bytes, self._pmcids)))
+        """Directory name containing the checksum of the pmcid list."""
+        checksum = _utils.checksum(
+            b",".join([str(pmcid).encode("UTF-8") for pmcid in self._pmcids])
+        )
         return f"pmcidList-{checksum}"
 
     def _prepare_webenv(self, client: EntrezClient) -> Dict[str, str]:
+        """Use EPost to upload PMCIDs to the history server."""
         _LOG.info("Performing search")
         return client.epost(self._pmcids)
 
@@ -218,14 +242,22 @@ def _get_query(args: argparse.Namespace) -> str:
     return Path(args.query_file).read_text("utf-8").strip()
 
 
+def _get_pmcids(args: argparse.Namespace) -> List[int]:
+    return [
+        int(pmcid.strip())
+        for pmcid in Path(args.pmcids_file).read_text("UTF-8").strip().split()
+    ]
+
+
 def _edit_argument_parser(argument_parser: ArgparseActions) -> None:
     nargs_kw = {"nargs": "?"} if _get_data_dir_env() else {}
     argument_parser.add_argument(
         "data_dir",
         help="Directory in which all nqdc data should be stored. "
-        "A subdirectory will be created for the given query. Can also be "
-        "provided by exporting the NQDC_DATA_DIR environment variable (if "
-        "both are specified the command-line argument has higher precedence).",
+        "A subdirectory will be created for the given query or PMCID list. "
+        "Can also be provided by exporting the NQDC_DATA_DIR environment "
+        "variable (if both are specified the command-line argument has "
+        "higher precedence).",
         # False positive in this case; see
         # https://github.com/python/mypy/issues/5382. could be avoided by using
         # a TypedDict once we drop support for python 3.7.
@@ -248,6 +280,12 @@ def _edit_argument_parser(argument_parser: ArgparseActions) -> None:
         default=None,
         help="File in which the query is stored. The query can alternatively "
         "be provided as a string by using the query parameter.",
+    )
+    group.add_argument(
+        "--pmcids_file",
+        type=str,
+        default=None,
+        help="File containing PubMed Central IDs (one per line) to download.",
     )
     argument_parser.add_argument(
         "-n",
@@ -272,13 +310,116 @@ def _edit_argument_parser(argument_parser: ArgparseActions) -> None:
     )
 
 
+def download_pmcids(
+    pmcids: Sequence[int],
+    data_dir: PathLikeOrStr,
+    n_docs: Optional[int] = None,
+    retmax: int = 500,
+    api_key: Optional[str] = None,
+):
+    """Download articles in a provided list of PMCIDs.
+
+    Parameters
+    ----------
+    pmcids
+        List of PubMed Central IDs to download.
+    data_dir
+        Path to the directory where all nqdc data is stored; a subdirectory
+        will be created for this download.
+    n_docs
+        Approximate maximum number of articles to download. By default, all
+        results returned for the search are downloaded. If n_docs is
+        specified, at most n_docs rounded up to the nearest multiple of
+        `retmax` articles will be downloaded.
+    retmax
+        Batch size -- number of articles that are downloaded per request.
+    api_key
+        API key for the Entrez E-utilities (see [the E-utilities
+        help](https://www.ncbi.nlm.nih.gov/books/NBK25497/)). If the API
+        key is provided, it is included in all requests to the Entrez
+        E-utilities.
+
+    Returns
+    -------
+    output_dir
+        The directory that was created in which downloaded data is stored.
+    exit_code
+        COMPLETED if all articles have been successfully downloaded and
+        INCOMPLETE otherwise. Used by the `nqdc` command-line interface.
+
+    """
+    return _PMCIDListDownloader(
+        pmcids,
+        data_dir=data_dir,
+        n_docs=n_docs,
+        retmax=retmax,
+        api_key=api_key,
+    ).download()
+
+
+def download_query_results(
+    query: str,
+    data_dir: PathLikeOrStr,
+    *,
+    n_docs: Optional[int] = None,
+    retmax: int = 500,
+    api_key: Optional[str] = None,
+):
+    """Download articles matching a query from PubMedCentral.
+
+    Parameters
+    ----------
+    query
+        Search term for querying the PMC database. You can build the query
+        using the [PMC advanced search
+        interface](https://www.ncbi.nlm.nih.gov/pmc/advanced). For more
+        information see [the E-Utilities
+        help](https://www.ncbi.nlm.nih.gov/books/NBK3837/).
+    data_dir
+        Path to the directory where all nqdc data is stored; a subdirectory
+        will be created for this download.
+    n_docs
+        Approximate maximum number of articles to download. By default, all
+        results returned for the search are downloaded. If n_docs is
+        specified, at most n_docs rounded up to the nearest multiple of
+        `retmax` articles will be downloaded.
+    retmax
+        Batch size -- number of articles that are downloaded per request.
+    api_key
+        API key for the Entrez E-utilities (see [the E-utilities
+        help](https://www.ncbi.nlm.nih.gov/books/NBK25497/)). If the API
+        key is provided, it is included in all requests to the Entrez
+        E-utilities.
+
+    Returns
+    -------
+    output_dir
+        The directory that was created in which downloaded data is stored.
+    exit_code
+        COMPLETED if all articles have been successfully downloaded and
+        INCOMPLETE otherwise. Used by the `nqdc` command-line interface.
+
+    """
+    return _QueryDownloader(
+        query, data_dir=data_dir, n_docs=n_docs, retmax=retmax, api_key=api_key
+    ).download()
+
+
 def _download_articles_for_args(
     args: argparse.Namespace,
 ) -> Tuple[Path, ExitCode]:
     api_key = _get_api_key(args)
-    query = _get_query(args)
     data_dir = _get_data_dir(args)
-    return download_articles_for_query(
+    if args.pmcids_file is not None:
+        pmcids = _get_pmcids(args)
+        return download_pmcids(
+            pmcids=pmcids,
+            data_dir=data_dir,
+            n_docs=args.n_docs,
+            api_key=api_key,
+        )
+    query = _get_query(args)
+    return download_query_results(
         query=query,
         data_dir=data_dir,
         n_docs=args.n_docs,
@@ -313,7 +454,7 @@ class DownloadCommand(Command):
         _edit_argument_parser(argument_parser)
         argument_parser.description = (
             "Download full-text articles from "
-            "PubMed Central for the given query."
+            "PubMed Central for the given query or list of PMCIDs."
         )
 
     def run(
