@@ -165,25 +165,27 @@ def _extract_tables(article_dir: Path) -> None:
     try:
         # We re-parse the article to make sure it is a standalone document to
         # avoid XSLT errors.
-        tables_xhtml = stylesheet(
+        tables_xml = stylesheet(
             etree.parse(str(article_dir.joinpath("article.xml")))
         )
+        # remove the DTD added by docbook
+        tables_xml.docinfo.clear()
     except Exception:
         _LOG.exception(f"failed to transform article: {stylesheet.error_log}")
         return
     tables_dir = article_dir.joinpath("tables")
     tables_dir.mkdir(exist_ok=True, parents=True)
-    tables_file = tables_dir.joinpath("tables.xhtml")
+    tables_file = tables_dir.joinpath("tables.xml")
     tables_file.write_bytes(
-        etree.tostring(tables_xhtml, encoding="UTF-8", xml_declaration=True)
+        etree.tostring(tables_xml, encoding="UTF-8", xml_declaration=True)
     )
-    _extract_tables_content(tables_xhtml, tables_dir)
+    _extract_tables_content(tables_xml, tables_dir)
 
 
 def _extract_tables_content(
-    tables_xhtml: etree.Element, tables_dir: Path
+    tables_xml: etree.Element, tables_dir: Path
 ) -> None:
-    for table_nb, table in enumerate(tables_xhtml.iterfind("extracted-table")):
+    for table_nb, table in enumerate(tables_xml.iterfind("extracted-table")):
         try:
             table_info = {}
             table_info["table_id"] = table.find("table-id").text

@@ -169,7 +169,7 @@ conciseness):
       │   │   └── pmcid_6759467
       │   │       ├── article.xml
       │   │       └── tables
-      │   │           └── tables.xhtml
+      │   │           └── tables.xml
       │   ├── 01f
       │   │   └── pmcid_6781806
       │   │       ├── article.xml
@@ -178,7 +178,7 @@ conciseness):
       │   │           ├── table_000_info.json
       │   │           ├── table_001.csv
       │   │           ├── table_001_info.json
-      │   │           └── tables.xhtml
+      │   │           └── tables.xml
       │   ├── ...
       │   └── info.json
       └── articlesets
@@ -191,7 +191,7 @@ Each article directory, such as `articles/01f/pmcid_6781806`, contains:
 - `article.xml`: the XML file containing the full article in its original
   format.
 - a `tables` subdirectory, containing:
-  - `tables.xhtml`: all the article's tables, each provided in 2 formats: its
+  - `tables.xml`: all the article's tables, each provided in 2 formats: its
     original version, and converted to XHTML using the
     [DocBook](https://docbook.org/) stylesheets.
   - For each table, a CSV file containing the extracted data and a JSON file

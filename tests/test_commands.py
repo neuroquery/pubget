@@ -163,7 +163,7 @@ def _check_download_output(tmp_path):
 def _check_extract_articles_output(articlesets_dir):
     _commands.nqdc_command(["extract_articles", str(articlesets_dir)])
     articles_dir = articlesets_dir.parent.joinpath("articles")
-    assert len(list(articles_dir.glob("**/*.xml"))) == 7
+    assert len(list(articles_dir.glob("**/article.xml"))) == 7
     return articles_dir
 
 

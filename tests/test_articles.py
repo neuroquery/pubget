@@ -23,12 +23,12 @@ def test_extract_articles(n_jobs, tmp_path, entrez_mock, monkeypatch):
     )
     assert created_dir == articles_dir
     assert code == ExitCode.COMPLETED
-    assert len(list(articles_dir.glob("**/*.xml"))) == 7
+    assert len(list(articles_dir.glob("**/article.xml"))) == 7
 
     # check tables
     tables_dir = articles_dir.joinpath("19d", "pmcid_9057060", "tables")
     assert tables_dir.is_dir()
-    assert tables_dir.joinpath("tables.xhtml").is_file()
+    assert tables_dir.joinpath("tables.xml").is_file()
     coords = pd.read_csv(tables_dir.joinpath("table_000.csv"))
     assert (coords.values == [[10, 20, 30], [-10, -20, -30]]).all()
 
