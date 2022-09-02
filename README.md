@@ -79,6 +79,13 @@ parameter. It must contain one ID per line, for example:
 7154153
 ```
 
+Note these must be PubMedCentral IDs, *not* PubMed IDs. Moreover, Some articles
+can be viewed on the PubMedCentral website, but are not in the Open Access
+subset. The publisher of these articles forbids downloading their full text in
+XML form. Therefore, for such articles only the abstract and metadata will be
+available. When we use a query instead of a PMCID list, only articles in the
+Open Access subset are considered.
+
 If we use a query instead, we do not use the `--pmcids_file` option, but either
 `--query` or `--query_file`. Everything else works in the same way, and the rest
 of this documentation relies on an example that uses a query.
