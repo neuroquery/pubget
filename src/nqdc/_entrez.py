@@ -86,6 +86,7 @@ class EntrezClient:
         # not 'if not all_pmcids' in case someone passes a numpy array
         if len(all_pmcids) == 0:
             _LOG.error("Empty PMCID list.")
+            self.n_failures = 1
             return {}
         params = {"db": "pmc", "id": ",".join(map(str, all_pmcids))}
         data = {**params, **self._entrez_id}

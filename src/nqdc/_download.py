@@ -23,6 +23,31 @@ _STEP_DESCRIPTION = "Download articles from PubMed Central."
 
 
 class _Downloader(abc.ABC):
+    """Download articles from PubMed Central.
+
+    Subclasses must define how the output directory is named and how to
+    build the WebEnv on the Entrez History Server from which results are
+    downloaded.
+
+    Parameters
+    ----------
+    data_dir
+        Path to the directory where all nqdc data is stored; a subdirectory
+        will be created for this download.
+    n_docs
+        Approximate maximum number of articles to download. By default, all
+        results returned for the search are downloaded. If n_docs is
+        specified, at most n_docs rounded up to the nearest multiple of
+        `retmax` articles will be downloaded.
+    retmax
+        Batch size -- number of articles that are downloaded per request.
+    api_key
+        API key for the Entrez E-utilities (see [the E-utilities
+        help](https://www.ncbi.nlm.nih.gov/books/NBK25497/)). If the API
+        key is provided, it is included in all requests to the Entrez
+        E-utilities.
+    """
+
     def __init__(
         self,
         data_dir: PathLikeOrStr,
@@ -31,30 +56,6 @@ class _Downloader(abc.ABC):
         retmax: int = 500,
         api_key: Optional[str] = None,
     ) -> None:
-        """Download articles from PubMed Central.
-
-        Subclasses must define how the output directory is named and how to
-        build the WebEnv on the Entrez History Server from which results are
-        downloaded.
-
-        Parameters
-        ----------
-        data_dir
-            Path to the directory where all nqdc data is stored; a subdirectory
-            will be created for this download.
-        n_docs
-            Approximate maximum number of articles to download. By default, all
-            results returned for the search are downloaded. If n_docs is
-            specified, at most n_docs rounded up to the nearest multiple of
-            `retmax` articles will be downloaded.
-        retmax
-            Batch size -- number of articles that are downloaded per request.
-        api_key
-            API key for the Entrez E-utilities (see [the E-utilities
-            help](https://www.ncbi.nlm.nih.gov/books/NBK25497/)). If the API
-            key is provided, it is included in all requests to the Entrez
-            E-utilities.
-        """
         self._data_dir = Path(data_dir)
         self._n_docs = n_docs
         self._retmax = retmax
@@ -69,7 +70,8 @@ class _Downloader(abc.ABC):
             The directory that was created in which downloaded data is stored.
         exit_code
             COMPLETED if all articles have been successfully downloaded and
-            INCOMPLETE otherwise. Used by the `nqdc` command-line interface.
+            INCOMPLETE or ERROR otherwise. Used by the `nqdc` command-line
+            interface.
         """
         output_dir = self._data_dir.joinpath(
             self._output_dir_name(), "articlesets"
@@ -122,6 +124,7 @@ class _Downloader(abc.ABC):
                 "Download is incomplete -- not all articles matching "
                 "the query have been downloaded"
             )
+        # write info file updated with new completion status and n_docs
         _utils.write_info(output_dir, **info)
         return output_dir, exit_code
 
@@ -335,6 +338,7 @@ def _edit_argument_parser(argument_parser: ArgparseActions) -> None:
 def download_pmcids(
     pmcids: Sequence[int],
     data_dir: PathLikeOrStr,
+    *,
     n_docs: Optional[int] = None,
     retmax: int = 500,
     api_key: Optional[str] = None,
@@ -367,7 +371,8 @@ def download_pmcids(
         The directory that was created in which downloaded data is stored.
     exit_code
         COMPLETED if all articles have been successfully downloaded and
-        INCOMPLETE otherwise. Used by the `nqdc` command-line interface.
+        INCOMPLETE or ERROR otherwise. Used by the `nqdc` command-line
+        interface.
 
     """
     return _PMCIDListDownloader(
@@ -419,7 +424,8 @@ def download_query_results(
         The directory that was created in which downloaded data is stored.
     exit_code
         COMPLETED if all articles have been successfully downloaded and
-        INCOMPLETE otherwise. Used by the `nqdc` command-line interface.
+        INCOMPLETE or ERROR otherwise. Used by the `nqdc` command-line
+        interface.
 
     """
     return _QueryDownloader(
