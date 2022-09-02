@@ -304,7 +304,10 @@ def _edit_argument_parser(argument_parser: ArgparseActions) -> None:
         "--pmcids_file",
         type=str,
         default=None,
-        help="File containing PubMed Central IDs (one per line) to download.",
+        help="Instead of using a query, we can download a predefined list "
+        "of articles by providing their PubmedCentral IDs. The pmcids_file "
+        "parameter should be the path of a file containing PubMed Central IDs "
+        "(one per line) to download.",
     )
     argument_parser.add_argument(
         "-n",
