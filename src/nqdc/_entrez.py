@@ -6,8 +6,8 @@ from pathlib import Path
 from typing import Any, Dict, Mapping, Optional, Sequence, Union
 from urllib.parse import urljoin
 
-from lxml import etree
 import requests
+from lxml import etree
 
 from nqdc._typing import PathLikeOrStr
 
