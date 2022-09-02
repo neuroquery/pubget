@@ -21,9 +21,10 @@ _STEP_DESCRIPTION = "Run full nqdc pipeline."
 _FULL_PIPELINE_DESCRIPTION = (
     "Download and process full-text articles from PubMed Central "
     "for the given query or list of PMCIDs. Articles are downloaded and "
-    "stored in individual files. Then, their text and stereotactic coordinates "
-    "are extracted and stored in csv files. Finally, the text is "
-    "vectorized by computing word counts and TFIDF features."
+    "stored in individual files. Then, their text and "
+    "stereotactic coordinates are extracted and stored in csv files. "
+    "Finally, the text is vectorized by computing word counts "
+    "and TFIDF features."
 )
 
 
