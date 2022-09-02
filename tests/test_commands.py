@@ -150,11 +150,23 @@ def test_full_pipeline_command(
     assert len(list(log_dir.glob("*"))) == 1
 
 
-def _check_download_output(tmp_path):
+def _check_download_query_file_output(tmp_path):
     query_file = tmp_path.joinpath("query")
     query_file.write_text("fMRI[abstract]", "utf-8")
     _commands.nqdc_command(["download", str(tmp_path), "-f", str(query_file)])
     query_dir = tmp_path.joinpath("query-7838640309244685021f9954f8aa25fc")
+    articlesets_dir = query_dir.joinpath("articlesets")
+    assert len(list(articlesets_dir.glob("*.xml"))) == 1
+    return articlesets_dir
+
+
+def _check_download_pmcid_list_output(tmp_path):
+    pmcids_file = tmp_path.joinpath("pmcids")
+    pmcids_file.write_text("\n".join(map(str, range(7))), "utf-8")
+    _commands.nqdc_command(
+        ["download", str(tmp_path), "--pmcids_file", str(pmcids_file)]
+    )
+    query_dir = tmp_path.joinpath("pmcidList-94281be5de7c35a42f8abaf41d934ace")
     articlesets_dir = query_dir.joinpath("articlesets")
     assert len(list(articlesets_dir.glob("*.xml"))) == 1
     return articlesets_dir
@@ -250,7 +262,9 @@ def _check_extract_nimare_data_output(vectorized_dir, voc_checksum):
     return nimare_dir
 
 
+@pytest.mark.parametrize("download_mode", ["query", "pmcid"])
 def test_commands(
+    download_mode,
     tmp_path,
     nq_datasets_mock,
     entrez_mock,
@@ -258,7 +272,11 @@ def test_commands(
     mock_nimare,
     monkeypatch,
 ):
-    articlesets_dir = _check_download_output(tmp_path)
+    if download_mode == "query":
+        articlesets_dir = _check_download_query_file_output(tmp_path)
+    else:
+        assert download_mode == "pmcid"
+        articlesets_dir = _check_download_pmcid_list_output(tmp_path)
     articles_dir = _check_extract_articles_output(articlesets_dir)
     extracted_data_dir = _check_extract_data_output(articles_dir)
     _check_extract_vocabulary_output(extracted_data_dir, articles_dir)

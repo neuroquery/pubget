@@ -37,9 +37,8 @@ that we can later use them for meta-analysis.
 nqdc run ./nqdc_data -q "fMRI[title]"
 ```
 
-See `nqdc run --help` for a description of this command. In
-particular, the `--n_jobs` option allows running the data extraction in
-parallel, which can significantly speed up the pipeline.
+See `nqdc run --help` for a description of this command. In particular, the
+`--n_jobs` option allows running some of the steps in parallel.
 
 # Usage
 
@@ -65,7 +64,31 @@ their PubMed Central ID (`pmcid`). Note this is not the same as the PubMed ID
 
 ## Step 1: Downloading articles from PMC
 
-This step is executed by the `nqdc download` command.
+This step is executed by the `nqdc download` command. Articles to download can
+be selected in 2 different ways: by using a query to search the PMC database, or
+by providing an explicit list of article PMCIDs. To use a list of PMCIDs, we
+must pass the path to a file containing the IDs as the `--pmcids_file`
+parameter. It must contain one ID per line, for example:
+
+```
+8217889
+7518235
+7500239
+7287136
+7395771
+7154153
+```
+
+Note these must be PubMedCentral IDs, *not* PubMed IDs. Moreover, Some articles
+can be viewed on the PubMedCentral website, but are not in the Open Access
+subset. The publisher of these articles forbids downloading their full text in
+XML form. Therefore, for such articles only the abstract and metadata will be
+available. When we use a query instead of a PMCID list, only articles in the
+Open Access subset are considered.
+
+If we use a query instead, we do not use the `--pmcids_file` option, but either
+`--query` or `--query_file`. Everything else works in the same way, and the rest
+of this documentation relies on an example that uses a query.
 
 We must first define our query, with which Pubmed Central will be searched for
 articles. It can be simple such as `fMRI`, or more specific such as
@@ -75,8 +98,9 @@ interface](https://www.ncbi.nlm.nih.gov/pmc/advanced). For more information see
 [the E-Utilities help](https://www.ncbi.nlm.nih.gov/books/NBK3837/).
 Some examples are provided in the `nqdc` git repository, in `docs/example_queries`.
 
-The query can be passed either as a string on the command-line or by passing the
-path of a text file containing the query.
+The query can be passed either as a string on the command-line with `-q` or
+`--query` or by passing the path of a text file containing the query with `-f`
+or `--query_file`.
 
 If we have an Entrez API key (see details in the [E-utilities
 documentation](https://www.ncbi.nlm.nih.gov/books/NBK25497/)), we can provide it
@@ -96,9 +120,15 @@ nqdc download -q "fMRI[Title] AND (2019[PubDate] : 2019[PubDate])" nqdc_data
 
 ---
 
-**Note:** writing the query in a file rather than passing it as an argument is more convenient for complex queries, for example those that contain whitespace, newlines or quotes. By storing it in a file we do not need to take care to quote or escape characters that would be interpreted by the shell. In this case we would store our query in a file, say `query.txt`:
+**Note:** writing the query in a file rather than passing it as an argument is
+more convenient for complex queries, for example those that contain whitespace,
+newlines or quotes. By storing it in a file we do not need to take care to quote
+or escape characters that would be interpreted by the shell. In this case we
+would store our query in a file, say `query.txt`:
 
-> fMRI[Title] AND (2019[PubDate] : 2019[PubDate])
+```
+fMRI[Title] AND (2019[PubDate] : 2019[PubDate])
+```
 
 and run
 
@@ -119,7 +149,9 @@ After running this command, these are the contents of our data directory:
 
 `nqdc` has created a subdirectory for this query. If we run the download again
 for the same query, the same subdirectory will be reused
-(`3c0556e22a59e7d200f00ac8219dfd6c` is the md5 checksum of the query).
+(`3c0556e22a59e7d200f00ac8219dfd6c` is the md5 checksum of the query). If we had
+used a PMCID list instead of a query, the subdirectory name would start with
+`pmcidList-` instead of `query-`.
 
 Inside the query directory, the results of the bulk download are stored in the
 `articlesets` directory. The articles themselves are in XML files bundling up to
@@ -133,6 +165,9 @@ the number of results was limited by using the `--n_docs` parameter,
 `is_complete` will be `false` and the exit status of the program will
 be 1. You may want to re-run the command before moving on to the next step if
 the download is incomplete.
+
+If we used a query it will be stored in `articlesets/query.txt`, and if we used
+a list of PMCIDs, in `articlesets/requested_pmcids.txt`.
 
 If we run the same query again, only missing batches will be downloaded. If we
 want to force re-running the search and downloading the whole data we need to

@@ -87,6 +87,20 @@ jobs:
       - name: "run tests"
         run: make test_plugin
 
+  run_compare_query_vs_pmcid_list:
+    name: "Compare query vs PMCID list"
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.10"
+        name: "setup python"
+      - name: "install"
+        run: pip install .[dev]
+      - name: "run check"
+        run: make compare_query_vs_pmcid_list
+
   build_doc:
     name: "build documentation"
     runs-on: "ubuntu-latest"

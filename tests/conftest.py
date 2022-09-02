@@ -100,6 +100,7 @@ class EntrezMock:
         self._count = len(self._article_set.getroot())
         assert self._count == 7
         self.fail_efetch_after_n_articles = None
+        self.last_request = None
 
     @property
     def count(self):
@@ -107,12 +108,14 @@ class EntrezMock:
         return self._count
 
     def __call__(self, request, *args, **kwargs):
+        self.last_request = request
         if "esearch.fcgi" in request.url:
             return self._esearch(request)
+        if "epost.fcgi" in request.url:
+            return self._epost(request)
         if "efetch.fcgi" in request.url:
             return self._efetch(request)
-        else:
-            return Response(status_code=400, reason="Bad Request")
+        return Response(status_code=400, reason="Bad Request")
 
     def _esearch(self, request):
         response = {
@@ -125,6 +128,14 @@ class EntrezMock:
             }
         }
         return Response(request.url, json.dumps(response).encode("utf-8"))
+
+    def _epost(self, request):
+        response = b"""<ePostResult>
+        <QueryKey>1</QueryKey>
+        <WebEnv>WEBENV_1</WebEnv>
+        </ePostResult>
+        """
+        return Response(request.url, response)
 
     def _efetch(self, request):
         params = _parse_query(request.body)
