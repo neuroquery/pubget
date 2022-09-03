@@ -45,7 +45,7 @@ def run_and_check():
 
     print("\n")
 
-    query_dir = data_dir.joinpath("query-1856490e8aca377ff8e6c38e84a77112")
+    query_dir = data_dir.joinpath("query_1856490e8aca377ff8e6c38e84a77112")
     vectorized_dir = list(
         query_dir.glob("subset_allArticles-voc_*_vectorizedText")
     )[0]

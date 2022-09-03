@@ -141,7 +141,7 @@ nqdc download -f query.txt nqdc_data
 After running this command, these are the contents of our data directory:
 ```
 · nqdc_data
-  └── query-3c0556e22a59e7d200f00ac8219dfd6c
+  └── query_3c0556e22a59e7d200f00ac8219dfd6c
       └── articlesets
           ├── articleset_00000.xml
           └── info.json
@@ -151,7 +151,7 @@ After running this command, these are the contents of our data directory:
 for the same query, the same subdirectory will be reused
 (`3c0556e22a59e7d200f00ac8219dfd6c` is the md5 checksum of the query). If we had
 used a PMCID list instead of a query, the subdirectory name would start with
-`pmcidList-` instead of `query-`.
+`pmcidList_` instead of `query_`.
 
 Inside the query directory, the results of the bulk download are stored in the
 `articlesets` directory. The articles themselves are in XML files bundling up to
@@ -183,7 +183,7 @@ separate directory. To do so, we pass the `articlesets` directory created by the
 `nqdc download` command in step 1:
 
 ```
-nqdc extract_articles nqdc_data/query-3c0556e22a59e7d200f00ac8219dfd6c/articlesets
+nqdc extract_articles nqdc_data/query_3c0556e22a59e7d200f00ac8219dfd6c/articlesets
 ```
 
 This creates an `articles` subdirectory in the query directory, containing the
@@ -198,7 +198,7 @@ conciseness):
 
 ```
 · nqdc_data
-  └── query-3c0556e22a59e7d200f00ac8219dfd6c
+  └── query_3c0556e22a59e7d200f00ac8219dfd6c
       ├── articles
       │   ├── 019
       │   │   └── pmcid_6759467
@@ -255,14 +255,14 @@ We pass the path of the `articles` directory created by `nqdc extract_articles`
 in the previous step to the `nqdc extract_data` command:
 
 ```
-nqdc extract_data --articles_with_coords_only nqdc_data/query-3c0556e22a59e7d200f00ac8219dfd6c/articles/
+nqdc extract_data --articles_with_coords_only nqdc_data/query_3c0556e22a59e7d200f00ac8219dfd6c/articles/
 ```
 
 Our data directory now contains (ommitting the contents of the previous steps):
 
 ```
 · nqdc_data
-  └── query-3c0556e22a59e7d200f00ac8219dfd6c
+  └── query_3c0556e22a59e7d200f00ac8219dfd6c
       ├── articles
       ├── articlesets
       └── subset_articlesWithCoords_extractedData
@@ -340,7 +340,7 @@ vectorize, created by `nqdc extract_data` in step 3 (here we are using the
 default vocabulary):
 
 ```
-nqdc vectorize nqdc_data/query-3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords_extractedData/
+nqdc vectorize nqdc_data/query_3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords_extractedData/
 ```
 
 This creates a new directory whose name reflects the data source (whether all
@@ -351,7 +351,7 @@ vocabulary file, concatenated with those of the vocabulary mapping file, see
 
 ```
 · nqdc_data
-  └── query-3c0556e22a59e7d200f00ac8219dfd6c
+  └── query_3c0556e22a59e7d200f00ac8219dfd6c
       ├── articles
       ├── articlesets
       ├── subset_articlesWithCoords_extractedData
@@ -436,7 +436,7 @@ It builds a vocabulary of all the words and 2-grams (groups of 2
 words) that appear in the downloaded text, and computes their document frequency
 (the proportion of documents in which a term appears).
 ```
-nqdc extract_vocabulary nqdc_data/query-3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords_extractedData
+nqdc extract_vocabulary nqdc_data/query_3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords_extractedData
 ```
 
 The vocabulary is stored in a csv file in a new directory. There is no header
@@ -444,7 +444,7 @@ and the 2 columns are the term and its document frequency.
 
 ```
 · nqdc_data
-  └── query-3c0556e22a59e7d200f00ac8219dfd6c
+  └── query_3c0556e22a59e7d200f00ac8219dfd6c
       ├── articles
       ├── articlesets
       ├── subset_articlesWithCoords_extractedData
@@ -477,14 +477,14 @@ Note: for this model to give good results a large dataset is needed, ideally clo
 
 We pass the `_vectorizedText` directory created by `nqdc vectorize`:
 ```
-nqdc fit_neuroquery nqdc_data/query-3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
+nqdc fit_neuroquery nqdc_data/query_3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
 ```
 
 This creates a directory whose name ends with `_neuroqueryModel`:
 
 ```
 · nqdc_data
-  └── query-3c0556e22a59e7d200f00ac8219dfd6c
+  └── query_3c0556e22a59e7d200f00ac8219dfd6c
       ├── articles
       ├── articlesets
       ├── subset_articlesWithCoords_extractedData
@@ -547,14 +547,14 @@ information.
 
 We pass the `_vectorizedText` directory created by `nqdc vectorize`:
 ```
-nqdc fit_neurosynth nqdc_data/query-3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
+nqdc fit_neurosynth nqdc_data/query_3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
 ```
 
 This creates a directory whose name ends with `_neurosynthResults`:
 
 ```
 · nqdc_data
-  └── query-3c0556e22a59e7d200f00ac8219dfd6c
+  └── query_3c0556e22a59e7d200f00ac8219dfd6c
       ├── articles
       ├── articlesets
       ├── subset_articlesWithCoords_extractedData
@@ -598,14 +598,14 @@ It prepares the articles whose data was extracted for annotation with
 We pass the `_extractedData` directory created by `nqdc extract_data`:
 
 ```
-nqdc extract_labelbuddy_data nqdc_data/query-3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords_extractedData
+nqdc extract_labelbuddy_data nqdc_data/query_3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords_extractedData
 ```
 
 This creates a directory whose name ends with `labelbuddyData` containing the batches of documents in JSONL format (in this case there is a single batch):
 
 ```
 · nqdc_data
-  └── query-3c0556e22a59e7d200f00ac8219dfd6c
+  └── query_3c0556e22a59e7d200f00ac8219dfd6c
       ├── articles
       ├── articlesets
       ├── subset_articlesWithCoords_extractedData
@@ -639,14 +639,14 @@ for details.
 We pass the `_vectorizedText` directory created by `nqdc vectorize`:
 
 ```
-nqdc extract_nimare_data nqdc_data/query-3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
+nqdc extract_nimare_data nqdc_data/query_3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
 ```
 
 The resulting directory contains a `nimare_dataset.json` file that can be used to initialize a `nimare.Dataset`. 
 
 ```
 · nqdc_data
-  └── query-3c0556e22a59e7d200f00ac8219dfd6c
+  └── query_3c0556e22a59e7d200f00ac8219dfd6c
       ├── articles
       ├── articlesets
       ├── subset_articlesWithCoords_extractedData

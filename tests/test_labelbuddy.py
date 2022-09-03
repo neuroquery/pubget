@@ -34,7 +34,7 @@ def test_make_labelbuddy_documents(
     monkeypatch.setattr(_labelbuddy, "_CHAPTER_SIZE", 2)
     monkeypatch.setattr(_labelbuddy, "_LOG_PERIOD", 2)
     download_dir, _ = _download.download_query_results(
-        "fMRI[abstract]", tmp_path.joinpath("query-abc")
+        "fMRI[abstract]", tmp_path.joinpath("query_abc")
     )
     articles_dir, _ = _articles.extract_articles(download_dir)
     data_dir, _ = _data_extraction.extract_data_to_csv(articles_dir)

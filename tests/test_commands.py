@@ -33,7 +33,7 @@ def test_full_pipeline_command_with_nimare(
     voc_file = test_data_dir.joinpath("vocabulary.csv")
     voc_checksum = _vectorization._checksum_vocabulary(voc_file)
     nimare_file = tmp_path.joinpath(
-        "query-7838640309244685021f9954f8aa25fc",
+        "query_7838640309244685021f9954f8aa25fc",
         f"subset_allArticles-voc_{voc_checksum}_nimareDataset",
         "nimare_dataset.json",
     )
@@ -108,7 +108,7 @@ def test_full_pipeline_command(
         assert voc_source == "default"
     code = _commands.nqdc_command(args)
     assert code == 0
-    query_name = "query-7838640309244685021f9954f8aa25fc"
+    query_name = "query_7838640309244685021f9954f8aa25fc"
     if voc_source == "extract":
         voc_file = tmp_path.joinpath(
             query_name,
@@ -154,7 +154,7 @@ def _check_download_query_file_output(tmp_path):
     query_file = tmp_path.joinpath("query")
     query_file.write_text("fMRI[abstract]", "utf-8")
     _commands.nqdc_command(["download", str(tmp_path), "-f", str(query_file)])
-    query_dir = tmp_path.joinpath("query-7838640309244685021f9954f8aa25fc")
+    query_dir = tmp_path.joinpath("query_7838640309244685021f9954f8aa25fc")
     articlesets_dir = query_dir.joinpath("articlesets")
     assert len(list(articlesets_dir.glob("*.xml"))) == 1
     return articlesets_dir
@@ -166,7 +166,7 @@ def _check_download_pmcid_list_output(tmp_path):
     _commands.nqdc_command(
         ["download", str(tmp_path), "--pmcids_file", str(pmcids_file)]
     )
-    query_dir = tmp_path.joinpath("pmcidList-94281be5de7c35a42f8abaf41d934ace")
+    query_dir = tmp_path.joinpath("pmcidList_94281be5de7c35a42f8abaf41d934ace")
     articlesets_dir = query_dir.joinpath("articlesets")
     assert len(list(articlesets_dir.glob("*.xml"))) == 1
     return articlesets_dir

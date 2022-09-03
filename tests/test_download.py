@@ -15,7 +15,7 @@ def test_download_query_results(tmp_path, entrez_mock, monkeypatch):
     )
     assert code == ExitCode.ERROR
     assert download_dir == tmp_path.joinpath(
-        "query-7838640309244685021f9954f8aa25fc", "articlesets"
+        "query_7838640309244685021f9954f8aa25fc", "articlesets"
     )
     assert download_dir.joinpath("articleset_00000.xml").is_file()
     assert not download_dir.joinpath("articleset_00001.xml").is_file()
@@ -55,7 +55,7 @@ def test_download_pmcids(tmp_path, entrez_mock):
     download_dir, code = _download.download_pmcids([1, 2, 3], tmp_path)
     assert code == ExitCode.COMPLETED
     assert download_dir == tmp_path.joinpath(
-        "pmcidList-55b84a9d317184fe61224bfb4a060fb0", "articlesets"
+        "pmcidList_55b84a9d317184fe61224bfb4a060fb0", "articlesets"
     )
     assert (
         download_dir.joinpath("requested_pmcids.txt").read_text("UTF-8")
