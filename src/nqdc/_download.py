@@ -176,7 +176,7 @@ class _QueryDownloader(_Downloader):
 
     def _output_dir_name(self) -> str:
         """Directory name containing the checksum of the query string."""
-        return f"query-{_utils.checksum(self._query)}"
+        return f"query_{_utils.checksum(self._query)}"
 
     def _prepare_webenv(self, client: EntrezClient) -> Dict[str, str]:
         """Use ESearch to build the result set."""
@@ -220,7 +220,7 @@ class _PMCIDListDownloader(_Downloader):
         checksum = _utils.checksum(
             b",".join([str(pmcid).encode("UTF-8") for pmcid in self._pmcids])
         )
-        return f"pmcidList-{checksum}"
+        return f"pmcidList_{checksum}"
 
     def _prepare_webenv(self, client: EntrezClient) -> Dict[str, str]:
         """Use EPost to upload PMCIDs to the history server."""

@@ -18,7 +18,7 @@ with tempfile.TemporaryDirectory("_nqdc_test") as tmp_dir:
     ]
     subprocess.run(nqdc_args, check=True)
     metadata_file = data_dir.joinpath(
-        "query-d3b30e14cf943416f1129eb1f111e8bc",
+        "query_d3b30e14cf943416f1129eb1f111e8bc",
         "subset_allArticles_extractedData",
         "metadata.csv",
     )
@@ -36,7 +36,7 @@ with tempfile.TemporaryDirectory("_nqdc_test") as tmp_dir:
     ]
     subprocess.run(new_nqdc_args, check=True)
     new_metadata_file = data_dir.joinpath(
-        "pmcidList-0594dba48803670013a89c740bf50934",
+        "pmcidList_0594dba48803670013a89c740bf50934",
         "subset_allArticles_extractedData",
         "metadata.csv",
     )

@@ -19,7 +19,7 @@ with tempfile.TemporaryDirectory(suffix="_nqdc") as tmp_dir:
     assert (
         Path(tmp_dir)
         .joinpath(
-            "query-49e0abb9869a532a31d37ed788c76780",
+            "query_49e0abb9869a532a31d37ed788c76780",
             "subset_allArticles_examplePluginPubDatesPlot",
             "plot.png",
         )

@@ -46,7 +46,7 @@ def test_extract_articles(n_jobs, tmp_path, entrez_mock, monkeypatch):
     info_file.write_text(json.dumps(info), "utf-8")
     created_dir, code = _articles.extract_articles(download_dir)
     assert created_dir == tmp_path.joinpath(
-        "query-7838640309244685021f9954f8aa25fc", "articles"
+        "query_7838640309244685021f9954f8aa25fc", "articles"
     )
     assert code == ExitCode.INCOMPLETE
     info_file.unlink()
