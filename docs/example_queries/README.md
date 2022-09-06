@@ -12,3 +12,8 @@ examples.
   what was used to create the NeuroQuery dataset and is meant to produce many
   articles that contain stereotactic coordinates; as of May 2022 it should yield
   over 9,000 articles with coordinates.
+- `pmcids.txt`: contains around 9,000 PMCIDS for which stereotactic coordinates
+  were found. It was built as the union of PMCIDs for articles in NeuroQuery,
+  NeuroSynth, and the results of `journal_list_fmri_vbm.txt` that contain
+  stereotactic coordinates (`nqdc --articles_with_coords_only`). It can be used
+  as `nqdc --pmcids_file pmcids.txt`.
