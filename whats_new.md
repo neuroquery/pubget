@@ -2,6 +2,7 @@
 
 ## 0.0.3.dev
 
+- downloading batches of articles now a bit more robust because response content is check and nqdc retries up to 4 times if a request fails.
 - query output directories renamed from query-<md5> to query_<md5> to follow a bids-like convention.
 - It is now possible to download an explicit list of PMCIDs rather than a PMC query to select the articles to download.
   See the `--pmcids_file` parameter or the "Usage/Step 1" part of the documentation.
