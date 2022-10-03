@@ -1,8 +1,8 @@
 import json
 from unittest.mock import Mock
 
-from lxml import etree
 import pytest
+from lxml import etree
 
 from nqdc import _entrez
 
