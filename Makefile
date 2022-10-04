@@ -1,3 +1,5 @@
+nqdc_version := $(shell cat src/nqdc/_data/VERSION)
+
 .PHONY: test_all test test_plugin test_coverage test_coverage_strict test_mypy \
         test_flake8 test_pylint run_full_pipeline run_full_pipeline_neurosynth \
         compare_query_vs_pmcid_list doc format clean clean_all
@@ -40,6 +42,9 @@ compare_query_vs_pmcid_list:
 
 doc:
 	pdoc --no-search --no-show-source -d numpy -o doc_build ./src/nqdc
+	@sed --in-place 's/\(<h1 id="neuroquery-data-collection">NeuroQuery Data '\
+'Collection<\/h1>\)/\1\n<p><b>This document describes nqdc version '\
+'$(nqdc_version) <\/b><\/p>/' doc_build/nqdc.html
 
 format:
 	isort .

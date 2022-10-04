@@ -1,6 +1,6 @@
 # `nqdc` releases
 
-## 0.0.3.dev
+## 0.0.3
 
 - downloading batches of articles now a bit more robust because response content is check and nqdc retries up to 4 times if a request fails.
 - query output directories renamed from query-<md5> to query_<md5> to follow a bids-like convention.
