@@ -1,5 +1,7 @@
+import json
 from unittest.mock import Mock
 
+import pytest
 from lxml import etree
 
 from nqdc import _entrez
@@ -9,6 +11,7 @@ def test_esearch(entrez_mock, tmp_path):
     client = _entrez.EntrezClient()
     client.esearch("fmri")
     client.efetch(output_dir=tmp_path, n_docs=10, retmax=3)
+    i = None
     for i, batch in enumerate(sorted(tmp_path.glob("*.xml"))):
         batch = etree.parse(str(batch)).getroot()
         assert batch.tag == "pmc-articleset"
@@ -24,15 +27,15 @@ def test_epost(entrez_mock):
     assert result["count"] == "3"
 
 
-def test_entrez_api_key(requests_mock):
+def test_entrez_api_key(entrez_mock):
     client = _entrez.EntrezClient()
     client.esearch("fmri")
-    req = requests_mock.call_args_list[0][0][0]
+    req = entrez_mock.last_request
     assert "api_key" not in req.body
     assert "api_key" not in req.url
     client = _entrez.EntrezClient(api_key="MYAPIKEY")
     client.esearch("fmri")
-    req = requests_mock.call_args_list[1][0][0]
+    req = entrez_mock.last_request
     assert "api_key=MYAPIKEY" in req.body
     assert "api_key" not in req.url
 
@@ -83,6 +86,59 @@ def test_esearch_failure(requests_mock, tmp_path):
     client.efetch(tmp_path)
     assert client.n_failures == 1
 
-    client.n_failures = 0
-    client.efetch(tmp_path, {"webenv": "some webenv", "querykeymissing": ""})
-    assert client.n_failures == 1
+
+@pytest.mark.parametrize(
+    ("service", "bad_resp", "good_resp", "args"),
+    [
+        (
+            "esearch",
+            b"",
+            b'{"esearchresult": {"count": "", "webenv": "", "querykey": ""}}',
+            ("fmri",),
+        ),
+        (
+            "esearch",
+            b'{"esearchresult": {"ERROR": "too many requests"}}',
+            b'{"esearchresult": {"count": "", "webenv": "", "querykey": ""}}',
+            ("fmri",),
+        ),
+        (
+            "esearch",
+            b'{"esearchresult": {"count": "", "webenv": "", "missing": ""}}',
+            b'{"esearchresult": {"count": "", "webenv": "", "querykey": ""}}',
+            ("fmri",),
+        ),
+        (
+            "epost",
+            b"",
+            b"<resp><WebEnv>abc</WebEnv><QueryKey>1</QueryKey></resp>",
+            ([123, 456],),
+        ),
+        (
+            "efetch",
+            b"",
+            b"<pmc-articleset></pmc-articleset>",
+            ("tmp_path", {"webenv": "", "querykey": "", "count": 3}),
+        ),
+    ],
+)
+def test_retry(tmp_path, requests_mock, service, bad_resp, good_resp, args):
+    resp_0 = Mock()
+    resp_0.status_code = 300
+    resp_1 = Mock()
+    resp_1.status_code = 200
+    resp_1.content = bad_resp
+    resp_2 = Mock()
+    resp_2.status_code = 200
+    resp_2.content = good_resp
+    responses = [resp_0, resp_1, resp_2, Mock(), Mock()]
+    for resp in responses:
+        try:
+            resp.json.return_value = json.loads(resp.content.decode("UTF-8"))
+        except (TypeError, ValueError):
+            pass
+    requests_mock.side_effect = responses
+    client = _entrez.EntrezClient(request_period=0.0)
+    args = [tmp_path if a == "tmp_path" else a for a in args]
+    getattr(client, service)(*args)
+    assert requests_mock.call_count == 3

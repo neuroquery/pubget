@@ -13,6 +13,13 @@ from scipy import sparse
 
 
 @pytest.fixture(autouse=True)
+def no_retry_delay(monkeypatch):
+    monkeypatch.setattr(
+        "nqdc._entrez.EntrezClient._delay_before_retry_failed_request", 0.005
+    )
+
+
+@pytest.fixture(autouse=True)
 def erase_config(monkeypatch):
     for variable in os.environ:
         if variable.startswith("NQDC_"):
