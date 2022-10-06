@@ -4,19 +4,19 @@ from pathlib import Path
 
 import pandas as pd
 
-with tempfile.TemporaryDirectory("_nqdc_test") as tmp_dir:
+with tempfile.TemporaryDirectory("_pubget_test") as tmp_dir:
     data_dir = Path(tmp_dir)
     query = (
         "fMRI[Title] AND memory[Abstract] AND (2020[PubDate] : 2020[PubDate])"
     )
-    nqdc_args = [
-        "nqdc",
+    pubget_args = [
+        "pubget",
         "run",
         str(data_dir),
         "-q",
         query,
     ]
-    subprocess.run(nqdc_args, check=True)
+    subprocess.run(pubget_args, check=True)
     metadata_file = data_dir.joinpath(
         "query_d3b30e14cf943416f1129eb1f111e8bc",
         "subset_allArticles_extractedData",
@@ -27,14 +27,14 @@ with tempfile.TemporaryDirectory("_nqdc_test") as tmp_dir:
     ].sort_values()
     pmcids_file = data_dir.joinpath("found_pmcids.txt")
     pmcids.to_csv(pmcids_file, index=False, header=None)
-    new_nqdc_args = [
-        "nqdc",
+    new_pubget_args = [
+        "pubget",
         "run",
         str(data_dir),
         "--pmcids_file",
         str(pmcids_file),
     ]
-    subprocess.run(new_nqdc_args, check=True)
+    subprocess.run(new_pubget_args, check=True)
     new_metadata_file = data_dir.joinpath(
         "pmcidList_0594dba48803670013a89c740bf50934",
         "subset_allArticles_extractedData",

@@ -4,7 +4,7 @@ from unittest.mock import Mock
 
 import pandas as pd
 
-from nqdc import ExitCode, _vocabulary
+from pubget import ExitCode, _vocabulary
 
 
 def test_extract_vocabulary(tmp_path, test_data_dir, monkeypatch):

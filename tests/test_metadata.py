@@ -3,7 +3,7 @@ import pathlib
 import pytest
 from lxml import etree
 
-from nqdc import _metadata
+from pubget import _metadata
 
 
 def test_metadata_extractor():

@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from nqdc import ExitCode, _articles, _data_extraction, _download, _typing
+from pubget import ExitCode, _articles, _data_extraction, _download, _typing
 
 
 @pytest.fixture
@@ -80,7 +80,7 @@ def test_extract_data_to_csv(
     assert code == ExitCode.COMPLETED
 
     # check does not repeat completed extraction
-    with patch("nqdc._data_extraction._do_extract_data_to_csv") as mock:
+    with patch("pubget._data_extraction._do_extract_data_to_csv") as mock:
         data_dir, code = _data_extraction.extract_data_to_csv(
             articles_dir,
             data_dir,
@@ -95,7 +95,7 @@ def test_extract_data_to_csv(
 def test_extractor_failures(articles_dir, tmp_path, monkeypatch):
     data_dir = Path(f"{tmp_path}-extraction_failures-extracted_data")
     mock = Mock(side_effect=ValueError)
-    monkeypatch.setattr("nqdc._authors.AuthorsExtractor.extract", mock)
+    monkeypatch.setattr("pubget._authors.AuthorsExtractor.extract", mock)
     _data_extraction.extract_data_to_csv(articles_dir, data_dir)
 
     metadata = pd.read_csv(data_dir.joinpath("metadata.csv"))

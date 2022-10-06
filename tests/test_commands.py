@@ -8,15 +8,17 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from nqdc import _commands, _nimare, _vectorization
+from pubget import _commands, _nimare, _vectorization
 
 
 def _patch_neuroquery(monkeypatch):
     monkeypatch.setattr(
-        "nqdc._model_data.ModelData._MIN_DOCUMENT_FREQUENCY", 1
+        "pubget._model_data.ModelData._MIN_DOCUMENT_FREQUENCY", 1
     )
-    monkeypatch.setattr("nqdc._fit_neuroquery.SmoothedRegression", MagicMock())
-    monkeypatch.setattr("nqdc._fit_neuroquery.normalize", MagicMock())
+    monkeypatch.setattr(
+        "pubget._fit_neuroquery.SmoothedRegression", MagicMock()
+    )
+    monkeypatch.setattr("pubget._fit_neuroquery.normalize", MagicMock())
 
 
 def test_full_pipeline_command_with_nimare(
@@ -28,7 +30,7 @@ def test_full_pipeline_command_with_nimare(
 ):
     pytest.importorskip("nimare")
     args = ["run", str(tmp_path), "-q", "fMRI[abstract]", "--nimare"]
-    code = _commands.nqdc_command(args)
+    code = _commands.pubget_command(args)
     assert code == 0
     voc_file = test_data_dir.joinpath("vocabulary.csv")
     voc_checksum = _vectorization._checksum_vocabulary(voc_file)
@@ -106,7 +108,7 @@ def test_full_pipeline_command(
         args.extend(["--extract_vocabulary"])
     else:
         assert voc_source == "default"
-    code = _commands.nqdc_command(args)
+    code = _commands.pubget_command(args)
     assert code == 0
     query_name = "query_7838640309244685021f9954f8aa25fc"
     if voc_source == "extract":
@@ -153,7 +155,9 @@ def test_full_pipeline_command(
 def _check_download_query_file_output(tmp_path):
     query_file = tmp_path.joinpath("query")
     query_file.write_text("fMRI[abstract]", "utf-8")
-    _commands.nqdc_command(["download", str(tmp_path), "-f", str(query_file)])
+    _commands.pubget_command(
+        ["download", str(tmp_path), "-f", str(query_file)]
+    )
     query_dir = tmp_path.joinpath("query_7838640309244685021f9954f8aa25fc")
     articlesets_dir = query_dir.joinpath("articlesets")
     assert len(list(articlesets_dir.glob("*.xml"))) == 1
@@ -163,7 +167,7 @@ def _check_download_query_file_output(tmp_path):
 def _check_download_pmcid_list_output(tmp_path):
     pmcids_file = tmp_path.joinpath("pmcids")
     pmcids_file.write_text("\n".join(map(str, range(7))), "utf-8")
-    _commands.nqdc_command(
+    _commands.pubget_command(
         ["download", str(tmp_path), "--pmcids_file", str(pmcids_file)]
     )
     query_dir = tmp_path.joinpath("pmcidList_94281be5de7c35a42f8abaf41d934ace")
@@ -173,14 +177,14 @@ def _check_download_pmcid_list_output(tmp_path):
 
 
 def _check_extract_articles_output(articlesets_dir):
-    _commands.nqdc_command(["extract_articles", str(articlesets_dir)])
+    _commands.pubget_command(["extract_articles", str(articlesets_dir)])
     articles_dir = articlesets_dir.parent.joinpath("articles")
     assert len(list(articles_dir.glob("**/article.xml"))) == 7
     return articles_dir
 
 
 def _check_extract_data_output(articles_dir):
-    _commands.nqdc_command(["extract_data", str(articles_dir)])
+    _commands.pubget_command(["extract_data", str(articles_dir)])
     extracted_data_dir = articles_dir.parent.joinpath(
         "subset_allArticles_extractedData"
     )
@@ -195,7 +199,7 @@ def _check_extract_data_output(articles_dir):
 
 def _check_extract_vocabulary_output(extracted_data_dir, articles_dir):
     extracted_data_dir = _check_extract_data_output(articles_dir)
-    _commands.nqdc_command(["extract_vocabulary", str(extracted_data_dir)])
+    _commands.pubget_command(["extract_vocabulary", str(extracted_data_dir)])
     voc_dir = extracted_data_dir.parent.joinpath(
         "subset_allArticles_extractedVocabulary"
     )
@@ -204,7 +208,7 @@ def _check_extract_vocabulary_output(extracted_data_dir, articles_dir):
 
 
 def _check_vectorize_output(extracted_data_dir, test_data_dir):
-    _commands.nqdc_command(["vectorize", str(extracted_data_dir)])
+    _commands.pubget_command(["vectorize", str(extracted_data_dir)])
     voc_checksum = _vectorization._checksum_vocabulary(
         test_data_dir.joinpath("vocabulary.csv")
     )
@@ -219,7 +223,7 @@ def _check_vectorize_output(extracted_data_dir, test_data_dir):
 
 def _check_fit_neuroquery_output(vectorized_dir, voc_checksum, monkeypatch):
     _patch_neuroquery(monkeypatch)
-    _commands.nqdc_command(["fit_neuroquery", str(vectorized_dir)])
+    _commands.pubget_command(["fit_neuroquery", str(vectorized_dir)])
     nq_dir = vectorized_dir.parent.joinpath(
         f"subset_allArticles-voc_{voc_checksum}_neuroqueryModel",
         "neuroquery_model",
@@ -231,9 +235,9 @@ def _check_fit_neuroquery_output(vectorized_dir, voc_checksum, monkeypatch):
 
 def _check_fit_neurosynth_output(vectorized_dir, voc_checksum, monkeypatch):
     monkeypatch.setattr(
-        "nqdc._model_data.ModelData._MIN_DOCUMENT_FREQUENCY", 1
+        "pubget._model_data.ModelData._MIN_DOCUMENT_FREQUENCY", 1
     )
-    _commands.nqdc_command(["fit_neurosynth", str(vectorized_dir)])
+    _commands.pubget_command(["fit_neurosynth", str(vectorized_dir)])
     ns_dir = vectorized_dir.parent.joinpath(
         f"subset_allArticles-voc_{voc_checksum}_neurosynthResults",
         "neurosynth_maps",
@@ -243,7 +247,7 @@ def _check_fit_neurosynth_output(vectorized_dir, voc_checksum, monkeypatch):
 
 
 def _check_extract_labelbuddy_data_output(extracted_data_dir):
-    _commands.nqdc_command(
+    _commands.pubget_command(
         ["extract_labelbuddy_data", str(extracted_data_dir)]
     )
     labelbuddy_dir = extracted_data_dir.parent.joinpath(
@@ -254,7 +258,7 @@ def _check_extract_labelbuddy_data_output(extracted_data_dir):
 
 
 def _check_extract_nimare_data_output(vectorized_dir, voc_checksum):
-    _commands.nqdc_command(["extract_nimare_data", str(vectorized_dir)])
+    _commands.pubget_command(["extract_nimare_data", str(vectorized_dir)])
     nimare_dir = vectorized_dir.parent.joinpath(
         f"subset_allArticles-voc_{voc_checksum}_nimareDataset",
     )
@@ -345,9 +349,9 @@ def test_plugins(
     metadata_ep.return_value = all_ep
     monkeypatch.setattr(importlib_metadata, "entry_points", metadata_ep)
     args = ["run", str(tmp_path), "-q", "fMRI[abstract]"]
-    _commands.nqdc_command(args)
+    _commands.pubget_command(args)
     assert pipeline_plugin.arg_parser_called
     assert pipeline_plugin.run_called
-    _commands.nqdc_command(["myplugin"])
+    _commands.pubget_command(["myplugin"])
     assert command_plugin.arg_parser_called
     assert command_plugin.run_called

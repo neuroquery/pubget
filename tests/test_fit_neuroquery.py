@@ -3,7 +3,7 @@ from unittest.mock import Mock
 
 import neuroquery
 
-from nqdc import ExitCode, _fit_neuroquery
+from pubget import ExitCode, _fit_neuroquery
 
 
 def test_fit_neuroquery(extracted_data_dir, tfidf_dir):
@@ -31,7 +31,7 @@ def test_does_not_rerun(tmp_path, monkeypatch):
         "utf-8",
     )
     mock = Mock()
-    monkeypatch.setattr("nqdc._fit_neuroquery._do_fit_neuroquery", mock)
+    monkeypatch.setattr("pubget._fit_neuroquery._do_fit_neuroquery", mock)
     _, code = _fit_neuroquery.fit_neuroquery(tmp_path, tmp_path, tmp_path)
     assert code == ExitCode.COMPLETED
     assert len(mock.mock_calls) == 0

@@ -22,11 +22,11 @@ def run_and_check():
     args = parser.parse_args()
 
     data_dir = Path(args.output_dir).joinpath(
-        "nqdc_full_pipeline_run_"
+        "pubget_full_pipeline_run_"
         f"{datetime.now().isoformat().replace(':', '-')}"
     )
-    nqdc_args = [
-        "nqdc",
+    pubget_args = [
+        "pubget",
         "run",
         str(data_dir),
         "-q",
@@ -40,8 +40,8 @@ def run_and_check():
         "--fit_neuroquery",
     ]
     if args.fit_neurosynth:
-        nqdc_args.append("--fit_neurosynth")
-    subprocess.run(nqdc_args, check=True)
+        pubget_args.append("--fit_neurosynth")
+    subprocess.run(pubget_args, check=True)
 
     print("\n")
 
@@ -61,7 +61,7 @@ def run_and_check():
     assert coords.shape[0] >= 30_000
     print(f"n coordinates: {coords.shape[0]}")
 
-    print(f"\nnqdc pipeline ran successfully\nresults saved in {query_dir}")
+    print(f"\npubget pipeline ran successfully\nresults saved in {query_dir}")
 
 
 if __name__ == "__main__":

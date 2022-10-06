@@ -7,7 +7,7 @@ from unittest.mock import Mock
 
 import pytest
 
-from nqdc import ExitCode, _nimare
+from pubget import ExitCode, _nimare
 
 
 @pytest.fixture
@@ -66,7 +66,7 @@ def test_does_not_rerun(tmp_path, monkeypatch):
         "utf-8",
     )
     mock = Mock()
-    monkeypatch.setattr("nqdc._nimare._collect_nimare_data", mock)
+    monkeypatch.setattr("pubget._nimare._collect_nimare_data", mock)
     _, code = _nimare.make_nimare_dataset(tmp_path, tmp_path, tmp_path)
     assert code == ExitCode.COMPLETED
     assert len(mock.mock_calls) == 0

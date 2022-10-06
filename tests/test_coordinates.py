@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 from lxml import etree
 
-from nqdc import _articles, _coordinates
+from pubget import _articles, _coordinates
 
 
 def _example_table(values_start=20):

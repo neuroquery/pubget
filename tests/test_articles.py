@@ -6,7 +6,7 @@ import pandas as pd
 import pytest
 from lxml import etree
 
-from nqdc import ExitCode, _articles, _download, _utils
+from pubget import ExitCode, _articles, _download, _utils
 
 
 @pytest.mark.parametrize("n_jobs", [1, 3])
@@ -32,7 +32,7 @@ def test_extract_articles(n_jobs, tmp_path, entrez_mock, monkeypatch):
     assert (coords.values == [[10, 20, 30], [-10, -20, -30]]).all()
 
     # check does not repeat completed extraction
-    with patch("nqdc._articles._extract_from_articleset") as mock:
+    with patch("pubget._articles._extract_from_articleset") as mock:
         created_dir, code = _articles.extract_articles(
             download_dir, articles_dir
         )

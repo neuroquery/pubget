@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from nqdc import _writers
+from pubget import _writers
 
 
 def test_csv_writer(tmp_path):

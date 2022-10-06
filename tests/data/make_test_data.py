@@ -6,7 +6,7 @@ import argparse
 
 from lxml import etree
 
-from nqdc._entrez import EntrezClient
+from pubget._entrez import EntrezClient
 
 strip_text_xsl = b"""<?xml version="1.0" encoding="UTF-8"?>
 
@@ -75,7 +75,7 @@ output_dir.mkdir(exist_ok=True, parents=True)
 
 client = EntrezClient()
 client.esearch("fMRI")
-with tempfile.TemporaryDirectory(suffix="_nqdc") as tmp_dir:
+with tempfile.TemporaryDirectory(suffix="_pubget") as tmp_dir:
     client.efetch(tmp_dir, n_docs=7, retmax=7)
     stripped = etree.tostring(
         strip_text_transform(

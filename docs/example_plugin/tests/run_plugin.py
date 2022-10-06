@@ -4,10 +4,10 @@ import subprocess
 import tempfile
 from pathlib import Path
 
-with tempfile.TemporaryDirectory(suffix="_nqdc") as tmp_dir:
+with tempfile.TemporaryDirectory(suffix="_pubget") as tmp_dir:
     subprocess.run(
         [
-            "nqdc",
+            "pubget",
             "run",
             "--plot_pub_dates",
             "-q",
@@ -26,4 +26,4 @@ with tempfile.TemporaryDirectory(suffix="_nqdc") as tmp_dir:
         .is_file()
     ), "Plugin output not found!"
 
-print("nqdc and plugin ran successfully")
+print("pubget and plugin ran successfully")

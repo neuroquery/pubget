@@ -5,7 +5,7 @@ from unittest.mock import Mock
 
 import pytest
 
-from nqdc import ExitCode, _download
+from pubget import ExitCode, _download
 
 
 def test_download_query_results(tmp_path, entrez_mock, monkeypatch):
@@ -81,12 +81,12 @@ def test_get_data_dir(monkeypatch):
     args = argparse.Namespace(data_dir=None)
     with pytest.raises(RuntimeError):
         _download._get_data_dir(args)
-    monkeypatch.setenv("NQDC_DATA_DIR", "nqdc_data_env")
+    monkeypatch.setenv("NQDC_DATA_DIR", "pubget_data_env")
     data_dir = _download._get_data_dir(args)
-    assert data_dir == Path("nqdc_data_env")
-    args = argparse.Namespace(data_dir="nqdc_data_args")
+    assert data_dir == Path("pubget_data_env")
+    args = argparse.Namespace(data_dir="pubget_data_args")
     data_dir = _download._get_data_dir(args)
-    assert data_dir == Path("nqdc_data_args")
+    assert data_dir == Path("pubget_data_args")
 
 
 def test_data_dir_arg(monkeypatch):
@@ -98,9 +98,9 @@ def test_data_dir_arg(monkeypatch):
 
     parser = argparse.ArgumentParser()
     _download._edit_argument_parser(parser)
-    parser.parse_args(["nqdc_data_arg", "-q", "fmri"])
+    parser.parse_args(["pubget_data_arg", "-q", "fmri"])
 
-    monkeypatch.setenv("NQDC_DATA_DIR", "nqdc_data_env")
+    monkeypatch.setenv("NQDC_DATA_DIR", "pubget_data_env")
     parser = argparse.ArgumentParser()
     _download._edit_argument_parser(parser)
     parser.parse_args(["-q", "fmri"])

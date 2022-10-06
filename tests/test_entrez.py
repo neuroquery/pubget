@@ -4,7 +4,7 @@ from unittest.mock import Mock
 import pytest
 from lxml import etree
 
-from nqdc import _entrez
+from pubget import _entrez
 
 
 def test_esearch(entrez_mock, tmp_path):

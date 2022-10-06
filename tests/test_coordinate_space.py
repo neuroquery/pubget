@@ -2,7 +2,7 @@ import re
 
 import pytest
 
-from nqdc import _coordinate_space
+from pubget import _coordinate_space
 
 
 @pytest.mark.parametrize(

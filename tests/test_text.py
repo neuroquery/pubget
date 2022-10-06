@@ -2,7 +2,7 @@ from unittest.mock import Mock
 
 from lxml import etree
 
-from nqdc import _text
+from pubget import _text
 
 
 def test_text_extractor_transform_failure(monkeypatch):

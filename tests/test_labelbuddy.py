@@ -4,7 +4,13 @@ from unittest.mock import Mock
 
 import pytest
 
-from nqdc import ExitCode, _articles, _data_extraction, _download, _labelbuddy
+from pubget import (
+    ExitCode,
+    _articles,
+    _data_extraction,
+    _download,
+    _labelbuddy,
+)
 
 
 def test_does_not_rerun(tmp_path, monkeypatch):
@@ -13,7 +19,7 @@ def test_does_not_rerun(tmp_path, monkeypatch):
         "utf-8",
     )
     mock = Mock()
-    monkeypatch.setattr("nqdc._nimare._collect_nimare_data", mock)
+    monkeypatch.setattr("pubget._nimare._collect_nimare_data", mock)
     _, code = _labelbuddy.make_labelbuddy_documents(tmp_path, tmp_path)
     assert code == ExitCode.COMPLETED
     assert len(mock.mock_calls) == 0

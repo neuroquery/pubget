@@ -13,7 +13,7 @@ except ImportError:
 import neuroquery
 import neuroquery.img_utils
 
-from nqdc import _img_utils
+from pubget import _img_utils
 
 
 def _array_from_text(text, dtype):

@@ -4,8 +4,8 @@ from unittest.mock import Mock
 
 import pytest
 
-import nqdc
-from nqdc import _utils
+import pubget
+from pubget import _utils
 
 
 def test_checksum():
@@ -23,8 +23,8 @@ def test_assert_exists(tmp_path):
 
 
 def test_version():
-    assert nqdc.__version__ == _utils.get_nqdc_version()
-    assert re.match(r"[0-9]+\.[0-9]+\.[0-9]+", _utils.get_nqdc_version())
+    assert pubget.__version__ == _utils.get_pubget_version()
+    assert re.match(r"[0-9]+\.[0-9]+\.[0-9]+", _utils.get_pubget_version())
 
 
 @pytest.mark.parametrize(

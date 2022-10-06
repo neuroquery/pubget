@@ -1,43 +1,43 @@
-[![build](https://github.com/neuroquery/nqdc/actions/workflows/testing.yml/badge.svg)](https://github.com/neuroquery/nqdc/actions/workflows/testing.yml)
-[![codecov](https://codecov.io/gh/neuroquery/nqdc/branch/main/graph/badge.svg?token=8KEBP2EN3A)](https://codecov.io/gh/neuroquery/nqdc)
-[![nqdc on GitHub](https://img.shields.io/static/v1?label=&message=nqdc%20on%20GitHub&color=black&style=flat&logo=github)](https://github.com/neuroquery/nqdc)
+[![build](https://github.com/neuroquery/pubget/actions/workflows/testing.yml/badge.svg)](https://github.com/neuroquery/pubget/actions/workflows/testing.yml)
+[![codecov](https://codecov.io/gh/neuroquery/pubget/branch/main/graph/badge.svg?token=8KEBP2EN3A)](https://codecov.io/gh/neuroquery/pubget)
+[![pubget on GitHub](https://img.shields.io/static/v1?label=&message=pubget%20on%20GitHub&color=black&style=flat&logo=github)](https://github.com/neuroquery/pubget)
 
 
 # NeuroQuery Data Collection
 
-`nqdc` is a command-line tool for collecting data for large-scale
+`pubget` is a command-line tool for collecting data for large-scale
 coordinate-based neuroimaging meta-analysis. It exposes some of the machinery
 that was used to create the [neuroquery
 dataset](https://github.com/neuroquery/neuroquery_data), which powers
 [neuroquery.org](https://neuroquery.org).
 
-`nqdc` downloads full-text articles from [PubMed
+`pubget` downloads full-text articles from [PubMed
 Central](https://www.ncbi.nlm.nih.gov/pmc/) and extracts their text and
 stereotactic coordinates. It also computes [TFIDF
 features](https://en.wikipedia.org/wiki/Tf%E2%80%93idf) for the extracted text.
 
-Besides the command-line interface, `nqdc`'s functionality is also exposed
-through its [Python API](https://neuroquery.github.io/nqdc/#python-api).
+Besides the command-line interface, `pubget`'s functionality is also exposed
+through its [Python API](https://neuroquery.github.io/pubget/#python-api).
 
 # Installation
 
-You can install `nqdc` by running:
+You can install `pubget` by running:
 ```
-pip install nqdc
+pip install pubget
 ```
 
-This will install the `nqdc` Python package, as well as the `nqdc` command.
+This will install the `pubget` Python package, as well as the `pubget` command.
 
 # Quick Start
 
-Once `nqdc` is installed, we can download and process neuroimaging articles so
+Once `pubget` is installed, we can download and process neuroimaging articles so
 that we can later use them for meta-analysis.
 
 ```
-nqdc run ./nqdc_data -q "fMRI[title]"
+pubget run ./pubget_data -q "fMRI[title]"
 ```
 
-See `nqdc run --help` for a description of this command. In particular, the
+See `pubget run --help` for a description of this command. In particular, the
 `--n_jobs` option allows running some of the steps in parallel.
 
 # Usage
@@ -52,19 +52,19 @@ The creation of a dataset happens in four steps:
   [TFIDF](https://en.wikipedia.org/wiki/Tf%E2%80%93idf) features.
 
 Each of these steps stores its output in a separate directory. Normally, you
-will run the whole procedure in one command by invoking `nqdc run`. However,
+will run the whole procedure in one command by invoking `pubget run`. However,
 separate commands are also provided to run each step separately. Below, we
-describe each step and its output. Use `nqdc -h` to see a list of all available
-commands and `nqdc run -h` to see all the options of the main command.
+describe each step and its output. Use `pubget -h` to see a list of all available
+commands and `pubget run -h` to see all the options of the main command.
 
-All articles downloaded by `nqdc` come from [PubMed
+All articles downloaded by `pubget` come from [PubMed
 Central](https://www.ncbi.nlm.nih.gov/pmc/), and are therefore identified by
 their PubMed Central ID (`pmcid`). Note this is not the same as the PubMed ID
 (`pmid`). Not all articles in PMC have a `pmid`.
 
 ## Step 1: Downloading articles from PMC
 
-This step is executed by the `nqdc download` command. Articles to download can
+This step is executed by the `pubget download` command. Articles to download can
 be selected in 2 different ways: by using a query to search the PMC database, or
 by providing an explicit list of article PMCIDs. To use a list of PMCIDs, we
 must pass the path to a file containing the IDs as the `--pmcids_file`
@@ -96,7 +96,7 @@ articles. It can be simple such as `fMRI`, or more specific such as
 query using the [PMC advanced search
 interface](https://www.ncbi.nlm.nih.gov/pmc/advanced). For more information see
 [the E-Utilities help](https://www.ncbi.nlm.nih.gov/books/NBK3837/).
-Some examples are provided in the `nqdc` git repository, in `docs/example_queries`.
+Some examples are provided in the `pubget` git repository, in `docs/example_queries`.
 
 The query can be passed either as a string on the command-line with `-q` or
 `--query` or by passing the path of a text file containing the query with `-f`
@@ -107,15 +107,15 @@ documentation](https://www.ncbi.nlm.nih.gov/books/NBK25497/)), we can provide it
 through the `NQDC_API_KEY` environment variable or through the `--api_key`
 command line argument (the latter has higher precedence).
 
-We must also specify the directory in which all `nqdc` data will be stored. It
+We must also specify the directory in which all `pubget` data will be stored. It
 can be provided either as a command-line argument (as in the examples below), or
 by exporting the `NQDC_DATA_DIR` environment variable. Subdirectories will be
 created for each different query. In the following we suppose we are storing our
-data in a directory called `nqdc_data`.
+data in a directory called `pubget_data`.
 
 We can thus download all articles with "fMRI" in their title published in 2019 by running:
 ```
-nqdc download -q "fMRI[Title] AND (2019[PubDate] : 2019[PubDate])" nqdc_data
+pubget download -q "fMRI[Title] AND (2019[PubDate] : 2019[PubDate])" pubget_data
 ```
 
 ---
@@ -133,21 +133,21 @@ fMRI[Title] AND (2019[PubDate] : 2019[PubDate])
 and run
 
 ```
-nqdc download -f query.txt nqdc_data
+pubget download -f query.txt pubget_data
 ```
 
 ---
 
 After running this command, these are the contents of our data directory:
 ```
-· nqdc_data
+· pubget_data
   └── query_3c0556e22a59e7d200f00ac8219dfd6c
       └── articlesets
           ├── articleset_00000.xml
           └── info.json
 ```
 
-`nqdc` has created a subdirectory for this query. If we run the download again
+`pubget` has created a subdirectory for this query. If we run the download again
 for the same query, the same subdirectory will be reused
 (`3c0556e22a59e7d200f00ac8219dfd6c` is the md5 checksum of the query). If we had
 used a PMCID list instead of a query, the subdirectory name would start with
@@ -176,14 +176,14 @@ remove the `articlesets` directory.
 
 ## Step 2: extracting articles from bulk download
 
-This step is executed by the `nqdc extract_articles` command.
+This step is executed by the `pubget extract_articles` command.
 
 Once our download is complete, we extract articles and store each of them in a
 separate directory. To do so, we pass the `articlesets` directory created by the
-`nqdc download` command in step 1:
+`pubget download` command in step 1:
 
 ```
-nqdc extract_articles nqdc_data/query_3c0556e22a59e7d200f00ac8219dfd6c/articlesets
+pubget extract_articles pubget_data/query_3c0556e22a59e7d200f00ac8219dfd6c/articlesets
 ```
 
 This creates an `articles` subdirectory in the query directory, containing the
@@ -197,7 +197,7 @@ Our data directory now looks like this (with many articles ommitted for
 conciseness):
 
 ```
-· nqdc_data
+· pubget_data
   └── query_3c0556e22a59e7d200f00ac8219dfd6c
       ├── articles
       │   ├── 019
@@ -242,26 +242,26 @@ the article extraction we need to remove the `articles` directory (or the
 
 ## Step 3: extracting data from articles
 
-This step is executed by the `nqdc extract_data` command.
+This step is executed by the `pubget extract_data` command.
 
 It creates another directory that contains CSV files, containing the text,
 metadata and coordinates extracted from all the articles.
 
 If we use the `--articles_with_coords_only` option, only articles in which
-`nqdc` finds stereotactic coordinates are kept. The name of the resulting
+`pubget` finds stereotactic coordinates are kept. The name of the resulting
 directory will reflect that choice.
 
-We pass the path of the `articles` directory created by `nqdc extract_articles`
-in the previous step to the `nqdc extract_data` command:
+We pass the path of the `articles` directory created by `pubget extract_articles`
+in the previous step to the `pubget extract_data` command:
 
 ```
-nqdc extract_data --articles_with_coords_only nqdc_data/query_3c0556e22a59e7d200f00ac8219dfd6c/articles/
+pubget extract_data --articles_with_coords_only pubget_data/query_3c0556e22a59e7d200f00ac8219dfd6c/articles/
 ```
 
 Our data directory now contains (ommitting the contents of the previous steps):
 
 ```
-· nqdc_data
+· pubget_data
   └── query_3c0556e22a59e7d200f00ac8219dfd6c
       ├── articles
       ├── articlesets
@@ -308,7 +308,7 @@ data extraction we need to remove the corresponding directory (or the
 
 ## Step 4: vectorizing (computing TFIDF features)
 
-This step is executed by the `nqdc vectorize` command.
+This step is executed by the `pubget vectorize` command.
 
 Some large-scale meta-analysis methods such as
 [neurosynth](https://neurosynth.org/) and [neuroquery](https://neuroquery.org)
@@ -326,7 +326,7 @@ of the *document frequency* (the total number of times the term occurs in the
 whole corpus or dataset).
 
 To extract the TFIDF features we must therefore choose a vocabulary.
-- By default, `nqdc` will download and use the vocabulary used by
+- By default, `pubget` will download and use the vocabulary used by
 [neuroquery.org](https://neuroquery.org).
 - If we use the `--extract_vocabulary` option, a new vocabulary is created from
   the downloaded text and used for computing TFIDF features (see "extracting a
@@ -335,12 +335,12 @@ To extract the TFIDF features we must therefore choose a vocabulary.
 `--vocabulary_file` option. This file will be parsed as a CSV file with no
 header, whose first column contains the terms. Other columns are ignored.
 
-We also pass to `nqdc vectorize` the directory containing the text we want to
-vectorize, created by `nqdc extract_data` in step 3 (here we are using the
+We also pass to `pubget vectorize` the directory containing the text we want to
+vectorize, created by `pubget extract_data` in step 3 (here we are using the
 default vocabulary):
 
 ```
-nqdc vectorize nqdc_data/query_3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords_extractedData/
+pubget vectorize pubget_data/query_3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords_extractedData/
 ```
 
 This creates a new directory whose name reflects the data source (whether all
@@ -350,7 +350,7 @@ vocabulary file, concatenated with those of the vocabulary mapping file, see
 "vocabulary mapping" below):
 
 ```
-· nqdc_data
+· pubget_data
   └── query_3c0556e22a59e7d200f00ac8219dfd6c
       ├── articles
       ├── articlesets
@@ -405,20 +405,20 @@ such as "brainstem" and "brain stem".
 This is done through a JSON file that contains a mapping of the form `{term:
 replacement}`. For example if it contains `{"brain stem": "brainstem"}`, "brain
 stem" will be discarded from the vocabulary and every occurrence of "brain stem"
-will be counted as an occurrence of "brainstem" instead. To be found by `nqdc`,
+will be counted as an occurrence of "brainstem" instead. To be found by `pubget`,
 this vocabulary mapping file must be in the same directory as the vocabulary
 file, and its name must be the vocabulary file's name with
 `_voc_mapping_identity.json` appended: for example `vocabulary.csv`,
 `vocabulary.csv_voc_mapping_identity.json`.
 
 When a vocabulary mapping is provided, a shorter vocabulary is therefore created
-by removing redundant words. The TFIDF and word counts computed by `nqdc`
+by removing redundant words. The TFIDF and word counts computed by `pubget`
 correspond to the shorter vocabulary, which is stored along with its document
 frequencies in `feature_names.csv`.
 
 `vocabulary.csv` contains the document frequencies of the original (full,
 longer) vocabulary. A `vocabulary.csv_voc_mapping_identity.json` file is always
-created by `nqdc`, but if no vocabulary mapping was used, that file contains an
+created by `pubget`, but if no vocabulary mapping was used, that file contains an
 empty mapping (`{}`) and `vocabulary.csv` and `feature_names.csv` are identical.
 
 The vocabulary mapping is primarily used by the `neuroquery` package and its
@@ -428,7 +428,7 @@ file providing the terms corresponding to the TFIDF *features* is
 
 ## Optional step: extracting a new vocabulary
 
-This step is executed by the `nqdc extract_vocabulary` command.
+This step is executed by the `pubget extract_vocabulary` command.
 When running the full pipeline this step is optional: we must use
 the `--extract_vocabulary` option for it to be executed.
 
@@ -436,14 +436,14 @@ It builds a vocabulary of all the words and 2-grams (groups of 2
 words) that appear in the downloaded text, and computes their document frequency
 (the proportion of documents in which a term appears).
 ```
-nqdc extract_vocabulary nqdc_data/query_3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords_extractedData
+pubget extract_vocabulary pubget_data/query_3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords_extractedData
 ```
 
 The vocabulary is stored in a csv file in a new directory. There is no header
 and the 2 columns are the term and its document frequency.
 
 ```
-· nqdc_data
+· pubget_data
   └── query_3c0556e22a59e7d200f00ac8219dfd6c
       ├── articles
       ├── articlesets
@@ -454,14 +454,14 @@ and the 2 columns are the term and its document frequency.
       └── subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
 ```
 
-When running the whole pipeline (`nqdc run`), if we use the
+When running the whole pipeline (`pubget run`), if we use the
 `--extract_vocabulary` option and do not provide an explicit value for
 `--vocabulary_file`, the freshly-extracted vocabulary is used instead of the
 default `neuroquery` one for computing TFIDF features.
 
 ## Optional step: fitting a NeuroQuery encoding model
 
-This step is executed by the `nqdc fit_neuroquery` command. When running the
+This step is executed by the `pubget fit_neuroquery` command. When running the
 full pipeline it is optional: we must use the `--fit_neuroquery` option
 for it to be executed.
 
@@ -475,15 +475,15 @@ package](https://github.com/neuroquery/neuroquery).
 
 Note: for this model to give good results a large dataset is needed, ideally close to 10,000 articles (with coordinates).
 
-We pass the `_vectorizedText` directory created by `nqdc vectorize`:
+We pass the `_vectorizedText` directory created by `pubget vectorize`:
 ```
-nqdc fit_neuroquery nqdc_data/query_3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
+pubget fit_neuroquery pubget_data/query_3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
 ```
 
 This creates a directory whose name ends with `_neuroqueryModel`:
 
 ```
-· nqdc_data
+· pubget_data
   └── query_3c0556e22a59e7d200f00ac8219dfd6c
       ├── articles
       ├── articlesets
@@ -529,7 +529,7 @@ Then run `flask run` and point your web browser to `https://localhost:5000`: you
 
 ## Optional step: running a NeuroSynth meta-analysis
 
-This step is executed by the `nqdc fit_neurosynth` command. When running the
+This step is executed by the `pubget fit_neurosynth` command. When running the
 full pipeline it is optional: we must use the `--fit_neurosynth` option for it
 to be executed.
 
@@ -545,15 +545,15 @@ paper](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3146590/) and
 information.
 
 
-We pass the `_vectorizedText` directory created by `nqdc vectorize`:
+We pass the `_vectorizedText` directory created by `pubget vectorize`:
 ```
-nqdc fit_neurosynth nqdc_data/query_3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
+pubget fit_neurosynth pubget_data/query_3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
 ```
 
 This creates a directory whose name ends with `_neurosynthResults`:
 
 ```
-· nqdc_data
+· pubget_data
   └── query_3c0556e22a59e7d200f00ac8219dfd6c
       ├── articles
       ├── articlesets
@@ -588,23 +588,23 @@ mention it.
 
 ## Optional step: preparing articles for annotation with `labelbuddy`
 
-This step is executed by the `nqdc extract_labelbuddy_data` command.
+This step is executed by the `pubget extract_labelbuddy_data` command.
 When running the full pipeline this step is optional: we must use
 the `--labelbuddy` or `--labelbuddy_part_size` option for it to be executed.
 
 It prepares the articles whose data was extracted for annotation with
 [labelbuddy](https://jeromedockes.github.io/labelbuddy/).
 
-We pass the `_extractedData` directory created by `nqdc extract_data`:
+We pass the `_extractedData` directory created by `pubget extract_data`:
 
 ```
-nqdc extract_labelbuddy_data nqdc_data/query_3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords_extractedData
+pubget extract_labelbuddy_data pubget_data/query_3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords_extractedData
 ```
 
 This creates a directory whose name ends with `labelbuddyData` containing the batches of documents in JSONL format (in this case there is a single batch):
 
 ```
-· nqdc_data
+· pubget_data
   └── query_3c0556e22a59e7d200f00ac8219dfd6c
       ├── articles
       ├── articlesets
@@ -627,7 +627,7 @@ for details.
 
 ## Optional step: creating a NiMARE dataset
 
-This step is executed by the `nqdc extract_nimare_data` command. When running
+This step is executed by the `pubget extract_nimare_data` command. When running
 the full pipeline this step is optional: we must use the `--nimare` option for
 it to be executed.
 
@@ -636,16 +636,16 @@ data in JSON format. See the NiMARE
 [documentation](https://nimare.readthedocs.io/en/latest/generated/nimare.dataset.Dataset.html#nimare.dataset.Dataset)
 for details.
 
-We pass the `_vectorizedText` directory created by `nqdc vectorize`:
+We pass the `_vectorizedText` directory created by `pubget vectorize`:
 
 ```
-nqdc extract_nimare_data nqdc_data/query_3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
+pubget extract_nimare_data pubget_data/query_3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
 ```
 
 The resulting directory contains a `nimare_dataset.json` file that can be used to initialize a `nimare.Dataset`. 
 
 ```
-· nqdc_data
+· pubget_data
   └── query_3c0556e22a59e7d200f00ac8219dfd6c
       ├── articles
       ├── articlesets
@@ -657,50 +657,50 @@ The resulting directory contains a `nimare_dataset.json` file that can be used t
 ```
 
 Using this option requires installing NiMARE, which is not installed by default
-with `nqdc`. To use this option, install NiMARE separately with
+with `pubget`. To use this option, install NiMARE separately with
 ```
 pip install nimare
 ```
-or install `nqdc` with
+or install `pubget` with
 ```
-pip install "nqdc[nimare]"
+pip install "pubget[nimare]"
 ```
 
 ## Full pipeline
 
-We can run all steps in one command by using `nqdc run`.
+We can run all steps in one command by using `pubget run`.
 
 The full procedure described above could be run by executing:
 
 ```
-nqdc run -q "fMRI[Title] AND (2019[PubDate] : 2019[PubDate])" \
+pubget run -q "fMRI[Title] AND (2019[PubDate] : 2019[PubDate])" \
     --articles_with_coords_only                               \
-    nqdc_data
+    pubget_data
 ```
 
-(The output directory, `nqdc_data`, could also be provided by exporting the
+(The output directory, `pubget_data`, could also be provided by exporting the
 `NQDC_DATA_DIR` environment variable instead of passing it on the command line.)
 
 If we also want to apply the optional steps:
 ```
-nqdc run -q "fMRI[Title] AND (2019[PubDate] : 2019[PubDate])" \
+pubget run -q "fMRI[Title] AND (2019[PubDate] : 2019[PubDate])" \
     --articles_with_coords_only                               \
     --fit_neuroquery                                          \
     --labelbuddy                                              \
     --nimare                                                  \
-    nqdc_data
+    pubget_data
 ```
 (remember that `--nimare` requires NiMARE to be installed).
 
 Here also, steps that had already been completed are skipped; we need to remove
 the corresponding directories if we want to force running these steps again.
 
-See `nqdc run --help` for a description of all options.
+See `pubget run --help` for a description of all options.
 
 
 ## Logging
 
-By default `nqdc` commands report their progress by writing to the standard
+By default `pubget` commands report their progress by writing to the standard
 streams. In addition, they can write log files if we provide the `--log_dir`
 command-line argument, or if we define the `NQDC_LOG_DIR` environment variable
 (the command-line argument has higher precedence). If this log directory is
@@ -711,41 +711,41 @@ written there as well.
 
 It is possible to write plugins and define [entry
 points](https://setuptools.pypa.io/en/latest/userguide/entry_point.html) to add
-functionality that is automatically executed when `nqdc` is run.
+functionality that is automatically executed when `pubget` is run.
 
-The name of the entry point should be `nqdc.plugin_actions`. It must be
+The name of the entry point should be `pubget.plugin_actions`. It must be
 a function taking no arguments and returning a dictionary with keys
 `pipeline_steps` and `commands`. The corresponding values must be lists
 of processing step objects, that must implement the interface defined by
-`nqdc.PipelineStep` and `nqdc.Command` respectively (their types do not need to
+`pubget.PipelineStep` and `pubget.Command` respectively (their types do not need to
 inherit from these classes).
 
-All steps in `pipeline_steps` will be run when `nqdc run` is used. All steps in
-`standalone_steps` will be added as additional nqdc commands; for example if the
-`name` of a standalone step is `my_plugin`, the `nqdc my_plugin` command will
+All steps in `pipeline_steps` will be run when `pubget run` is used. All steps in
+`standalone_steps` will be added as additional pubget commands; for example if the
+`name` of a standalone step is `my_plugin`, the `pubget my_plugin` command will
 become available.
 
 An example plugin that can be used as a template, and more details, are provided
-in the `nqdc` git repository, in `docs/example_plugin`.
+in the `pubget` git repository, in `docs/example_plugin`.
 
 # Contributing
 
 Feedback and contributions are welcome. Development happens at the
-[nqdc GitHub repositiory](https://github.com/neuroquery/nqdc).
-To install the dependencies required for development, from the directory where you cloned `nqdc`, run:
+[pubget GitHub repositiory](https://github.com/neuroquery/pubget).
+To install the dependencies required for development, from the directory where you cloned `pubget`, run:
 ```
 pip install -e ".[dev]"
 ```
 
 The tests can be run with `make test_all`, or `make test_coverage` to report
 test coverage. The documentation can be rendered with `make doc`. `make
-run_full_pipeline` runs the full `nqdc` pipeline on a query returning a
+run_full_pipeline` runs the full `pubget` pipeline on a query returning a
 realistic number of results (`fMRI[title]`).
 
 # Python API
 
-`nqdc` is mostly intended for use as a command-line tool. However, it is also a
+`pubget` is mostly intended for use as a command-line tool. However, it is also a
 Python package and its functionality can be used in Python programs. The Python
 API closely reflects the command-line programs described above.
 
-The Python API is described on the `nqdc` [website](https://neuroquery.github.io/nqdc/#python-api).
+The Python API is described on the `pubget` [website](https://neuroquery.github.io/pubget/#python-api).

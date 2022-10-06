@@ -4,7 +4,7 @@ from unittest.mock import Mock
 import numpy as np
 from scipy import sparse, stats
 
-from nqdc import ExitCode, _fit_neurosynth
+from pubget import ExitCode, _fit_neurosynth
 
 
 def test_chi_square():
@@ -52,7 +52,7 @@ def test_does_not_rerun(tmp_path, monkeypatch):
         "utf-8",
     )
     mock = Mock()
-    monkeypatch.setattr("nqdc._fit_neurosynth._do_fit_neurosynth", mock)
+    monkeypatch.setattr("pubget._fit_neurosynth._do_fit_neurosynth", mock)
     _, code = _fit_neurosynth.fit_neurosynth(tmp_path, tmp_path, tmp_path)
     assert code == ExitCode.COMPLETED
     assert len(mock.mock_calls) == 0

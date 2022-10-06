@@ -7,7 +7,7 @@ import pandas as pd
 import pytest
 from scipy import sparse
 
-from nqdc import ExitCode, _vectorization
+from pubget import ExitCode, _vectorization
 
 
 @pytest.mark.parametrize(("with_voc", "n_jobs"), [(True, 3), (False, 1)])
@@ -33,7 +33,7 @@ def test_vectorize_corpus_to_npz(
     _check_pmcids(tmp_path)
     _check_doc_frequencies(tmp_path)
     _check_matrices(tmp_path)
-    with patch("nqdc._vectorization._do_vectorize_corpus_to_npz") as mock:
+    with patch("pubget._vectorization._do_vectorize_corpus_to_npz") as mock:
         output_dir, code = _vectorization.vectorize_corpus_to_npz(
             input_dir, output_dir=tmp_path, n_jobs=n_jobs, **kwargs
         )

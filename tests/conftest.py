@@ -15,7 +15,7 @@ from scipy import sparse
 @pytest.fixture(autouse=True)
 def no_retry_delay(monkeypatch):
     monkeypatch.setattr(
-        "nqdc._entrez.EntrezClient._delay_before_retry_failed_request", 0.005
+        "pubget._entrez.EntrezClient._delay_before_retry_failed_request", 0.005
     )
 
 
@@ -48,7 +48,7 @@ def test_data_dir():
 @pytest.fixture(autouse=True)
 def basic_nq_datasets_mock(monkeypatch):
     monkeypatch.setattr("neuroquery.datasets.fetch_neuroquery_model", Mock)
-    monkeypatch.setattr("nqdc._vectorization.fetch_neuroquery_model", Mock)
+    monkeypatch.setattr("pubget._vectorization.fetch_neuroquery_model", Mock)
 
 
 @pytest.fixture()
@@ -70,7 +70,7 @@ def nq_datasets_mock(test_data_dir, tmp_path, monkeypatch):
         return str(nq_model_dir)
 
     monkeypatch.setattr("neuroquery.datasets.fetch_neuroquery_model", fetch)
-    monkeypatch.setattr("nqdc._vectorization.fetch_neuroquery_model", fetch)
+    monkeypatch.setattr("pubget._vectorization.fetch_neuroquery_model", fetch)
 
 
 class Response:

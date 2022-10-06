@@ -1,7 +1,7 @@
-Example queries for nqdc.
+Example queries for pubget.
 
 The query can be provided directly on the command line or read from a file with
-`nqdc --query_file /path/to/query_file.txt`. This directory provides some
+`pubget --query_file /path/to/query_file.txt`. This directory provides some
 examples.
 
 - `fmri_2019.txt`: the example used in the documentation -- articles with "fMRI"
@@ -15,5 +15,5 @@ examples.
 - `pmcids.txt`: contains around 9,000 PMCIDS for which stereotactic coordinates
   were found. It was built as the union of PMCIDs for articles in NeuroQuery,
   NeuroSynth, and the results of `journal_list_fmri_vbm.txt` that contain
-  stereotactic coordinates (`nqdc --articles_with_coords_only`). It can be used
-  as `nqdc --pmcids_file pmcids.txt`.
+  stereotactic coordinates (`pubget --articles_with_coords_only`). It can be used
+  as `pubget --pmcids_file pmcids.txt`.

@@ -1,6 +1,6 @@
 from unittest.mock import Mock
 
-from nqdc import _pipeline, _typing
+from pubget import _pipeline, _typing
 
 
 def test_stop_pipeline():

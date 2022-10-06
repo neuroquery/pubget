@@ -1,4 +1,4 @@
-nqdc_version := $(shell cat src/nqdc/_data/VERSION)
+pubget_version := $(shell cat src/pubget/_data/VERSION)
 
 .PHONY: test_all test test_plugin test_coverage test_coverage_strict test_mypy \
         test_flake8 test_pylint run_full_pipeline run_full_pipeline_neurosynth \
@@ -10,18 +10,18 @@ test:
 	tox
 
 test_coverage_strict:
-	pytest --cov=nqdc --cov-report=xml --cov-report=term --cov-fail-under=100 tests
+	pytest --cov=pubget --cov-report=xml --cov-report=term --cov-fail-under=100 tests
 	coverage html
 
 test_coverage:
-	pytest --cov=nqdc --cov-report=xml --cov-report=term tests
+	pytest --cov=pubget --cov-report=xml --cov-report=term tests
 	coverage html
 
 test_mypy:
-	mypy ./src/nqdc/*.py
+	mypy ./src/pubget/*.py
 
 test_flake8:
-	flake8 ./src/nqdc/*.py
+	flake8 ./src/pubget/*.py
 	flake8 tests/
 
 test_pylint:
@@ -41,10 +41,10 @@ compare_query_vs_pmcid_list:
 	python tests/compare_query_vs_pmcid_list.py
 
 doc:
-	pdoc --no-search --no-show-source -d numpy -o doc_build ./src/nqdc
+	pdoc --no-search --no-show-source -d numpy -o doc_build ./src/pubget
 	@sed --in-place 's/\(<h1 id="neuroquery-data-collection">NeuroQuery Data '\
-'Collection<\/h1>\)/\1\n<p><b>This document describes nqdc version '\
-'$(nqdc_version) <\/b><\/p>/' doc_build/nqdc.html
+'Collection<\/h1>\)/\1\n<p><b>This document describes pubget version '\
+'$(pubget_version) <\/b><\/p>/' doc_build/pubget.html
 
 format:
 	isort .

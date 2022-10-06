@@ -3,7 +3,7 @@ import pathlib
 import pytest
 from lxml import etree
 
-from nqdc import _links
+from pubget import _links
 
 
 @pytest.mark.parametrize("n_links", [0, 1, 5])
