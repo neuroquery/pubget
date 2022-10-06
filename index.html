@@ -153,7 +153,7 @@ pubget    </h1>
 <a href="https://codecov.io/gh/neuroquery/pubget"><img src="https://codecov.io/gh/neuroquery/pubget/branch/main/graph/badge.svg?token=8KEBP2EN3A" alt="codecov" /></a>
 <a href="https://github.com/neuroquery/pubget"><img src="https://img.shields.io/static/v1?label=&amp;message=pubget%20on%20GitHub&amp;color=black&amp;style=flat&amp;logo=github" alt="pubget on GitHub" /></a></p>
 
-<p><b>This document describes pubget version 0.0.4</b></p>
+<p><b>This document describes pubget version 0.0.5</b></p>
 <p><code><a href="">pubget</a></code> is a command-line tool for collecting data for large-scale
 coordinate-based neuroimaging meta-analysis. It exposes some of the machinery
 that was used to create the <a href="https://github.com/neuroquery/neuroquery_data">neuroquery
@@ -254,12 +254,12 @@ or <code>--query_file</code>.</p>
 
 <p>If we have an Entrez API key (see details in the <a href="https://www.ncbi.nlm.nih.gov/books/NBK25497/">E-utilities
 documentation</a>), we can provide it
-through the <code>NQDC_API_KEY</code> environment variable or through the <code>--api_key</code>
+through the <code>PUBGET_API_KEY</code> environment variable or through the <code>--api_key</code>
 command line argument (the latter has higher precedence).</p>
 
 <p>We must also specify the directory in which all <code><a href="">pubget</a></code> data will be stored. It
 can be provided either as a command-line argument (as in the examples below), or
-by exporting the <code>NQDC_DATA_DIR</code> environment variable. Subdirectories will be
+by exporting the <code>PUBGET_DATA_DIR</code> environment variable. Subdirectories will be
 created for each different query. In the following we suppose we are storing our
 data in a directory called <code>pubget_data</code>.</p>
 
@@ -819,7 +819,7 @@ with <code><a href="">pubget</a></code>. To use this option, install NiMARE sepa
 </code></pre>
 
 <p>(The output directory, <code>pubget_data</code>, could also be provided by exporting the
-<code>NQDC_DATA_DIR</code> environment variable instead of passing it on the command line.)</p>
+<code>PUBGET_DATA_DIR</code> environment variable instead of passing it on the command line.)</p>
 
 <p>If we also want to apply the optional steps:</p>
 
@@ -842,7 +842,7 @@ the corresponding directories if we want to force running these steps again.</p>
 
 <p>By default <code><a href="">pubget</a></code> commands report their progress by writing to the standard
 streams. In addition, they can write log files if we provide the <code>--log_dir</code>
-command-line argument, or if we define the <code>NQDC_LOG_DIR</code> environment variable
+command-line argument, or if we define the <code>PUBGET_LOG_DIR</code> environment variable
 (the command-line argument has higher precedence). If this log directory is
 specified, a new log file with a timestamp is created and all the output is
 written there as well.</p>
