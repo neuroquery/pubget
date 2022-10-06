@@ -42,9 +42,9 @@ compare_query_vs_pmcid_list:
 
 doc:
 	pdoc --no-search --no-show-source -d numpy -o doc_build ./src/pubget
-	@sed --in-place 's/\(<h1 id="neuroquery-data-collection">NeuroQuery Data '\
-'Collection<\/h1>\)/\1\n<p><b>This document describes pubget version '\
-'$(pubget_version) <\/b><\/p>/' doc_build/pubget.html
+	@sed --in-place 's/^\(.*pubget.*is a command-line tool for collecting.*\)$$'\
+'/<p><b>This document describes pubget version $(pubget_version)<\/b><\/p>\n\1/' \
+doc_build/pubget.html
 
 format:
 	isort .
