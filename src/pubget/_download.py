@@ -237,7 +237,7 @@ class _PMCIDListDownloader(_Downloader):
 
 
 def _get_data_dir_env() -> Optional[str]:
-    return os.environ.get("NQDC_DATA_DIR", None)
+    return os.environ.get("PUBGET_DATA_DIR", None)
 
 
 def _get_data_dir(args: argparse.Namespace) -> Path:
@@ -247,7 +247,8 @@ def _get_data_dir(args: argparse.Namespace) -> Path:
     if not data_dir:
         raise RuntimeError(
             "The pubget data directory must be provided either as a command "
-            "line argument or through the NQDC_DATA_DIR environment variable."
+            "line argument or through the PUBGET_DATA_DIR "
+            "environment variable."
         )
     return Path(data_dir)
 
@@ -255,7 +256,7 @@ def _get_data_dir(args: argparse.Namespace) -> Path:
 def _get_api_key(args: argparse.Namespace) -> Optional[str]:
     if args.api_key is not None:
         return str(args.api_key)
-    return os.environ.get("NQDC_API_KEY", None)
+    return os.environ.get("PUBGET_API_KEY", None)
 
 
 def _get_query(args: argparse.Namespace) -> str:
@@ -277,7 +278,7 @@ def _edit_argument_parser(argument_parser: ArgparseActions) -> None:
         "data_dir",
         help="Directory in which all pubget data should be stored. "
         "A subdirectory will be created for the given query or PMCID list. "
-        "Can also be provided by exporting the NQDC_DATA_DIR environment "
+        "Can also be provided by exporting the PUBGET_DATA_DIR environment "
         "variable (if both are specified the command-line argument has "
         "higher precedence).",
         # False positive in this case; see
@@ -328,7 +329,7 @@ def _edit_argument_parser(argument_parser: ArgparseActions) -> None:
         default=None,
         help="API key for the Entrez E-utilities (see "
         "https://www.ncbi.nlm.nih.gov/books/NBK25497/). Can also be provided "
-        "by exporting the NQDC_API_KEY environment variable (if both are "
+        "by exporting the PUBGET_API_KEY environment variable (if both are "
         "specified the command-line argument has higher precedence). If the "
         "API key is provided, it is included in all requests to the Entrez "
         "E-utilities.",

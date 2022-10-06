@@ -18,7 +18,7 @@ from pubget._vocabulary import (
     VocabularyExtractionStep,
 )
 
-_NQDC_DESCRIPTION = (
+_PUBGET_DESCRIPTION = (
     "Download articles from PubMedCentral and extract "
     "metadata, text, stereotactic coordinates and TFIDF features."
 )
@@ -31,7 +31,7 @@ def _get_root_parser() -> argparse.ArgumentParser:
         type=str,
         default=None,
         help="Directory in which to store log files. Can also be specified by "
-        "exporting the NQDC_LOG_DIR environment variable (if both are given "
+        "exporting the PUBGET_LOG_DIR environment variable (if both are given "
         "the command-line argument has higher precedence). If not specified, "
         "no log file is written.",
     )
@@ -84,7 +84,7 @@ def _add_command_subparsers(
 
 
 def _get_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description=_NQDC_DESCRIPTION)
+    parser = argparse.ArgumentParser(description=_PUBGET_DESCRIPTION)
     version = _utils.get_pubget_version()
     parser.add_argument(
         "--version", action="version", version=f"%(prog)s {version}"

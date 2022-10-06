@@ -22,7 +22,7 @@ def no_retry_delay(monkeypatch):
 @pytest.fixture(autouse=True)
 def erase_config(monkeypatch):
     for variable in os.environ:
-        if variable.startswith("NQDC_"):
+        if variable.startswith("PUBGET_"):
             monkeypatch.delenv(variable)
 
 

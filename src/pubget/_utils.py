@@ -51,7 +51,7 @@ def _add_log_file(
 ) -> None:
     """Add a file log handler if user specified a pubget log directory."""
     if log_dir is None:
-        log_dir = os.environ.get("NQDC_LOG_DIR", None)
+        log_dir = os.environ.get("PUBGET_LOG_DIR", None)
     if log_dir is None:
         return
     log_dir = Path(log_dir)

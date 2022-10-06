@@ -92,7 +92,7 @@ def test_full_pipeline_command(
 ):
     log_dir = tmp_path.joinpath("log")
     _patch_neuroquery(monkeypatch)
-    monkeypatch.setenv("NQDC_LOG_DIR", str(log_dir))
+    monkeypatch.setenv("PUBGET_LOG_DIR", str(log_dir))
     args = ["run", str(tmp_path), "-q", "fMRI[abstract]", "--n_jobs", "2"]
     if with_nimare:
         args.append("--nimare")

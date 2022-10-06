@@ -11,7 +11,7 @@ from scipy import sparse
 def _get_n_jobs(args):
     if args.n_jobs is not None:
         return args.n_jobs
-    return os.environ.get("NQDC_N_JOBS", 4)
+    return os.environ.get("PUBGET_N_JOBS", 4)
 
 
 def run_and_check():

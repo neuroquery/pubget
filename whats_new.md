@@ -1,4 +1,14 @@
+# `pubget` releases
+
+## 0.0.5
+
+- `nqdc` renamed `pubget`; all symbols, paths, environment variables etc. have been adapted accordingly.
+
+
 # `nqdc` releases
+
+`pubget` used to be called `nqdc`.
+The `nqdc` package is deprecated and should no longer be used.
 
 ## 0.0.3
 

@@ -64,11 +64,11 @@ def test_download_pmcids(tmp_path, entrez_mock):
 
 
 def test_get_api_key(monkeypatch):
-    monkeypatch.delenv("NQDC_API_KEY", raising=False)
+    monkeypatch.delenv("PUBGET_API_KEY", raising=False)
     args = argparse.Namespace(api_key=None)
     key = _download._get_api_key(args)
     assert key is None
-    monkeypatch.setenv("NQDC_API_KEY", "apikey")
+    monkeypatch.setenv("PUBGET_API_KEY", "apikey")
     key = _download._get_api_key(args)
     assert key == "apikey"
     args = argparse.Namespace(api_key="apikey1")
@@ -77,11 +77,11 @@ def test_get_api_key(monkeypatch):
 
 
 def test_get_data_dir(monkeypatch):
-    monkeypatch.delenv("NQDC_DATA_DIR", raising=False)
+    monkeypatch.delenv("PUBGET_DATA_DIR", raising=False)
     args = argparse.Namespace(data_dir=None)
     with pytest.raises(RuntimeError):
         _download._get_data_dir(args)
-    monkeypatch.setenv("NQDC_DATA_DIR", "pubget_data_env")
+    monkeypatch.setenv("PUBGET_DATA_DIR", "pubget_data_env")
     data_dir = _download._get_data_dir(args)
     assert data_dir == Path("pubget_data_env")
     args = argparse.Namespace(data_dir="pubget_data_args")
@@ -90,7 +90,7 @@ def test_get_data_dir(monkeypatch):
 
 
 def test_data_dir_arg(monkeypatch):
-    monkeypatch.delenv("NQDC_DATA_DIR", raising=False)
+    monkeypatch.delenv("PUBGET_DATA_DIR", raising=False)
     parser = argparse.ArgumentParser()
     _download._edit_argument_parser(parser)
     with pytest.raises(SystemExit):
@@ -100,7 +100,7 @@ def test_data_dir_arg(monkeypatch):
     _download._edit_argument_parser(parser)
     parser.parse_args(["pubget_data_arg", "-q", "fmri"])
 
-    monkeypatch.setenv("NQDC_DATA_DIR", "pubget_data_env")
+    monkeypatch.setenv("PUBGET_DATA_DIR", "pubget_data_env")
     parser = argparse.ArgumentParser()
     _download._edit_argument_parser(parser)
     parser.parse_args(["-q", "fmri"])

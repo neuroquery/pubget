@@ -102,12 +102,12 @@ or `--query_file`.
 
 If we have an Entrez API key (see details in the [E-utilities
 documentation](https://www.ncbi.nlm.nih.gov/books/NBK25497/)), we can provide it
-through the `NQDC_API_KEY` environment variable or through the `--api_key`
+through the `PUBGET_API_KEY` environment variable or through the `--api_key`
 command line argument (the latter has higher precedence).
 
 We must also specify the directory in which all `pubget` data will be stored. It
 can be provided either as a command-line argument (as in the examples below), or
-by exporting the `NQDC_DATA_DIR` environment variable. Subdirectories will be
+by exporting the `PUBGET_DATA_DIR` environment variable. Subdirectories will be
 created for each different query. In the following we suppose we are storing our
 data in a directory called `pubget_data`.
 
@@ -677,7 +677,7 @@ pubget run -q "fMRI[Title] AND (2019[PubDate] : 2019[PubDate])" \
 ```
 
 (The output directory, `pubget_data`, could also be provided by exporting the
-`NQDC_DATA_DIR` environment variable instead of passing it on the command line.)
+`PUBGET_DATA_DIR` environment variable instead of passing it on the command line.)
 
 If we also want to apply the optional steps:
 ```
@@ -700,7 +700,7 @@ See `pubget run --help` for a description of all options.
 
 By default `pubget` commands report their progress by writing to the standard
 streams. In addition, they can write log files if we provide the `--log_dir`
-command-line argument, or if we define the `NQDC_LOG_DIR` environment variable
+command-line argument, or if we define the `PUBGET_LOG_DIR` environment variable
 (the command-line argument has higher precedence). If this log directory is
 specified, a new log file with a timestamp is created and all the output is
 written there as well.
