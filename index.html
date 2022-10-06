@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="pdoc 12.1.0"/>
-    <title>nqdc API documentation</title>
+    <title>pubget API documentation</title>
 
     <style>/*! * Bootstrap Reboot v5.0.0 (https://getbootstrap.com/) * Copyright 2011-2021 The Bootstrap Authors * Copyright 2011-2021 Twitter, Inc. * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE) * Forked from Normalize.css, licensed MIT (https://github.com/necolas/normalize.css/blob/master/LICENSE.md) */*,::after,::before{box-sizing:border-box}@media (prefers-reduced-motion:no-preference){:root{scroll-behavior:smooth}}body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";font-size:1rem;font-weight:400;line-height:1.5;color:#212529;background-color:#fff;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}hr{margin:1rem 0;color:inherit;background-color:currentColor;border:0;opacity:.25}hr:not([size]){height:1px}h1,h2,h3,h4,h5,h6{margin-top:0;margin-bottom:.5rem;font-weight:500;line-height:1.2}h1{font-size:calc(1.375rem + 1.5vw)}@media (min-width:1200px){h1{font-size:2.5rem}}h2{font-size:calc(1.325rem + .9vw)}@media (min-width:1200px){h2{font-size:2rem}}h3{font-size:calc(1.3rem + .6vw)}@media (min-width:1200px){h3{font-size:1.75rem}}h4{font-size:calc(1.275rem + .3vw)}@media (min-width:1200px){h4{font-size:1.5rem}}h5{font-size:1.25rem}h6{font-size:1rem}p{margin-top:0;margin-bottom:1rem}abbr[data-bs-original-title],abbr[title]{-webkit-text-decoration:underline dotted;text-decoration:underline dotted;cursor:help;-webkit-text-decoration-skip-ink:none;text-decoration-skip-ink:none}address{margin-bottom:1rem;font-style:normal;line-height:inherit}ol,ul{padding-left:2rem}dl,ol,ul{margin-top:0;margin-bottom:1rem}ol ol,ol ul,ul ol,ul ul{margin-bottom:0}dt{font-weight:700}dd{margin-bottom:.5rem;margin-left:0}blockquote{margin:0 0 1rem}b,strong{font-weight:bolder}small{font-size:.875em}mark{padding:.2em;background-color:#fcf8e3}sub,sup{position:relative;font-size:.75em;line-height:0;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}a{color:#0d6efd;text-decoration:underline}a:hover{color:#0a58ca}a:not([href]):not([class]),a:not([href]):not([class]):hover{color:inherit;text-decoration:none}code,kbd,pre,samp{font-family:SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;font-size:1em;direction:ltr;unicode-bidi:bidi-override}pre{display:block;margin-top:0;margin-bottom:1rem;overflow:auto;font-size:.875em}pre code{font-size:inherit;color:inherit;word-break:normal}code{font-size:.875em;color:#d63384;word-wrap:break-word}a>code{color:inherit}kbd{padding:.2rem .4rem;font-size:.875em;color:#fff;background-color:#212529;border-radius:.2rem}kbd kbd{padding:0;font-size:1em;font-weight:700}figure{margin:0 0 1rem}img,svg{vertical-align:middle}table{caption-side:bottom;border-collapse:collapse}caption{padding-top:.5rem;padding-bottom:.5rem;color:#6c757d;text-align:left}th{text-align:inherit;text-align:-webkit-match-parent}tbody,td,tfoot,th,thead,tr{border-color:inherit;border-style:solid;border-width:0}label{display:inline-block}button{border-radius:0}button:focus:not(:focus-visible){outline:0}button,input,optgroup,select,textarea{margin:0;font-family:inherit;font-size:inherit;line-height:inherit}button,select{text-transform:none}[role=button]{cursor:pointer}select{word-wrap:normal}select:disabled{opacity:1}[list]::-webkit-calendar-picker-indicator{display:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]:not(:disabled),[type=reset]:not(:disabled),[type=submit]:not(:disabled),button:not(:disabled){cursor:pointer}::-moz-focus-inner{padding:0;border-style:none}textarea{resize:vertical}fieldset{min-width:0;padding:0;margin:0;border:0}legend{float:left;width:100%;padding:0;margin-bottom:.5rem;font-size:calc(1.275rem + .3vw);line-height:inherit}@media (min-width:1200px){legend{font-size:1.5rem}}legend+*{clear:left}::-webkit-datetime-edit-day-field,::-webkit-datetime-edit-fields-wrapper,::-webkit-datetime-edit-hour-field,::-webkit-datetime-edit-minute,::-webkit-datetime-edit-month-field,::-webkit-datetime-edit-text,::-webkit-datetime-edit-year-field{padding:0}::-webkit-inner-spin-button{height:auto}[type=search]{outline-offset:-2px;-webkit-appearance:textfield}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-color-swatch-wrapper{padding:0}::file-selector-button{font:inherit}::-webkit-file-upload-button{font:inherit;-webkit-appearance:button}output{display:inline-block}iframe{border:0}summary{display:list-item;cursor:pointer}progress{vertical-align:baseline}[hidden]{display:none!important}</style>
     <style>/*! syntax-highlighting.css */pre{line-height:125%;}span.linenos{color:inherit; background-color:transparent; padding-left:5px; padding-right:20px;}.pdoc-code .hll{background-color:#ffffcc}.pdoc-code{background:#f8f8f8;}.pdoc-code .c{color:#3D7B7B; font-style:italic}.pdoc-code .err{border:1px solid #FF0000}.pdoc-code .k{color:#008000; font-weight:bold}.pdoc-code .o{color:#666666}.pdoc-code .ch{color:#3D7B7B; font-style:italic}.pdoc-code .cm{color:#3D7B7B; font-style:italic}.pdoc-code .cp{color:#9C6500}.pdoc-code .cpf{color:#3D7B7B; font-style:italic}.pdoc-code .c1{color:#3D7B7B; font-style:italic}.pdoc-code .cs{color:#3D7B7B; font-style:italic}.pdoc-code .gd{color:#A00000}.pdoc-code .ge{font-style:italic}.pdoc-code .gr{color:#E40000}.pdoc-code .gh{color:#000080; font-weight:bold}.pdoc-code .gi{color:#008400}.pdoc-code .go{color:#717171}.pdoc-code .gp{color:#000080; font-weight:bold}.pdoc-code .gs{font-weight:bold}.pdoc-code .gu{color:#800080; font-weight:bold}.pdoc-code .gt{color:#0044DD}.pdoc-code .kc{color:#008000; font-weight:bold}.pdoc-code .kd{color:#008000; font-weight:bold}.pdoc-code .kn{color:#008000; font-weight:bold}.pdoc-code .kp{color:#008000}.pdoc-code .kr{color:#008000; font-weight:bold}.pdoc-code .kt{color:#B00040}.pdoc-code .m{color:#666666}.pdoc-code .s{color:#BA2121}.pdoc-code .na{color:#687822}.pdoc-code .nb{color:#008000}.pdoc-code .nc{color:#0000FF; font-weight:bold}.pdoc-code .no{color:#880000}.pdoc-code .nd{color:#AA22FF}.pdoc-code .ni{color:#717171; font-weight:bold}.pdoc-code .ne{color:#CB3F38; font-weight:bold}.pdoc-code .nf{color:#0000FF}.pdoc-code .nl{color:#767600}.pdoc-code .nn{color:#0000FF; font-weight:bold}.pdoc-code .nt{color:#008000; font-weight:bold}.pdoc-code .nv{color:#19177C}.pdoc-code .ow{color:#AA22FF; font-weight:bold}.pdoc-code .w{color:#bbbbbb}.pdoc-code .mb{color:#666666}.pdoc-code .mf{color:#666666}.pdoc-code .mh{color:#666666}.pdoc-code .mi{color:#666666}.pdoc-code .mo{color:#666666}.pdoc-code .sa{color:#BA2121}.pdoc-code .sb{color:#BA2121}.pdoc-code .sc{color:#BA2121}.pdoc-code .dl{color:#BA2121}.pdoc-code .sd{color:#BA2121; font-style:italic}.pdoc-code .s2{color:#BA2121}.pdoc-code .se{color:#AA5D1F; font-weight:bold}.pdoc-code .sh{color:#BA2121}.pdoc-code .si{color:#A45A77; font-weight:bold}.pdoc-code .sx{color:#008000}.pdoc-code .sr{color:#A45A77}.pdoc-code .s1{color:#BA2121}.pdoc-code .ss{color:#19177C}.pdoc-code .bp{color:#008000}.pdoc-code .fm{color:#0000FF}.pdoc-code .vc{color:#19177C}.pdoc-code .vg{color:#19177C}.pdoc-code .vi{color:#19177C}.pdoc-code .vm{color:#19177C}.pdoc-code .il{color:#666666}</style>
@@ -21,7 +21,6 @@
 
         <h2>Contents</h2>
         <ul>
-  <li><a href="#neuroquery-data-collection">NeuroQuery Data Collection</a></li>
   <li><a href="#installation">Installation</a></li>
   <li><a href="#quick-start">Quick Start</a></li>
   <li><a href="#usage">Usage</a>
@@ -148,47 +147,45 @@
     <main class="pdoc">
             <section class="module-info">
                     <h1 class="modulename">
-nqdc    </h1>
+pubget    </h1>
 
-                        <div class="docstring"><p><a href="https://github.com/neuroquery/nqdc/actions/workflows/testing.yml"><img src="https://github.com/neuroquery/nqdc/actions/workflows/testing.yml/badge.svg" alt="build" /></a>
-<a href="https://codecov.io/gh/neuroquery/nqdc"><img src="https://codecov.io/gh/neuroquery/nqdc/branch/main/graph/badge.svg?token=8KEBP2EN3A" alt="codecov" /></a>
-<a href="https://github.com/neuroquery/nqdc"><img src="https://img.shields.io/static/v1?label=&amp;message=nqdc%20on%20GitHub&amp;color=black&amp;style=flat&amp;logo=github" alt="nqdc on GitHub" /></a></p>
+                        <div class="docstring"><p><a href="https://github.com/neuroquery/pubget/actions/workflows/testing.yml"><img src="https://github.com/neuroquery/pubget/actions/workflows/testing.yml/badge.svg" alt="build" /></a>
+<a href="https://codecov.io/gh/neuroquery/pubget"><img src="https://codecov.io/gh/neuroquery/pubget/branch/main/graph/badge.svg?token=8KEBP2EN3A" alt="codecov" /></a>
+<a href="https://github.com/neuroquery/pubget"><img src="https://img.shields.io/static/v1?label=&amp;message=pubget%20on%20GitHub&amp;color=black&amp;style=flat&amp;logo=github" alt="pubget on GitHub" /></a></p>
 
-<h1 id="neuroquery-data-collection">NeuroQuery Data Collection</h1>
-<p><b>This document describes nqdc version 0.0.3 </b></p>
-
-<p><code><a href="">nqdc</a></code> is a command-line tool for collecting data for large-scale
+<p><b>This document describes pubget version 0.0.4</b></p>
+<p><code><a href="">pubget</a></code> is a command-line tool for collecting data for large-scale
 coordinate-based neuroimaging meta-analysis. It exposes some of the machinery
 that was used to create the <a href="https://github.com/neuroquery/neuroquery_data">neuroquery
 dataset</a>, which powers
 <a href="https://neuroquery.org">neuroquery.org</a>.</p>
 
-<p><code><a href="">nqdc</a></code> downloads full-text articles from <a href="https://www.ncbi.nlm.nih.gov/pmc/">PubMed
+<p><code><a href="">pubget</a></code> downloads full-text articles from <a href="https://www.ncbi.nlm.nih.gov/pmc/">PubMed
 Central</a> and extracts their text and
 stereotactic coordinates. It also computes <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf">TFIDF
 features</a> for the extracted text.</p>
 
-<p>Besides the command-line interface, <code><a href="">nqdc</a></code>'s functionality is also exposed
-through its <a href="https://neuroquery.github.io/nqdc/#python-api">Python API</a>.</p>
+<p>Besides the command-line interface, <code><a href="">pubget</a></code>'s functionality is also exposed
+through its <a href="https://neuroquery.github.io/pubget/#python-api">Python API</a>.</p>
 
 <h1 id="installation">Installation</h1>
 
-<p>You can install <code><a href="">nqdc</a></code> by running:</p>
+<p>You can install <code><a href="">pubget</a></code> by running:</p>
 
-<pre><code>pip install nqdc
+<pre><code>pip install pubget
 </code></pre>
 
-<p>This will install the <code><a href="">nqdc</a></code> Python package, as well as the <code><a href="">nqdc</a></code> command.</p>
+<p>This will install the <code><a href="">pubget</a></code> Python package, as well as the <code><a href="">pubget</a></code> command.</p>
 
 <h1 id="quick-start">Quick Start</h1>
 
-<p>Once <code><a href="">nqdc</a></code> is installed, we can download and process neuroimaging articles so
+<p>Once <code><a href="">pubget</a></code> is installed, we can download and process neuroimaging articles so
 that we can later use them for meta-analysis.</p>
 
-<pre><code>nqdc run ./nqdc_data -q "fMRI[title]"
+<pre><code>pubget run ./pubget_data -q "fMRI[title]"
 </code></pre>
 
-<p>See <code>nqdc run --help</code> for a description of this command. In particular, the
+<p>See <code>pubget run --help</code> for a description of this command. In particular, the
 <code>--n_jobs</code> option allows running some of the steps in parallel.</p>
 
 <h1 id="usage">Usage</h1>
@@ -206,19 +203,19 @@ storing this information in CSV files.</li>
 </ul>
 
 <p>Each of these steps stores its output in a separate directory. Normally, you
-will run the whole procedure in one command by invoking <code>nqdc run</code>. However,
+will run the whole procedure in one command by invoking <code>pubget run</code>. However,
 separate commands are also provided to run each step separately. Below, we
-describe each step and its output. Use <code>nqdc -h</code> to see a list of all available
-commands and <code>nqdc run -h</code> to see all the options of the main command.</p>
+describe each step and its output. Use <code>pubget -h</code> to see a list of all available
+commands and <code>pubget run -h</code> to see all the options of the main command.</p>
 
-<p>All articles downloaded by <code><a href="">nqdc</a></code> come from <a href="https://www.ncbi.nlm.nih.gov/pmc/">PubMed
+<p>All articles downloaded by <code><a href="">pubget</a></code> come from <a href="https://www.ncbi.nlm.nih.gov/pmc/">PubMed
 Central</a>, and are therefore identified by
 their PubMed Central ID (<code>pmcid</code>). Note this is not the same as the PubMed ID
 (<code>pmid</code>). Not all articles in PMC have a <code>pmid</code>.</p>
 
 <h2 id="step-1-downloading-articles-from-pmc">Step 1: Downloading articles from PMC</h2>
 
-<p>This step is executed by the <code>nqdc download</code> command. Articles to download can
+<p>This step is executed by the <code>pubget download</code> command. Articles to download can
 be selected in 2 different ways: by using a query to search the PMC database, or
 by providing an explicit list of article PMCIDs. To use a list of PMCIDs, we
 must pass the path to a file containing the IDs as the <code>--pmcids_file</code>
@@ -249,7 +246,7 @@ articles. It can be simple such as <code>fMRI</code>, or more specific such as
 query using the <a href="https://www.ncbi.nlm.nih.gov/pmc/advanced">PMC advanced search
 interface</a>. For more information see
 <a href="https://www.ncbi.nlm.nih.gov/books/NBK3837/">the E-Utilities help</a>.
-Some examples are provided in the <code><a href="">nqdc</a></code> git repository, in <code>docs/example_queries</code>.</p>
+Some examples are provided in the <code><a href="">pubget</a></code> git repository, in <code>docs/example_queries</code>.</p>
 
 <p>The query can be passed either as a string on the command-line with <code>-q</code> or
 <code>--query</code> or by passing the path of a text file containing the query with <code>-f</code>
@@ -260,15 +257,15 @@ documentation</a>), we can provide it
 through the <code>NQDC_API_KEY</code> environment variable or through the <code>--api_key</code>
 command line argument (the latter has higher precedence).</p>
 
-<p>We must also specify the directory in which all <code><a href="">nqdc</a></code> data will be stored. It
+<p>We must also specify the directory in which all <code><a href="">pubget</a></code> data will be stored. It
 can be provided either as a command-line argument (as in the examples below), or
 by exporting the <code>NQDC_DATA_DIR</code> environment variable. Subdirectories will be
 created for each different query. In the following we suppose we are storing our
-data in a directory called <code>nqdc_data</code>.</p>
+data in a directory called <code>pubget_data</code>.</p>
 
 <p>We can thus download all articles with "fMRI" in their title published in 2019 by running:</p>
 
-<pre><code>nqdc download -q "fMRI[Title] AND (2019[PubDate] : 2019[PubDate])" nqdc_data
+<pre><code>pubget download -q "fMRI[Title] AND (2019[PubDate] : 2019[PubDate])" pubget_data
 </code></pre>
 
 <hr />
@@ -284,21 +281,21 @@ would store our query in a file, say <code>query.txt</code>:</p>
 
 <p>and run</p>
 
-<pre><code>nqdc download -f query.txt nqdc_data
+<pre><code>pubget download -f query.txt pubget_data
 </code></pre>
 
 <hr />
 
 <p>After running this command, these are the contents of our data directory:</p>
 
-<pre><code>· nqdc_data
+<pre><code>· pubget_data
   └── query_3c0556e22a59e7d200f00ac8219dfd6c
       └── articlesets
           ├── articleset_00000.xml
           └── info.json
 </code></pre>
 
-<p><code><a href="">nqdc</a></code> has created a subdirectory for this query. If we run the download again
+<p><code><a href="">pubget</a></code> has created a subdirectory for this query. If we run the download again
 for the same query, the same subdirectory will be reused
 (<code>3c0556e22a59e7d200f00ac8219dfd6c</code> is the md5 checksum of the query). If we had
 used a PMCID list instead of a query, the subdirectory name would start with
@@ -326,13 +323,13 @@ remove the <code>articlesets</code> directory.</p>
 
 <h2 id="step-2-extracting-articles-from-bulk-download">Step 2: extracting articles from bulk download</h2>
 
-<p>This step is executed by the <code>nqdc extract_articles</code> command.</p>
+<p>This step is executed by the <code>pubget extract_articles</code> command.</p>
 
 <p>Once our download is complete, we extract articles and store each of them in a
 separate directory. To do so, we pass the <code>articlesets</code> directory created by the
-<code>nqdc download</code> command in step 1:</p>
+<code>pubget download</code> command in step 1:</p>
 
-<pre><code>nqdc extract_articles nqdc_data/query_3c0556e22a59e7d200f00ac8219dfd6c/articlesets
+<pre><code>pubget extract_articles pubget_data/query_3c0556e22a59e7d200f00ac8219dfd6c/articlesets
 </code></pre>
 
 <p>This creates an <code>articles</code> subdirectory in the query directory, containing the
@@ -345,7 +342,7 @@ the first 3 hexidecimal digits of the md5 hash of its <code>pmcid</code>.</p>
 <p>Our data directory now looks like this (with many articles ommitted for
 conciseness):</p>
 
-<pre><code>· nqdc_data
+<pre><code>· pubget_data
   └── query_3c0556e22a59e7d200f00ac8219dfd6c
       ├── articles
       │   ├── 019
@@ -394,24 +391,24 @@ the article extraction we need to remove the <code>articles</code> directory (or
 
 <h2 id="step-3-extracting-data-from-articles">Step 3: extracting data from articles</h2>
 
-<p>This step is executed by the <code>nqdc extract_data</code> command.</p>
+<p>This step is executed by the <code>pubget extract_data</code> command.</p>
 
 <p>It creates another directory that contains CSV files, containing the text,
 metadata and coordinates extracted from all the articles.</p>
 
 <p>If we use the <code>--articles_with_coords_only</code> option, only articles in which
-<code><a href="">nqdc</a></code> finds stereotactic coordinates are kept. The name of the resulting
+<code><a href="">pubget</a></code> finds stereotactic coordinates are kept. The name of the resulting
 directory will reflect that choice.</p>
 
-<p>We pass the path of the <code>articles</code> directory created by <code>nqdc extract_articles</code>
-in the previous step to the <code>nqdc extract_data</code> command:</p>
+<p>We pass the path of the <code>articles</code> directory created by <code>pubget extract_articles</code>
+in the previous step to the <code>pubget extract_data</code> command:</p>
 
-<pre><code>nqdc extract_data --articles_with_coords_only nqdc_data/query_3c0556e22a59e7d200f00ac8219dfd6c/articles/
+<pre><code>pubget extract_data --articles_with_coords_only pubget_data/query_3c0556e22a59e7d200f00ac8219dfd6c/articles/
 </code></pre>
 
 <p>Our data directory now contains (ommitting the contents of the previous steps):</p>
 
-<pre><code>· nqdc_data
+<pre><code>· pubget_data
   └── query_3c0556e22a59e7d200f00ac8219dfd6c
       ├── articles
       ├── articlesets
@@ -460,7 +457,7 @@ data extraction we need to remove the corresponding directory (or the
 
 <h2 id="step-4-vectorizing-computing-tfidf-features">Step 4: vectorizing (computing TFIDF features)</h2>
 
-<p>This step is executed by the <code>nqdc vectorize</code> command.</p>
+<p>This step is executed by the <code>pubget vectorize</code> command.</p>
 
 <p>Some large-scale meta-analysis methods such as
 <a href="https://neurosynth.org/">neurosynth</a> and <a href="https://neuroquery.org">neuroquery</a>
@@ -480,7 +477,7 @@ whole corpus or dataset).</p>
 <p>To extract the TFIDF features we must therefore choose a vocabulary.</p>
 
 <ul>
-<li>By default, <code><a href="">nqdc</a></code> will download and use the vocabulary used by
+<li>By default, <code><a href="">pubget</a></code> will download and use the vocabulary used by
 <a href="https://neuroquery.org">neuroquery.org</a>.</li>
 <li>If we use the <code>--extract_vocabulary</code> option, a new vocabulary is created from
 the downloaded text and used for computing TFIDF features (see "extracting a
@@ -490,11 +487,11 @@ new vocabulary" below).</li>
 header, whose first column contains the terms. Other columns are ignored.</li>
 </ul>
 
-<p>We also pass to <code>nqdc vectorize</code> the directory containing the text we want to
-vectorize, created by <code>nqdc extract_data</code> in step 3 (here we are using the
+<p>We also pass to <code>pubget vectorize</code> the directory containing the text we want to
+vectorize, created by <code>pubget extract_data</code> in step 3 (here we are using the
 default vocabulary):</p>
 
-<pre><code>nqdc vectorize nqdc_data/query_3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords_extractedData/
+<pre><code>pubget vectorize pubget_data/query_3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords_extractedData/
 </code></pre>
 
 <p>This creates a new directory whose name reflects the data source (whether all
@@ -503,7 +500,7 @@ articles are kept or only those with coordinates) and the chosen vocabulary
 vocabulary file, concatenated with those of the vocabulary mapping file, see
 "vocabulary mapping" below):</p>
 
-<pre><code>· nqdc_data
+<pre><code>· pubget_data
   └── query_3c0556e22a59e7d200f00ac8219dfd6c
       ├── articles
       ├── articlesets
@@ -558,20 +555,20 @@ such as "brainstem" and "brain stem".</p>
 <p>This is done through a JSON file that contains a mapping of the form <code>{term:
 replacement}</code>. For example if it contains <code>{"brain stem": "brainstem"}</code>, "brain
 stem" will be discarded from the vocabulary and every occurrence of "brain stem"
-will be counted as an occurrence of "brainstem" instead. To be found by <code><a href="">nqdc</a></code>,
+will be counted as an occurrence of "brainstem" instead. To be found by <code><a href="">pubget</a></code>,
 this vocabulary mapping file must be in the same directory as the vocabulary
 file, and its name must be the vocabulary file's name with
 <code>_voc_mapping_identity.json</code> appended: for example <code>vocabulary.csv</code>,
 <code>vocabulary.csv_voc_mapping_identity.json</code>.</p>
 
 <p>When a vocabulary mapping is provided, a shorter vocabulary is therefore created
-by removing redundant words. The TFIDF and word counts computed by <code><a href="">nqdc</a></code>
+by removing redundant words. The TFIDF and word counts computed by <code><a href="">pubget</a></code>
 correspond to the shorter vocabulary, which is stored along with its document
 frequencies in <code>feature_names.csv</code>.</p>
 
 <p><code>vocabulary.csv</code> contains the document frequencies of the original (full,
 longer) vocabulary. A <code>vocabulary.csv_voc_mapping_identity.json</code> file is always
-created by <code><a href="">nqdc</a></code>, but if no vocabulary mapping was used, that file contains an
+created by <code><a href="">pubget</a></code>, but if no vocabulary mapping was used, that file contains an
 empty mapping (<code>{}</code>) and <code>vocabulary.csv</code> and <code>feature_names.csv</code> are identical.</p>
 
 <p>The vocabulary mapping is primarily used by the <code>neuroquery</code> package and its
@@ -581,7 +578,7 @@ file providing the terms corresponding to the TFIDF <em>features</em> is
 
 <h2 id="optional-step-extracting-a-new-vocabulary">Optional step: extracting a new vocabulary</h2>
 
-<p>This step is executed by the <code>nqdc extract_vocabulary</code> command.
+<p>This step is executed by the <code>pubget extract_vocabulary</code> command.
 When running the full pipeline this step is optional: we must use
 the <code>--extract_vocabulary</code> option for it to be executed.</p>
 
@@ -589,13 +586,13 @@ the <code>--extract_vocabulary</code> option for it to be executed.</p>
 words) that appear in the downloaded text, and computes their document frequency
 (the proportion of documents in which a term appears).</p>
 
-<pre><code>nqdc extract_vocabulary nqdc_data/query_3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords_extractedData
+<pre><code>pubget extract_vocabulary pubget_data/query_3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords_extractedData
 </code></pre>
 
 <p>The vocabulary is stored in a csv file in a new directory. There is no header
 and the 2 columns are the term and its document frequency.</p>
 
-<pre><code>· nqdc_data
+<pre><code>· pubget_data
   └── query_3c0556e22a59e7d200f00ac8219dfd6c
       ├── articles
       ├── articlesets
@@ -606,14 +603,14 @@ and the 2 columns are the term and its document frequency.</p>
       └── subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
 </code></pre>
 
-<p>When running the whole pipeline (<code>nqdc run</code>), if we use the
+<p>When running the whole pipeline (<code>pubget run</code>), if we use the
 <code>--extract_vocabulary</code> option and do not provide an explicit value for
 <code>--vocabulary_file</code>, the freshly-extracted vocabulary is used instead of the
 default <code>neuroquery</code> one for computing TFIDF features.</p>
 
 <h2 id="optional-step-fitting-a-neuroquery-encoding-model">Optional step: fitting a NeuroQuery encoding model</h2>
 
-<p>This step is executed by the <code>nqdc fit_neuroquery</code> command. When running the
+<p>This step is executed by the <code>pubget fit_neuroquery</code> command. When running the
 full pipeline it is optional: we must use the <code>--fit_neuroquery</code> option
 for it to be executed.</p>
 
@@ -627,14 +624,14 @@ package</a>.</p>
 
 <p>Note: for this model to give good results a large dataset is needed, ideally close to 10,000 articles (with coordinates).</p>
 
-<p>We pass the <code>_vectorizedText</code> directory created by <code>nqdc vectorize</code>:</p>
+<p>We pass the <code>_vectorizedText</code> directory created by <code>pubget vectorize</code>:</p>
 
-<pre><code>nqdc fit_neuroquery nqdc_data/query_3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
+<pre><code>pubget fit_neuroquery pubget_data/query_3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
 </code></pre>
 
 <p>This creates a directory whose name ends with <code>_neuroqueryModel</code>:</p>
 
-<pre><code>· nqdc_data
+<pre><code>· pubget_data
   └── query_3c0556e22a59e7d200f00ac8219dfd6c
       ├── articles
       ├── articlesets
@@ -680,7 +677,7 @@ Then run <code>flask run</code> and point your web browser to <code>https://loca
 
 <h2 id="optional-step-running-a-neurosynth-meta-analysis">Optional step: running a NeuroSynth meta-analysis</h2>
 
-<p>This step is executed by the <code>nqdc fit_neurosynth</code> command. When running the
+<p>This step is executed by the <code>pubget fit_neurosynth</code> command. When running the
 full pipeline it is optional: we must use the <code>--fit_neurosynth</code> option for it
 to be executed.</p>
 
@@ -694,14 +691,14 @@ paper</a> and
 <a href="https://nimare.readthedocs.io/">NiMARE</a> documentation pages for more
 information.</p>
 
-<p>We pass the <code>_vectorizedText</code> directory created by <code>nqdc vectorize</code>:</p>
+<p>We pass the <code>_vectorizedText</code> directory created by <code>pubget vectorize</code>:</p>
 
-<pre><code>nqdc fit_neurosynth nqdc_data/query_3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
+<pre><code>pubget fit_neurosynth pubget_data/query_3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
 </code></pre>
 
 <p>This creates a directory whose name ends with <code>_neurosynthResults</code>:</p>
 
-<pre><code>· nqdc_data
+<pre><code>· pubget_data
   └── query_3c0556e22a59e7d200f00ac8219dfd6c
       ├── articles
       ├── articlesets
@@ -736,21 +733,21 @@ mention it.</p>
 
 <h2 id="optional-step-preparing-articles-for-annotation-with-labelbuddy">Optional step: preparing articles for annotation with <code>labelbuddy</code></h2>
 
-<p>This step is executed by the <code>nqdc extract_labelbuddy_data</code> command.
+<p>This step is executed by the <code>pubget extract_labelbuddy_data</code> command.
 When running the full pipeline this step is optional: we must use
 the <code>--labelbuddy</code> or <code>--labelbuddy_part_size</code> option for it to be executed.</p>
 
 <p>It prepares the articles whose data was extracted for annotation with
 <a href="https://jeromedockes.github.io/labelbuddy/">labelbuddy</a>.</p>
 
-<p>We pass the <code>_extractedData</code> directory created by <code>nqdc extract_data</code>:</p>
+<p>We pass the <code>_extractedData</code> directory created by <code>pubget extract_data</code>:</p>
 
-<pre><code>nqdc extract_labelbuddy_data nqdc_data/query_3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords_extractedData
+<pre><code>pubget extract_labelbuddy_data pubget_data/query_3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords_extractedData
 </code></pre>
 
 <p>This creates a directory whose name ends with <code>labelbuddyData</code> containing the batches of documents in JSONL format (in this case there is a single batch):</p>
 
-<pre><code>· nqdc_data
+<pre><code>· pubget_data
   └── query_3c0556e22a59e7d200f00ac8219dfd6c
       ├── articles
       ├── articlesets
@@ -772,7 +769,7 @@ for details.</p>
 
 <h2 id="optional-step-creating-a-nimare-dataset">Optional step: creating a NiMARE dataset</h2>
 
-<p>This step is executed by the <code>nqdc extract_nimare_data</code> command. When running
+<p>This step is executed by the <code>pubget extract_nimare_data</code> command. When running
 the full pipeline this step is optional: we must use the <code>--nimare</code> option for
 it to be executed.</p>
 
@@ -781,14 +778,14 @@ data in JSON format. See the NiMARE
 <a href="https://nimare.readthedocs.io/en/latest/generated/nimare.dataset.Dataset.html#nimare.dataset.Dataset">documentation</a>
 for details.</p>
 
-<p>We pass the <code>_vectorizedText</code> directory created by <code>nqdc vectorize</code>:</p>
+<p>We pass the <code>_vectorizedText</code> directory created by <code>pubget vectorize</code>:</p>
 
-<pre><code>nqdc extract_nimare_data nqdc_data/query_3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
+<pre><code>pubget extract_nimare_data pubget_data/query_3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
 </code></pre>
 
 <p>The resulting directory contains a <code>nimare_dataset.json</code> file that can be used to initialize a <code>nimare.Dataset</code>. </p>
 
-<pre><code>· nqdc_data
+<pre><code>· pubget_data
   └── query_3c0556e22a59e7d200f00ac8219dfd6c
       ├── articles
       ├── articlesets
@@ -800,38 +797,38 @@ for details.</p>
 </code></pre>
 
 <p>Using this option requires installing NiMARE, which is not installed by default
-with <code><a href="">nqdc</a></code>. To use this option, install NiMARE separately with</p>
+with <code><a href="">pubget</a></code>. To use this option, install NiMARE separately with</p>
 
 <pre><code>pip install nimare
 </code></pre>
 
-<p>or install <code><a href="">nqdc</a></code> with</p>
+<p>or install <code><a href="">pubget</a></code> with</p>
 
-<pre><code>pip install "nqdc[nimare]"
+<pre><code>pip install "pubget[nimare]"
 </code></pre>
 
 <h2 id="full-pipeline">Full pipeline</h2>
 
-<p>We can run all steps in one command by using <code>nqdc run</code>.</p>
+<p>We can run all steps in one command by using <code>pubget run</code>.</p>
 
 <p>The full procedure described above could be run by executing:</p>
 
-<pre><code>nqdc run -q "fMRI[Title] AND (2019[PubDate] : 2019[PubDate])" \
+<pre><code>pubget run -q "fMRI[Title] AND (2019[PubDate] : 2019[PubDate])" \
     --articles_with_coords_only                               \
-    nqdc_data
+    pubget_data
 </code></pre>
 
-<p>(The output directory, <code>nqdc_data</code>, could also be provided by exporting the
+<p>(The output directory, <code>pubget_data</code>, could also be provided by exporting the
 <code>NQDC_DATA_DIR</code> environment variable instead of passing it on the command line.)</p>
 
 <p>If we also want to apply the optional steps:</p>
 
-<pre><code>nqdc run -q "fMRI[Title] AND (2019[PubDate] : 2019[PubDate])" \
+<pre><code>pubget run -q "fMRI[Title] AND (2019[PubDate] : 2019[PubDate])" \
     --articles_with_coords_only                               \
     --fit_neuroquery                                          \
     --labelbuddy                                              \
     --nimare                                                  \
-    nqdc_data
+    pubget_data
 </code></pre>
 
 <p>(remember that <code>--nimare</code> requires NiMARE to be installed).</p>
@@ -839,11 +836,11 @@ with <code><a href="">nqdc</a></code>. To use this option, install NiMARE separa
 <p>Here also, steps that had already been completed are skipped; we need to remove
 the corresponding directories if we want to force running these steps again.</p>
 
-<p>See <code>nqdc run --help</code> for a description of all options.</p>
+<p>See <code>pubget run --help</code> for a description of all options.</p>
 
 <h2 id="logging">Logging</h2>
 
-<p>By default <code><a href="">nqdc</a></code> commands report their progress by writing to the standard
+<p>By default <code><a href="">pubget</a></code> commands report their progress by writing to the standard
 streams. In addition, they can write log files if we provide the <code>--log_dir</code>
 command-line argument, or if we define the <code>NQDC_LOG_DIR</code> environment variable
 (the command-line argument has higher precedence). If this log directory is
@@ -854,44 +851,44 @@ written there as well.</p>
 
 <p>It is possible to write plugins and define <a href="https://setuptools.pypa.io/en/latest/userguide/entry_point.html">entry
 points</a> to add
-functionality that is automatically executed when <code><a href="">nqdc</a></code> is run.</p>
+functionality that is automatically executed when <code><a href="">pubget</a></code> is run.</p>
 
-<p>The name of the entry point should be <code>nqdc.plugin_actions</code>. It must be
+<p>The name of the entry point should be <code>pubget.plugin_actions</code>. It must be
 a function taking no arguments and returning a dictionary with keys
 <code>pipeline_steps</code> and <code>commands</code>. The corresponding values must be lists
 of processing step objects, that must implement the interface defined by
-<code><a href="#PipelineStep">nqdc.PipelineStep</a></code> and <code><a href="#Command">nqdc.Command</a></code> respectively (their types do not need to
+<code><a href="#PipelineStep">pubget.PipelineStep</a></code> and <code><a href="#Command">pubget.Command</a></code> respectively (their types do not need to
 inherit from these classes).</p>
 
-<p>All steps in <code>pipeline_steps</code> will be run when <code>nqdc run</code> is used. All steps in
-<code>standalone_steps</code> will be added as additional nqdc commands; for example if the
-<code>name</code> of a standalone step is <code>my_plugin</code>, the <code>nqdc my_plugin</code> command will
+<p>All steps in <code>pipeline_steps</code> will be run when <code>pubget run</code> is used. All steps in
+<code>standalone_steps</code> will be added as additional pubget commands; for example if the
+<code>name</code> of a standalone step is <code>my_plugin</code>, the <code>pubget my_plugin</code> command will
 become available.</p>
 
 <p>An example plugin that can be used as a template, and more details, are provided
-in the <code><a href="">nqdc</a></code> git repository, in <code>docs/example_plugin</code>.</p>
+in the <code><a href="">pubget</a></code> git repository, in <code>docs/example_plugin</code>.</p>
 
 <h1 id="contributing">Contributing</h1>
 
 <p>Feedback and contributions are welcome. Development happens at the
-<a href="https://github.com/neuroquery/nqdc">nqdc GitHub repositiory</a>.
-To install the dependencies required for development, from the directory where you cloned <code><a href="">nqdc</a></code>, run:</p>
+<a href="https://github.com/neuroquery/pubget">pubget GitHub repositiory</a>.
+To install the dependencies required for development, from the directory where you cloned <code><a href="">pubget</a></code>, run:</p>
 
 <pre><code>pip install -e ".[dev]"
 </code></pre>
 
 <p>The tests can be run with <code>make test_all</code>, or <code>make test_coverage</code> to report
 test coverage. The documentation can be rendered with <code>make doc</code>. <code>make
-run_full_pipeline</code> runs the full <code><a href="">nqdc</a></code> pipeline on a query returning a
+run_full_pipeline</code> runs the full <code><a href="">pubget</a></code> pipeline on a query returning a
 realistic number of results (<code>fMRI[title]</code>).</p>
 
 <h1 id="python-api">Python API</h1>
 
-<p><code><a href="">nqdc</a></code> is mostly intended for use as a command-line tool. However, it is also a
+<p><code><a href="">pubget</a></code> is mostly intended for use as a command-line tool. However, it is also a
 Python package and its functionality can be used in Python programs. The Python
 API closely reflects the command-line programs described above.</p>
 
-<p>The Python API is described on the <code><a href="">nqdc</a></code> <a href="https://neuroquery.github.io/nqdc/#python-api">website</a>.</p>
+<p>The Python API is described on the <code><a href="">pubget</a></code> <a href="https://neuroquery.github.io/pubget/#python-api">website</a>.</p>
 </div>
 
                 
@@ -908,7 +905,7 @@ API closely reflects the command-line programs described above.</p>
     </div>
     <a class="headerlink" href="#Command"></a>
     
-            <div class="docstring"><p>An <code><a href="">nqdc</a></code> subcommand.</p>
+            <div class="docstring"><p>An <code><a href="">pubget</a></code> subcommand.</p>
 </div>
 
 
@@ -971,7 +968,7 @@ API closely reflects the command-line programs described above.</p>
                     <div class="decorator">@abstractmethod</div>
 
         <span class="def">def</span>
-        <span class="name">run</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">args</span><span class="p">:</span> <span class="n">argparse</span><span class="o">.</span><span class="n">Namespace</span></span><span class="return-annotation">) -> <span class="n"><a href="#ExitCode">nqdc.ExitCode</a></span>:</span></span>
+        <span class="name">run</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">args</span><span class="p">:</span> <span class="n">argparse</span><span class="o">.</span><span class="n">Namespace</span></span><span class="return-annotation">) -> <span class="n"><a href="#ExitCode">pubget.ExitCode</a></span>:</span></span>
 
         
     </div>
@@ -1064,7 +1061,7 @@ API closely reflects the command-line programs described above.</p>
     </div>
     <a class="headerlink" href="#PipelineStep"></a>
     
-            <div class="docstring"><p>An individual step in the <code><a href="">nqdc</a></code> pipeline (<code>nqdc run</code>).</p>
+            <div class="docstring"><p>An individual step in the <code><a href="">pubget</a></code> pipeline (<code>pubget run</code>).</p>
 </div>
 
 
@@ -1127,7 +1124,7 @@ API closely reflects the command-line programs described above.</p>
                     <div class="decorator">@abstractmethod</div>
 
         <span class="def">def</span>
-        <span class="name">run</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">args</span><span class="p">:</span> <span class="n">argparse</span><span class="o">.</span><span class="n">Namespace</span>,</span><span class="param">	<span class="n">previous_steps_output</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">],</span> <span class="n">nqdc</span><span class="o">.</span><span class="n">_ExitCode</span><span class="p">]</span>:</span></span>
+        <span class="name">run</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">args</span><span class="p">:</span> <span class="n">argparse</span><span class="o">.</span><span class="n">Namespace</span>,</span><span class="param">	<span class="n">previous_steps_output</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">],</span> <span class="n">pubget</span><span class="o">.</span><span class="n">_ExitCode</span><span class="p">]</span>:</span></span>
 
         
     </div>
@@ -1143,7 +1140,7 @@ API closely reflects the command-line programs described above.</p>
                     <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">download_pmcids</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">pmcids</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>,</span><span class="param">	<span class="n">data_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>,</span><span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">n_docs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">retmax</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span>,</span><span class="param">	<span class="n">api_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></span><span class="return-annotation">) -> <span class="n">Tuple</span><span class="p">[</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="n">nqdc</span><span class="o">.</span><span class="n">_ExitCode</span><span class="p">]</span>:</span></span>
+        <span class="name">download_pmcids</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">pmcids</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>,</span><span class="param">	<span class="n">data_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>,</span><span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">n_docs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">retmax</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span>,</span><span class="param">	<span class="n">api_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></span><span class="return-annotation">) -> <span class="n">Tuple</span><span class="p">[</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="n">pubget</span><span class="o">.</span><span class="n">_ExitCode</span><span class="p">]</span>:</span></span>
 
         
     </div>
@@ -1155,7 +1152,7 @@ API closely reflects the command-line programs described above.</p>
 
 <ul>
 <li><strong>pmcids</strong>: List of PubMed Central IDs to download.</li>
-<li><strong>data_dir</strong>: Path to the directory where all nqdc data is stored; a subdirectory
+<li><strong>data_dir</strong>: Path to the directory where all pubget data is stored; a subdirectory
 will be created for this download.</li>
 <li><strong>n_docs</strong>: Approximate maximum number of articles to download. By default, all
 results returned for the search are downloaded. If n_docs is
@@ -1173,7 +1170,7 @@ E-utilities.</li>
 <ul>
 <li><strong>output_dir</strong>: The directory that was created in which downloaded data is stored.</li>
 <li><strong>exit_code</strong>: COMPLETED if all articles have been successfully downloaded and
-INCOMPLETE or ERROR otherwise. Used by the <code><a href="">nqdc</a></code> command-line
+INCOMPLETE or ERROR otherwise. Used by the <code><a href="">pubget</a></code> command-line
 interface.</li>
 </ul>
 </div>
@@ -1184,7 +1181,7 @@ interface.</li>
                     <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">download_query_results</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">query</span><span class="p">:</span> <span class="nb">str</span>,</span><span class="param">	<span class="n">data_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>,</span><span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">n_docs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">retmax</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span>,</span><span class="param">	<span class="n">api_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></span><span class="return-annotation">) -> <span class="n">Tuple</span><span class="p">[</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="n">nqdc</span><span class="o">.</span><span class="n">_ExitCode</span><span class="p">]</span>:</span></span>
+        <span class="name">download_query_results</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">query</span><span class="p">:</span> <span class="nb">str</span>,</span><span class="param">	<span class="n">data_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>,</span><span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">n_docs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">retmax</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span>,</span><span class="param">	<span class="n">api_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></span><span class="return-annotation">) -> <span class="n">Tuple</span><span class="p">[</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="n">pubget</span><span class="o">.</span><span class="n">_ExitCode</span><span class="p">]</span>:</span></span>
 
         
     </div>
@@ -1200,7 +1197,7 @@ using the <a href="https://www.ncbi.nlm.nih.gov/pmc/advanced">PMC advanced searc
 interface</a>. For more
 information see <a href="https://www.ncbi.nlm.nih.gov/books/NBK3837/">the E-Utilities
 help</a>.</li>
-<li><strong>data_dir</strong>: Path to the directory where all nqdc data is stored; a subdirectory
+<li><strong>data_dir</strong>: Path to the directory where all pubget data is stored; a subdirectory
 will be created for this download.</li>
 <li><strong>n_docs</strong>: Approximate maximum number of articles to download. By default, all
 results returned for the search are downloaded. If n_docs is
@@ -1218,7 +1215,7 @@ E-utilities.</li>
 <ul>
 <li><strong>output_dir</strong>: The directory that was created in which downloaded data is stored.</li>
 <li><strong>exit_code</strong>: COMPLETED if all articles have been successfully downloaded and
-INCOMPLETE or ERROR otherwise. Used by the <code><a href="">nqdc</a></code> command-line
+INCOMPLETE or ERROR otherwise. Used by the <code><a href="">pubget</a></code> command-line
 interface.</li>
 </ul>
 </div>
@@ -1229,7 +1226,7 @@ interface.</li>
                     <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">extract_articles</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">articlesets_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>,</span><span class="param">	<span class="n">output_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="n">NoneType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">n_jobs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span></span><span class="return-annotation">) -> <span class="n">Tuple</span><span class="p">[</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="n">nqdc</span><span class="o">.</span><span class="n">_ExitCode</span><span class="p">]</span>:</span></span>
+        <span class="name">extract_articles</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">articlesets_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>,</span><span class="param">	<span class="n">output_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="n">NoneType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">n_jobs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span></span><span class="return-annotation">) -> <span class="n">Tuple</span><span class="p">[</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="n">pubget</span><span class="o">.</span><span class="n">_ExitCode</span><span class="p">]</span>:</span></span>
 
         
     </div>
@@ -1241,7 +1238,7 @@ interface.</li>
 
 <ul>
 <li><strong>articlesets_dir</strong>: Directory containing the downloaded files. It is a directory created by
-<code>nqdc.download_articles_for_query</code>: it is named <code>articlesets</code> and it
+<code>pubget.download_articles_for_query</code>: it is named <code>articlesets</code> and it
 contains the bulk download files <code>articleset_00000.xml</code>,
 <code>articleset_00001.xml</code>, etc.</li>
 <li><strong>output_dir</strong>: Directory where to store the extracted articles. If not specified, a
@@ -1275,7 +1272,7 @@ and its tables.</p>
 <ul>
 <li><strong>exit_code</strong>: COMPLETED if the download in <code>articlesets_dir</code> was complete and the
 article extraction finished normally and INCOMPLETE otherwise. Used by
-the <code><a href="">nqdc</a></code> command-line interface.</li>
+the <code><a href="">pubget</a></code> command-line interface.</li>
 </ul>
 </div>
 
@@ -1285,7 +1282,7 @@ the <code><a href="">nqdc</a></code> command-line interface.</li>
                     <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">extract_data_to_csv</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">articles_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>,</span><span class="param">	<span class="n">output_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="n">NoneType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">articles_with_coords_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>,</span><span class="param">	<span class="n">n_jobs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span></span><span class="return-annotation">) -> <span class="n">Tuple</span><span class="p">[</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="n">nqdc</span><span class="o">.</span><span class="n">_ExitCode</span><span class="p">]</span>:</span></span>
+        <span class="name">extract_data_to_csv</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">articles_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>,</span><span class="param">	<span class="n">output_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="n">NoneType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">articles_with_coords_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>,</span><span class="param">	<span class="n">n_jobs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span></span><span class="return-annotation">) -> <span class="n">Tuple</span><span class="p">[</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="n">pubget</span><span class="o">.</span><span class="n">_ExitCode</span><span class="p">]</span>:</span></span>
 
         
     </div>
@@ -1297,7 +1294,7 @@ the <code><a href="">nqdc</a></code> command-line interface.</li>
 
 <ul>
 <li><strong>articles_dir</strong>: Directory containing the article files. It is a directory created by
-<code><a href="#extract_articles">nqdc.extract_articles</a></code>: it is named <code>articles</code> and contains
+<code><a href="#extract_articles">pubget.extract_articles</a></code>: it is named <code>articles</code> and contains
 subdirectories <code>000</code> - <code>fff</code>, each of which contains articles stored in
 XML files.</li>
 <li><strong>output_dir</strong>: Directory in which to store the extracted data. If not specified, a
@@ -1315,7 +1312,7 @@ processors.</li>
 <ul>
 <li><strong>output_dir</strong>: The directory in which extracted data is stored.</li>
 <li><strong>exit_code</strong>: COMPLETED if previous (article extraction) step was complete and this
-step (data extraction) finished normally as well. Used by the <code><a href="">nqdc</a></code>
+step (data extraction) finished normally as well. Used by the <code><a href="">pubget</a></code>
 command-line interface.</li>
 </ul>
 </div>
@@ -1326,7 +1323,7 @@ command-line interface.</li>
                     <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">extract_vocabulary_to_csv</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">extracted_data_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>,</span><span class="param">	<span class="n">output_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="n">NoneType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></span><span class="return-annotation">) -> <span class="n">Tuple</span><span class="p">[</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="n">nqdc</span><span class="o">.</span><span class="n">_ExitCode</span><span class="p">]</span>:</span></span>
+        <span class="name">extract_vocabulary_to_csv</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">extracted_data_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>,</span><span class="param">	<span class="n">output_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="n">NoneType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></span><span class="return-annotation">) -> <span class="n">Tuple</span><span class="p">[</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="n">pubget</span><span class="o">.</span><span class="n">_ExitCode</span><span class="p">]</span>:</span></span>
 
         
     </div>
@@ -1338,7 +1335,7 @@ command-line interface.</li>
 
 <ul>
 <li><strong>extracted_data_dir</strong>: The directory containing the text of articles to vectorize. It is a
-directory created by <code><a href="#extract_data_to_csv">nqdc.extract_data_to_csv</a></code>: it contains a file
+directory created by <code><a href="#extract_data_to_csv">pubget.extract_data_to_csv</a></code>: it contains a file
 named <code>text.csv</code> with fields <code>pmcid</code>, <code>title</code>, <code>keywords</code>, <code>abstract</code>,
 <code>body</code>.</li>
 </ul>
@@ -1348,7 +1345,7 @@ named <code>text.csv</code> with fields <code>pmcid</code>, <code>title</code>, 
 <ul>
 <li><strong>output_dir</strong>: The directory in which the vocabulary is stored.</li>
 <li><strong>exit_code</strong>: COMPLETED if previous (data extraction) step was complete and this step
-(vocabulary extraction) finished normally as well. Used by the <code><a href="">nqdc</a></code>
+(vocabulary extraction) finished normally as well. Used by the <code><a href="">pubget</a></code>
 command-line interface.</li>
 </ul>
 </div>
@@ -1359,7 +1356,7 @@ command-line interface.</li>
                     <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">fit_neuroquery</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">tfidf_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>,</span><span class="param">	<span class="n">extracted_data_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="n">NoneType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">output_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="n">NoneType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">n_jobs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span></span><span class="return-annotation">) -> <span class="n">Tuple</span><span class="p">[</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="n">nqdc</span><span class="o">.</span><span class="n">_ExitCode</span><span class="p">]</span>:</span></span>
+        <span class="name">fit_neuroquery</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">tfidf_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>,</span><span class="param">	<span class="n">extracted_data_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="n">NoneType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">output_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="n">NoneType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">n_jobs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span></span><span class="return-annotation">) -> <span class="n">Tuple</span><span class="p">[</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="n">pubget</span><span class="o">.</span><span class="n">_ExitCode</span><span class="p">]</span>:</span></span>
 
         
     </div>
@@ -1371,10 +1368,10 @@ command-line interface.</li>
 
 <ul>
 <li><strong>vectorized_dir</strong>: The directory containing the vectorized text (TFIDF features). It is
-the directory created by <code><a href="#vectorize_corpus_to_npz">nqdc.vectorize_corpus_to_npz</a></code> using
+the directory created by <code><a href="#vectorize_corpus_to_npz">pubget.vectorize_corpus_to_npz</a></code> using
 <code>extracted_data_dir</code> as input.</li>
 <li><strong>extracted_data_dir</strong>: The directory containing extracted metadata and coordinates. It is a
-directory created by <code><a href="#extract_data_to_csv">nqdc.extract_data_to_csv</a></code>. If <code>None</code>, this
+directory created by <code><a href="#extract_data_to_csv">pubget.extract_data_to_csv</a></code>. If <code>None</code>, this
 function looks for a sibling directory of the <code>vectorized_dir</code> whose
 name ends with <code>_extractedData</code>.</li>
 <li><strong>output_dir</strong>: Directory in which to store the NeuroQuery model. If not specified, a
@@ -1389,7 +1386,7 @@ subdirectory that can be loaded with
 <ul>
 <li><strong>output_dir</strong>: The directory in which the neuroquery model is stored.</li>
 <li><strong>exit_code</strong>: COMPLETED if the neuroquery model was fitted and previous steps were
-complete and INCOMPLETE otherwise. Used by the <code><a href="">nqdc</a></code> command-line
+complete and INCOMPLETE otherwise. Used by the <code><a href="">pubget</a></code> command-line
 interface.</li>
 </ul>
 </div>
@@ -1400,7 +1397,7 @@ interface.</li>
                     <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">fit_neurosynth</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">tfidf_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>,</span><span class="param">	<span class="n">extracted_data_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="n">NoneType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">output_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="n">NoneType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">n_jobs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span></span><span class="return-annotation">) -> <span class="n">Tuple</span><span class="p">[</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="n">nqdc</span><span class="o">.</span><span class="n">_ExitCode</span><span class="p">]</span>:</span></span>
+        <span class="name">fit_neurosynth</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">tfidf_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>,</span><span class="param">	<span class="n">extracted_data_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="n">NoneType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">output_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="n">NoneType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">n_jobs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span></span><span class="return-annotation">) -> <span class="n">Tuple</span><span class="p">[</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="n">pubget</span><span class="o">.</span><span class="n">_ExitCode</span><span class="p">]</span>:</span></span>
 
         
     </div>
@@ -1414,10 +1411,10 @@ interface.</li>
 
 <ul>
 <li><strong>vectorized_dir</strong>: The directory containing the vectorized text (TFIDF features). It is
-the directory created by <code><a href="#vectorize_corpus_to_npz">nqdc.vectorize_corpus_to_npz</a></code> using
+the directory created by <code><a href="#vectorize_corpus_to_npz">pubget.vectorize_corpus_to_npz</a></code> using
 <code>extracted_data_dir</code> as input.</li>
 <li><strong>extracted_data_dir</strong>: The directory containing extracted metadata and coordinates. It is a
-directory created by <code><a href="#extract_data_to_csv">nqdc.extract_data_to_csv</a></code>. If <code>None</code>, this
+directory created by <code><a href="#extract_data_to_csv">pubget.extract_data_to_csv</a></code>. If <code>None</code>, this
 function looks for a sibling directory of the <code>vectorized_dir</code> whose
 name ends with <code>_extractedData</code>.</li>
 <li><strong>output_dir</strong>: Directory in which to store the NeuroSynth maps. If not specified, a
@@ -1431,7 +1428,7 @@ values) resulting from the analysis.</li>
 <ul>
 <li><strong>output_dir</strong>: The directory in which the meta-analysis maps are stored.</li>
 <li><strong>exit_code</strong>: COMPLETED if the analysis ran successfully and previous steps were
-complete and INCOMPLETE otherwise. Used by the <code><a href="">nqdc</a></code> command-line
+complete and INCOMPLETE otherwise. Used by the <code><a href="">pubget</a></code> command-line
 interface.</li>
 </ul>
 </div>
@@ -1442,7 +1439,7 @@ interface.</li>
                     <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">make_labelbuddy_documents</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">extracted_data_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>,</span><span class="param">	<span class="n">output_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="n">NoneType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">part_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">500</span></span><span class="return-annotation">) -> <span class="n">Tuple</span><span class="p">[</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="n">nqdc</span><span class="o">.</span><span class="n">_ExitCode</span><span class="p">]</span>:</span></span>
+        <span class="name">make_labelbuddy_documents</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">extracted_data_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>,</span><span class="param">	<span class="n">output_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="n">NoneType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">part_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">500</span></span><span class="return-annotation">) -> <span class="n">Tuple</span><span class="p">[</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="n">pubget</span><span class="o">.</span><span class="n">_ExitCode</span><span class="p">]</span>:</span></span>
 
         
     </div>
@@ -1462,7 +1459,7 @@ for details.</p>
 
 <ul>
 <li><strong>extracted_data_dir</strong>: The directory containing extracted text and metadata. It is a directory
-created by <code><a href="#extract_data_to_csv">nqdc.extract_data_to_csv</a></code>.</li>
+created by <code><a href="#extract_data_to_csv">pubget.extract_data_to_csv</a></code>.</li>
 <li><strong>output_dir</strong>: Directory in which to store the created data. If not specified, a
 sibling directory of <code>extracted_data_dir</code> whose name ends with
 <code>_labelbuddyData</code> is created.</li>
@@ -1475,7 +1472,7 @@ If <code>None</code>, put all articles in one file.</li>
 <ul>
 <li><strong>output_dir</strong>: The directory in which the prepared documents are stored.</li>
 <li><strong>exit_code</strong>: COMPLETED if previous steps were complete and INCOMPLETE otherwise.
-Used by the <code><a href="">nqdc</a></code> command-line interface.</li>
+Used by the <code><a href="">pubget</a></code> command-line interface.</li>
 </ul>
 </div>
 
@@ -1485,13 +1482,13 @@ Used by the <code><a href="">nqdc</a></code> command-line interface.</li>
                     <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">make_nimare_dataset</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">vectorized_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>,</span><span class="param">	<span class="n">extracted_data_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="n">NoneType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">output_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="n">NoneType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></span><span class="return-annotation">) -> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">],</span> <span class="n">nqdc</span><span class="o">.</span><span class="n">_ExitCode</span><span class="p">]</span>:</span></span>
+        <span class="name">make_nimare_dataset</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">vectorized_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>,</span><span class="param">	<span class="n">extracted_data_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="n">NoneType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">output_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="n">NoneType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></span><span class="return-annotation">) -> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">],</span> <span class="n">pubget</span><span class="o">.</span><span class="n">_ExitCode</span><span class="p">]</span>:</span></span>
 
         
     </div>
     <a class="headerlink" href="#make_nimare_dataset"></a>
     
-            <div class="docstring"><p>Create a NiMARE JSON dataset from data collected by <code><a href="">nqdc</a></code>.</p>
+            <div class="docstring"><p>Create a NiMARE JSON dataset from data collected by <code><a href="">pubget</a></code>.</p>
 
 <p>See the <a href="https://nimare.readthedocs.io/">NiMARE documentation</a> for details.
 This function requires <code>nimare</code> to be installed.</p>
@@ -1500,10 +1497,10 @@ This function requires <code>nimare</code> to be installed.</p>
 
 <ul>
 <li><strong>vectorized_dir</strong>: The directory containing the vectorized text (TFIDF features). It is
-the directory created by <code><a href="#vectorize_corpus_to_npz">nqdc.vectorize_corpus_to_npz</a></code> using
+the directory created by <code><a href="#vectorize_corpus_to_npz">pubget.vectorize_corpus_to_npz</a></code> using
 <code>extracted_data_dir</code> as input.</li>
 <li><strong>extracted_data_dir</strong>: The directory containing extracted metadata and coordinates. It is a
-directory created by <code><a href="#extract_data_to_csv">nqdc.extract_data_to_csv</a></code>. If <code>None</code>, this
+directory created by <code><a href="#extract_data_to_csv">pubget.extract_data_to_csv</a></code>. If <code>None</code>, this
 function looks for a sibling directory of the <code>vectorized_dir</code> whose
 name ends with <code>_extractedData</code>.</li>
 <li><strong>output_dir</strong>: Directory in which to store the extracted data. If not specified, a
@@ -1518,7 +1515,7 @@ sibling directory of <code>vectorized_dir</code> whose name ends with
 <code>nimare_dataset.json</code> file.</li>
 <li><strong>exit_code</strong>: COMPLETED if previous steps were complete and the NiMARE dataset was
 created, INCOMPLETE if previous steps were incomplete, ERROR if NiMARE
-is not installed. Used by the <code><a href="">nqdc</a></code> command-line interface.</li>
+is not installed. Used by the <code><a href="">pubget</a></code> command-line interface.</li>
 </ul>
 </div>
 
@@ -1528,7 +1525,7 @@ is not installed. Used by the <code><a href="">nqdc</a></code> command-line inte
                     <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">vectorize_corpus_to_npz</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">extracted_data_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>,</span><span class="param">	<span class="n">output_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="n">NoneType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">vocabulary</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">nqdc</span><span class="o">.</span><span class="n">_vectorization</span><span class="o">.</span><span class="n">Vocabulary</span><span class="p">]</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">Vocabulary</span><span class="o">.</span><span class="n">NEUROQUERY_VOCABULARY</span><span class="p">:</span> <span class="s1">&#39;https://github.com/neuroquery/neuroquery_data/blob/main/neuroquery_model/vocabulary.csv&#39;</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">n_jobs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span></span><span class="return-annotation">) -> <span class="n">Tuple</span><span class="p">[</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="n">nqdc</span><span class="o">.</span><span class="n">_ExitCode</span><span class="p">]</span>:</span></span>
+        <span class="name">vectorize_corpus_to_npz</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">extracted_data_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>,</span><span class="param">	<span class="n">output_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="n">NoneType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">vocabulary</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pubget</span><span class="o">.</span><span class="n">_vectorization</span><span class="o">.</span><span class="n">Vocabulary</span><span class="p">]</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">Vocabulary</span><span class="o">.</span><span class="n">NEUROQUERY_VOCABULARY</span><span class="p">:</span> <span class="s1">&#39;https://github.com/neuroquery/neuroquery_data/blob/main/neuroquery_model/vocabulary.csv&#39;</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">n_jobs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span></span><span class="return-annotation">) -> <span class="n">Tuple</span><span class="p">[</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="n">pubget</span><span class="o">.</span><span class="n">_ExitCode</span><span class="p">]</span>:</span></span>
 
         
     </div>
@@ -1540,7 +1537,7 @@ is not installed. Used by the <code><a href="">nqdc</a></code> command-line inte
 
 <ul>
 <li><strong>extracted_data_dir</strong>: The directory containing the text of articles to vectorize. It is a
-directory created by <code><a href="#extract_data_to_csv">nqdc.extract_data_to_csv</a></code>: it contains a file
+directory created by <code><a href="#extract_data_to_csv">pubget.extract_data_to_csv</a></code>: it contains a file
 named <code>text.csv</code> with fields <code>pmcid</code>, <code>title</code>, <code>keywords</code>, <code>abstract</code>,
 <code>body</code>.</li>
 <li><strong>output_dir</strong>: The directory in which to store the results. If not specified, a
@@ -1559,7 +1556,7 @@ processors.</li>
 <ul>
 <li><strong>output_dir</strong>: The directory in which the vectorized data is stored.</li>
 <li><strong>exit_code</strong>: COMPLETED if previous (data extraction) step was complete and this step
-(vectorization) finished normally as well. Used by the <code><a href="">nqdc</a></code>
+(vectorization) finished normally as well. Used by the <code><a href="">pubget</a></code>
 command-line interface.</li>
 </ul>
 </div>
