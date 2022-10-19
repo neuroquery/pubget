@@ -28,6 +28,13 @@ _LOG = logging.getLogger(__name__)
 _STEP_NAME = "vectorize"
 _STEP_DESCRIPTION = "Extract TFIDF features from text."
 _FIELDS = ("title", "keywords", "abstract", "body")
+_OPTIONS_IMPLYING_TFIDF = (
+    "vectorize_text",
+    "vocabulary_file",
+    "fit_neuroquery",
+    "fit_neurosynth",
+    "nimare",
+)
 
 
 class Vocabulary(Enum):
@@ -420,12 +427,21 @@ class VectorizationStep(PipelineStep):
     def edit_argument_parser(self, argument_parser: ArgparseActions) -> None:
         _add_voc_arg(argument_parser)
         _utils.add_n_jobs_argument(argument_parser)
+        argument_parser.add_argument(
+            "--vectorize_text",
+            action="store_true",
+            help="Vectorize text by computing word counts and TFIDF features.",
+        )
 
     def run(
         self,
         args: argparse.Namespace,
         previous_steps_output: Mapping[str, Path],
-    ) -> Tuple[Path, ExitCode]:
+    ) -> Tuple[Optional[Path], ExitCode]:
+        if not any(
+            getattr(args, option) for option in _OPTIONS_IMPLYING_TFIDF
+        ):
+            return None, ExitCode.COMPLETED
         return vectorize_corpus_to_npz(
             previous_steps_output["extract_data"],
             n_jobs=args.n_jobs,

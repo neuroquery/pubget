@@ -63,6 +63,44 @@ def mock_nimare(monkeypatch):
 
 
 @pytest.mark.parametrize(
+    "options", [("--fit_neuroquery",), ("--vectorize_text",)]
+)
+def test_vectorization_execution(
+    tmp_path,
+    monkeypatch,
+    nq_datasets_mock,
+    entrez_mock,
+    test_data_dir,
+    options,
+):
+    _patch_neuroquery(monkeypatch)
+    voc_file = test_data_dir.joinpath("vocabulary.csv")
+    voc_checksum = _vectorization._checksum_vocabulary(voc_file)
+    query_name = "query_7838640309244685021f9954f8aa25fc"
+    args = [
+        "run",
+        str(tmp_path),
+        "-q",
+        "fMRI[abstract]",
+        "--n_jobs",
+        "2",
+        "--labelbuddy",
+    ]
+    code = _commands.pubget_command(args)
+    assert code == 0
+    tfidf_pmcids_file = tmp_path.joinpath(
+        query_name,
+        f"subset_allArticles-voc_{voc_checksum}_vectorizedText",
+        "pmcid.txt",
+    )
+    assert not tfidf_pmcids_file.is_file()
+    args.extend(options)
+    code = _commands.pubget_command(args)
+    assert code == 0
+    assert tfidf_pmcids_file.is_file()
+
+
+@pytest.mark.parametrize(
     (
         "voc_source",
         "with_nimare",
@@ -93,7 +131,15 @@ def test_full_pipeline_command(
     log_dir = tmp_path.joinpath("log")
     _patch_neuroquery(monkeypatch)
     monkeypatch.setenv("PUBGET_LOG_DIR", str(log_dir))
-    args = ["run", str(tmp_path), "-q", "fMRI[abstract]", "--n_jobs", "2"]
+    args = [
+        "run",
+        str(tmp_path),
+        "-q",
+        "fMRI[abstract]",
+        "--vectorize_text",
+        "--n_jobs",
+        "2",
+    ]
     if with_nimare:
         args.append("--nimare")
     if with_fit_neuroquery:
