@@ -304,9 +304,47 @@ query again, the data extraction is skipped. If we want to force re-running the
 data extraction we need to remove the corresponding directory (or the
 `info.json` file it contains).
 
-## Step 4: vectorizing (computing TFIDF features)
+## Optional step: extracting a new vocabulary
 
-This step is executed by the `pubget vectorize` command.
+This step is executed by the `pubget extract_vocabulary` command.
+When running the full pipeline this step is optional: we must use
+the `--extract_vocabulary` option for it to be executed.
+
+It builds a vocabulary of all the words and 2-grams (groups of 2 
+words) that appear in the downloaded text, and computes their document frequency
+(the proportion of documents in which a term appears).
+```
+pubget extract_vocabulary pubget_data/query_3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords_extractedData
+```
+
+The vocabulary is stored in a csv file in a new directory. There is no header
+and the 2 columns are the term and its document frequency.
+
+```
+· pubget_data
+  └── query_3c0556e22a59e7d200f00ac8219dfd6c
+      ├── articles
+      ├── articlesets
+      ├── subset_articlesWithCoords_extractedData
+      └── subset_articlesWithCoords_extractedVocabulary
+          ├── info.json
+          └── vocabulary.csv
+```
+
+When running the whole pipeline (`pubget run`), if we use the
+`--extract_vocabulary` option and do not provide an explicit value for
+`--vocabulary_file`, the freshly-extracted vocabulary is used instead of the
+default `neuroquery` one for computing TFIDF features (see next step).
+
+
+## Optional step: vectorizing (computing TFIDF features)
+
+This step is executed by the `pubget vectorize` command. When running the full
+pipeline this step is optional: we must use the `--vectorize_text` option for it
+to be executed. However, if any of the subsequent steps that rely on TFIDF
+features (NeuroQuery, NeuroSynth or NiMARE steps, see below) are requested, this
+step is always run and `--vectorize_text` is ignored. This step is also run
+whenever we use the `--vocabulary_file` option.
 
 Some large-scale meta-analysis methods such as
 [neurosynth](https://neurosynth.org/) and [neuroquery](https://neuroquery.org)
@@ -423,39 +461,6 @@ The vocabulary mapping is primarily used by the `neuroquery` package and its
 tokenization pipeline, and you can safely ignore this – just remember that the
 file providing the terms corresponding to the TFIDF *features* is
 `feature_names.csv`.
-
-## Optional step: extracting a new vocabulary
-
-This step is executed by the `pubget extract_vocabulary` command.
-When running the full pipeline this step is optional: we must use
-the `--extract_vocabulary` option for it to be executed.
-
-It builds a vocabulary of all the words and 2-grams (groups of 2 
-words) that appear in the downloaded text, and computes their document frequency
-(the proportion of documents in which a term appears).
-```
-pubget extract_vocabulary pubget_data/query_3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords_extractedData
-```
-
-The vocabulary is stored in a csv file in a new directory. There is no header
-and the 2 columns are the term and its document frequency.
-
-```
-· pubget_data
-  └── query_3c0556e22a59e7d200f00ac8219dfd6c
-      ├── articles
-      ├── articlesets
-      ├── subset_articlesWithCoords_extractedData
-      ├── subset_articlesWithCoords_extractedVocabulary
-      │   ├── info.json
-      │   └── vocabulary.csv
-      └── subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
-```
-
-When running the whole pipeline (`pubget run`), if we use the
-`--extract_vocabulary` option and do not provide an explicit value for
-`--vocabulary_file`, the freshly-extracted vocabulary is used instead of the
-default `neuroquery` one for computing TFIDF features.
 
 ## Optional step: fitting a NeuroQuery encoding model
 

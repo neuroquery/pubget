@@ -1,5 +1,10 @@
 # `pubget` releases
 
+## 0.0.6
+
+- The text vectorization (TFIDF) step is now optional. 
+  It is run when using the options `--vectorize_text` or `--vocabulary_file`, or when subsequent steps that need the TFIDF (neurosynth, neuroquery, nimare) are requested.
+
 ## 0.0.5
 
 - `nqdc` renamed `pubget`; all symbols, paths, environment variables etc. have been adapted accordingly.
