@@ -115,7 +115,7 @@ def _prepare_document(
         doc_info["metadata"]["doi"] = doc_meta["doi"]
     url = f"https://www.ncbi.nlm.nih.gov/pmc/articles/PMC{doc_meta['pmcid']}"
     doc_info["display_title"] = (
-        f"pmcid: <a href={url}>{doc_meta['pmcid']}</a>"
+        f'pmcid: <a href="{url}">{doc_meta["pmcid"]}</a>'
         f" — Part {part} Chapter {chapter} Page {page}"
     )
     doc_info["list_title"] = f"{part}.{chapter}.{page: <2} {doc_text['title']}"
