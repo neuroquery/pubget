@@ -35,8 +35,7 @@ _STEP_NAME = "extract_labelbuddy_data"
 _STEP_DESCRIPTION = (
     "Prepare extracted articles for annotation with labelbuddy."
 )
-_DEFAULT_PART_SIZE = 500
-_CHAPTER_SIZE = 20
+_DEFAULT_BATCH_SIZE = 500
 _LOG_PERIOD = 1000
 _TEMPLATE = """{authors}
 {journal}, {publication_year}
@@ -90,10 +89,7 @@ def _prepare_document(
     doc_text: pd.Series,
     doc_meta: pd.Series,
     doc_authors: pd.DataFrame,
-    *,
-    part: int,
-    chapter: int,
-    page: int,
+    batch: int,
 ) -> Dict[str, Any]:
     """Extract information for one article and prepare labelbuddy document."""
     doc_text = doc_text.fillna("")
@@ -105,9 +101,7 @@ def _prepare_document(
         "pmcid": int(doc_meta["pmcid"]),
         "text_md5": md5(doc_info["text"].encode("utf-8")).hexdigest(),
         "field_positions": _get_inserted_field_positions(_TEMPLATE, fields),
-        "part": part,
-        "chapter": chapter,
-        "page": page,
+        "batch": batch,
     }
     if not pd.isnull(doc_meta["pmid"]):
         doc_info["metadata"]["pmid"] = int(doc_meta["pmid"])
@@ -115,11 +109,10 @@ def _prepare_document(
         doc_info["metadata"]["doi"] = doc_meta["doi"]
     url = f"https://www.ncbi.nlm.nih.gov/pmc/articles/PMC{doc_meta['pmcid']}"
     doc_info["metadata"]["pmc_url"] = url
-    doc_info["display_title"] = (
-        f'pmcid: <a href="{url}">{doc_meta["pmcid"]}</a>'
-        f" — Part {part} Chapter {chapter} Page {page}"
-    )
-    doc_info["list_title"] = f"{part}.{chapter}.{page: <2} {doc_text['title']}"
+    doc_info[
+        "display_title"
+    ] = f'pmcid: <a href="{url}">{doc_meta["pmcid"]}</a>'
+    doc_info["list_title"] = f"PMC{doc_meta['pmcid']} {doc_text['title']}"
     efetch_url = (
         "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
         f"efetch.fcgi?db=pmc&id={doc_meta['pmcid']}"
@@ -150,45 +143,40 @@ def _iter_corpus(
     _LOG.info(f"Read {n_articles} articles.")
 
 
-def _write_labelbuddy_part(
+def _write_labelbuddy_batch(
     all_docs: Iterator[Tuple[pd.Series, pd.Series, pd.DataFrame]],
-    part_nb: int,
-    part_size: Optional[int],
+    batch_nb: int,
+    batch_size: Optional[int],
     output_dir: Path,
 ) -> None:
     """Write labelbuddy documents to jsonl file.
 
-    Writes at most `part_size` documents (or all documents if `part_size` is
+    Writes at most `batch_size` documents (or all documents if `batch_size` is
     `None`) taken from `all_docs` to the appropriate jsonl file. Raises
     `StopIteration` if the `all_docs` iterator runs out.
     """
-    pagination = {"part": part_nb, "chapter": 1, "page": 1}
     # get the first document so we don't create the file if the generator is
     # exhausted.
     doc_info = next(all_docs)
     with open(
-        output_dir.joinpath(f"documents_{part_nb:0>5}.jsonl"),
+        output_dir.joinpath(f"documents_{batch_nb:0>5}.jsonl"),
         "w",
         encoding="utf-8",
     ) as out_f:
-        out_f.write(json.dumps(_prepare_document(*doc_info, **pagination)))
+        out_f.write(json.dumps(_prepare_document(*doc_info, batch=batch_nb)))
         out_f.write("\n")
-        pagination["page"] += 1
         n_written = 1
-        while part_size is None or n_written != part_size:
+        while batch_size is None or n_written != batch_size:
             doc_info = next(all_docs)
-            out_f.write(json.dumps(_prepare_document(*doc_info, **pagination)))
+            out_f.write(
+                json.dumps(_prepare_document(*doc_info, batch=batch_nb))
+            )
             out_f.write("\n")
             n_written += 1
-            if not pagination["page"] % _CHAPTER_SIZE:
-                pagination["chapter"] += 1
-                pagination["page"] = 1
-            else:
-                pagination["page"] += 1
 
 
 def _do_make_labelbuddy_documents(
-    extracted_data_dir: Path, output_dir: Path, part_size: Optional[int]
+    extracted_data_dir: Path, output_dir: Path, batch_size: Optional[int]
 ) -> None:
     """Perform the creation of the labelbuddy jsonl files."""
     text_file = extracted_data_dir.joinpath("text.csv")
@@ -198,26 +186,26 @@ def _do_make_labelbuddy_documents(
         metadata_file, encoding="utf-8"
     ) as metadata_fh:
         all_docs = _iter_corpus(text_fh, metadata_fh, authors)
-        part_nb = 1
+        batch_nb = 1
         while True:
             try:
-                _write_labelbuddy_part(
-                    all_docs, part_nb, part_size, output_dir
+                _write_labelbuddy_batch(
+                    all_docs, batch_nb, batch_size, output_dir
                 )
             except StopIteration:
                 return
             else:
-                part_nb += 1
+                batch_nb += 1
 
 
 def make_labelbuddy_documents(
     extracted_data_dir: PathLikeOrStr,
     output_dir: Optional[PathLikeOrStr] = None,
-    part_size: Optional[int] = _DEFAULT_PART_SIZE,
+    batch_size: Optional[int] = _DEFAULT_BATCH_SIZE,
 ) -> Tuple[Path, ExitCode]:
     """Prepare articles for annotation with labelbuddy.
 
-    The documents are prepared in JSONL format, with `part_size` documents in
+    The documents are prepared in JSONL format, with `batch_size` documents in
     each `.jsonl` file. They can thus be imported into labelbuddy with, for
     example: `labelbuddy mydb.labelbuddy --import-docs documents_00001.jsonl`.
 
@@ -234,7 +222,7 @@ def make_labelbuddy_documents(
         Directory in which to store the created data. If not specified, a
         sibling directory of `extracted_data_dir` whose name ends with
         `_labelbuddyData` is created.
-    part_size
+    batch_size
         Number of articles stored in each `.jsonl` file.
         If `None`, put all articles in one file.
     Returns
@@ -254,10 +242,10 @@ def make_labelbuddy_documents(
     )
     if not status["need_run"]:
         return output_dir, ExitCode.COMPLETED
-    if part_size is not None and part_size < 1:
-        raise ValueError(f"part_size must be at least 1, got {part_size}.")
+    if batch_size is not None and batch_size < 1:
+        raise ValueError(f"batch_size must be at least 1, got {batch_size}.")
     _LOG.info(f"Creating labelbuddy data in {output_dir}")
-    _do_make_labelbuddy_documents(extracted_data_dir, output_dir, part_size)
+    _do_make_labelbuddy_documents(extracted_data_dir, output_dir, batch_size)
     is_complete = bool(status["previous_step_complete"])
     _utils.write_info(output_dir, name=_STEP_NAME, is_complete=is_complete)
     _LOG.info(f"Done creating labelbuddy data in {output_dir}")
@@ -265,13 +253,13 @@ def make_labelbuddy_documents(
     return output_dir, exit_code
 
 
-def _get_part_size(args: argparse.Namespace) -> Optional[int]:
-    part_size: Optional[int] = args.labelbuddy_part_size
-    if part_size is None:
-        return _DEFAULT_PART_SIZE
-    if part_size == -1:
+def _get_batch_size(args: argparse.Namespace) -> Optional[int]:
+    batch_size: Optional[int] = args.labelbuddy_batch_size
+    if batch_size is None:
+        return _DEFAULT_BATCH_SIZE
+    if batch_size == -1:
         return None
-    return part_size
+    return batch_size
 
 
 class LabelbuddyStep(PipelineStep):
@@ -289,12 +277,12 @@ class LabelbuddyStep(PipelineStep):
             "for more information.",
         )
         argument_parser.add_argument(
-            "--labelbuddy_part_size",
+            "--labelbuddy_batch_size",
             type=int,
             default=None,
             help="Number of articles in each jsonl file of documents "
             "prepared for annotation with labelbuddy. "
-            f"Default is {_DEFAULT_PART_SIZE}. "
+            f"Default is {_DEFAULT_BATCH_SIZE}. "
             "-1 means put all articles in one file. "
             "This option implies --labelbuddy.",
         )
@@ -304,11 +292,11 @@ class LabelbuddyStep(PipelineStep):
         args: argparse.Namespace,
         previous_steps_output: Mapping[str, Path],
     ) -> Tuple[Optional[Path], ExitCode]:
-        if not args.labelbuddy and args.labelbuddy_part_size is None:
+        if not args.labelbuddy and args.labelbuddy_batch_size is None:
             return None, ExitCode.COMPLETED
         return make_labelbuddy_documents(
             previous_steps_output["extract_data"],
-            part_size=_get_part_size(args),
+            batch_size=_get_batch_size(args),
         )
 
 
@@ -326,17 +314,17 @@ class LabelbuddyCommand(Command):
             "with 'extractedData'.",
         )
         argument_parser.add_argument(
-            "--labelbuddy_part_size",
+            "--labelbuddy_batch_size",
             type=int,
             default=None,
             help="Number of articles in each jsonl file of documents "
             "prepared for annotation with labelbuddy. "
-            f"Default is {_DEFAULT_PART_SIZE}. "
+            f"Default is {_DEFAULT_BATCH_SIZE}. "
             "-1 means put all articles in one file. ",
         )
 
     def run(self, args: argparse.Namespace) -> ExitCode:
         return make_labelbuddy_documents(
             args.extracted_data_dir,
-            part_size=_get_part_size(args),
+            batch_size=_get_batch_size(args),
         )[1]

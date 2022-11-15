@@ -111,8 +111,8 @@ def test_vectorization_execution(
     [
         ("file", True, [], False, True),
         ("default", False, ["--labelbuddy"], False, False),
-        ("extract", False, ["--labelbuddy_part_size", "3"], False, False),
-        ("default", False, ["--labelbuddy_part_size", "-1"], True, False),
+        ("extract", False, ["--labelbuddy_batch_size", "3"], False, False),
+        ("default", False, ["--labelbuddy_batch_size", "-1"], True, False),
     ],
 )
 def test_full_pipeline_command(
