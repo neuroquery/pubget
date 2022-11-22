@@ -593,7 +593,7 @@ mention it.
 
 This step is executed by the `pubget extract_labelbuddy_data` command.
 When running the full pipeline this step is optional: we must use
-the `--labelbuddy` or `--labelbuddy_part_size` option for it to be executed.
+the `--labelbuddy` or `--labelbuddy_batch_size` option for it to be executed.
 
 It prepares the articles whose data was extracted for annotation with
 [labelbuddy](https://jeromedockes.github.io/labelbuddy/).
