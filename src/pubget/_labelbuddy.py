@@ -35,7 +35,7 @@ _STEP_NAME = "extract_labelbuddy_data"
 _STEP_DESCRIPTION = (
     "Prepare extracted articles for annotation with labelbuddy."
 )
-_DEFAULT_BATCH_SIZE = 500
+_DEFAULT_BATCH_SIZE = 200
 _LOG_PERIOD = 1000
 _TEMPLATE = """{authors}
 {journal}, {publication_year}
@@ -112,7 +112,7 @@ def _prepare_document(
     doc_info[
         "display_title"
     ] = f'pmcid: <a href="{url}">{doc_meta["pmcid"]}</a>'
-    doc_info["list_title"] = f"PMC{doc_meta['pmcid']} {doc_text['title']}"
+    doc_info["list_title"] = f"PMC{doc_meta['pmcid']}  {doc_text['title']}"
     efetch_url = (
         "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
         f"efetch.fcgi?db=pmc&id={doc_meta['pmcid']}"
