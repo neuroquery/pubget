@@ -7,7 +7,14 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from pubget import ExitCode, _articles, _data_extraction, _download, _typing
+from pubget import (
+    ExitCode,
+    _articles,
+    _data_extraction,
+    _download,
+    _typing,
+    _utils,
+)
 
 
 @pytest.fixture
@@ -132,3 +139,8 @@ def test_stop_pipeline(empty_articles_dir):
     previous_steps = {"extract_articles": empty_articles_dir}
     with pytest.raises(_typing.StopPipeline, match=r"No articles.*"):
         step.run(args, previous_steps)
+
+
+def test_config_worker_logging():
+    _data_extraction._config_worker_logging()
+    _utils.configure_logging()

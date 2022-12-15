@@ -59,7 +59,7 @@ def extract_vocabulary(extracted_data_dir: PathLikeOrStr) -> pd.Series:
     vectorizer = CountVectorizer(
         input="content",
         lowercase=True,
-        stop_words=tokenization.nltk_stop_words(),
+        stop_words=list(tokenization.nltk_stop_words()),
         tokenizer=tokenization.Tokenizer(),
         ngram_range=(1, 2),
         binary=True,

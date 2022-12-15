@@ -109,12 +109,6 @@ def test_esearch_failure(requests_mock, tmp_path):
             ("fmri",),
         ),
         (
-            "epost",
-            b"",
-            b"<resp><WebEnv>abc</WebEnv><QueryKey>1</QueryKey></resp>",
-            ([123, 456],),
-        ),
-        (
             "efetch",
             b"",
             b"<pmc-articleset></pmc-articleset>",
@@ -141,4 +135,27 @@ def test_retry(tmp_path, requests_mock, service, bad_resp, good_resp, args):
     client = _entrez.EntrezClient(request_period=0.0)
     args = [tmp_path if a == "tmp_path" else a for a in args]
     getattr(client, service)(*args)
+    assert requests_mock.call_count == 3
+
+
+def test_epost_retry(tmp_path, requests_mock):
+    resp_0 = Mock()
+    resp_0.status_code = 200
+    resp_0.content = b""
+    resp_1 = Mock()
+    resp_1.status_code = 200
+    resp_1.content = (
+        b"<resp><WebEnv>WEBENV_1</WebEnv><QueryKey>1</QueryKey></resp>"
+    )
+    resp_2 = Mock()
+    resp_2.status_code = 200
+    content = {
+        "esearchresult": {"count": "2", "webenv": "WEBENV_1", "querykey": "2"}
+    }
+    resp_2.content = json.dumps(content).encode("UTF-8")
+    resp_2.json.return_value = content
+    responses = [resp_0, resp_1, resp_2, Mock(), Mock()]
+    requests_mock.side_effect = responses
+    client = _entrez.EntrezClient(request_period=0.0)
+    client.epost([123, 456])
     assert requests_mock.call_count == 3

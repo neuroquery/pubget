@@ -178,12 +178,15 @@ class EntrezClient:
     def epost(self, all_pmcids: Sequence[int]) -> Dict[str, str]:
         """Post a list of PMCIDs to the Entrez history server.
 
-        If post fails, returns an empty dictionary. Otherwise returns a
-        dictionary with keys "count" "webenv" and "querykey".
+        An esearch query is then performed to filter the list of pmcids to keep
+        only the open-acccess articles.
 
-        IDs can be posted directly to efetch but by posting them first the
-        efetch part is handled in the same way for queries and id lists.
+        If the function fails, it returns an empty dictionary. Otherwise it
+        returns a dictionary with keys "count" "webenv" and "querykey".
 
+        IDs can be posted directly to efetch but by posting them first we can
+        then filter by open-access, and the efetch part is handled in the same
+        way for queries and id lists.
         """
         # not 'if not all_pmcids' in case someone passes a numpy array
         if len(all_pmcids) == 0:
@@ -202,31 +205,37 @@ class EntrezClient:
             return {}
         resp_xml = etree.fromstring(resp.content)
         webenv = resp_xml.find("WebEnv").text
-        querykey = resp_xml.find("QueryKey").text
-        self.last_search_result = {
-            "webenv": webenv,
-            "querykey": querykey,
-            "count": str(len(all_pmcids)),
-        }
-        return self.last_search_result
+        query_key = resp_xml.find("QueryKey").text
+        return self.esearch(webenv=webenv, query_key=query_key)
 
     def esearch(
         self,
-        query: str,
+        query: Optional[str] = None,
+        webenv: Optional[str] = None,
+        query_key: Optional[str] = None,
     ) -> Dict[str, str]:
         """Perform search.
 
+        If webenv and query_key are provided, results will be the intersection
+        with existing webenv on the history server -- see Entrez documentation.
+        Results are always restricted to open-access subset.
         If search fails, returns an empty dictionary. Otherwise returns the
         search results -- keys of interest are "count", "webenv", and
         "querykey".
+
         """
+        term = "open+access[filter]"
+        if query is not None:
+            term = "&".join((query, term))
         search_params = {
             "db": "pmc",
-            "term": f"{query}&open+access[filter]",
+            "term": term,
             "usehistory": "y",
             "retmode": "json",
             "retmax": 5,
         }
+        if webenv is not None and query_key is not None:
+            search_params.update({"WebEnv": webenv, "query_key": query_key})
         data = {**search_params, **self._entrez_id}
         resp = self._send_request(
             self._esearch_base_url,
