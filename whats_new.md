@@ -1,5 +1,9 @@
 # `pubget` releases
 
+## 0.0.7
+
+- When downloading a list of PMCIDs (with `--pmcids_file` option), the list is now filtered to keep only articles that are in the PMC Open Access subset.
+
 ## 0.0.6
 
 - The text vectorization (TFIDF) step is now optional. 
