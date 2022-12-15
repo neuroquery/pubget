@@ -256,7 +256,7 @@ def _get_data_dir(args: argparse.Namespace) -> Path:
 def _get_api_key(args: argparse.Namespace) -> Optional[str]:
     if args.api_key is not None:
         return str(args.api_key)
-    return os.environ.get("PUBGET_API_KEY", None)
+    return os.environ.get("NCBI_API_KEY", None)
 
 
 def _get_query(args: argparse.Namespace) -> str:
@@ -329,7 +329,7 @@ def _edit_argument_parser(argument_parser: ArgparseActions) -> None:
         default=None,
         help="API key for the Entrez E-utilities (see "
         "https://www.ncbi.nlm.nih.gov/books/NBK25497/). Can also be provided "
-        "by exporting the PUBGET_API_KEY environment variable (if both are "
+        "by exporting the NCBI_API_KEY environment variable (if both are "
         "specified the command-line argument has higher precedence). If the "
         "API key is provided, it is included in all requests to the Entrez "
         "E-utilities.",
