@@ -184,9 +184,10 @@ class EntrezClient:
         If the function fails, it returns an empty dictionary. Otherwise it
         returns a dictionary with keys "count" "webenv" and "querykey".
 
-        IDs can be posted directly to efetch but by posting them first we can
-        then filter by open-access, and the efetch part is handled in the same
-        way for queries and id lists.
+        IDs can be posted directly to efetch but by posting them to epost first
+        we can then filter by open-access, and the efetch part is handled in
+        the same way for queries and id lists.
+
         """
         # not 'if not all_pmcids' in case someone passes a numpy array
         if len(all_pmcids) == 0:
@@ -195,6 +196,7 @@ class EntrezClient:
             return {}
         params = {"db": "pmc", "id": ",".join(map(str, all_pmcids))}
         data = {**params, **self._entrez_id}
+        _LOG.info(f"Posting {len(all_pmcids)} PMCIDs to Entrez.")
         resp = self._send_request(
             self._epost_base_url,
             data=data,
@@ -206,7 +208,13 @@ class EntrezClient:
         resp_xml = etree.fromstring(resp.content)
         webenv = resp_xml.find("WebEnv").text
         query_key = resp_xml.find("QueryKey").text
-        return self.esearch(webenv=webenv, query_key=query_key)
+        search_result = self.esearch(webenv=webenv, query_key=query_key)
+        if "count" in search_result:
+            _LOG.info(
+                f"{int(search_result['count'])} / {len(all_pmcids)} articles "
+                "are in PMC Open Access."
+            )
+        return search_result
 
     def esearch(
         self,
@@ -217,8 +225,14 @@ class EntrezClient:
         """Perform search.
 
         If webenv and query_key are provided, results will be the intersection
-        with existing webenv on the history server -- see Entrez documentation.
-        Results are always restricted to open-access subset.
+        with existing webenv on the history server -- see Entrez documentation:
+        https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ESearch
+
+        Results are always restricted to the open-access subset. Therefore
+        `query=None` amounts to searching for all open-access articles
+        (possibly within a previous result set if providing `webenv` &
+        `query_key`).
+
         If search fails, returns an empty dictionary. Otherwise returns the
         search results -- keys of interest are "count", "webenv", and
         "querykey".

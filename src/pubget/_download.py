@@ -224,7 +224,7 @@ class _PMCIDListDownloader(_Downloader):
 
     def _prepare_webenv(self, client: EntrezClient) -> Dict[str, str]:
         """Use EPost to upload PMCIDs to the history server."""
-        _LOG.info("Performing search")
+        _LOG.info("Uploading PMCIDs.")
         return client.epost(self._pmcids)
 
     def _save_input(self, output_dir: Path) -> None:
