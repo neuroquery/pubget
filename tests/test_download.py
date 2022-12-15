@@ -64,11 +64,11 @@ def test_download_pmcids(tmp_path, entrez_mock):
 
 
 def test_get_api_key(monkeypatch):
-    monkeypatch.delenv("PUBGET_API_KEY", raising=False)
+    monkeypatch.delenv("NCBI_API_KEY", raising=False)
     args = argparse.Namespace(api_key=None)
     key = _download._get_api_key(args)
     assert key is None
-    monkeypatch.setenv("PUBGET_API_KEY", "apikey")
+    monkeypatch.setenv("NCBI_API_KEY", "apikey")
     key = _download._get_api_key(args)
     assert key == "apikey"
     args = argparse.Namespace(api_key="apikey1")

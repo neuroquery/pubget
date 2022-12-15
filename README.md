@@ -102,7 +102,7 @@ or `--query_file`.
 
 If we have an Entrez API key (see details in the [E-utilities
 documentation](https://www.ncbi.nlm.nih.gov/books/NBK25497/)), we can provide it
-through the `PUBGET_API_KEY` environment variable or through the `--api_key`
+through the `NCBI_API_KEY` environment variable or through the `--api_key`
 command line argument (the latter has higher precedence).
 
 We must also specify the directory in which all `pubget` data will be stored. It
