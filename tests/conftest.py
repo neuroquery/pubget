@@ -4,6 +4,7 @@ import os
 import shutil
 from pathlib import Path
 from unittest.mock import Mock
+import urllib.parse
 
 import numpy as np
 import pandas as pd
@@ -108,6 +109,7 @@ class EntrezMock:
         assert self._count == 7
         self.fail_efetch_after_n_articles = None
         self.last_request = None
+        self.webenvs = {}
 
     @property
     def count(self):
@@ -125,23 +127,33 @@ class EntrezMock:
         return Response(status_code=400, reason="Bad Request")
 
     def _esearch(self, request):
+        params = urllib.parse.parse_qs(request.body)
         response = {
             "esearchresult": {
-                "count": str(self._count),
-                "retmax": "5",
-                "retstart": "0",
-                "querykey": "1",
-                "webenv": "WEBENV_1",
+                "retmax": params["retmax"][0],
+                "querykey": params.get("query_key", ["1"])[0],
+                "webenv": params.get("WebEnv", ["WEBENV_0"])[0],
             }
         }
+        if "WebEnv" not in params:
+            response["esearchresult"]["count"] = str(self._count)
+        else:
+            response["esearchresult"]["count"] = str(
+                len(self.webenvs[params["WebEnv"][0]])
+            )
         return Response(request.url, json.dumps(response).encode("utf-8"))
 
     def _epost(self, request):
-        response = b"""<ePostResult>
+        webenv = f"WEBENV_{len(self.webenvs) + 1}"
+        query = urllib.parse.parse_qs(request.body)
+        self.webenvs[webenv] = query["id"][0].split(",")
+        response = f"""<ePostResult>
         <QueryKey>1</QueryKey>
-        <WebEnv>WEBENV_1</WebEnv>
+        <WebEnv>{webenv}</WebEnv>
         </ePostResult>
-        """
+        """.encode(
+            "utf-8"
+        )
         return Response(request.url, response)
 
     def _efetch(self, request):
