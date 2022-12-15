@@ -194,8 +194,11 @@ class EntrezClient:
             _LOG.error("Empty PMCID list.")
             self.n_failures = 1
             return {}
-        params = {"db": "pmc", "id": ",".join(map(str, all_pmcids))}
-        data = {**params, **self._entrez_id}
+        data = {
+            "db": "pmc",
+            "id": ",".join(map(str, all_pmcids)),
+            **self._entrez_id,
+        }
         _LOG.info(f"Posting {len(all_pmcids)} PMCIDs to Entrez.")
         resp = self._send_request(
             self._epost_base_url,
@@ -241,16 +244,16 @@ class EntrezClient:
         term = "open+access[filter]"
         if query is not None:
             term = "&".join((query, term))
-        search_params = {
+        data = {
             "db": "pmc",
             "term": term,
             "usehistory": "y",
             "retmode": "json",
             "retmax": 5,
+            **self._entrez_id,
         }
         if webenv is not None and query_key is not None:
-            search_params.update({"WebEnv": webenv, "query_key": query_key})
-        data = {**search_params, **self._entrez_id}
+            data.update({"WebEnv": webenv, "query_key": query_key})
         resp = self._send_request(
             self._esearch_base_url,
             data=data,
