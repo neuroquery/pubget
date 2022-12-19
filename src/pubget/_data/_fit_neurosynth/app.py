@@ -83,7 +83,6 @@ def download_image():
     return flask.send_from_directory(
         maps_dir,
         f"{file_name}.nii.gz",
-        f"{file_name}.nii.gz",
         as_attachment=True,
         mimetype="application/octet-stream",
     )
