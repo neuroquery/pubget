@@ -58,7 +58,7 @@ def test_download_pmcids(tmp_path, entrez_mock):
         "pmcidList_55b84a9d317184fe61224bfb4a060fb0", "articlesets"
     )
     assert (
-        download_dir.joinpath("requested_pmcids.txt").read_text("UTF-8")
+        download_dir.parent.joinpath("requested_pmcids.txt").read_text("UTF-8")
         == "1\n2\n3\n"
     )
 

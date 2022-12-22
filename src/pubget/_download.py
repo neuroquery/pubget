@@ -100,7 +100,7 @@ class _Downloader(abc.ABC):
         else:
             info["search_result"] = self._prepare_webenv(client)
             _utils.write_info(output_dir, **info)
-            self._save_input(output_dir)
+            self._save_input(output_dir.parent)
         client.efetch(
             output_dir,
             search_result=info["search_result"],

@@ -140,9 +140,10 @@ After running this command, these are the contents of our data directory:
 ```
 · pubget_data
   └── query_3c0556e22a59e7d200f00ac8219dfd6c
-      └── articlesets
-          ├── articleset_00000.xml
-          └── info.json
+      ├── articlesets
+      │   ├── articleset_00000.xml
+      │   └── info.json
+      └── query.txt
 ```
 
 `pubget` has created a subdirectory for this query. If we run the download again
@@ -164,8 +165,9 @@ the number of results was limited by using the `--n_docs` parameter,
 be 1. You may want to re-run the command before moving on to the next step if
 the download is incomplete.
 
-If we used a query it will be stored in `articlesets/query.txt`, and if we used
-a list of PMCIDs, in `articlesets/requested_pmcids.txt`.
+If we used a query it will be stored in `query.txt`, and if we used a list of
+PMCIDs, in `requested_pmcids.txt`, at the root of the query directory (ie at the
+same level as `articlesets/`).
 
 If we run the same query again, only missing batches will be downloaded. If we
 want to force re-running the search and downloading the whole data we need to

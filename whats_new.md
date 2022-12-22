@@ -2,6 +2,7 @@
 
 ## 0.0.7
 
+- `query.txt` and `requested_pmcids.txt` have moved from the `articlesets/` subdirectory to the root of the query or pmcid list's directory.
 - `labelbuddy` output now contains a `batch_info.csv` file providing the `.jsonl` file and line position of each `pmcid`.
 - The environment variable to provide the NCBI API key has been renamed from `PUBGET_API_KEY` to `NCBI_API_KEY`.
 - When downloading a list of PMCIDs (with `--pmcids_file` option), the list is now filtered to keep only articles that are in the PMC Open Access subset.
