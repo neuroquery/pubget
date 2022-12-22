@@ -110,7 +110,9 @@ def test_neurosynth_coordinates_to_maps(tmp_path):
         maps = pd.DataFrame(maps_vals, index=pmcids, copy=True)
     assert maps.shape == (3, 235375)
     coords_17 = [(0.0, 0.0, 0.0), (10.0, -10.0, 30.0)]
-    masker = maskers.NiftiMasker(datasets.load_mni152_brain_mask()).fit()
+    masker = maskers.NiftiMasker(
+        datasets.load_mni152_brain_mask(resolution=2)
+    ).fit()
     spheres_masker = maskers.NiftiSpheresMasker(
         coords_17, mask_img=masker.mask_img_, radius=10.0
     ).fit()
