@@ -46,15 +46,8 @@ class ExitCode(enum.IntEnum):
 class Extractor(ABC):
     """Extractors used by the `_data_extraction` module."""
 
-    @property
-    @abstractmethod
-    def fields(self) -> Tuple[str, ...]:
-        """Return Dict keys or DataFrame columns produced by this extractor."""
-
-    @property
-    @abstractmethod
-    def name(self) -> str:
-        """Name for this extractor."""
+    fields: Tuple[str, ...]
+    name: str
 
     @abstractmethod
     def extract(
@@ -74,15 +67,8 @@ class Writer(AbstractContextManager):
 class Command:
     """An `pubget` subcommand."""
 
-    @property
-    @abstractmethod
-    def name(self) -> str:
-        """Name for this command."""
-
-    @property
-    @abstractmethod
-    def short_description(self) -> str:
-        """A short description of the command."""
+    name: str
+    short_description: str
 
     @abstractmethod
     def edit_argument_parser(self, argument_parser: ArgparseActions) -> None:
@@ -99,15 +85,8 @@ class Command:
 class PipelineStep:
     """An individual step in the `pubget` pipeline (`pubget run`)."""
 
-    @property
-    @abstractmethod
-    def name(self) -> str:
-        """Name for this step."""
-
-    @property
-    @abstractmethod
-    def short_description(self) -> str:
-        """A short description of the processing step."""
+    name: str
+    short_description: str
 
     @abstractmethod
     def edit_argument_parser(self, argument_parser: ArgparseActions) -> None:

@@ -124,7 +124,7 @@ class EntrezMock:
             return self._epost(request)
         if "efetch.fcgi" in request.url:
             return self._efetch(request)
-        return Response(status_code=400, reason="Bad Request")
+        return Response(request.url, status_code=400, reason="Bad Request")
 
     def _esearch(self, request):
         params = urllib.parse.parse_qs(request.body)
