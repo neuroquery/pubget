@@ -155,24 +155,25 @@ def _write_labelbuddy_batch(
     `None`) taken from `all_docs` to the appropriate jsonl file. Raises
     `StopIteration` if the `all_docs` iterator runs out.
     """
-    # get the first document so we don't create the file if the generator is
-    # exhausted.
-    doc_info = next(all_docs)
-    with open(
-        output_dir.joinpath(f"documents_{batch_nb:0>5}.jsonl"),
-        "w",
-        encoding="utf-8",
-    ) as out_f:
-        out_f.write(json.dumps(_prepare_document(*doc_info, batch=batch_nb)))
-        out_f.write("\n")
-        n_written = 1
-        while batch_size is None or n_written != batch_size:
-            doc_info = next(all_docs)
-            out_f.write(
-                json.dumps(_prepare_document(*doc_info, batch=batch_nb))
-            )
-            out_f.write("\n")
-            n_written += 1
+    batch_file = output_dir.joinpath(f"documents_{batch_nb:0>5}.jsonl")
+    n_written = 0
+    try:
+        with open(batch_file, "w", encoding="utf-8") as out_f, open(
+            output_dir.joinpath("batch_info.csv"), "a", encoding="utf-8"
+        ) as batch_info_f:
+            while batch_size is None or n_written != batch_size:
+                doc_info = next(all_docs)
+                out_f.write(
+                    json.dumps(_prepare_document(*doc_info, batch=batch_nb))
+                )
+                out_f.write("\n")
+                row = (int(doc_info[1]["pmcid"]), batch_file.name, n_written)
+                batch_info_f.write(",".join(map(str, row)))
+                batch_info_f.write("\n")
+                n_written += 1
+    finally:
+        if batch_file.is_file() and not n_written:
+            batch_file.unlink()
 
 
 def _do_make_labelbuddy_documents(
@@ -182,6 +183,7 @@ def _do_make_labelbuddy_documents(
     text_file = extracted_data_dir.joinpath("text.csv")
     metadata_file = extracted_data_dir.joinpath("metadata.csv")
     authors = pd.read_csv(extracted_data_dir.joinpath("authors.csv"))
+    output_dir.joinpath("batch_info.csv").write_text("pmcid,file_name,line\n")
     with open(text_file, encoding="utf-8") as text_fh, open(
         metadata_file, encoding="utf-8"
     ) as metadata_fh:

@@ -613,6 +613,7 @@ This creates a directory whose name ends with `labelbuddyData` containing the ba
       ├── articlesets
       ├── subset_articlesWithCoords_extractedData
       ├── subset_articlesWithCoords_labelbuddyData
+      │   ├── batch_info.csv
       │   ├── documents_00001.jsonl
       │   └── info.json
       └── subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
@@ -627,6 +628,11 @@ labelbuddy mydb.labelbuddy --import-docs documents_00001.jsonl
 See the [labelbuddy
 documentation](https://jeromedockes.github.io/labelbuddy/labelbuddy/current/documentation/)
 for details.
+
+The CSV file `batch_info.csv` provides the location of each article in the
+`.jsonl` files: its columns are `pmcid`, `file_name` (the name of the `.jsonl`
+file containing that article) and `line` (the line number that contains that
+article, first line is 0).
 
 ## Optional step: creating a NiMARE dataset
 
