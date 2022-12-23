@@ -3,16 +3,21 @@
 [![pubget on GitHub](https://img.shields.io/static/v1?label=&message=pubget%20on%20GitHub&color=black&style=flat&logo=github)](https://github.com/neuroquery/pubget)
 
 
-`pubget` is a command-line tool for collecting data for large-scale
-coordinate-based neuroimaging meta-analysis. It exposes some of the machinery
-that was used to create the [neuroquery
+`pubget` is a command-line tool for collecting data for biomedical text-mining,
+and in particular large-scale coordinate-based neuroimaging meta-analysis. It
+exposes some of the machinery that was used to create the [neuroquery
 dataset](https://github.com/neuroquery/neuroquery_data), which powers
 [neuroquery.org](https://neuroquery.org).
 
 `pubget` downloads full-text articles from [PubMed
-Central](https://www.ncbi.nlm.nih.gov/pmc/) and extracts their text and
-stereotactic coordinates. It also computes [TFIDF
-features](https://en.wikipedia.org/wiki/Tf%E2%80%93idf) for the extracted text.
+Central](https://www.ncbi.nlm.nih.gov/pmc/) and extracts their text, metadata
+and stereotactic coordinates. It can also compute [TFIDF
+features](https://en.wikipedia.org/wiki/Tf%E2%80%93idf) for the extracted text,
+fit [NeuroQuery](https://neuroquery.org) or
+[NeuroSynth](https://neurosynth.org/), and format its output for use with
+[NiMARE](https://nimare.readthedocs.io/) or
+[labelbuddy](https://jeromedockes.github.io/labelbuddy/).
+It can be extended with plugins.
 
 Besides the command-line interface, `pubget`'s functionality is also exposed
 through its [Python API](https://neuroquery.github.io/pubget/#python-api).
@@ -28,8 +33,8 @@ This will install the `pubget` Python package, as well as the `pubget` command.
 
 # Quick Start
 
-Once `pubget` is installed, we can download and process neuroimaging articles so
-that we can later use them for meta-analysis.
+Once `pubget` is installed, we can download and process biomedical publications so
+that we can later use them for text-mining or meta-analysis.
 
 ```
 pubget run ./pubget_data -q "fMRI[title]"
@@ -40,14 +45,18 @@ See `pubget run --help` for a description of this command. In particular, the
 
 # Usage
 
-The creation of a dataset happens in four steps:
+The creation of a dataset happens in 3 steps:
 - Downloading the articles in bulk from the
   [PMC](https://www.ncbi.nlm.nih.gov/pmc/) API.
 - Extracting the articles from the bulk download
 - Extracting text, stereotactic coordinates and metadata from the articles, and
   storing this information in CSV files.
+  
+Afterwards, some optional steps can also be run, such as:  
 - Vectorizing the text: transforming it into vectors of
   [TFIDF](https://en.wikipedia.org/wiki/Tf%E2%80%93idf) features.
+- Running the same analyses as NeuroSynth or NeuroQuery.
+- Preparing the data for use with labelbuddy or NiMARE.
 
 Each of these steps stores its output in a separate directory. Normally, you
 will run the whole procedure in one command by invoking `pubget run`. However,
@@ -80,9 +89,9 @@ parameter. It must contain one ID per line, for example:
 Note these must be PubMedCentral IDs, *not* PubMed IDs. Moreover, Some articles
 can be viewed on the PubMedCentral website, but are not in the Open Access
 subset. The publisher of these articles forbids downloading their full text in
-XML form. Therefore, for such articles only the abstract and metadata will be
-available. When we use a query instead of a PMCID list, only articles in the
-Open Access subset are considered.
+XML form. `pubget` filters the list of PMCIDs and only downloads those that are
+in the Open Access subset. When we use a query instead of a PMCID list, only
+articles in the Open Access subset are considered.
 
 If we use a query instead, we do not use the `--pmcids_file` option, but either
 `--query` or `--query_file`. Everything else works in the same way, and the rest
@@ -146,14 +155,18 @@ After running this command, these are the contents of our data directory:
       └── query.txt
 ```
 
-`pubget` has created a subdirectory for this query. If we run the download again
-for the same query, the same subdirectory will be reused
-(`3c0556e22a59e7d200f00ac8219dfd6c` is the md5 checksum of the query). If we had
-used a PMCID list instead of a query, the subdirectory name would start with
-`pmcidList_` instead of `query_`.
+`pubget` has created a directory for this query,
+`query_3c0556e22a59e7d200f00ac8219dfd6c` -- in the following we will call it
+"the query directory". If we run the download again for the same query, the same
+directory will be reused (`3c0556e22a59e7d200f00ac8219dfd6c` is the md5 checksum
+of the query). If we had used a PMCID list instead of a query, the directory
+name would start with `pmcidList_` instead of `query_`.
+
+If we used a query it will be stored in `query.txt`, and if we used a list of
+PMCIDs, in `requested_pmcids.txt`, in the query directory.
 
 Inside the query directory, the results of the bulk download are stored in the
-`articlesets` directory. The articles themselves are in XML files bundling up to
+`articlesets` subdirectory. The articles themselves are in XML files bundling up to
 500 articles called `articleset_*.xml`. Here there is only one because the
 search returned less than 500 articles.
 
@@ -164,10 +177,6 @@ the number of results was limited by using the `--n_docs` parameter,
 `is_complete` will be `false` and the exit status of the program will
 be 1. You may want to re-run the command before moving on to the next step if
 the download is incomplete.
-
-If we used a query it will be stored in `query.txt`, and if we used a list of
-PMCIDs, in `requested_pmcids.txt`, at the root of the query directory (ie at the
-same level as `articlesets/`).
 
 If we run the same query again, only missing batches will be downloaded. If we
 want to force re-running the search and downloading the whole data we need to
@@ -193,7 +202,7 @@ articles are spread over many subdirectories. The names of these subdirectories
 range from `000` to `fff` and an article goes in the subdirectory that matches
 the first 3 hexidecimal digits of the md5 hash of its `pmcid`.
 
-Our data directory now looks like this (with many articles ommitted for
+Our data directory now looks like this (with many articles omitted for
 conciseness):
 
 ```
@@ -349,7 +358,7 @@ step is always run and `--vectorize_text` is ignored. This step is also run
 whenever we use the `--vocabulary_file` option.
 
 Some large-scale meta-analysis methods such as
-[neurosynth](https://neurosynth.org/) and [neuroquery](https://neuroquery.org)
+[NeuroSynth](https://neurosynth.org/) and [NeuroQuery](https://neuroquery.org)
 rely on [TFIDF features](https://en.wikipedia.org/wiki/Tf%E2%80%93idf) to
 represent articles' text. The last step before we can apply these methods is
 therefore to extract TFIDF features from the text we obtained in the previous
@@ -434,7 +443,7 @@ again, the vectorization is skipped. If we want to force re-running the
 vectorization we need to remove the corresponding directory (or the `info.json`
 file it contains).
 
-### Vocabulary mapping: collapsing redundant words
+### Vocabulary mapping: collapsing synonyms
 
 It is possible to instruct the tokenizer (that extracts words from text) to
 collapse some pairs of terms that have the same meaning but different spellings,
