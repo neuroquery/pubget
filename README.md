@@ -4,7 +4,7 @@
 
 ![](pubget.svg)
 
-`pubget` is a command-line tool for collecting data for biomedical text-mining, and in particular large-scale coordinate-based neuroimaging meta-analysis. 
+`pubget` is a command-line tool for collecting data for biomedical text-mining, and in particular large-scale coordinate-based neuroimaging meta-analysis.
 It exposes some of the machinery that was used to create the [neuroquery dataset](https://github.com/neuroquery/neuroquery_data), which powers [neuroquery.org](https://neuroquery.org).
 
 `pubget` downloads full-text articles from [PubMed Central](https://www.ncbi.nlm.nih.gov/pmc/) and extracts their text, metadata and stereotactic coordinates.
@@ -30,7 +30,7 @@ Once `pubget` is installed, we can download and process biomedical publications 
 pubget run ./pubget_data -q "fMRI[title]"
 ```
 
-See `pubget run --help` for a description of this command. 
+See `pubget run --help` for a description of this command.
 For example, the `--n_jobs` option allows running some of the steps in parallel.
 
 # Usage
@@ -39,8 +39,8 @@ The creation of a dataset happens in 3 steps:
 - Downloading the articles in bulk from the [PMC](https://www.ncbi.nlm.nih.gov/pmc/) API.
 - Extracting the articles from the bulk download
 - Extracting text, stereotactic coordinates and metadata from the articles, and storing this information in CSV files.
-  
-Afterwards, some optional steps can also be run, such as:  
+
+Afterwards, some optional steps can also be run, such as:
 - Vectorizing the text: transforming it into vectors of [TFIDF](https://en.wikipedia.org/wiki/Tf%E2%80%93idf) features.
 - Running the same analyses as NeuroSynth or NeuroQuery.
 - Preparing the data for use with labelbuddy or NiMARE.
@@ -90,7 +90,7 @@ The query can be passed either as a string on the command-line with `-q` or `--q
 
 If we have an NCBI API key (see details in the [E-utilities documentation](https://www.ncbi.nlm.nih.gov/books/NBK25497/)), we can provide it through the `NCBI_API_KEY` environment variable or through the `--api_key` command line argument (the latter has higher precedence).
 
-We must also specify the directory in which all `pubget` data will be stored. 
+We must also specify the directory in which all `pubget` data will be stored.
 It can be provided either as a command-line argument (as in the examples below), or by exporting the `PUBGET_DATA_DIR` environment variable.
 Subdirectories will be created for each different query.
 In the following we suppose we are storing our data in a directory called `pubget_data`.
@@ -233,11 +233,11 @@ Our data directory now contains (ommitting the contents of the previous steps):
 If we had not used `--articles_with_coords_only`, the new subdirectory would be named `subset_allArticles_extractedData` instead.
 
 - `metadata.csv` contains one row per article, with some metadata: `pmcid` (PubMed Central ID), `pmid` (PubMed ID), `doi`, `title`, `journal`, `publication_year` and `license`. Note some values may be missing (for example not all articles have a `pmid` or `doi`).
-- `authors.csv` contains one row per article per author. 
+- `authors.csv` contains one row per article per author.
   Fields are `pmcid`, `surname`, `given-names`.
 - `text.csv` contains one row per article.
   The first field is the `pmcid`, and the other fields are `title`, `keywords`, `abstract`, and `body`, and contain the text extracted from these parts of the article.
-- `links.csv` contains the external links found in the articles. 
+- `links.csv` contains the external links found in the articles.
   The fields are `pmcid`, `ext-link-type` (the type of link, for example "uri", "doi"), and `href` (usually an URL).
 - `coordinates.csv` contains one row for each `(x, y, z)` stereotactic coordinate found in any article.
   Its fields are the `pmcid` of the article, the table label and id the coordinates came from, and `x`, `y`, `z`.
@@ -287,7 +287,7 @@ This step is also run whenever we use the `--vocabulary_file` option.
 Some large-scale meta-analysis methods such as [NeuroSynth](https://neurosynth.org/) and [NeuroQuery](https://neuroquery.org) rely on [TFIDF features](https://en.wikipedia.org/wiki/Tf%E2%80%93idf) to represent articles' text.
 The last step before we can apply these methods is therefore to extract TFIDF features from the text we obtained in the previous step.
 
-TFIDF features rely on a predefined vocabulary (set of terms or phrases). 
+TFIDF features rely on a predefined vocabulary (set of terms or phrases).
 Each dimension of the feature vector corresponds to a term in the vocabulary and represents the importance of that term in the encoded text.
 This importance is an increasing function of the *term frequency* (the number of time the term occurs in the text divided by the length of the text) and a decreasing function of the *document frequency* (the total number of times the term occurs in the whole corpus or dataset).
 
@@ -507,7 +507,7 @@ The CSV file `batch_info.csv` provides the location of each article in the `.jso
 
 ## Optional step: creating a NiMARE dataset
 
-This step is executed by the `pubget extract_nimare_data` command. 
+This step is executed by the `pubget extract_nimare_data` command.
 When running the full pipeline this step is optional: we must use the `--nimare` option for it to be executed.
 
 It creates a [NiMARE](https://nimare.readthedocs.io/) dataset for the extracted data in JSON format.
@@ -519,7 +519,7 @@ We pass the `_vectorizedText` directory created by `pubget vectorize`:
 pubget extract_nimare_data pubget_data/query_3c0556e22a59e7d200f00ac8219dfd6c/subset_articlesWithCoords-voc_e6f7a7e9c6ebc4fb81118ccabfee8bd7_vectorizedText
 ```
 
-The resulting directory contains a `nimare_dataset.json` file that can be used to initialize a `nimare.Dataset`. 
+The resulting directory contains a `nimare_dataset.json` file that can be used to initialize a `nimare.Dataset`.
 
 ```
 · pubget_data
@@ -583,7 +583,7 @@ If this log directory is specified, a new log file with a timestamp is created a
 
 It is possible to write plugins and define [entry points](https://setuptools.pypa.io/en/latest/userguide/entry_point.html) to add functionality that is automatically executed when `pubget` is run.
 
-The name of the entry point should be `pubget.plugin_actions`. 
+The name of the entry point should be `pubget.plugin_actions`.
 It must be a function taking no arguments and returning a dictionary with keys `pipeline_steps` and `commands`.
 The corresponding values must be lists of processing step objects, that must implement the interface defined by `pubget.PipelineStep` and `pubget.Command` respectively (their types do not need to inherit from these classes).
 
@@ -594,7 +594,7 @@ An example plugin that can be used as a template, and more details, are provided
 
 # Contributing
 
-Feedback and contributions are welcome. 
+Feedback and contributions are welcome.
 Development happens at the [pubget GitHub repositiory](https://github.com/neuroquery/pubget).
 To install the dependencies required for development, from the directory where you cloned `pubget`, run:
 ```

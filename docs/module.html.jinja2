@@ -1,0 +1,10 @@
+{% extends "default/module.html.jinja2" %}
+
+{% block favicon %}
+<link rel="icon" type="image/svg+xml" href="pubget.svg" />
+{% endblock %}
+
+{% block nav_title %}
+<h5 style="text-align: left;">pubget {{ env.PUBGET_VERSION }}</h5>
+<img src="pubget.svg" alt="project logo"/>
+{% endblock %}

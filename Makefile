@@ -41,12 +41,12 @@ compare_query_vs_pmcid_list:
 	python tests/compare_query_vs_pmcid_list.py
 
 doc:
-	pdoc --no-search --no-show-source -d numpy -o doc_build ./src/pubget --logo pubget.svg
+	rm -rf doc_build/*
+	PUBGET_VERSION=$$(cat src/pubget/_data/VERSION) pdoc --no-search --no-show-source -d numpy -o doc_build ./src/pubget -t docs/
 	@sed --in-place 's/^\(.*pubget.*is a command-line tool for collecting.*\)$$'\
 '/<p><b>This document describes pubget version $(pubget_version)<\/b><\/p>\n\1/' \
 doc_build/pubget.html
 	cp pubget.svg doc_build
-	convert -resize x32 pubget.svg doc_build/favicon.ico
 
 format:
 	isort .
