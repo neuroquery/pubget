@@ -1,8 +1,11 @@
+# pubget
+
+![](pubget.svg)
+
 [![build](https://github.com/neuroquery/pubget/actions/workflows/testing.yml/badge.svg)](https://github.com/neuroquery/pubget/actions/workflows/testing.yml)
 [![codecov](https://codecov.io/gh/neuroquery/pubget/branch/main/graph/badge.svg?token=8KEBP2EN3A)](https://codecov.io/gh/neuroquery/pubget)
 [![pubget on GitHub](https://img.shields.io/static/v1?label=&message=pubget%20on%20GitHub&color=black&style=flat&logo=github)](https://github.com/neuroquery/pubget)
 
-![](pubget.svg)
 
 `pubget` is a command-line tool for collecting data for biomedical text-mining, and in particular large-scale coordinate-based neuroimaging meta-analysis.
 It exposes some of the machinery that was used to create the [neuroquery dataset](https://github.com/neuroquery/neuroquery_data), which powers [neuroquery.org](https://neuroquery.org).

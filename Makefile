@@ -46,6 +46,8 @@ doc:
 	@sed --in-place 's/^\(.*pubget.*is a command-line tool for collecting.*\)$$'\
 '/<p><b>This document describes pubget version $(pubget_version)<\/b><\/p>\n\1/' \
 doc_build/pubget.html
+	@sed --in-place '/<h1 id="pubget">/d' doc_build/pubget.html
+	@sed --in-place '/<li><a href="#pubget">pubget<\/a><\/li>/d' doc_build/pubget.html
 	cp pubget.svg doc_build
 
 format:
