@@ -448,7 +448,7 @@ def _add_symlink(target_dir: Path, link_name: Optional[str]) -> None:
     if link_name is None:
         return
     if not target_dir.is_dir():
-        return None
+        return
     link_file = target_dir.with_name(link_name)
     if link_file.exists():
         if not link_file.is_symlink():
