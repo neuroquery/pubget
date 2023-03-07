@@ -100,7 +100,6 @@ def test_dump_failed_request(tmp_path):
     client = _entrez.EntrezClient(
         failed_requests_dump_dir=tmp_path, api_key="myapikey"
     )
-    client._dump_failed_request_info(req_mock, None)
     client._dump_failed_request_info(req_mock, resp_mock)
     req_dir = sorted(tmp_path.glob("*"))[-1]
     for file_name in (
@@ -115,6 +114,7 @@ def test_dump_failed_request(tmp_path):
     assert "myapikey" not in req_dir.joinpath("request_body").read_text(
         "utf-8"
     )
+    client._dump_failed_request_info(req_mock, None)
     resp_mock = Mock()
     resp_mock.content.side_effect = Exception
     client._dump_failed_request_info(req_mock, resp_mock)
