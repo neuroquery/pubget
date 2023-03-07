@@ -1,5 +1,4 @@
 """Client for the Entrez E-utilities needed for downloading articles."""
-import io
 import logging
 import math
 import time
@@ -38,12 +37,9 @@ def _check_efetch_response(response: requests.Response) -> Tuple[bool, str]:
     if not check:
         return check, reason
     try:
-        parse_events = etree.iterparse(
-            io.BytesIO(response.content), events=("start",)
-        )
-        event, elem = next(parse_events)
-        assert event == "start"
-        assert elem.tag == "pmc-articleset"
+        root = etree.fromstring(response.content)
+        assert root.tag == "pmc-articleset"
+        assert (root.find("article") is not None)
     except Exception:
         return (
             False,
@@ -89,8 +85,7 @@ class EntrezClient:
     """Client for esearch and efetch using the pmc database."""
 
     _default_timeout = 27
-    _n_request_attempts = 5
-    _delay_before_retry_failed_request = 2.0
+    _delay_before_retry_failed_request = (2.0, 8.0, 32.0, 32.0, 32.0)
     _entrez_base_url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
     _esearch_base_url = urljoin(_entrez_base_url, "esearch.fcgi")
     _efetch_base_url = urljoin(_entrez_base_url, "efetch.fcgi")
@@ -134,12 +129,12 @@ class EntrezClient:
         self._wait_to_send_request()
         try:
             resp = self._session.send(prepped, timeout=self._default_timeout)
-        except Exception:
-            _LOG.exception(f"Request failed: {prepped.url}")
+        except Exception as error:
+            _LOG.warning(f"Request failed: {prepped.url} ({error})")
             return None
         check, reason = response_validator(resp)
         if not check:
-            _LOG.error(
+            _LOG.warning(
                 f"Response failed to validate (reason: {reason}) "
                 f"for url {prepped.url}"
             )
@@ -167,12 +162,20 @@ class EntrezClient:
         """
         req = requests.Request("POST", url, params=params, data=data)
         prepped = self._session.prepare_request(req)
-        for attempt in range(self._n_request_attempts):
-            _LOG.debug(f"sending request: {prepped.url} (attempt #{attempt})")
+        for attempt, delay in enumerate(
+            self._delay_before_retry_failed_request
+        ):
+            _LOG.info(f"sending request: {prepped.url} (attempt #{attempt + 1})")
             resp = self._send_one_request(prepped, response_validator)
             if resp is not None:
                 return resp
-            time.sleep(self._delay_before_retry_failed_request)
+            _LOG.warning(f"request failed: sleeping {delay}s before retrying.")
+            time.sleep(delay)
+        _LOG.error(
+            "Request failed; giving up after "
+            f"{len(self._delay_before_retry_failed_request)} attempts: "
+            f"{prepped.url}"
+        )
         return None
 
     def epost(self, all_pmcids: Sequence[int]) -> Dict[str, str]:
@@ -353,4 +356,5 @@ class EntrezClient:
             self.n_failures += 1
             _LOG.error(f"{self.n_failures} batches failed to download")
         else:
+            _LOG.info(f"batch {batch_nb + 1} downloaded successfully.")
             batch_file.write_bytes(resp.content)
