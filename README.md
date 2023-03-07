@@ -131,8 +131,15 @@ After running this command, these are the contents of our data directory:
       └── query.txt
 ```
 
-`pubget` has created a directory for this query, `query_3c0556e22a59e7d200f00ac8219dfd6c` -- in the following we will call it "the query directory".
-If we run the download again for the same query, the same directory will be reused (`3c0556e22a59e7d200f00ac8219dfd6c` is the md5 checksum of the query).
+`pubget` has created a directory for this query, `query_3c0556e22a59e7d200f00ac8219dfd6c` — in the following we will call it "the query directory".
+Its name contains the md5 checksum of the query (or PMCID list), which is useful for `pubget` to reuse the same directory if we run the same query again, but not very helpful for us humans.
+Therefore, we can use the `--alias` command-line argument to give this query an alternative name, and `pubget` will create a symbolic link for us.
+For example if we run the query above with the added option `--alias "fMRI-2019"`, our `pubget_data` directory will look like this:
+```
+· pubget_data
+  ├── fMRI-2019 -> query_3c0556e22a59e7d200f00ac8219dd6c
+  └── query_3c0556e22a59e7d200f00ac8219dd6c
+```
 If we had used a PMCID list instead of a query, the directory name would start with `pmcidList_` instead of `query_`.
 
 If we used a query it will be stored in `query.txt`, and if we used a list of PMCIDs, in `requested_pmcids.txt`, in the query directory.
@@ -366,7 +373,7 @@ The vocabulary mapping is primarily used by the `neuroquery` package and its tok
 This step is executed by the `pubget fit_neuroquery` command.
 When running the full pipeline it is optional: we must use the `--fit_neuroquery` option for it to be executed.
 
-In this step, once the TFIDF features and the coordinates have been extracted from downloaded articles, they are used to train a NeuroQuery encoding model -- the same type of model that is exposed at [neuroquery.org](https://neuroquery.org).
+In this step, once the TFIDF features and the coordinates have been extracted from downloaded articles, they are used to train a NeuroQuery encoding model — the same type of model that is exposed at [neuroquery.org](https://neuroquery.org).
 Details about this model are provided in [the NeuroQuery paper](https://elifesciences.org/articles/53385) and the documentation for the [neuroquery package](https://github.com/neuroquery/neuroquery).
 
 Note: for this model to give good results a large dataset is needed, ideally close to 10,000 articles (with coordinates).

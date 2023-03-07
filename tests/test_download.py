@@ -104,3 +104,19 @@ def test_data_dir_arg(monkeypatch):
     parser = argparse.ArgumentParser()
     _download._edit_argument_parser(parser)
     parser.parse_args(["-q", "fmri"])
+
+
+def test_add_symlink(tmp_path):
+    out_dir_1 = tmp_path.joinpath("out_1")
+    _download._add_symlink(out_dir_1, "my_name")
+    assert not tmp_path.joinpath("my_name").exists()
+    out_dir_1.mkdir()
+    _download._add_symlink(out_dir_1, "my_name")
+    assert tmp_path.joinpath("my_name").exists()
+    out_dir_2 = tmp_path.joinpath("out_2")
+    out_dir_2.mkdir()
+    _download._add_symlink(out_dir_2, "my_name")
+    assert tmp_path.joinpath("my_name").resolve() == out_dir_2.resolve()
+    tmp_path.joinpath("my_other_name").touch()
+    _download._add_symlink(out_dir_1, "my_other_name")
+    assert not tmp_path.joinpath("my_other_name").is_symlink()

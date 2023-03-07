@@ -139,6 +139,8 @@ def test_full_pipeline_command(
         "--vectorize_text",
         "--n_jobs",
         "2",
+        "--alias",
+        "my_memorable_name",
     ]
     if with_nimare:
         args.append("--nimare")
@@ -157,6 +159,10 @@ def test_full_pipeline_command(
     code = _commands.pubget_command(args)
     assert code == 0
     query_name = "query_7838640309244685021f9954f8aa25fc"
+    assert (
+        tmp_path.joinpath("my_memorable_name").resolve()
+        == tmp_path.joinpath(query_name).resolve()
+    )
     if voc_source == "extract":
         voc_file = tmp_path.joinpath(
             query_name,
