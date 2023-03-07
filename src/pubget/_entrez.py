@@ -138,7 +138,7 @@ class EntrezClient:
             f"{datetime.datetime.now().isoformat().replace(':', '_')}"
             f"-{secrets.token_hex(2)}"
         )
-        request_dir.mkdir(exist_ok=True, parents=True)
+        request_dir.mkdir(parents=True)
         _LOG.info(f"Logging info on failed request to {request_dir}")
         try:
             request_dir.joinpath("request_url").write_text(
