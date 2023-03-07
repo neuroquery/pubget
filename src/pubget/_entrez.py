@@ -39,7 +39,7 @@ def _check_efetch_response(response: requests.Response) -> Tuple[bool, str]:
     try:
         root = etree.fromstring(response.content)
         assert root.tag == "pmc-articleset"
-        assert (root.find("article") is not None)
+        assert root.find("article") is not None
     except Exception:
         return (
             False,
@@ -165,7 +165,9 @@ class EntrezClient:
         for attempt, delay in enumerate(
             self._delay_before_retry_failed_request
         ):
-            _LOG.info(f"sending request: {prepped.url} (attempt #{attempt + 1})")
+            _LOG.info(
+                f"sending request: {prepped.url} (attempt #{attempt + 1})"
+            )
             resp = self._send_one_request(prepped, response_validator)
             if resp is not None:
                 return resp
