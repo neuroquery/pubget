@@ -111,7 +111,7 @@ def test_esearch_failure(requests_mock, tmp_path):
         (
             "efetch",
             b"",
-            b"<pmc-articleset></pmc-articleset>",
+            b"<pmc-articleset><article/></pmc-articleset>",
             ("tmp_path", {"webenv": "", "querykey": "", "count": 3}),
         ),
     ],
