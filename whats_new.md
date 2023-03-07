@@ -1,5 +1,10 @@
 # `pubget` releases
 
+## 0.0.8
+
+- The download step is more robust to malformed XML files sent by efetch.fcgi
+- An `--alias` command-line option has been added to create a symlink with a human-readable name to a query's output directory.
+
 ## 0.0.7
 
 - `query.txt` and `requested_pmcids.txt` have moved from the `articlesets/` subdirectory to the root of the query or pmcid list's directory.

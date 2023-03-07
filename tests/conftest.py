@@ -1,10 +1,11 @@
+import copy
 import itertools
 import json
 import os
 import shutil
+import urllib.parse
 from pathlib import Path
 from unittest.mock import Mock
-import urllib.parse
 
 import numpy as np
 import pandas as pd
@@ -16,7 +17,8 @@ from scipy import sparse
 @pytest.fixture(autouse=True)
 def no_retry_delay(monkeypatch):
     monkeypatch.setattr(
-        "pubget._entrez.EntrezClient._delay_before_retry_failed_request", 0.005
+        "pubget._entrez.EntrezClient._delay_before_retry_failed_request",
+        (0.001, 0.001, 0.001, 0.001, 0.001),
     )
 
 
@@ -172,7 +174,7 @@ class EntrezMock:
         result = etree.Element("pmc-articleset")
         start, end = retstart, retstart + retmax
         for article in self._article_set.getroot()[start:end]:
-            result.append(article)
+            result.append(copy.deepcopy(article))
         content = etree.tostring(
             result, encoding="utf-8", xml_declaration=True
         )
