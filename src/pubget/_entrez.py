@@ -1,6 +1,9 @@
 """Client for the Entrez E-utilities needed for downloading articles."""
+import datetime
+import json
 import logging
 import math
+import secrets
 import time
 from pathlib import Path
 from typing import (
@@ -85,7 +88,7 @@ class EntrezClient:
     """Client for esearch and efetch using the pmc database."""
 
     _default_timeout = 27
-    _delay_before_retry_failed_request = (2.0, 8.0, 32.0, 32.0, 32.0)
+    _delay_before_retry_failed_request = (2.0, 8.0, 32.0, 64.0, 64.0)
     _entrez_base_url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
     _esearch_base_url = urljoin(_entrez_base_url, "esearch.fcgi")
     _efetch_base_url = urljoin(_entrez_base_url, "efetch.fcgi")
@@ -95,6 +98,7 @@ class EntrezClient:
         self,
         request_period: Optional[float] = None,
         api_key: Optional[str] = None,
+        failed_requests_dump_dir: Optional[PathLikeOrStr] = None,
     ) -> None:
         self._entrez_id = {}
         if api_key is not None:
@@ -105,6 +109,9 @@ class EntrezClient:
             )
         else:
             self._request_period = request_period
+        self._failed_requests_dump_dir: Optional[Path] = None
+        if failed_requests_dump_dir is not None:
+            self._failed_requests_dump_dir = Path(failed_requests_dump_dir)
         self._last_request_time: Union[None, float] = None
         self._session = requests.Session()
         self.last_search_result: Optional[Mapping[str, str]] = None
@@ -120,6 +127,48 @@ class EntrezClient:
             time.sleep(wait)
         self._last_request_time = time.time()
 
+    def _dump_failed_request_info(
+        self,
+        request: requests.PreparedRequest,
+        response: Optional[requests.Response],
+    ) -> None:
+        if self._failed_requests_dump_dir is None:
+            return
+        request_dir = self._failed_requests_dump_dir.joinpath(
+            f"{datetime.datetime.now().isoformat().replace(':', '_')}"
+            f"-{secrets.token_hex(2)}"
+        )
+        request_dir.mkdir(parents=True)
+        _LOG.info(f"Logging info on failed request to {request_dir}")
+        try:
+            request_dir.joinpath("request_url").write_text(
+                request.url or "", encoding="utf-8"
+            )
+            request_dir.joinpath("request_headers").write_text(
+                json.dumps(dict(request.headers)), encoding="utf-8"
+            )
+            body = str(request.body or "")
+            api_key = self._entrez_id.get("api_key")
+            if api_key is not None:
+                body = body.replace(api_key, f"<API KEY: {api_key[:3]}...>")
+            request_dir.joinpath("request_body").write_text(
+                body, encoding="utf-8"
+            )
+            if response is None:
+                return
+
+            request_dir.joinpath("response_url").write_text(
+                response.url, encoding="utf-8"
+            )
+            request_dir.joinpath("response_headers").write_text(
+                json.dumps(dict(response.headers)), encoding="utf-8"
+            )
+            request_dir.joinpath("response_content").write_bytes(
+                response.content
+            )
+        except Exception:
+            _LOG.exception("Failed to log bad request or response content.")
+
     def _send_one_request(
         self,
         prepped: requests.PreparedRequest,
@@ -131,6 +180,7 @@ class EntrezClient:
             resp = self._session.send(prepped, timeout=self._default_timeout)
         except Exception as error:
             _LOG.warning(f"Request failed: {prepped.url} ({error})")
+            self._dump_failed_request_info(prepped, None)
             return None
         check, reason = response_validator(resp)
         if not check:
@@ -138,6 +188,7 @@ class EntrezClient:
                 f"Response failed to validate (reason: {reason}) "
                 f"for url {prepped.url}"
             )
+            self._dump_failed_request_info(prepped, resp)
             return None
         _LOG.debug(
             f"received response. code: {resp.status_code}; "
