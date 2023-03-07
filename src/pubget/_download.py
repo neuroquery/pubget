@@ -314,6 +314,16 @@ def _edit_argument_parser(argument_parser: ArgparseActions) -> None:
         "(one per line) to download.",
     )
     argument_parser.add_argument(
+        "--alias",
+        type=str,
+        default=None,
+        help="Human-readable name for the output directory. If provided, a "
+        "symbolic link with this name will be created to make it easier to "
+        "recognize the output directories of different queries or PMCID lists "
+        "in the pubget data directory. For example: 'mri_articles_2019-2023', "
+        "'ct_review_project', etc. ",
+    )
+    argument_parser.add_argument(
         "-n",
         "--n_docs",
         type=int,
@@ -434,6 +444,24 @@ def download_query_results(
     ).download()
 
 
+def _add_symlink(target_dir: Path, link_name: Optional[str]) -> None:
+    if link_name is None:
+        return
+    if not target_dir.is_dir():
+        return
+    link_file = target_dir.with_name(link_name)
+    if link_file.exists():
+        if not link_file.is_symlink():
+            _LOG.warning(
+                f"Not creating symbolic link: {link_file} already "
+                "exists and is not a symbolic link."
+            )
+            return
+        link_file.unlink()
+    link_file.symlink_to(target_dir.name, target_is_directory=True)
+    _LOG.info(f"Added symbolic link: {link_file.name} → {target_dir.name}")
+
+
 def _download_articles_for_args(
     args: argparse.Namespace,
 ) -> Tuple[Path, ExitCode]:
@@ -441,19 +469,22 @@ def _download_articles_for_args(
     data_dir = _get_data_dir(args)
     if args.pmcids_file is not None:
         pmcids = _get_pmcids(args)
-        return download_pmcids(
+        output_dir, exit_code = download_pmcids(
             pmcids=pmcids,
             data_dir=data_dir,
             n_docs=args.n_docs,
             api_key=api_key,
         )
-    query = _get_query(args)
-    return download_query_results(
-        query=query,
-        data_dir=data_dir,
-        n_docs=args.n_docs,
-        api_key=api_key,
-    )
+    else:
+        query = _get_query(args)
+        output_dir, exit_code = download_query_results(
+            query=query,
+            data_dir=data_dir,
+            n_docs=args.n_docs,
+            api_key=api_key,
+        )
+    _add_symlink(output_dir.parent, args.alias)
+    return output_dir, exit_code
 
 
 class DownloadStep(PipelineStep):
@@ -470,6 +501,7 @@ class DownloadStep(PipelineStep):
         args: argparse.Namespace,
         previous_steps_output: Mapping[str, Path],
     ) -> Tuple[Path, ExitCode]:
+        del previous_steps_output
         return _download_articles_for_args(args)
 
 
