@@ -1,5 +1,5 @@
 import json
-from unittest.mock import Mock
+from unittest.mock import MagicMock, Mock
 
 import pytest
 from lxml import etree
@@ -85,6 +85,39 @@ def test_esearch_failure(requests_mock, tmp_path):
     client.n_failures = 0
     client.efetch(tmp_path)
     assert client.n_failures == 1
+
+
+def test_dump_failed_request(tmp_path):
+    client = _entrez.EntrezClient()
+    req_mock, resp_mock = Mock(), Mock()
+    req_mock.headers = {"a": "b"}
+    req_mock.body = "some content"
+    req_mock.url = "http://example"
+    resp_mock.url = "http://example"
+    resp_mock.content = b"some content"
+    resp_mock.headers = {"key": "val"}
+    client._dump_failed_request_info(req_mock, resp_mock)
+    client = _entrez.EntrezClient(
+        failed_requests_dump_dir=tmp_path, api_key="myapikey"
+    )
+    client._dump_failed_request_info(req_mock, None)
+    client._dump_failed_request_info(req_mock, resp_mock)
+    req_dir = sorted(tmp_path.glob("*"))[-1]
+    for file_name in (
+        "request_url",
+        "request_headers",
+        "request_body",
+        "response_url",
+        "response_headers",
+        "response_content",
+    ):
+        assert req_dir.joinpath(file_name).is_file()
+    assert "myapikey" not in req_dir.joinpath("request_body").read_text(
+        "utf-8"
+    )
+    resp_mock = Mock()
+    resp_mock.content.side_effect = Exception
+    client._dump_failed_request_info(req_mock, resp_mock)
 
 
 @pytest.mark.parametrize(

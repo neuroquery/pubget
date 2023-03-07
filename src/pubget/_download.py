@@ -90,7 +90,12 @@ class _Downloader(abc.ABC):
                 "name": _STEP_NAME,
             }
         _LOG.info(f"Downloading data in {output_dir}")
-        client = EntrezClient(api_key=self._api_key)
+        client = EntrezClient(
+            api_key=self._api_key,
+            failed_requests_dump_dir=output_dir.joinpath(
+                "failed_requests_dumps"
+            ),
+        )
         if "search_result" in info and "webenv" in info["search_result"]:
             _LOG.info(
                 "Found partial download, resuming download of webenv "
