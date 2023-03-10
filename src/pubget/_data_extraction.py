@@ -6,7 +6,16 @@ import multiprocessing
 import multiprocessing.synchronize
 from contextlib import ExitStack
 from pathlib import Path
-from typing import Any, Dict, Generator, Mapping, Optional, Sequence, Tuple
+from typing import (
+    Any,
+    Dict,
+    Generator,
+    Mapping,
+    Optional,
+    Sequence,
+    Tuple,
+    List,
+)
 
 import pandas as pd
 from lxml import etree
@@ -15,7 +24,7 @@ from pubget import _utils
 from pubget._authors import AuthorsExtractor
 from pubget._coordinate_space import CoordinateSpaceExtractor
 from pubget._coordinates import CoordinateExtractor
-from pubget._links import LinkExtractor
+from pubget._links import LinkExtractor, neurovault_id_extractors
 from pubget._metadata import MetadataExtractor
 from pubget._text import TextExtractor
 from pubget._typing import (
@@ -194,6 +203,18 @@ def extract_data_to_csv(
     return output_dir, exit_code
 
 
+def _get_data_extractors() -> List[Extractor]:
+    return [
+        MetadataExtractor(),
+        AuthorsExtractor(),
+        TextExtractor(),
+        CoordinateExtractor(),
+        CoordinateSpaceExtractor(),
+        LinkExtractor(),
+        *neurovault_id_extractors(),
+    ]
+
+
 def _do_extract_data_to_csv(
     articles_dir: Path,
     output_dir: Path,
@@ -205,23 +226,16 @@ def _do_extract_data_to_csv(
     sterotactic coordinate triplet have their data saved.
     """
     n_to_process = _utils.get_n_articles(articles_dir)
-    data_extractors = [
-        MetadataExtractor(),
-        AuthorsExtractor(),
-        TextExtractor(),
-        CoordinateExtractor(),
-        CoordinateSpaceExtractor(),
-        LinkExtractor(),
-    ]
+    data_extractors = _get_data_extractors()
     all_writers = [
         CSVWriter.from_extractor(extractor, output_dir)
         for extractor in data_extractors
     ]
+    n_processed_articles = 0
+    n_kept_articles = 0
     with ExitStack() as stack:
         for writer in all_writers:
             stack.enter_context(writer)
-        n_processed_articles = 0
-        n_kept_articles = 0
         # Slows down reading & processing articles if we don't write them fast
         # enough.
         articles_semaphore = multiprocessing.Semaphore(_CHUNK_SIZE * n_jobs)

@@ -1,6 +1,7 @@
 """Extracting all URLs from an article XML."""
 import pathlib
-from typing import Dict
+import re
+from typing import Dict, Tuple
 
 import pandas as pd
 from lxml import etree
@@ -36,3 +37,56 @@ class LinkExtractor(Extractor):
                 {"pmcid": pmcid, "ext-link-type": link_type, "href": href}
             )
         return pd.DataFrame(all_links, columns=self.fields).drop_duplicates()
+
+
+class LinkContentExtractor(Extractor):
+    """Extracting values from link hrefs.
+
+    the `name` is the Extractor's name and naming capture groups in the pattern
+    define the fields of the extracted records. Records with null values and
+    duplicates are dropped.
+    """
+
+    def __init__(self, pattern: str, name: str) -> None:
+        self.name = name
+        self.pattern = pattern
+        capture_groups = re.findall(r"\(\?P<(\w+)>", self.pattern)
+        self.fields = ("pmcid", *capture_groups)
+
+    def extract(
+        self,
+        article: etree.ElementTree,
+        article_dir: pathlib.Path,
+        previous_extractors_output: Dict[str, Records],
+    ) -> pd.DataFrame:
+        del article, article_dir
+        links = previous_extractors_output.get("links")
+        if links is None or (len(links) == 0):
+            return pd.DataFrame(columns=self.fields)
+        captured = links["href"].str.extract(self.pattern, expand=True)
+        captured["pmcid"] = links["pmcid"]
+        return pd.DataFrame(
+            captured.dropna().drop_duplicates().reset_index(),
+            columns=self.fields,
+        )
+
+
+def neurovault_id_extractors() -> Tuple[Extractor, Extractor]:
+    return (
+        LinkContentExtractor(
+            r"""(?x)
+            .*(?:neurovault.org/collections/
+            |identifiers.org/neurovault.collection:)
+            (?P<collection_id>\w+)
+            """,
+            "neurovault_collections",
+        ),
+        LinkContentExtractor(
+            r"""(?x)
+            .*(?:neurovault.org/images/
+            |identifiers.org/neurovault.image:)
+            (?P<image_id>\d+)
+            """,
+            "neurovault_images",
+        ),
+    )

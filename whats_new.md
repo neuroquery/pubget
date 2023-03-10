@@ -2,6 +2,7 @@
 
 ## 0.0.8
 
+- NeuroVault image and collection IDs are extracted and stored in the `extractedData` directory.
 - When a request fails, the request and response (if there is one) are dumped in the `articlesets/failed_requests_dumps/` directory for easier diagnosis of issues with Entrez.
 - The download step is more robust to malformed XML files sent by efetch.fcgi
 - An `--alias` command-line option has been added to create a symlink with a human-readable name to a query's output directory.
