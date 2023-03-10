@@ -74,10 +74,19 @@ class LinkContentExtractor(Extractor):
 def neurovault_id_extractors() -> Tuple[Extractor, Extractor]:
     return (
         LinkContentExtractor(
-            r".*neurovault.org/collections/(?P<collection_id>\d+)",
+            r"""(?x)
+            .*(?:neurovault.org/collections/
+            |identifiers.org/neurovault.collection:)
+            (?P<collection_id>\w+)
+            """,
             "neurovault_collections",
         ),
         LinkContentExtractor(
-            r".*neurovault.org/images/(?P<image_id>\d+)", "neurovault_images"
+            r"""(?x)
+            .*(?:neurovault.org/images/
+            |identifiers.org/neurovault.image:)
+            (?P<image_id>\d+)
+            """,
+            "neurovault_images",
         ),
     )
