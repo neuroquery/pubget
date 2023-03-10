@@ -11,4 +11,4 @@ def test_text_extractor_transform_failure(monkeypatch):
     monkeypatch.setattr(
         etree, "XSLT", Mock(return_value=Mock(side_effect=ValueError))
     )
-    assert extractor.extract(Mock(), Mock()) == {}
+    assert extractor.extract(Mock(), Mock(), {}) == {}

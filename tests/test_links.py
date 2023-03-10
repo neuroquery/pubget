@@ -29,6 +29,6 @@ def test_link_extractor(n_links):
     xml = xml_template % links_text
     document = etree.ElementTree(etree.XML(xml))
     extracted = _links.LinkExtractor().extract(
-        document, pathlib.Path("pmc_9057060")
+        document, pathlib.Path("pmc_9057060"), {}
     )
     assert extracted.shape == (n_links, 3)

@@ -6,7 +6,7 @@ from typing import Dict, Union
 from lxml import etree
 
 from pubget import _utils
-from pubget._typing import Extractor
+from pubget._typing import Extractor, Records
 
 _LOG = logging.getLogger(__name__)
 
@@ -18,8 +18,12 @@ class TextExtractor(Extractor):
     name = "text"
 
     def extract(
-        self, article: etree.ElementTree, article_dir: pathlib.Path
+        self,
+        article: etree.ElementTree,
+        article_dir: pathlib.Path,
+        previous_extractors_output: Dict[str, Records],
     ) -> Dict[str, Union[str, int]]:
+        del article_dir, previous_extractors_output
         result: Dict[str, Union[str, int]] = {}
         # Stylesheet is not parsed in init because lxml.XSLT cannot be pickled
         # so that would prevent the extractor from being passed to

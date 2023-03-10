@@ -4,7 +4,7 @@ from typing import Any, Dict
 
 from lxml import etree
 
-from pubget._typing import Extractor
+from pubget._typing import Extractor, Records
 
 
 class MetadataExtractor(Extractor):
@@ -22,8 +22,12 @@ class MetadataExtractor(Extractor):
     name = "metadata"
 
     def extract(
-        self, article: etree.ElementTree, article_dir: pathlib.Path
+        self,
+        article: etree.ElementTree,
+        article_dir: pathlib.Path,
+        previous_extractors_output: Dict[str, Records],
     ) -> Dict[str, Any]:
+        del article_dir, previous_extractors_output
         metadata: Dict[str, Any] = {}
         for article_id in article.iterfind("front/article-meta/article-id"):
             _add_id(article_id, metadata)

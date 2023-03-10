@@ -2,7 +2,7 @@
 import logging
 import pathlib
 import re
-from typing import Any, List, Sequence, Tuple
+from typing import Any, List, Sequence, Tuple, Dict
 
 import numpy as np
 import pandas as pd
@@ -10,7 +10,7 @@ from lxml import etree
 from scipy import stats
 
 from pubget import _utils
-from pubget._typing import Extractor
+from pubget._typing import Extractor, Records
 
 _LOG = logging.getLogger(__name__)
 
@@ -72,8 +72,12 @@ class CoordinateExtractor(Extractor):
     name = "coordinates"
 
     def extract(
-        self, article: etree.ElementTree, article_dir: pathlib.Path
+        self,
+        article: etree.ElementTree,
+        article_dir: pathlib.Path,
+        previous_extractors_output: Dict[str, Records],
     ) -> pd.DataFrame:
+        del article, previous_extractors_output
         coords = _extract_coordinates_from_article_dir(article_dir)
         return coords.loc[:, self.fields]
 

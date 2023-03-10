@@ -43,6 +43,9 @@ class ExitCode(enum.IntEnum):
     ERROR = 2
 
 
+Records = Union[Dict[str, Any], pd.DataFrame]
+
+
 class Extractor(ABC):
     """Extractors used by the `_data_extraction` module."""
 
@@ -51,8 +54,11 @@ class Extractor(ABC):
 
     @abstractmethod
     def extract(
-        self, article: etree.ElementTree, article_dir: Path
-    ) -> Union[Dict[str, Any], pd.DataFrame]:
+        self,
+        article: etree.ElementTree,
+        article_dir: Path,
+        previous_extractors_output: Dict[str, Records],
+    ) -> Records:
         """Extract data from an article."""
 
 

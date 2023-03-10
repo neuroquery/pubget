@@ -26,6 +26,7 @@ from pubget._typing import (
     PathLikeOrStr,
     PipelineStep,
     StopPipeline,
+    Records,
 )
 from pubget._writers import CSVWriter
 
@@ -89,11 +90,11 @@ def _extract_article_data(
     except Exception:
         _LOG.exception(f"Failed to parse {article_file}")
         return None
-    article_data = {}
+    article_data: Dict[str, Records] = {}
     for extractor in data_extractors:
         try:
             article_data[extractor.name] = extractor.extract(
-                article, article_dir
+                article, article_dir, article_data
             )
         except Exception:
             _LOG.exception(

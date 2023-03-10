@@ -1,11 +1,12 @@
 """Extracting all URLs from an article XML."""
 import pathlib
+from typing import Dict
 
 import pandas as pd
 from lxml import etree
 
 from pubget import _utils
-from pubget._typing import Extractor
+from pubget._typing import Extractor, Records
 
 
 class LinkExtractor(Extractor):
@@ -19,8 +20,12 @@ class LinkExtractor(Extractor):
     name = "links"
 
     def extract(
-        self, article: etree.ElementTree, article_dir: pathlib.Path
+        self,
+        article: etree.ElementTree,
+        article_dir: pathlib.Path,
+        previous_extractors_output: Dict[str, Records],
     ) -> pd.DataFrame:
+        del article_dir, previous_extractors_output
         pmcid = _utils.get_pmcid(article)
         all_links = []
         xlink = "http://www.w3.org/1999/xlink"

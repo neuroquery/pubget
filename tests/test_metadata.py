@@ -31,7 +31,7 @@ def test_metadata_extractor():
     """
     )
     metadata = _metadata.MetadataExtractor().extract(
-        xml, pathlib.Path("pmcid_123")
+        xml, pathlib.Path("pmcid_123"), {}
     )
     assert metadata["pmcid"] == 123
     assert metadata["pmid"] == 456

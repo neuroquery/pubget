@@ -5,7 +5,7 @@ from typing import Any, Dict
 
 from lxml import etree
 
-from pubget._typing import Extractor
+from pubget._typing import Extractor, Records
 from pubget._utils import get_pmcid
 
 
@@ -16,8 +16,12 @@ class CoordinateSpaceExtractor(Extractor):
     name = "coordinate_space"
 
     def extract(
-        self, article: etree.ElementTree, article_dir: pathlib.Path
+        self,
+        article: etree.ElementTree,
+        article_dir: pathlib.Path,
+        previous_extractors_output: Dict[str, Records],
     ) -> Dict[str, Any]:
+        del article_dir, previous_extractors_output
         return {
             "pmcid": get_pmcid(article),
             "coordinate_space": _neurosynth_guess_space(
