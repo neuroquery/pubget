@@ -2,6 +2,7 @@ import pathlib
 
 import pytest
 from lxml import etree
+import pandas as pd
 
 from pubget import _links
 
@@ -32,3 +33,32 @@ def test_link_extractor(n_links):
         document, pathlib.Path("pmc_9057060"), {}
     )
     assert extracted.shape == (n_links, 3)
+
+
+def test_link_content_extractor():
+    links = pd.DataFrame(
+        {
+            "href": [
+                "neurovault.org/collections/12/",
+                "https://neurovault.org/images/3",
+                "https://neurovault.org/images/2",
+            ],
+            "pmcid": 7,
+        }
+    )
+    data = {"links": links}
+    col_extract, img_extract = _links.neurovault_id_extractors()
+    col = col_extract.extract(None, None, data)
+    assert (
+        (col == pd.DataFrame({"pmcid": [7], "collection_id": ["12"]}))
+        .all()
+        .all()
+    )
+    img = img_extract.extract(None, None, data)
+    assert (
+        (img == pd.DataFrame({"pmcid": [7, 7], "image_id": ["3", "2"]}))
+        .all()
+        .all()
+    )
+    col = col_extract.extract(None, None, pd.DataFrame())
+    assert col.shape == (0, 2)

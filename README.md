@@ -236,6 +236,8 @@ Our data directory now contains (ommitting the contents of the previous steps):
           ├── coordinate_space.csv
           ├── info.json
           ├── links.csv
+          ├── neurovault_collections.csv
+          ├── neurovault_images.csv
           ├── metadata.csv
           └── text.csv
 ```
@@ -249,6 +251,7 @@ If we had not used `--articles_with_coords_only`, the new subdirectory would be 
   The first field is the `pmcid`, and the other fields are `title`, `keywords`, `abstract`, and `body`, and contain the text extracted from these parts of the article.
 - `links.csv` contains the external links found in the articles.
   The fields are `pmcid`, `ext-link-type` (the type of link, for example "uri", "doi"), and `href` (usually an URL).
+- `neurovault_collections.csv` and `neurovault_images.csv`: [NeuroVault](https://neurovault.org/) collection and image IDs that could be extracted from links in the articles, if any.
 - `coordinates.csv` contains one row for each `(x, y, z)` stereotactic coordinate found in any article.
   Its fields are the `pmcid` of the article, the table label and id the coordinates came from, and `x`, `y`, `z`.
 - `coordinate_space.csv` has fields `pmcid` and `coordinate_space`.
