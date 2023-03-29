@@ -58,6 +58,10 @@ All articles downloaded by `pubget` come from [PubMed Central](https://www.ncbi.
 Note this is not the same as the PubMed ID (`pmid`).
 Not all articles in PMC have a `pmid`.
 
+`pubget` only downloads articles from the [Open Access subset](https://www.ncbi.nlm.nih.gov/pmc/tools/openftlist/) of PMC.
+The open-access papers are the papers whose license allows downloading their text for text-mining or other reuse (Creative Commons or similar licenses).
+To restrict search results to the open-access subset on the PMC website (and see the papers that would be downloaded by `pubget`), select "Open access" in the "article attributes" list.
+
 ## Step 1: Downloading articles from PMC
 
 This step is executed by the `pubget download` command.
