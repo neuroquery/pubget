@@ -61,8 +61,7 @@ class Pipeline(Command):
                     f"'{step.name}' step: {stop_pipeline.reason}"
                 )
                 return ExitCode.ERROR
-            else:
-                if step_output is not None:
-                    outputs[step.name] = step_output
-                total_code = max(total_code, code)
+            if step_output is not None:
+                outputs[step.name] = step_output
+            total_code = max(total_code, code)
         return ExitCode(total_code)

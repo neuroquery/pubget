@@ -10,11 +10,11 @@ from typing import (
     Any,
     Dict,
     Generator,
+    List,
     Mapping,
     Optional,
     Sequence,
     Tuple,
-    List,
 )
 
 import pandas as pd
@@ -34,8 +34,8 @@ from pubget._typing import (
     Extractor,
     PathLikeOrStr,
     PipelineStep,
-    StopPipeline,
     Records,
+    StopPipeline,
 )
 from pubget._writers import CSVWriter
 

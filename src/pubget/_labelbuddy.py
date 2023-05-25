@@ -196,8 +196,7 @@ def _do_make_labelbuddy_documents(
                 )
             except StopIteration:
                 return
-            else:
-                batch_nb += 1
+            batch_nb += 1
 
 
 def make_labelbuddy_documents(

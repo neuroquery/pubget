@@ -383,7 +383,6 @@ def test_plugins(
     nq_datasets_mock,
     entrez_mock,
 ):
-
     pipeline_plugin = _PluginPipelineStep()
     command_plugin = _PluginCommand()
 

@@ -2,7 +2,7 @@
 import logging
 import pathlib
 import re
-from typing import Any, List, Sequence, Tuple, Dict
+from typing import Any, Dict, List, Sequence, Tuple
 
 import numpy as np
 import pandas as pd

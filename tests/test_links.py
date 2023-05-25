@@ -1,8 +1,8 @@
 import pathlib
 
+import pandas as pd
 import pytest
 from lxml import etree
-import pandas as pd
 
 from pubget import _links
 

@@ -72,6 +72,7 @@ class LinkContentExtractor(Extractor):
 
 
 def neurovault_id_extractors() -> Tuple[Extractor, Extractor]:
+    """Get a pair of extractors, for collection and image IDs respectively."""
     return (
         LinkContentExtractor(
             r"""(?x)
