@@ -30,12 +30,13 @@ class LinkExtractor(Extractor):
         pmcid = _utils.get_pmcid(article)
         all_links = []
         xlink = "http://www.w3.org/1999/xlink"
-        for link in article.iterfind(f"//ext-link[@{{{xlink}}}href]"):
-            href = link.get(f"{{{xlink}}}href")
-            link_type = link.get("ext-link-type")
-            all_links.append(
-                {"pmcid": pmcid, "ext-link-type": link_type, "href": href}
-            )
+        for tag in ['uri', 'ext-link']:
+            for link in article.iterfind(f"//{tag}[@{{{xlink}}}href]"):
+                href = link.get(f"{{{xlink}}}href")
+                link_type = link.get("ext-link-type")
+                all_links.append(
+                    {"pmcid": pmcid, "ext-link-type": link_type, "href": href}
+                )
         return pd.DataFrame(all_links, columns=self.fields).drop_duplicates()
 
 

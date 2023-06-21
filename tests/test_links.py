@@ -22,17 +22,19 @@ def test_link_extractor(n_links):
     </body>
 </article>
     """
-    one_link = (
+    two_links = (
         b'link <ext-link xlink:href="http:example.com/%d">'
-        b"http:example.com</ext-link>"
+        b'http:example.com</ext-link>'
+        b'link <uri xlink:href="http:example.com/%d">'
+        b"http:example.com</uri>"
     )
-    links_text = b"\n".join([one_link % i for i in range(n_links)])
+    links_text = b"\n".join([two_links % (i, i+10) for i in range(n_links)])
     xml = xml_template % links_text
     document = etree.ElementTree(etree.XML(xml))
     extracted = _links.LinkExtractor().extract(
         document, pathlib.Path("pmc_9057060"), {}
     )
-    assert extracted.shape == (n_links, 3)
+    assert extracted.shape == (n_links * 2, 3)
 
 
 def test_link_content_extractor():
