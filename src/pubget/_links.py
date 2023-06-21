@@ -33,7 +33,7 @@ class LinkExtractor(Extractor):
         for tag in ['uri', 'ext-link']:
             for link in article.iterfind(f"//{tag}[@{{{xlink}}}href]"):
                 href = link.get(f"{{{xlink}}}href")
-                link_type = link.get("ext-link-type")
+                link_type = link.get("ext-link-type") or tag
                 all_links.append(
                     {"pmcid": pmcid, "ext-link-type": link_type, "href": href}
                 )
