@@ -78,6 +78,7 @@ def neurovault_id_extractors() -> Tuple[Extractor, Extractor]:
         LinkContentExtractor(
             r"""(?x)
             .*(?:neurovault.org/collections/
+            |neurovault.org/api/collections/
             |identifiers.org/neurovault.collection:)
             (?P<collection_id>\w+)
             """,
@@ -86,6 +87,7 @@ def neurovault_id_extractors() -> Tuple[Extractor, Extractor]:
         LinkContentExtractor(
             r"""(?x)
             .*(?:neurovault.org/images/
+            |neurovault.org/api/images/
             |identifiers.org/neurovault.image:)
             (?P<image_id>\d+)
             """,

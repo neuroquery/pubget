@@ -42,10 +42,12 @@ def test_link_content_extractor():
         {
             "href": [
                 "https://neurovault.org/collections/12/",
+                "https://neurovault.org/api/collections/16/",
                 "identifiers.org/neurovault.collection:a13",
                 "neurovault.org/collections/14a",
                 "https://neurovault.org/images/3",
                 "identifiers.org/neurovault.image:2",
+                "https://neurovault.org/api/images/22/"
             ],
             "pmcid": 7,
         }
@@ -57,7 +59,7 @@ def test_link_content_extractor():
         (
             col
             == pd.DataFrame(
-                {"pmcid": 7, "collection_id": ["12", "a13", "14a"]}
+                {"pmcid": 7, "collection_id": ["12", "16", "a13", "14a"]}
             )
         )
         .all()
@@ -65,7 +67,7 @@ def test_link_content_extractor():
     )
     img = img_extract.extract(None, None, data)
     assert (
-        (img == pd.DataFrame({"pmcid": 7, "image_id": ["3", "2"]})).all().all()
+        (img == pd.DataFrame({"pmcid": 7, "image_id": ["3", "2", "22"]})).all().all()
     )
     col = col_extract.extract(None, None, pd.DataFrame())
     assert col.shape == (0, 2)
