@@ -32,6 +32,7 @@ template = """<!doctype html>
             <input type="submit" value="Run query"/>
         </form>
     </div>
+    {% if with_viewer %}
     {% if not term_missing %}
     <div>{{ img_viewer | safe }}</div>
     <div>
@@ -43,6 +44,7 @@ template = """<!doctype html>
         <p> Selected term is not in the vocabulary,
             please choose a different one.</p>
     </div>
+    {% endif %}
     {% endif %}
 </body>
 """
@@ -71,6 +73,8 @@ def title_as_link(df):
 @app.route("/", methods=["GET"])
 def index():
     default_term = "default mode"
+    if default_term not in terms_info.index:
+        default_term = ""
     return flask.redirect(flask.url_for("query", term=default_term))
 
 
@@ -99,7 +103,9 @@ def _get_image_viewer(term):
 
 def _get_similar_docs_table(term):
     loadings = tfidf[:, terms_info.loc[term, "pos"]].A.ravel()
-    order = np.argpartition(-loadings, np.arange(20))[:20]
+    order = np.argpartition(-loadings, np.arange(min(loadings.shape[0], 20)))[
+        :20
+    ]
     similar_docs = metadata.iloc[order].copy()
     similar_docs["similarity"] = loadings[order]
     similar_docs["title"] = title_as_link(similar_docs)
@@ -121,6 +127,7 @@ def query():
             template,
             term_missing=True,
             term="",
+            with_viewer=(term != ""),
             all_terms=terms_info.index.values,
         )
     img_viewer = _get_image_viewer(term)
@@ -132,6 +139,7 @@ def query():
         all_terms=terms_info.index.values,
         img_viewer=img_viewer,
         similar_documents=similar_docs_table,
+        with_viewer=True,
     )
 
 
