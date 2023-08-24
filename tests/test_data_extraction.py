@@ -56,7 +56,7 @@ def _check_extracted_data(data_dir, articles_with_coords_only):
     coordinates = pd.read_csv(data_dir.joinpath("coordinates.csv"))
     assert coordinates.shape == (12, 6)
     authors = pd.read_csv(data_dir.joinpath("authors.csv"))
-    assert authors.shape == (n_authors, 3)
+    assert authors.shape == (n_authors, 4)
     assert authors["pmcid"].nunique() == n_articles
     n_links = 7 if articles_with_coords_only else 10
     links = pd.read_csv(data_dir.joinpath("links.csv"))
@@ -108,7 +108,7 @@ def test_extractor_failures(articles_dir, tmp_path, monkeypatch):
     metadata = pd.read_csv(data_dir.joinpath("metadata.csv"))
     assert metadata.shape == (7, 7)
     authors = pd.read_csv(data_dir.joinpath("authors.csv"))
-    assert authors.shape == (0, 3)
+    assert authors.shape == (0, 4)
 
 
 def test_extract_from_incomplete_articles(articles_dir, tmp_path):
