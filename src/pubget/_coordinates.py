@@ -109,7 +109,9 @@ def _extract_coordinates_from_article_dir(
 
 
 def _extract_coordinates_from_table(table: pd.DataFrame) -> pd.DataFrame:
-    table = table.applymap(
+    # pandas breaking change
+    map_meth = "map" if hasattr(table, "map") else "applymap"
+    table = getattr(table, map_meth)(
         lambda x: x if not isinstance(x, str) else x.translate(_CHAR_MAP)
     )
     if isinstance(table.columns, pd.MultiIndex):
