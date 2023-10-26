@@ -1,5 +1,6 @@
 """'extract_articles' step: extract articles from bulk PMC download."""
 import argparse
+import io
 import json
 import logging
 from pathlib import Path
@@ -195,9 +196,11 @@ def _extract_tables_content(
             if not table.xpath("(.//th|.//thead)"):
                 kwargs["header"] = 0
             table_data = pd.read_html(
-                etree.tostring(
-                    table.find("transformed-table//{*}table")
-                ).decode("utf-8"),
+                io.StringIO(
+                    etree.tostring(
+                        table.find("transformed-table//{*}table")
+                    ).decode("utf-8")
+                ),
                 thousands=None,
                 flavor="lxml",
                 **kwargs,
