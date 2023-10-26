@@ -156,6 +156,7 @@ def test_multiple_header_rows(tmp_path):
     <table-id />
     <table-label />
     <table-caption />
+    <table-wrap-foot />
     <transformed-table>
     <table>
         <thead>
@@ -188,6 +189,7 @@ def test_char_mapping(tmp_path):
     <table-id />
     <table-label />
     <table-caption />
+    <table-wrap-foot />
     <transformed-table>
     <table>
     <tr><td>x, y, z</td></tr>
@@ -214,6 +216,7 @@ def test_coordinate_extraction_failures(monkeypatch, tmp_path):
     <table-id />
     <table-label />
     <table-caption />
+    <table-wrap-foot />
     <transformed-table>
     <table>
     <tr><td>x, y, z</td></tr>

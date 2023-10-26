@@ -62,6 +62,7 @@ def test_extract_tables_content_multiple_header_rows(tmp_path):
     <table-id />
     <table-label />
     <table-caption />
+    <table-wrap-foot />
     <transformed-table>
     <table>
         <thead>
@@ -136,6 +137,7 @@ def test_table_content_extraction_failure(tmp_path):
     <table-id />
     <table-label />
     <table-caption />
+    <table-wrap-foot />
     <transformed-table>
     <table>
     <tr><th>A</th><th>B</th></tr>

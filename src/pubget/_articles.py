@@ -192,6 +192,7 @@ def _extract_tables_content(
             table_info["table_id"] = table.find("table-id").text
             table_info["table_label"] = table.find("table-label").text
             table_info["table_caption"] = table.find("table-caption").text
+            table_info["table_foot"] = table.find("table-wrap-foot").text
             kwargs = {}
             if not table.xpath("(.//th|.//thead)"):
                 kwargs["header"] = 0

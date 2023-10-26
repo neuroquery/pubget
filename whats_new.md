@@ -1,5 +1,9 @@
 # `pubget` releases
 
+## 0.0.9
+
+- The `"table_foot"` key has been added to table info JSON files. It holds the contents of the `table-wrap-foot` element for that table.
+
 ## 0.0.8
 
 - NeuroVault image and collection IDs are extracted and stored in the `extractedData` directory.

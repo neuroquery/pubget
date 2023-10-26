@@ -206,7 +206,7 @@ Each article directory, such as `articles/01f/pmcid_6781806`, contains:
 - `article.xml`: the XML file containing the full article in its original format.
 - a `tables` subdirectory, containing:
   - `tables.xml`: all the article's tables, each provided in 2 formats: its original version, and converted to XHTML using the [DocBook](https://docbook.org/) stylesheets.
-  - For each table, a CSV file containing the extracted data and a JSON file providing information such as the table label, id, caption, and `n_header_rows`, the number of rows at the start of the CSV that should be treated as part of the table header.
+  - For each table, a CSV file containing the extracted data and a JSON file providing information such as the table label, id, caption, footer, and `n_header_rows`, the number of rows at the start of the CSV that should be treated as part of the table header.
 
 If the download and article extraction were successfully run and we run the same query again, the article extraction is skipped.
 If we want to force re-running the article extraction we need to remove the `articles` directory (or the `info.json` file it contains).
