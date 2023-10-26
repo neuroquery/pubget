@@ -35,6 +35,9 @@
       <table-caption>
         <xsl:value-of select="caption"/>
       </table-caption>
+      <table-wrap-foot>
+        <xsl:value-of select="table-wrap-foot"/>
+      </table-wrap-foot>
       <original-table>
         <xsl:copy-of select="."/>
       </original-table>
