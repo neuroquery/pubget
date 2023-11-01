@@ -10,7 +10,7 @@ import re
 import shutil
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, Generator, Optional, Tuple, Union, List
+from typing import Any, Dict, Generator, List, Optional, Tuple, Union
 
 import pandas as pd
 from lxml import etree

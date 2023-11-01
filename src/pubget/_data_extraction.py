@@ -22,11 +22,11 @@ from lxml import etree
 
 from pubget import _utils
 from pubget._authors import AuthorsExtractor
-from pubget._table_info import TableInfoExtractor
 from pubget._coordinate_space import CoordinateSpaceExtractor
 from pubget._coordinates import CoordinateExtractor
 from pubget._links import LinkExtractor, neurovault_id_extractors
 from pubget._metadata import MetadataExtractor
+from pubget._table_info import TableInfoExtractor
 from pubget._text import TextExtractor
 from pubget._typing import (
     ArgparseActions,

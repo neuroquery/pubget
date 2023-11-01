@@ -3,8 +3,8 @@ import json
 from pathlib import Path
 from typing import Any, Dict
 
-from lxml import etree
 import pandas as pd
+from lxml import etree
 
 from pubget import _utils
 from pubget._typing import Extractor, Records
@@ -35,13 +35,15 @@ class TableInfoExtractor(Extractor):
         del article, previous_extractors_output
         all_tables_info = []
         pmcid = _utils.get_pmcid_from_article_dir(article_dir)
-        for table_json in _utils.get_table_info_files_from_article_dir(article_dir):
+        for table_json in _utils.get_table_info_files_from_article_dir(
+            article_dir
+        ):
             table_info = json.loads(table_json.read_text("UTF-8"))
             table_info["pmcid"] = pmcid
             table_info["table_data_file"] = str(
-                table_json.with_name(table_info["table_data_file"]).relative_to(
-                    article_dir.parents[2]
-                )
+                table_json.with_name(
+                    table_info["table_data_file"]
+                ).relative_to(article_dir.parents[2])
             )
             all_tables_info.append(table_info)
         if all_tables_info:
