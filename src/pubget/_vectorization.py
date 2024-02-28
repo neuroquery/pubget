@@ -64,7 +64,7 @@ def vectorize_corpus_to_npz(
     extracted_data_dir
         The directory containing the text of articles to vectorize. It is a
         directory created by `pubget.extract_data_to_csv`: it contains a file
-        named `text.csv` with fields `pmcid`, `title`, `keywords`, `abstract`,
+        named `text.csv` with fields `id`, `title`, `keywords`, `abstract`,
         `body`.
     output_dir
         The directory in which to store the results. If not specified, a
@@ -134,9 +134,9 @@ def _do_vectorize_corpus_to_npz(
         extracted_data_dir, vocabulary_file, n_jobs=n_jobs
     )
     np.savetxt(
-        output_dir.joinpath("pmcid.txt"),
-        extraction_result["pmcids"],
-        fmt="%i",
+        output_dir.joinpath("id.txt"),
+        extraction_result["ids"],
+        fmt="%s",
         encoding="utf-8",
     )
     for feature_kind in "counts", "tfidf":
@@ -154,7 +154,7 @@ def _do_vectorize_corpus_to_npz(
     voc_mapping_file.write_text(
         json.dumps(extraction_result["voc_mapping"]), "utf-8"
     )
-    return len(extraction_result["pmcids"])
+    return len(extraction_result["ids"])
 
 
 def _vectorize_articles(
@@ -162,13 +162,13 @@ def _vectorize_articles(
 ) -> Tuple[Sequence[int], Dict[str, sparse.csr_matrix]]:
     """Vectorize one batch of articles.
 
-    Returns the pmcids and the mapping text field: csr matrix of features.
+    Returns the ids and the mapping text field: csr matrix of features.
     """
     articles.fillna("", inplace=True)
     vectorized = {}
     for field in _FIELDS:
         vectorized[field] = vectorizer.transform(articles[field].values)
-    return articles["pmcid"].values, vectorized
+    return articles["id"].values, vectorized
 
 
 def _extract_word_counts(
@@ -176,8 +176,8 @@ def _extract_word_counts(
 ) -> Tuple[Sequence[int], Dict[str, sparse.csr_matrix], TextVectorizer]:
     """Compute word counts for all articles in a csv file.
 
-    returns the pmcids, mapping of text filed: csr matrix, and the vectorizer.
-    order of pmcids matches rows in the feature matrices.
+    returns the ids, mapping of text filed: csr matrix, and the vectorizer.
+    order of ids matches rows in the feature matrices.
     """
     vectorizer = TextVectorizer.from_vocabulary_file(
         str(vocabulary_file), use_idf=False, norm=None, voc_mapping={}
@@ -196,8 +196,8 @@ def _extract_word_counts(
             format="csr",
             dtype=int,
         )
-    pmcids = np.concatenate([chunk[0] for chunk in vectorized_chunks])
-    return pmcids, vectorized_fields, vectorizer
+    ids = np.concatenate([chunk[0] for chunk in vectorized_chunks])
+    return ids, vectorized_fields, vectorizer
 
 
 def _get_voc_mapping_file(vocabulary_file: PathLikeOrStr) -> Path:
@@ -339,7 +339,7 @@ def vectorize_corpus(
     extracted_data_dir
         The directory containing the text of articles to vectorize. It is a
         directory created by `pubget.extract_data_to_csv`: it contains a file
-        named `text.csv` with fields `pmcid`, `title`, `keywords`, `abstract`,
+        named `text.csv` with fields `id`, `title`, `keywords`, `abstract`,
         `body`.
     vocabulary
         A file containing the vocabulary used to vectorize text, with one term
@@ -353,7 +353,7 @@ def vectorize_corpus(
     Returns
     -------
     vectorized_data
-        Contains the pmcids of the vectorized articles, the document
+        Contains the ids of the vectorized articles, the document
         frequencies of the vocabulary, and the word counts and TFIDF for each
         article section and for whole articles as scipy sparse matrices.
 
@@ -362,13 +362,13 @@ def vectorize_corpus(
     assert_exists(corpus_file)
     n_jobs = _utils.check_n_jobs(n_jobs)
     vocabulary_file = _resolve_voc(vocabulary)
-    pmcids, counts_full_voc, vectorizer = _extract_word_counts(
+    ids, counts_full_voc, vectorizer = _extract_word_counts(
         corpus_file, vocabulary_file, n_jobs=n_jobs
     )
     voc = vectorizer.get_feature_names()
     voc_mapping = _load_voc_mapping(vocabulary_file)
     data = _prepare_bow_data(counts_full_voc, voc, voc_mapping)
-    data["pmcids"] = pmcids
+    data["ids"] = ids
     return data
 
 

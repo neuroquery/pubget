@@ -6,13 +6,13 @@ from typing import Any, Dict
 from lxml import etree
 
 from pubget._typing import Extractor, Records
-from pubget._utils import get_pmcid
+from pubget._utils import get_id
 
 
 class CoordinateSpaceExtractor(Extractor):
     """Extracting coordinate space from article XML"""
 
-    fields = ("pmcid", "coordinate_space")
+    fields = ("id", "coordinate_space")
     name = "coordinate_space"
 
     def extract(
@@ -21,13 +21,18 @@ class CoordinateSpaceExtractor(Extractor):
         article_dir: pathlib.Path,
         previous_extractors_output: Dict[str, Records],
     ) -> Dict[str, Any]:
+        id = get_id(article)
         del article_dir, previous_extractors_output
-        return {
-            "pmcid": get_pmcid(article),
-            "coordinate_space": _neurosynth_guess_space(
-                " ".join(article.xpath(".//text()"))
-            ),
-        }
+        if "pmcid" in id:
+            result = {
+                "id": id,
+                "coordinate_space": _neurosynth_guess_space(
+                    " ".join(article.xpath(".//text()"))
+                ),
+            }
+        else:
+            result = {"id": id, "coordinate_space": "UNKNOWN"}
+        return result
 
 
 def _neurosynth_guess_space(text: str) -> str:

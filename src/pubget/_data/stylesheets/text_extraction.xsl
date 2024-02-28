@@ -10,9 +10,9 @@
 
   <xsl:template match="/">
     <extracted-text>
-      <pmcid>
+      <id>
         <xsl:value-of select="/article/front /article-meta/article-id[@pub-id-type='pmc']"/>
-      </pmcid>
+      </id>
       <title>
         <xsl:value-of select="/article/front/article-meta/title-group/article-title"/>
       </title>

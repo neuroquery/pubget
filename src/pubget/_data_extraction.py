@@ -39,6 +39,8 @@ from pubget._typing import (
 )
 from pubget._writers import CSVWriter
 
+import IPython
+
 _LOG = logging.getLogger(__name__)
 _STEP_NAME = "extract_data"
 _STEP_DESCRIPTION = "Extract metadata, text and coordinates from articles."
@@ -125,7 +127,7 @@ def _iter_articles(
     articles_dir = Path(articles_dir)
     for subdir in articles_dir.glob("*"):
         if subdir.is_dir():
-            for article_dir in subdir.glob("pmcid_*"):
+            for article_dir in subdir.glob("pm*id_*"):
                 # Throttle processing articles so they don't accumulate in the
                 # Pool's output queue. When joblib.Parallel starts returning
                 # iterators we can use it instead of Pool
@@ -205,8 +207,8 @@ def extract_data_to_csv(
 
 def _get_data_extractors() -> List[Extractor]:
     return [
-        MetadataExtractor(),
         AuthorsExtractor(),
+        MetadataExtractor(),
         TextExtractor(),
         CoordinateExtractor(),
         CoordinateSpaceExtractor(),
