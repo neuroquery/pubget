@@ -123,13 +123,18 @@ def _prepare_document(
         )
         doc_info["metadata"]["efetch_url"] = efetch_url
     elif "pmid" in id:
-        doc_info["display_title"] = f'pmid: {doc_meta["pmid"]}'
+        url = f"https://pubmed.ncbi.nlm.nih.gov/{doc_meta['pmid']}/"
+        doc_info["metadata"]["pmid_url"] = url
+        doc_info["display_title"] = (
+            f'pmid: <a href="{url}">{doc_meta["pmid"]}</a>'
+        )
         doc_info["list_title"] = f"PMID{doc_meta['pmid']}  {doc_text['title']}"
         efetch_url = (
             "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
             f"efetch.fcgi?db=pubmed&id={doc_meta['pmid']}"
         )
         doc_info["metadata"]["efetch_url"] = efetch_url
+        doc_info["text"] = doc_info["text"].replace("\n\n# Body\n\n", "")
     return doc_info
 
 

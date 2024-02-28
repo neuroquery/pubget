@@ -47,7 +47,7 @@ class TextExtractor(Extractor):
             result["id"] = id
             result["title"] = article.find(".//ArticleTitle").text
             keywords = []
-            for item in article.iterfind(".//DescriptorName"):
+            for item in article.iterfind(".//KeywordList/Keyword"):
                 keywords.append(item.text)
             keywords = "\n".join(keywords)
             result["keywords"] = keywords
@@ -58,7 +58,7 @@ class TextExtractor(Extractor):
             for section in abstract_sections:
                 try:
                     abstract = abstract + section.text + " "
-                except:
+                except TypeError:
                     continue
             result["abstract"] = abstract
             result["body"] = ""

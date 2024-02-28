@@ -18,6 +18,7 @@ class MetadataExtractor(Extractor):
         "doi",
         "title",
         "journal",
+        "journal_fullname",
         "publication_year",
         "license",
     )
@@ -65,15 +66,22 @@ def _add_journal(
 ) -> None:
     if id_type == "pmcid":
         journal_elem = article.find(
-            # "front/journal-meta/journal-id[@journal-id-type='nlm-ta']"
+            "front/journal-meta/journal-id[@journal-id-type='nlm-ta']"
+        )
+        journal_fullname_elem = article.find(
             "front/journal-meta/journal-title-group/journal-title"
         )
         if journal_elem is not None:
             metadata["journal"] = journal_elem.text
+        elif journal_fullname_elem is not None:
+            metadata["journal_fullname"] = journal_fullname_elem.text
     elif id_type == "pmid":
-        journal_elem = article.find(".//Journal/Title")
+        journal_elem = article.find(".//Journal/ISOAbbreviation")
+        journal_fullname_elem = article.find(".//Journal/Title")
         if journal_elem is not None:
             metadata["journal"] = journal_elem.text
+        if journal_fullname_elem is not None:
+            metadata["journal_fullname"] = journal_fullname_elem.text
 
 
 def _add_pub_date(
