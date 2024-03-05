@@ -10,7 +10,7 @@ import re
 import shutil
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, Generator, Optional, Tuple, Union
+from typing import Any, Dict, Generator, List, Optional, Tuple, Union
 
 import pandas as pd
 from lxml import etree
@@ -160,13 +160,15 @@ def read_article_table(
     return table_info, table_data
 
 
+def get_table_info_files_from_article_dir(article_dir: Path) -> List[Path]:
+    return sorted(article_dir.joinpath("tables").glob("table_*_info.json"))
+
+
 def get_tables_from_article_dir(
     article_dir: Path,
 ) -> Generator[Tuple[Dict[str, Any], pd.DataFrame], None, None]:
     """Load information and data for all tables belonging to an article."""
-    for table_info_json in sorted(
-        article_dir.joinpath("tables").glob("table_*_info.json")
-    ):
+    for table_info_json in get_table_info_files_from_article_dir(article_dir):
         yield read_article_table(table_info_json)
 
 
