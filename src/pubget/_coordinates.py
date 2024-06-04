@@ -99,6 +99,8 @@ def _extract_coordinates_from_article_dir(
                 f"in article pmcid {pmcid}"
             )
             continue
+        if coordinates.empty:
+            continue
         coordinates["pmcid"] = pmcid
         coordinates["table_id"] = table_info["table_id"]
         coordinates["table_label"] = table_info["table_label"]
