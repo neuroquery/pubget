@@ -112,6 +112,7 @@ def _format_tables(doc_tables: pd.DataFrame, root_dir: Path) -> str:
 
     return "\n\n\n".join(table_texts)
 
+
 def _prepare_document(
     doc_text: pd.Series,
     doc_meta: pd.Series,
