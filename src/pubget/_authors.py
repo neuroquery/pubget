@@ -12,7 +12,7 @@ from pubget._typing import Extractor, Records
 class AuthorsExtractor(Extractor):
     """Extracting list of authors from article XML."""
 
-    fields = ("pmcid", "surname", "given-names")
+    fields = ("id", "firstname", "lastname")
     name = "authors"
 
     def extract(
@@ -23,17 +23,27 @@ class AuthorsExtractor(Extractor):
     ) -> pd.DataFrame:
         del article_dir, previous_extractors_output
         authors = []
-        pmcid = _utils.get_pmcid(article)
-        for author_elem in article.iterfind(
-            "front/article-meta/contrib-group/contrib[@contrib-type='author']"
-        ):
-            author_info = {"pmcid": pmcid}
-            for part in [
-                "name/surname",
-                "name/given-names",
-            ]:
+        id = _utils.get_id(article)
+        if "pmcid" in id:
+            author_indicator = "front/article-meta/contrib-group/contrib[@contrib-type='author']"
+            firstname_indicator = "name/given-names"
+            lastname_indicator = "name/surname"
+        elif "pmid" in id:
+            author_indicator = ".//Author"
+            firstname_indicator = "ForeName"
+            lastname_indicator = "LastName"
+        firstname_field = "firstname"
+        lastname_field = "lastname"
+
+        for author_elem in article.iterfind(author_indicator):
+            author_info = {"id": id}
+            for part, field in zip(
+                [firstname_indicator, lastname_indicator],
+                [firstname_field, lastname_field],
+            ):
                 elem = author_elem.find(part)
+
                 if elem is not None:
-                    author_info[elem.tag] = elem.text
+                    author_info[field] = elem.text
             authors.append(author_info)
         return pd.DataFrame(authors, columns=self.fields)
