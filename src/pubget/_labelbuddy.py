@@ -98,20 +98,19 @@ def _format_tables(doc_tables: pd.DataFrame, root_dir: Path) -> str:
             table_info["table_id"]
         table_label = "None" if pd.isna(table_info["table_label"]) else \
             table_info["table_label"]
-        table_str = f"ID: {table_id}\nLabel: {table_label}\n"
+        table_str = f"## ID: {table_id}\n### Label: {table_label}\n"
         with open(table_path, encoding="utf-8") as table_fh:
             reader = csv.reader(table_fh)
             for row in reader:
                 table_str += "\t".join(row) + "\n"  # Tab-separated values
         table_caption = "None" if pd.isna(table_info["table_caption"]) else \
-            table_info["table_id"]
+            table_info["table_caption"]
         table_foot = "None" if pd.isna(table_info["table_foot"]) else \
-            table_info["table_id"]
-        table_str += f"Caption: {table_caption}\nFooter: {table_foot}"
+            table_info["table_foot"]
+        table_str += f"### Caption\n{table_caption}\n### Footer\n{table_foot}"
         table_texts.append(table_str)
 
     return "\n\n\n".join(table_texts)
-
 
 def _prepare_document(
     doc_text: pd.Series,
