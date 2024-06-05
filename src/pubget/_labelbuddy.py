@@ -3,6 +3,7 @@
 https://jeromedockes.github.io/labelbuddy/
 """
 import argparse
+import csv
 import json
 import logging
 import re
@@ -53,6 +54,9 @@ _TEMPLATE = """{authors}
 
 # Body
 {body}
+
+# Table(s)
+{tables}
 """
 
 
@@ -85,10 +89,36 @@ def _format_authors(doc_authors: pd.DataFrame) -> str:
     )
 
 
+def _format_tables(doc_tables: pd.DataFrame, root_dir: Path) -> str:
+    """Display tables in a string."""
+    table_texts = []
+    for _, table_info in doc_tables.iterrows():
+        table_path = root_dir.joinpath(table_info["table_data_file"])
+        table_id = "None" if pd.isna(table_info["table_id"]) else \
+            table_info["table_id"]
+        table_label = "None" if pd.isna(table_info["table_label"]) else \
+            table_info["table_label"]
+        table_str = f"ID: {table_id}\nLabel: {table_label}\n"
+        with open(table_path, encoding="utf-8") as table_fh:
+            reader = csv.reader(table_fh)
+            for row in reader:
+                table_str += "\t".join(row) + "\n"  # Tab-separated values
+        table_caption = "None" if pd.isna(table_info["table_caption"]) else \
+            table_info["table_id"]
+        table_foot = "None" if pd.isna(table_info["table_foot"]) else \
+            table_info["table_id"]
+        table_str += f"Caption: {table_caption}\nFooter: {table_foot}"
+        table_texts.append(table_str)
+
+    return "\n\n\n".join(table_texts)
+
+
 def _prepare_document(
     doc_text: pd.Series,
     doc_meta: pd.Series,
+    doc_tables: pd.DataFrame,
     doc_authors: pd.DataFrame,
+    root_dir: Path,
     batch: int,
 ) -> Dict[str, Any]:
     """Extract information for one article and prepare labelbuddy document."""
@@ -96,6 +126,7 @@ def _prepare_document(
     doc_info: Dict[str, Any] = {}
     fields = {**doc_text, **doc_meta}
     fields["authors"] = _format_authors(doc_authors)
+    fields["tables"] = _format_tables(doc_tables, root_dir)
     doc_info["text"] = _TEMPLATE.format(**fields)
     doc_info["metadata"] = {
         "pmcid": int(doc_meta["pmcid"]),
@@ -122,8 +153,13 @@ def _prepare_document(
 
 
 def _iter_corpus(
-    text_fh: TextIO, metadata_fh: TextIO, authors: pd.DataFrame
-) -> Generator[Tuple[pd.Series, pd.Series, pd.DataFrame], None, None]:
+    text_fh: TextIO,
+    metadata_fh: TextIO,
+    tables: pd.DataFrame,
+    authors: pd.DataFrame
+) -> Generator[
+    Tuple[pd.Series, pd.Series, pd.DataFrame, pd.DataFrame], None, None
+]:
     """Iterate over articles and provide text, metadata, authors."""
     all_text_chunks = pd.read_csv(text_fh, chunksize=200)
     all_metadata_chunks = pd.read_csv(metadata_fh, chunksize=200)
@@ -136,17 +172,21 @@ def _iter_corpus(
         ):
             n_articles += 1
             assert doc_meta["pmcid"] == doc_text["pmcid"]
+            doc_tables = tables[tables["pmcid"] == doc_meta["pmcid"]]
             doc_authors = authors[authors["pmcid"] == doc_meta["pmcid"]]
             if not n_articles % _LOG_PERIOD:
                 _LOG.info(f"Read {n_articles} articles.")
-            yield doc_text, doc_meta, doc_authors
+            yield doc_text, doc_meta, doc_tables, doc_authors
     _LOG.info(f"Read {n_articles} articles.")
 
 
 def _write_labelbuddy_batch(
-    all_docs: Iterator[Tuple[pd.Series, pd.Series, pd.DataFrame]],
+    all_docs: Iterator[
+        Tuple[pd.Series, pd.Series, pd.DataFrame, pd.DataFrame]
+    ],
     batch_nb: int,
     batch_size: Optional[int],
+    root_dir: Path,
     output_dir: Path,
 ) -> None:
     """Write labelbuddy documents to jsonl file.
@@ -164,7 +204,11 @@ def _write_labelbuddy_batch(
             while batch_size is None or n_written != batch_size:
                 doc_info = next(all_docs)
                 out_f.write(
-                    json.dumps(_prepare_document(*doc_info, batch=batch_nb))
+                    json.dumps(
+                        _prepare_document(
+                            *doc_info, root_dir=root_dir, batch=batch_nb
+                        )
+                    )
                 )
                 out_f.write("\n")
                 row = (int(doc_info[1]["pmcid"]), batch_file.name, n_written)
@@ -180,19 +224,21 @@ def _do_make_labelbuddy_documents(
     extracted_data_dir: Path, output_dir: Path, batch_size: Optional[int]
 ) -> None:
     """Perform the creation of the labelbuddy jsonl files."""
+    root_dir = Path(extracted_data_dir).parent
     text_file = extracted_data_dir.joinpath("text.csv")
     metadata_file = extracted_data_dir.joinpath("metadata.csv")
     authors = pd.read_csv(extracted_data_dir.joinpath("authors.csv"))
+    tables = pd.read_csv(extracted_data_dir.joinpath("tables.csv"))
     output_dir.joinpath("batch_info.csv").write_text("pmcid,file_name,line\n")
     with open(text_file, encoding="utf-8") as text_fh, open(
         metadata_file, encoding="utf-8"
     ) as metadata_fh:
-        all_docs = _iter_corpus(text_fh, metadata_fh, authors)
+        all_docs = _iter_corpus(text_fh, metadata_fh, tables, authors)
         batch_nb = 1
         while True:
             try:
                 _write_labelbuddy_batch(
-                    all_docs, batch_nb, batch_size, output_dir
+                    all_docs, batch_nb, batch_size, root_dir, output_dir
                 )
             except StopIteration:
                 return
