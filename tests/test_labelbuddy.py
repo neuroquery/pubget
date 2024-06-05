@@ -96,6 +96,7 @@ def _check_batch_info(labelbuddy_dir):
                 "title": "fmri",
                 "publication_year": 2000,
                 "journal": "Journ. Brain. Imag.",
+                "tables": "x\ty\tz",
             },
         ),
         (
