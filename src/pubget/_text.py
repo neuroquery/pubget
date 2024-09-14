@@ -14,7 +14,7 @@ _LOG = logging.getLogger(__name__)
 class TextExtractor(Extractor):
     """Extracting text from XML articles."""
 
-    fields = ("pmcid", "title", "keywords", "abstract", "body", "datasets")
+    fields = ("pmcid", "title", "keywords", "abstract", "body")
     name = "text"
 
     def extract(
