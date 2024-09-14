@@ -25,7 +25,17 @@
       <body>
         <xsl:apply-templates select="/article/body" />
       </body>
+      <datasets>
+      <xsl:apply-templates select="/article/back//notes[@notes-type='data-availability']" />
+      </datasets>
     </extracted-text>
+  </xsl:template>
+
+ <xsl:template match="/article/back//notes[@notes-type='data-availability']">
+    <xsl:for-each select=".//p | .//ext-link[@ext-link-type='uri']">
+      <xsl:value-of select="normalize-space(.)" />
+      <xsl:text> </xsl:text>
+    </xsl:for-each>
   </xsl:template>
 
   <xsl:template match="*" >
@@ -151,7 +161,7 @@
   <xsl:template match="equation-count" />
   <xsl:template match="era" />
   <xsl:template match="etal" />
-  <xsl:template match="ext-link" />
+  <!-- <xsl:template match="ext-link" /> -->
   <xsl:template match="fax" />
   <xsl:template match="fig-count" />
   <xsl:template match="fn" />
@@ -204,7 +214,7 @@
   <xsl:template match="named-content" />
   <xsl:template match="nlm-citation" />
   <xsl:template match="note" />
-  <xsl:template match="notes" />
+  <!-- <xsl:template match="notes" /> -->
   <xsl:template match="oasis:table" />
   <xsl:template match="object-id" />
   <xsl:template match="on-behalf-of" />
