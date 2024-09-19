@@ -33,7 +33,7 @@
     <xsl:variable name="title" select=".//title"/>
     <xsl:if test="$title">
       <xsl:value-of select="concat('## ', normalize-space($title))"/>
-      <xsl:text>&#10;</xsl:text>
+      <xsl:text>&#10;&#10;</xsl:text>
     </xsl:if>
     <xsl:for-each select=".//p | .//ext-link[@ext-link-type='uri']">
       <xsl:value-of select="normalize-space(.)"/>
