@@ -24,8 +24,21 @@
       </abstract>
       <body>
         <xsl:apply-templates select="/article/body" />
+       <xsl:apply-templates select="/article/back//*[self::notes[@notes-type='data-availability'] or self::sec[@sec-type='data-availability']]"/>
       </body>
     </extracted-text>
+  </xsl:template>
+
+  <xsl:template match="/article/back//*[self::notes or self::sec][(self::notes and @notes-type='data-availability') or (self::sec and @sec-type='data-availability')]">
+    <xsl:variable name="title" select=".//title"/>
+    <xsl:if test="$title">
+      <xsl:value-of select="concat('## ', normalize-space($title))"/>
+      <xsl:text>&#10;&#10;</xsl:text>
+    </xsl:if>
+    <xsl:for-each select=".//p | .//ext-link[@ext-link-type='uri']">
+      <xsl:value-of select="normalize-space(.)"/>
+      <xsl:text> </xsl:text>
+    </xsl:for-each>
   </xsl:template>
 
   <xsl:template match="*" >
@@ -151,7 +164,6 @@
   <xsl:template match="equation-count" />
   <xsl:template match="era" />
   <xsl:template match="etal" />
-  <xsl:template match="ext-link" />
   <xsl:template match="fax" />
   <xsl:template match="fig-count" />
   <xsl:template match="fn" />
