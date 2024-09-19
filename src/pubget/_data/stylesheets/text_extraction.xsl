@@ -164,7 +164,6 @@
   <xsl:template match="equation-count" />
   <xsl:template match="era" />
   <xsl:template match="etal" />
-  <!-- <xsl:template match="ext-link" /> -->
   <xsl:template match="fax" />
   <xsl:template match="fig-count" />
   <xsl:template match="fn" />
