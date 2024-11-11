@@ -77,9 +77,14 @@ class CoordinateExtractor(Extractor):
         article_dir: pathlib.Path,
         previous_extractors_output: Dict[str, Records],
     ) -> pd.DataFrame:
+        id = _utils.get_id(article)
         del article, previous_extractors_output
-        coords = _extract_coordinates_from_article_dir(article_dir)
-        return coords.loc[:, self.fields]
+        if "pmcid" in id:
+            coords = _extract_coordinates_from_article_dir(article_dir)
+            coords.loc[:, self.fields]
+        else:
+            coords = pd.DataFrame(columns=self.fields)
+        return coords
 
 
 def _extract_coordinates_from_article_dir(

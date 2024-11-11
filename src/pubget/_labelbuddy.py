@@ -80,7 +80,7 @@ def _get_inserted_field_positions(
 def _format_authors(doc_authors: pd.DataFrame) -> str:
     """Collapse dataframe with one row per author to a single string."""
     return " and ".join(
-        f"{row['surname']}, {row['given-names']}"
+        f"{row['lastname']}, {row['firstname']}"
         for _, row in doc_authors.iterrows()
     )
 
@@ -98,7 +98,7 @@ def _prepare_document(
     fields["authors"] = _format_authors(doc_authors)
     doc_info["text"] = _TEMPLATE.format(**fields)
     doc_info["metadata"] = {
-        "pmcid": int(doc_meta["pmcid"]),
+        "id": int(doc_meta["id"].split('_')[1]),
         "text_md5": md5(doc_info["text"].encode("utf-8")).hexdigest(),
         "field_positions": _get_inserted_field_positions(_TEMPLATE, fields),
         "batch": batch,
@@ -107,17 +107,34 @@ def _prepare_document(
         doc_info["metadata"]["pmid"] = int(doc_meta["pmid"])
     if not pd.isnull(doc_meta["doi"]):
         doc_info["metadata"]["doi"] = doc_meta["doi"]
-    url = f"https://www.ncbi.nlm.nih.gov/pmc/articles/PMC{doc_meta['pmcid']}"
-    doc_info["metadata"]["pmc_url"] = url
-    doc_info[
-        "display_title"
-    ] = f'pmcid: <a href="{url}">{doc_meta["pmcid"]}</a>'
-    doc_info["list_title"] = f"PMC{doc_meta['pmcid']}  {doc_text['title']}"
-    efetch_url = (
-        "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
-        f"efetch.fcgi?db=pmc&id={doc_meta['pmcid']}"
-    )
-    doc_info["metadata"]["efetch_url"] = efetch_url
+    id = doc_meta["id"]
+    if "pmcid" in id:
+        doc_meta["pmcid"] = doc_meta["id"][len("pmcid_"):]
+        doc_info["metadata"]["pmcid"] = doc_meta["id"][len("pmcid_"):]
+        url = f"https://www.ncbi.nlm.nih.gov/pmc/articles/PMC{doc_meta['pmcid']}"
+        doc_info["metadata"]["pmc_url"] = url
+        doc_info[
+            "display_title"
+        ] = f'pmcid: <a href="{url}">{doc_meta["pmcid"]}</a>'
+        doc_info["list_title"] = f"PMC{doc_meta['pmcid']}  {doc_text['title']}"
+        efetch_url = (
+            "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
+            f"efetch.fcgi?db=pmc&id={doc_meta['pmcid']}"
+        )
+        doc_info["metadata"]["efetch_url"] = efetch_url
+    elif "pmid" in id:
+        url = f"https://pubmed.ncbi.nlm.nih.gov/{doc_meta['pmid']}/"
+        doc_info["metadata"]["pmid_url"] = url
+        doc_info["display_title"] = (
+            f'pmid: <a href="{url}">{doc_meta["pmid"]}</a>'
+        )
+        doc_info["list_title"] = f"PMID{doc_meta['pmid']}  {doc_text['title']}"
+        efetch_url = (
+            "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
+            f"efetch.fcgi?db=pubmed&id={doc_meta['pmid']}"
+        )
+        doc_info["metadata"]["efetch_url"] = efetch_url
+        doc_info["text"] = doc_info["text"].replace("\n\n# Body\n\n", "")
     return doc_info
 
 
@@ -135,8 +152,8 @@ def _iter_corpus(
             text_chunk.iterrows(), metadata_chunk.iterrows()
         ):
             n_articles += 1
-            assert doc_meta["pmcid"] == doc_text["pmcid"]
-            doc_authors = authors[authors["pmcid"] == doc_meta["pmcid"]]
+            assert doc_meta["id"] == doc_text["id"]
+            doc_authors = authors[authors["id"] == doc_meta["id"]]
             if not n_articles % _LOG_PERIOD:
                 _LOG.info(f"Read {n_articles} articles.")
             yield doc_text, doc_meta, doc_authors
@@ -167,7 +184,7 @@ def _write_labelbuddy_batch(
                     json.dumps(_prepare_document(*doc_info, batch=batch_nb))
                 )
                 out_f.write("\n")
-                row = (int(doc_info[1]["pmcid"]), batch_file.name, n_written)
+                row = (int(doc_info[1]["id"].split("_")[1]), batch_file.name, n_written)
                 batch_info_f.write(",".join(map(str, row)))
                 batch_info_f.write("\n")
                 n_written += 1
@@ -183,7 +200,7 @@ def _do_make_labelbuddy_documents(
     text_file = extracted_data_dir.joinpath("text.csv")
     metadata_file = extracted_data_dir.joinpath("metadata.csv")
     authors = pd.read_csv(extracted_data_dir.joinpath("authors.csv"))
-    output_dir.joinpath("batch_info.csv").write_text("pmcid,file_name,line\n")
+    output_dir.joinpath("batch_info.csv").write_text("id,file_name,line\n")
     with open(text_file, encoding="utf-8") as text_fh, open(
         metadata_file, encoding="utf-8"
     ) as metadata_fh:

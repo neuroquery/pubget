@@ -17,6 +17,7 @@ from typing import (
     Union,
 )
 from urllib.parse import urljoin
+import IPython
 
 import requests
 from lxml import etree
@@ -41,8 +42,8 @@ def _check_efetch_response(response: requests.Response) -> Tuple[bool, str]:
         return check, reason
     try:
         root = etree.fromstring(response.content)
-        assert root.tag == "pmc-articleset"
-        assert root.find("article") is not None
+        assert root.tag in ["PubmedArticleSet", "pmc-articleset"]
+        # assert root.find("article") is not None
     except Exception:
         return (
             False,
@@ -99,6 +100,7 @@ class EntrezClient:
         request_period: Optional[float] = None,
         api_key: Optional[str] = None,
         failed_requests_dump_dir: Optional[PathLikeOrStr] = None,
+        db="pmc",
     ) -> None:
         self._entrez_id = {}
         if api_key is not None:
@@ -116,6 +118,7 @@ class EntrezClient:
         self._session = requests.Session()
         self.last_search_result: Optional[Mapping[str, str]] = None
         self.n_failures = 0
+        self.db = db
 
     def _wait_to_send_request(self) -> None:
         if self._last_request_time is None:
@@ -211,6 +214,7 @@ class EntrezClient:
         attempts fail.
 
         """
+
         req = requests.Request("POST", url, params=params, data=data)
         prepped = self._session.prepare_request(req)
         for attempt, delay in enumerate(
@@ -231,8 +235,11 @@ class EntrezClient:
         )
         return None
 
-    def epost(self, all_pmcids: Sequence[int]) -> Dict[str, str]:
-        """Post a list of PMCIDs to the Entrez history server.
+    def epost(
+        self,
+        all_ids: Sequence[int],
+    ) -> Dict[str, str]:
+        """Post a list of PMCIDs or PMIDs to the Entrez history server.
 
         An esearch query is then performed to filter the list of pmcids to keep
         only the open-acccess articles.
@@ -245,17 +252,17 @@ class EntrezClient:
         the same way for queries and id lists.
 
         """
-        # not 'if not all_pmcids' in case someone passes a numpy array
-        if len(all_pmcids) == 0:
-            _LOG.error("Empty PMCID list.")
+        # not 'if not all_ids' in case someone passes a numpy array
+        if len(all_ids) == 0:
+            _LOG.error("Empty ID list.")
             self.n_failures = 1
             return {}
         data = {
-            "db": "pmc",
-            "id": ",".join(map(str, all_pmcids)),
+            "db": self.db,
+            "id": ",".join(map(str, all_ids)),
             **self._entrez_id,
         }
-        _LOG.info(f"Posting {len(all_pmcids)} PMCIDs to Entrez.")
+        _LOG.info(f"Posting {len(all_ids)} IDs to Entrez.")
         resp = self._send_request(
             self._epost_base_url,
             data=data,
@@ -268,11 +275,12 @@ class EntrezClient:
         webenv = resp_xml.find("WebEnv").text
         query_key = resp_xml.find("QueryKey").text
         search_result = self.esearch(webenv=webenv, query_key=query_key)
-        if "count" in search_result:
-            _LOG.info(
-                f"{int(search_result['count'])} / {len(all_pmcids)} articles "
-                "are in PMC Open Access."
-            )
+        if self.db == "pmc":
+            if "count" in search_result:
+                _LOG.info(
+                    f"{int(search_result['count'])} / {len(all_ids)} articles "
+                    "are in PMC Open Access."
+                )
         return search_result
 
     def esearch(
@@ -299,9 +307,12 @@ class EntrezClient:
         """
         term = "open+access[filter]"
         if query is not None:
-            term = "&".join((query, term))
+            if self.db == "pmc":
+                term = "&".join((query, term))
+        else:
+            term = query
         data = {
-            "db": "pmc",
+            "db": self.db,
             "term": term,
             "usehistory": "y",
             "retmode": "json",
@@ -315,6 +326,7 @@ class EntrezClient:
             data=data,
             response_validator=_check_esearch_response,
         )
+
         if resp is None:
             self.n_failures = 1
             return {}
@@ -375,7 +387,7 @@ class EntrezClient:
             "query_key": search_result["querykey"],
             "retmax": retmax,
             "retstart": retstart,
-            "db": "pmc",
+            "db": self.db,
             **self._entrez_id,
         }
         n_batches = math.ceil(n_docs / retmax)

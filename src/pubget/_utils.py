@@ -137,6 +137,23 @@ def get_pmcid(article: Union[etree.ElementTree, etree.Element]) -> int:
     )
 
 
+def get_pmid(article: Union[etree.ElementTree, etree.Element]) -> int:
+    """Extract the PubMed ID from an XML article."""
+    return int(article.find(".//PMID").text)
+
+
+def get_id(
+    article: Union[etree.ElementTree, etree.Element],
+) -> str:
+    try:
+        id = get_pmcid(article)
+        id_type = "pmcid"
+    except AttributeError:
+        id = get_pmid(article)
+        id_type = "pmid"
+    return f"{id_type}_{id}"
+
+
 def get_pmcid_from_article_dir(article_dir: Path) -> int:
     """Extract the PubMedCentral ID from an article's data dir."""
     match = re.match(r"pmcid_(\d+)", article_dir.name)

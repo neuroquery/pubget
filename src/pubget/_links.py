@@ -17,7 +17,7 @@ class LinkExtractor(Extractor):
     future.
     """
 
-    fields = ("pmcid", "ext-link-type", "href")
+    fields = ("id", "ext-link-type", "href")
     name = "links"
 
     def extract(
@@ -27,7 +27,7 @@ class LinkExtractor(Extractor):
         previous_extractors_output: Dict[str, Records],
     ) -> pd.DataFrame:
         del article_dir, previous_extractors_output
-        pmcid = _utils.get_pmcid(article)
+        id = _utils.get_id(article)
         all_links = []
         xlink = "http://www.w3.org/1999/xlink"
         for tag in ["uri", "ext-link"]:
@@ -35,7 +35,7 @@ class LinkExtractor(Extractor):
                 href = link.get(f"{{{xlink}}}href")
                 link_type = link.get("ext-link-type") or tag
                 all_links.append(
-                    {"pmcid": pmcid, "ext-link-type": link_type, "href": href}
+                    {"id": id, "ext-link-type": link_type, "href": href}
                 )
         return pd.DataFrame(all_links, columns=self.fields).drop_duplicates()
 
@@ -52,7 +52,7 @@ class LinkContentExtractor(Extractor):
         self.name = name
         self.pattern = pattern
         capture_groups = re.findall(r"\(\?P<(\w+)>", self.pattern)
-        self.fields = ("pmcid", *capture_groups)
+        self.fields = ("id", *capture_groups)
 
     def extract(
         self,
@@ -65,7 +65,7 @@ class LinkContentExtractor(Extractor):
         if links is None or (len(links) == 0):
             return pd.DataFrame(columns=self.fields)
         captured = links["href"].str.extract(self.pattern, expand=True)
-        captured["pmcid"] = links["pmcid"]
+        captured["id"] = links["id"]
         return pd.DataFrame(
             captured.dropna().drop_duplicates().reset_index(),
             columns=self.fields,

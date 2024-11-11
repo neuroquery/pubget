@@ -19,10 +19,12 @@ from pubget._typing import (
     PipelineStep,
 )
 
+import IPython
+
 _LOG = logging.getLogger(__name__)
 _LOG_PERIOD = 500
 _STEP_NAME = "extract_articles"
-_STEP_DESCRIPTION = "Extract articles from bulk PMC download."
+_STEP_DESCRIPTION = "Extract articles from bulk download."
 
 
 def extract_articles(
@@ -104,7 +106,7 @@ def _do_extract_articles(
     """Do the extraction and return number of articles found."""
     output_dir.mkdir(exist_ok=True, parents=True)
     with Parallel(n_jobs=n_jobs, verbose=8) as parallel:
-        _LOG.info("Extracting articles from PMC articlesets.")
+        _LOG.info("Extracting articles from articlesets.")
         article_counts = parallel(
             delayed(_extract_from_articleset)(
                 batch_file, output_dir=output_dir
@@ -112,9 +114,7 @@ def _do_extract_articles(
             for batch_file in articlesets_dir.glob("articleset_*.xml")
         )
         n_articles = int(sum(article_counts))  # int() is for mypy
-        _LOG.info(
-            f"Done extracting {n_articles} articles from PMC articlesets."
-        )
+        _LOG.info(f"Done extracting {n_articles} articles from articlesets.")
         _LOG.info("Extracting tables from articles.")
         parallel(
             delayed(_extract_tables)(article_dir)
@@ -133,7 +133,7 @@ def _iter_articles(
     n_articles = 0
     for bucket in all_articles_dir.glob("*"):
         if bucket.is_dir():
-            for article_dir in bucket.glob("pmcid_*"):
+            for article_dir in bucket.glob("pm*id_*"):
                 n_articles += 1
                 yield article_dir
                 if not n_articles % _LOG_PERIOD:
@@ -145,11 +145,15 @@ def _extract_from_articleset(batch_file: Path, output_dir: Path) -> int:
     _LOG.debug(f"Extracting articles from {batch_file.name}")
     with open(batch_file, "rb") as batch_fh:
         tree = etree.parse(batch_fh)
+    if "pmc-articleset" in tree.docinfo.doctype:
+        article_indicator = "article"
+    elif "PubmedArticleSet" in tree.docinfo.doctype:
+        article_indicator = "PubmedArticle"
     n_articles = 0
-    for article in tree.iterfind("article"):
-        pmcid = _utils.get_pmcid(article)
-        bucket = _utils.article_bucket_from_pmcid(pmcid)
-        article_dir = output_dir.joinpath(bucket, f"pmcid_{pmcid}")
+    for article in tree.iterfind(article_indicator):
+        id = _utils.get_id(article)
+        bucket = _utils.article_bucket_from_pmcid(id)
+        article_dir = output_dir.joinpath(bucket, f"{id}")
         article_dir.mkdir(exist_ok=True, parents=True)
         article_file = article_dir.joinpath("article.xml")
         article_file.write_bytes(

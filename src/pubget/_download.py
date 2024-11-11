@@ -55,11 +55,13 @@ class _Downloader(abc.ABC):
         n_docs: Optional[int] = None,
         retmax: int = 500,
         api_key: Optional[str] = None,
+        db="pmc",
     ) -> None:
         self._data_dir = Path(data_dir)
         self._n_docs = n_docs
         self._retmax = retmax
         self._api_key = api_key
+        self.db = db
 
     def download(self) -> Tuple[Path, ExitCode]:
         """Perform the download.
@@ -95,6 +97,7 @@ class _Downloader(abc.ABC):
             failed_requests_dump_dir=output_dir.joinpath(
                 "failed_requests_dumps"
             ),
+            db=self.db,
         )
         if "search_result" in info and "webenv" in info["search_result"]:
             _LOG.info(
@@ -147,7 +150,7 @@ class _Downloader(abc.ABC):
 
     @abc.abstractmethod
     def _save_input(self, output_dir: Path) -> None:
-        """Save the input (eg query, PMCIDs) used to download articles."""
+        """Save the input (eg query, PMCIDs, PMIDs) used to download articles."""
 
 
 class _QueryDownloader(_Downloader):
@@ -214,9 +217,10 @@ class _PMCIDListDownloader(_Downloader):
         n_docs: Optional[int] = None,
         retmax: int = 500,
         api_key: Optional[str] = None,
+        db="pmc",
     ) -> None:
         super().__init__(
-            data_dir, n_docs=n_docs, retmax=retmax, api_key=api_key
+            data_dir, n_docs=n_docs, retmax=retmax, api_key=api_key, db=db
         )
         self._pmcids = pmcids
 
@@ -239,6 +243,53 @@ class _PMCIDListDownloader(_Downloader):
             for pmcid in self._pmcids:
                 pmcids_f.write(str(pmcid))
                 pmcids_f.write("\n")
+
+
+class _PMIDListDownloader(_Downloader):
+    """Download articles in a provided list of PMIDs.
+
+    Parameters
+    ----------
+    pmids
+        List of PubMed IDs to download.
+
+    other parameters are forwarded to `_Downloader`.
+    """
+
+    def __init__(
+        self,
+        pmids: Sequence[int],
+        data_dir: PathLikeOrStr,
+        *,
+        n_docs: Optional[int] = None,
+        retmax: int = 500,
+        api_key: Optional[str] = None,
+        db="pubmed",
+    ) -> None:
+        super().__init__(
+            data_dir, n_docs=n_docs, retmax=retmax, api_key=api_key, db=db
+        )
+        self._pmids = pmids
+
+    def _output_dir_name(self) -> str:
+        """Directory name containing the checksum of the pmid list."""
+        checksum = _utils.checksum(
+            b",".join([str(pmid).encode("UTF-8") for pmid in self._pmids])
+        )
+        return f"pmidList_{checksum}"
+
+    def _prepare_webenv(self, client: EntrezClient) -> Dict[str, str]:
+        """Use EPost to upload PMIDs to the history server."""
+        _LOG.info("Uploading PMIDs.")
+        return client.epost(self._pmids)
+
+    def _save_input(self, output_dir: Path) -> None:
+        """Save the PMIDs the user asked to download."""
+        pmids_file_path = output_dir.joinpath("requested_pmids.txt")
+        with open(pmids_file_path, "w", encoding="UTF-8") as pmids_f:
+            for pmid in self._pmids:
+                pmids_f.write(str(pmid))
+                pmids_f.write("\n")
 
 
 def _get_data_dir_env() -> Optional[str]:
@@ -274,6 +325,13 @@ def _get_pmcids(args: argparse.Namespace) -> List[int]:
     return [
         int(pmcid.strip())
         for pmcid in Path(args.pmcids_file).read_text("UTF-8").strip().split()
+    ]
+
+
+def _get_pmids(args: argparse.Namespace) -> List[int]:
+    return [
+        int(pmid.strip())
+        for pmid in Path(args.pmids_file).read_text("UTF-8").strip().split()
     ]
 
 
@@ -316,6 +374,15 @@ def _edit_argument_parser(argument_parser: ArgparseActions) -> None:
         help="Instead of using a query, we can download a predefined list "
         "of articles by providing their PubmedCentral IDs. The pmcids_file "
         "parameter should be the path of a file containing PubMed Central IDs "
+        "(one per line) to download.",
+    )
+    group.add_argument(
+        "--pmids_file",
+        type=str,
+        default=None,
+        help="Instead of using a query, we can download a predefined list "
+        "of articles by providing their PubmedIDs. The pmids_file "
+        "parameter should be the path of a file containing PubMed IDs "
         "(one per line) to download.",
     )
     argument_parser.add_argument(
@@ -400,6 +467,55 @@ def download_pmcids(
     ).download()
 
 
+def download_pmids(
+    pmids: Sequence[int],
+    data_dir: PathLikeOrStr,
+    *,
+    n_docs: Optional[int] = None,
+    retmax: int = 500,
+    api_key: Optional[str] = None,
+) -> Tuple[Path, ExitCode]:
+    """Download articles in a provided list of PMIDs.
+
+    Parameters
+    ----------
+    pmids
+        List of PubMed IDs to download.
+    data_dir
+        Path to the directory where all pubget data is stored; a subdirectory
+        will be created for this download.
+    n_docs
+        Approximate maximum number of articles to download. By default, all
+        results returned for the search are downloaded. If n_docs is
+        specified, at most n_docs rounded up to the nearest multiple of
+        `retmax` articles will be downloaded.
+    retmax
+        Batch size -- number of articles that are downloaded per request.
+    api_key
+        API key for the Entrez E-utilities (see [the E-utilities
+        help](https://www.ncbi.nlm.nih.gov/books/NBK25497/)). If the API
+        key is provided, it is included in all requests to the Entrez
+        E-utilities.
+
+    Returns
+    -------
+    output_dir
+        The directory that was created in which downloaded data is stored.
+    exit_code
+        COMPLETED if all articles have been successfully downloaded and
+        INCOMPLETE or ERROR otherwise. Used by the `pubget` command-line
+        interface.
+
+    """
+    return _PMIDListDownloader(
+        pmids,
+        data_dir=data_dir,
+        n_docs=n_docs,
+        retmax=retmax,
+        api_key=api_key,
+    ).download()
+
+
 def download_query_results(
     query: str,
     data_dir: PathLikeOrStr,
@@ -476,6 +592,14 @@ def _download_articles_for_args(
         pmcids = _get_pmcids(args)
         output_dir, exit_code = download_pmcids(
             pmcids=pmcids,
+            data_dir=data_dir,
+            n_docs=args.n_docs,
+            api_key=api_key,
+        )
+    elif args.pmids_file is not None:
+        pmids = _get_pmids(args)
+        output_dir, exit_code = download_pmids(
+            pmids=pmids,
             data_dir=data_dir,
             n_docs=args.n_docs,
             api_key=api_key,
