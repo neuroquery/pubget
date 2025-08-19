@@ -39,5 +39,5 @@ class TextExtractor(Extractor):
         for part_name in self.fields:
             elem = transformed.find(part_name)
             result[part_name] = elem.text
-        result["pmcid"] = int(result["pmcid"])
+        result["pmcid"] = _utils.get_pmcid(article)
         return result
