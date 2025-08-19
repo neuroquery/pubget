@@ -132,9 +132,18 @@ def load_stylesheet(stylesheet_name: str) -> etree.XSLT:
 
 def get_pmcid(article: Union[etree.ElementTree, etree.Element]) -> int:
     """Extract the PubMedCentral ID from an XML article."""
-    return int(
-        article.find("front/article-meta/article-id[@pub-id-type='pmc']").text
+    pmc = article.find("front/article-meta/article-id[@pub-id-type='pmc']")
+    pmcid = article.find(
+        "front/article-meta/article-id[@pub-id-type='pmcid']"
     )
+    if pmc is None and pmcid is None:
+        raise ValueError("No PMC ID found in the article XML.")
+    if pmc:
+        val = pmc.text
+    else:
+        val = pmcid.text.replace("PMC", "")
+
+    return int(val)
 
 
 def get_pmcid_from_article_dir(article_dir: Path) -> int:
