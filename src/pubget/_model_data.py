@@ -186,7 +186,7 @@ class ModelData:
 
         rindex = pd.Series(np.arange(len(tfidf_pmcids)), index=tfidf_pmcids)
         self.tfidf = sparse.csr_matrix(
-            self.tfidf.A[rindex.loc[pmcids].values, :]
+            self.tfidf.toarray()[rindex.loc[pmcids].values, :]
         )
 
         self.metadata.set_index("pmcid", inplace=True)

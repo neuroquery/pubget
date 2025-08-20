@@ -54,7 +54,7 @@ def _check_matrices(data_dir):
             )
             assert data.shape == (3, 5)
             assert data.dtype == int if kind == "counts" else float
-    body_counts = sparse.load_npz(str(data_dir.joinpath("body_counts.npz"))).A
+    body_counts = sparse.load_npz(str(data_dir.joinpath("body_counts.npz"))).toarray()
     assert (
         body_counts
         == [
@@ -110,7 +110,7 @@ def test_voc_mapping_matrix():
     voc = ["amygdala", "brain stem", "brainstem", "cortex"]
     mapping = {"brain stem": "brainstem"}
     op = _vectorization._voc_mapping_matrix(voc, mapping)
-    assert np.allclose(op.A, [[1, 0, 0, 0], [0, 1, 1, 0], [0, 0, 0, 1]])
+    assert np.allclose(op.toarray(), [[1, 0, 0, 0], [0, 1, 1, 0], [0, 0, 0, 1]])
     assert np.allclose(op.dot(np.arange(1, len(voc) + 1)), [1, 5, 4])
 
 

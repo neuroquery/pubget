@@ -102,7 +102,7 @@ def _get_image_viewer(term):
 
 
 def _get_similar_docs_table(term):
-    loadings = tfidf[:, terms_info.loc[term, "pos"]].A.ravel()
+    loadings = tfidf[:, terms_info.loc[term, "pos"]].toarray().ravel()
     order = np.argpartition(-loadings, np.arange(min(loadings.shape[0], 20)))[
         :20
     ]
