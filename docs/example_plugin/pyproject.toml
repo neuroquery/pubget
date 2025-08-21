@@ -1,3 +1,21 @@
 [build-system]
-requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pubget_example_plugin"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+  "pandas",
+  "matplotlib",
+  "pubget",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest",
+]
+
+[project.entry-points."pubget.plugin_actions"]
+get_pubget_actions = "pubget_example_plugin:get_pubget_actions"
