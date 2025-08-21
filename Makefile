@@ -7,7 +7,7 @@ pubget_version := $(shell cat src/pubget/_data/VERSION)
 test_all: test_mypy test_flake8 test_coverage_strict test test_plugin test_pylint
 
 test:
-	tox
+	pytest tests
 
 test_coverage_strict:
 	pytest --cov=pubget --cov-report=xml --cov-report=term --cov-fail-under=100 tests
@@ -28,8 +28,7 @@ test_pylint:
 	pylint ./src
 
 test_plugin:
-	tox -e run_plugin
-	tox -c docs/example_plugin/tox.ini
+	pixi run run_plugin
 
 run_full_pipeline:
 	python tests/run_full_pipeline.py -o /tmp/
@@ -58,4 +57,4 @@ clean:
 	rm -rf doc_build build dist htmlcov .coverage .coverage.*
 
 clean_all: clean
-	rm -rf .mypy_cache .pytest_cache .tox
+	rm -rf .mypy_cache .pytest_cache
