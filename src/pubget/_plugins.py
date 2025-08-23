@@ -1,8 +1,7 @@
 """Utilities for loading pubget plug-in functionality."""
 
 from typing import Any, Dict, List
-
-import importlib_metadata
+import importlib.metadata
 
 
 def get_plugin_actions() -> Dict[str, List[Any]]:
@@ -14,7 +13,7 @@ def get_plugin_actions() -> Dict[str, List[Any]]:
         "pipeline_steps": [],
         "commands": [],
     }
-    for entry_point in importlib_metadata.entry_points().select(
+    for entry_point in importlib.metadata.entry_points().select(
         group="pubget.plugin_actions"
     ):
         plugin_actions = entry_point.load()()

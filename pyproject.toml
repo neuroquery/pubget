@@ -1,6 +1,62 @@
 [build-system]
-requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pubget"
+dynamic = ["version"]
+description = "Download neuroimaging articles and extract text and stereotactic coordinates."
+readme = "README.md"
+requires-python = ">=3.10"
+license-files = ["COPYING"]
+authors = [
+    {name = "Jérôme Dockès", email = "jerome@dockes.org"},
+    {name = "Alejandro de la Vega", email = "delavega@utexas.edu"}
+]
+keywords = ["neuroimaging", "meta-analysis", "text-mining"]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Software Development :: Libraries",
+]
+dependencies = [
+    "joblib (>=1.1.1)",
+    "lxml",
+    "neuroquery",
+    "numpy (>=1.23.5)",
+    "pandas (>=1.5.3)",
+    "requests",
+    "scikit-learn (>=1.2.1)",
+    "scipy (>=1.9.3)",
+]
+
+[project.urls]
+Documentation = "https://neuroquery.github.io/pubget/"
+"Source code" = "https://github.com/neuroquery/pubget"
+
+[project.optional-dependencies]
+dev = [
+    "coverage",
+    "flake8",
+    "mypy",
+    "pdoc",
+    "pylint",
+    "pytest",
+    "pytest-cov",
+    "types-requests",
+    "black",
+    "isort",
+]
+nimare = [
+    "nimare",
+]
+
+[tool.hatch.version]
+path = "src/pubget/_data/VERSION"
+pattern = "^(?P<version>.*)$"
 
 [tool.mypy]
 warn_return_any = true
@@ -21,3 +77,64 @@ profile = "black"
 extend_skip = ["data", "_data"]
 skip_gitignore = true
 line_length = 79
+
+[project.scripts]
+pubget = "pubget._commands:pubget_command"
+
+[tool.pixi.project]
+channels = ["conda-forge"]
+platforms = ["linux-64", "osx-arm64", "osx-64", "win-64"]
+
+[tool.pixi.dependencies]
+joblib = ">=1.1.1"
+lxml = "*"
+numpy = ">=1.23.5"
+pandas = ">=1.5.3"
+requests = "*"
+scikit-learn = ">=1.2.1"
+scipy = ">=1.9.3"
+
+[tool.pixi.pypi-dependencies]
+pubget = { path = ".", editable = true }
+
+[tool.pixi.feature.test.dependencies]
+pytest = "*"
+pytest-cov = "*"
+coverage = "*"
+
+[tool.pixi.feature.test.tasks]
+test = { cmd = "pytest -vsl --cov=pubget tests" }
+
+[tool.pixi.feature.plugin.pypi-dependencies]
+pubget_example_plugin = { path = "docs/example_plugin" }
+
+[tool.pixi.feature.plugin.tasks]
+run_plugin = { cmd = "python docs/example_plugin/tests/run_plugin.py" }
+
+[tool.pixi.feature.min-dependencies.dependencies]
+joblib = "==1.1.1"
+lxml = "*"
+numpy = "==1.23.5"
+pandas = "==1.5.3"
+requests = "*"
+scikit-learn = "==1.2.1"
+scipy = "==1.9.3"
+
+[tool.pixi.feature.optional-dependencies.pypi-dependencies]
+# TODO fix version conflicts
+# nimare = "*"
+
+[tool.pixi.feature.py310.dependencies]
+python = "~=3.10.0"
+
+[tool.pixi.feature.py311.dependencies]
+python = "~=3.11.0"
+
+[tool.pixi.feature.py313.dependencies]
+python = "~=3.13.0"
+
+[tool.pixi.environments]
+py310-min-deps = ["py310", "min-dependencies", "test"]
+py311-optional-deps = ["py311", "optional-dependencies", "test"]
+py313-latest-deps = ["py313", "test"]
+plugin = ["py313", "plugin"]

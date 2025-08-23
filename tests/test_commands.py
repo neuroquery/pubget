@@ -2,8 +2,8 @@ import json
 import sys
 from pathlib import Path
 from unittest.mock import MagicMock, Mock
+import importlib.metadata
 
-import importlib_metadata
 import numpy as np
 import pandas as pd
 import pytest
@@ -398,7 +398,7 @@ def test_plugins(
     all_ep.select.return_value = [ep]
     metadata_ep = MagicMock()
     metadata_ep.return_value = all_ep
-    monkeypatch.setattr(importlib_metadata, "entry_points", metadata_ep)
+    monkeypatch.setattr(importlib.metadata, "entry_points", metadata_ep)
     args = ["run", str(tmp_path), "-q", "fMRI[abstract]"]
     _commands.pubget_command(args)
     assert pipeline_plugin.arg_parser_called
