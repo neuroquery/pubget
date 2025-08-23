@@ -218,7 +218,7 @@ def extracted_and_tfidf_dir(tmp_path):
     ).to_csv(extracted_dir.joinpath("coordinate_space.csv"), index=False)
     voc = [f"term {i}" for i in range(100)]
     features = voc[:50]
-    mapping = {f"term {i}": f"term {i //2}" for i in range(50, 100)}
+    mapping = {f"term {i}": f"term {i // 2}" for i in range(50, 100)}
     tfidf = rng.poisson(1.0, (len(pmcids), len(features))).astype(float)
     tfidf /= tfidf.max()
     tfidf[:, ::3] = 0
