@@ -19,7 +19,7 @@ def test_chi_square():
     z_vals = _fit_neurosynth._chi_square(
         brain_maps, brain_maps.sum(axis=0), term_vec_sp
     )
-    term_vec = term_vec_sp.A.ravel().astype(bool)
+    term_vec = term_vec_sp.toarray().ravel().astype(bool)
     stats_z_vals = []
     normal = stats.norm()
     for voxel in range(n_voxels):
