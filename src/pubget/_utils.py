@@ -136,12 +136,14 @@ def get_pmcid(article: Union[etree.ElementTree, etree.Element]) -> int:
     pmcid = article.find(
         "front/article-meta/article-id[@pub-id-type='pmcid']"
     )
-    if pmc is None and pmcid is None:
-        raise ValueError("No PMC ID found in the article XML.")
-    if pmc:
+
+    val = None
+    if pmc is not None:
         val = pmc.text
-    else:
-        val = pmcid.text.replace("PMC", "")
+    elif pmcid is not None:
+        val = pmcid.text
+        if val.startswith("PMC"):
+            val = val[3:]
 
     return int(val)
 
