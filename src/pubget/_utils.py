@@ -145,6 +145,9 @@ def get_pmcid(article: Union[etree.ElementTree, etree.Element]) -> int:
         if val.startswith("PMC"):
             val = val[3:]
 
+    if val is None or not val.isdigit():
+        raise ValueError("No valid PMCID found in article XML.")
+
     return int(val)
 
 
