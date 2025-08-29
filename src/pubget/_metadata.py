@@ -96,5 +96,5 @@ def _add_id(article_id: etree.Element, metadata: Dict[str, Any]) -> None:
         id_type = "pmcid"
     value = article_id.text
     if id_type in ["pmid", "pmcid"]:
-        value = int(value)
+        value = int(value.replace("PMC", "").strip())
     metadata[id_type] = value
