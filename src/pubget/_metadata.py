@@ -90,7 +90,7 @@ def _add_license(article: etree.Element, metadata: Dict[str, Any]) -> None:
 
 def _add_id(article_id: etree.Element, metadata: Dict[str, Any]) -> None:
     id_type = article_id.get("pub-id-type")
-    if id_type not in ["pmc", "pmid", "doi"]:
+    if id_type not in ["pmc", "pmid", "doi", "pmcid"]:
         return
     if id_type == "pmc":
         id_type = "pmcid"
