@@ -31,7 +31,7 @@ class LinkExtractor(Extractor):
         all_links = []
         xlink = "http://www.w3.org/1999/xlink"
         for tag in ["uri", "ext-link"]:
-            for link in article.iterfind(f"//{tag}[@{{{xlink}}}href]"):
+            for link in article.iterfind(f".//{tag}[@{{{xlink}}}href]"):
                 href = link.get(f"{{{xlink}}}href")
                 link_type = link.get("ext-link-type") or tag
                 all_links.append(
