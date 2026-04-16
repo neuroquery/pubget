@@ -17,6 +17,9 @@ class TextExtractor(Extractor):
     fields = ("pmcid", "title", "keywords", "abstract", "body")
     name = "text"
 
+    def __init__(self, preserve_cross_references: bool = True) -> None:
+        self.preserve_cross_references = preserve_cross_references
+
     def extract(
         self,
         article: etree.ElementTree,
@@ -30,7 +33,14 @@ class TextExtractor(Extractor):
         # multiprocessing map. Parsing is cached.
         stylesheet = _utils.load_stylesheet("text_extraction.xsl")
         try:
-            transformed = stylesheet(article)
+            transformed = stylesheet(
+                article,
+                **{
+                    "preserve-crossrefs": etree.XSLT.strparam(
+                        "true" if self.preserve_cross_references else "false"
+                    )
+                },
+            )
         except Exception:
             _LOG.exception(
                 f"failed to transform article: {stylesheet.error_log}"

@@ -7,6 +7,7 @@
 
   <xsl:output method="xml" version="1.0" encoding="UTF-8" omit-xml-declaration="no"/>
   <xsl:strip-space elements="*"/>
+  <xsl:param name="preserve-crossrefs" select="'true'"/>
 
   <xsl:template match="/">
     <extracted-text>
@@ -305,6 +306,13 @@
   <xsl:template match="volume-series" />
   <xsl:template match="word-count" />
   <xsl:template match="x" />
-  <xsl:template match="xref" />
+  <xsl:template match="xref">
+    <xsl:choose>
+      <xsl:when test="$preserve-crossrefs = 'true'">
+        <xsl:apply-templates />
+      </xsl:when>
+      <xsl:otherwise />
+    </xsl:choose>
+  </xsl:template>
   <xsl:template match="year" />
 </xsl:transform>
