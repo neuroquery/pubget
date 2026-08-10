@@ -140,6 +140,7 @@ def extract_data_to_csv(
     *,
     articles_with_coords_only: bool = False,
     preserve_cross_references: bool = True,
+    keep_tables: bool = False,
     n_jobs: int = 1,
 ) -> Tuple[Path, ExitCode]:
     """Extract text and coordinates from articles and store in csv files.
@@ -162,6 +163,12 @@ def extract_data_to_csv(
     preserve_cross_references
         If True, text from inline cross-reference elements is preserved in
         extracted text. If False, those elements are removed.
+    keep_tables
+        If True, the articles' tables are inserted in the extracted text, at
+        the position where they appear in the article: their label, then their
+        contents as tab-separated values, then their footer. If False, tables
+        are only available in the separate CSV files created by
+        `pubget.extract_articles`.
     n_jobs
         Number of processes to run in parallel. `-1` means using all
         processors.
@@ -198,6 +205,7 @@ def extract_data_to_csv(
         output_dir,
         articles_with_coords_only,
         preserve_cross_references=preserve_cross_references,
+        keep_tables=keep_tables,
         n_jobs=n_jobs,
     )
     is_complete = bool(status["previous_step_complete"])
@@ -214,11 +222,15 @@ def extract_data_to_csv(
 
 def _get_data_extractors(
     preserve_cross_references: bool,
+    keep_tables: bool,
 ) -> List[Extractor]:
     return [
         MetadataExtractor(),
         AuthorsExtractor(),
-        TextExtractor(preserve_cross_references=preserve_cross_references),
+        TextExtractor(
+            preserve_cross_references=preserve_cross_references,
+            keep_tables=keep_tables,
+        ),
         TableInfoExtractor(),
         CoordinateExtractor(),
         CoordinateSpaceExtractor(),
@@ -231,7 +243,9 @@ def _do_extract_data_to_csv(
     articles_dir: Path,
     output_dir: Path,
     articles_with_coords_only: bool,
+    *,
     preserve_cross_references: bool,
+    keep_tables: bool,
     n_jobs: int,
 ) -> int:
     """Do the data extraction and return the number of articles whose data was
@@ -239,7 +253,9 @@ def _do_extract_data_to_csv(
     sterotactic coordinate triplet have their data saved.
     """
     n_to_process = _utils.get_n_articles(articles_dir)
-    data_extractors = _get_data_extractors(preserve_cross_references)
+    data_extractors = _get_data_extractors(
+        preserve_cross_references, keep_tables
+    )
     all_writers = [
         CSVWriter.from_extractor(extractor, output_dir)
         for extractor in data_extractors
@@ -305,6 +321,13 @@ def _edit_argument_parser(
         action="store_true",
         help="Remove inline cross-reference text from extracted article text.",
     )
+    argument_parser.add_argument(
+        "--keep_tables",
+        action="store_true",
+        help="Insert the articles' tables in the extracted text, at the "
+        "position where they appear in the article: their label, then their "
+        "contents as tab-separated values, then their footer.",
+    )
     _utils.add_n_jobs_argument(argument_parser)
 
 
@@ -326,6 +349,7 @@ class DataExtractionStep(PipelineStep):
             previous_steps_output["extract_articles"],
             articles_with_coords_only=args.articles_with_coords_only,
             preserve_cross_references=not args.strip_cross_references,
+            keep_tables=args.keep_tables,
             n_jobs=args.n_jobs,
         )
         if not _utils.get_n_articles(output_dir):
@@ -361,5 +385,6 @@ class DataExtractionCommand(Command):
             args.articles_dir,
             articles_with_coords_only=args.articles_with_coords_only,
             preserve_cross_references=not args.strip_cross_references,
+            keep_tables=args.keep_tables,
             n_jobs=args.n_jobs,
         )[1]

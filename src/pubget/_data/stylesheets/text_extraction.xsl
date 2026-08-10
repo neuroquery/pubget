@@ -8,6 +8,7 @@
   <xsl:output method="xml" version="1.0" encoding="UTF-8" omit-xml-declaration="no"/>
   <xsl:strip-space elements="*"/>
   <xsl:param name="preserve-crossrefs" select="'true'"/>
+  <xsl:param name="keep-tables" select="'false'"/>
 
   <xsl:template match="/">
     <extracted-text>
@@ -77,6 +78,22 @@
   <xsl:apply-templates />
   <xsl:text>
   </xsl:text>
+</xsl:template>
+
+<!-- The table itself is always stripped from the text; when tables are kept a
+     placeholder is left in its place, to be replaced with the table's contents
+     by 'pubget._text'. The number is the table's rank in the article, which is
+     also the number used to name the files written for it by
+     'pubget.extract_articles'. -->
+<xsl:template match="table-wrap" >
+  <xsl:text> </xsl:text>
+  <xsl:apply-templates />
+  <xsl:if test="$keep-tables = 'true'">
+    <xsl:text>&#10;[pubget-table-</xsl:text>
+    <xsl:value-of select="count(preceding::table-wrap)"/>
+    <xsl:text>]&#10;</xsl:text>
+  </xsl:if>
+  <xsl:text> </xsl:text>
 </xsl:template>
 
 <xsl:template match="text()" >
