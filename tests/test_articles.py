@@ -151,3 +151,36 @@ def test_table_content_extraction_failure(tmp_path):
     )
     _articles._extract_tables_content(xml, tmp_path)
     assert len(list(tmp_path.glob("table*info.json"))) == 1
+
+
+def test_extract_from_articleset_skips_unidentifiable(tmp_path):
+    """One article with no usable PMCID must not discard its whole batch.
+
+    Regression test: get_pmcid raises ValueError for records carrying no
+    resolvable identifier, and that used to propagate out of the per-batch
+    loop, so a single such article threw away every sibling that had
+    downloaded successfully.
+    """
+    from pubget import _articles
+
+    batch = tmp_path / "articleset.xml"
+    batch.write_bytes(
+        b"""<?xml version="1.0"?>
+        <articleset>
+          <article><front><article-meta>
+            <article-id pub-id-type="doi">10.1/nope</article-id>
+          </article-meta></front></article>
+          <article><front><article-meta>
+            <article-id pub-id-type="pmc">123</article-id>
+          </article-meta></front></article>
+          <article><front><article-meta>
+            <article-id pub-id-type="pmcid">PMC456</article-id>
+          </article-meta></front></article>
+        </articleset>"""
+    )
+    out = tmp_path / "articles"
+    n = _articles._extract_from_articleset(batch, out)
+
+    assert n == 2, "the two identifiable articles should still be extracted"
+    extracted = {p.name for p in out.glob("*/pmcid_*")}
+    assert extracted == {"pmcid_123", "pmcid_456"}
