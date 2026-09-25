@@ -253,6 +253,10 @@ If we had not used `--articles_with_coords_only`, the new subdirectory would be 
   Fields are `pmcid`, `surname`, `given-names`.
 - `text.csv` contains one row per article.
   The first field is the `pmcid`, and the other fields are `title`, `keywords`, `abstract`, and `body`, and contain the text extracted from these parts of the article.
+  By default the tables are left out of the `body` (they are available in the CSV files created by `pubget extract_articles`, described above).
+  If we use the `--keep_tables` option, each table is inserted in the `body` at the position where it appears in the article: its label, then its contents as tab-separated values (with one line per header row), then its footer.
+  The cells are those of the table's CSV file, so the text and the CSV files always agree.
+  Tables that `pubget` failed to parse are still left out.
 - `links.csv` contains the external links found in the articles.
   The fields are `pmcid`, `ext-link-type` (the type of link, for example "uri", "doi"), and `href` (usually an URL).
 - `neurovault_collections.csv` and `neurovault_images.csv`: [NeuroVault](https://neurovault.org/) collection and image IDs that could be extracted from links in the articles, if any.

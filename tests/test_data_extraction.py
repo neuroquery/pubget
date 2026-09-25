@@ -99,6 +99,16 @@ def test_extract_data_to_csv(
     _check_extracted_data(data_dir, articles_with_coords_only)
 
 
+def test_extract_data_to_csv_with_tables(tmp_path, articles_dir):
+    data_dir, code = _data_extraction.extract_data_to_csv(
+        articles_dir, tmp_path.joinpath("extracted_data"), keep_tables=True
+    )
+    assert code == ExitCode.COMPLETED
+    text = pd.read_csv(data_dir.joinpath("text.csv"))
+    assert text.at[0, "body"].strip().startswith("The text")
+    assert "X\tY\tZ\n10\t20\t30\n" in text.at[0, "body"]
+
+
 def test_extractor_failures(articles_dir, tmp_path, monkeypatch):
     data_dir = Path(f"{tmp_path}-extraction_failures-extracted_data")
     mock = Mock(side_effect=ValueError)
@@ -135,7 +145,12 @@ def test_should_write(data, with_coords, expected):
 
 def test_stop_pipeline(empty_articles_dir):
     step = _data_extraction.DataExtractionStep()
-    args = argparse.Namespace(articles_with_coords_only=False, n_jobs=1)
+    args = argparse.Namespace(
+        articles_with_coords_only=False,
+        strip_cross_references=False,
+        keep_tables=False,
+        n_jobs=1,
+    )
     previous_steps = {"extract_articles": empty_articles_dir}
     with pytest.raises(_typing.StopPipeline, match=r"No articles.*"):
         step.run(args, previous_steps)
