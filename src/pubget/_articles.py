@@ -147,7 +147,18 @@ def _extract_from_articleset(batch_file: Path, output_dir: Path) -> int:
         tree = etree.parse(batch_fh)
     n_articles = 0
     for article in tree.iterfind("article"):
-        pmcid = _utils.get_pmcid(article)
+        # An article whose PMCID cannot be resolved must not take the rest of
+        # the batch down with it. get_pmcid raises ValueError for records that
+        # carry no usable identifier, and a batch is typically hundreds of
+        # articles, so letting that propagate discards every sibling article
+        # that downloaded successfully.
+        try:
+            pmcid = _utils.get_pmcid(article)
+        except ValueError:
+            _LOG.warning(
+                "Skipping article with no usable PMCID in %s", batch_file.name
+            )
+            continue
         bucket = _utils.article_bucket_from_pmcid(pmcid)
         article_dir = output_dir.joinpath(bucket, f"pmcid_{pmcid}")
         article_dir.mkdir(exist_ok=True, parents=True)
