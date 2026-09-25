@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any, Dict, Mapping, Optional, Sequence, Tuple, Union
 
 import numpy as np
+import numpy.typing as npt
 import pandas as pd
 from joblib import Parallel, delayed
 from neuroquery.datasets import fetch_neuroquery_model
@@ -159,7 +160,7 @@ def _do_vectorize_corpus_to_npz(
 
 def _vectorize_articles(
     articles: pd.DataFrame, vectorizer: TextVectorizer
-) -> Tuple[Sequence[int], Dict[str, sparse.csr_matrix]]:
+) -> Tuple[npt.NDArray[Any], Dict[str, sparse.csr_matrix]]:
     """Vectorize one batch of articles.
 
     Returns the pmcids and the mapping text field: csr matrix of features.
@@ -173,7 +174,7 @@ def _vectorize_articles(
 
 def _extract_word_counts(
     corpus_file: PathLikeOrStr, vocabulary_file: PathLikeOrStr, n_jobs: int
-) -> Tuple[Sequence[int], Dict[str, sparse.csr_matrix], TextVectorizer]:
+) -> Tuple[npt.NDArray[Any], Dict[str, sparse.csr_matrix], TextVectorizer]:
     """Compute word counts for all articles in a csv file.
 
     returns the pmcids, mapping of text filed: csr matrix, and the vectorizer.
