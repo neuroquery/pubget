@@ -5032,8 +5032,30 @@ brains, auditory cortex, memory, memory<table-wrap><table><tr><th>X</th><th>Y</t
       </custom-meta-group>
     </article-meta>
   </front>
-  <body>The text of the article with coordinates,
-brains, auditory cortex, memory, memory<table-wrap><table><tr><th>X</th><th>Y</th><th>Z</th></tr><tr><td>10</td><td>20</td><td>30</td></tr><tr><td>-10</td><td>-20</td><td>-30</td></tr></table></table-wrap></body>
+  <body>
+    The text of the article with coordinates, brains, auditory cortex, memory, memory.
+    <table-wrap>
+        <table>
+            <tr>
+                <th>X</th><th>Y</th><th>Z</th>
+                <th>Region</th><th>Activation_Level</th><th>Voxel_Count</th><th>Signal_Noise_Ratio</th><th>Timepoint</th>
+                <th>Intensity</th><th>Subject_ID</th><th>Confidence_Score</th><th>Cluster_Size</th><th>P_Value</th>
+                <th>Q_Value</th><th>Correlation</th><th>Noise_Level</th><th>Hemisphere</th><th>Mean_Signal</th>
+                <th>Std_Dev</th><th>Median_Signal</th><th>Session_ID</th><th>Scan_Type</th><th>Experiment_ID</th>
+            </tr>
+            <tr><td>10</td><td>20</td><td>30</td><td>Hippocampus</td><td>1.5</td><td>150</td><td>3.2</td><td>5</td><td>2.3</td><td>101</td><td>0.95</td><td>12</td><td>0.05</td><td>0.07</td><td>0.85</td><td>0.2</td><td>Left</td><td>1.7</td><td>0.5</td><td>1.6</td><td>SS01</td><td>fMRI</td><td>EXP001</td></tr>
+            <tr><td>-10</td><td>-20</td><td>-30</td><td>Prefrontal Cortex</td><td>2.1</td><td>200</td><td>2.8</td><td>10</td><td>1.9</td><td>102</td><td>0.88</td><td>14</td><td>0.03</td><td>0.09</td><td>0.75</td><td>0.3</td><td>Right</td><td>2.1</td><td>0.4</td><td>1.9</td><td>SS02</td><td>MEG</td><td>EXP002</td></tr>
+            <tr><td>15</td><td>25</td><td>35</td><td>Auditory Cortex</td><td>3.0</td><td>120</td><td>3.5</td><td>15</td><td>3.1</td><td>103</td><td>0.97</td><td>16</td><td>0.01</td><td>0.08</td><td>0.65</td><td>0.1</td><td>Left</td><td>2.5</td><td>0.3</td><td>2.4</td><td>SS03</td><td>EEG</td><td>EXP003</td></tr>
+            <tr><td>-15</td><td>-25</td><td>-35</td><td>Visual Cortex</td><td>1.8</td><td>180</td><td>2.9</td><td>20</td><td>2.2</td><td>104</td><td>0.89</td><td>13</td><td>0.02</td><td>0.06</td><td>0.72</td><td>0.2</td><td>Right</td><td>1.9</td><td>0.6</td><td>1.8</td><td>SS04</td><td>fMRI</td><td>EXP004</td></tr>
+            <tr><td>20</td><td>30</td><td>40</td><td>Thalamus</td><td>2.5</td><td>160</td><td>3.1</td><td>25</td><td>2.8</td><td>105</td><td>0.92</td><td>18</td><td>0.04</td><td>0.05</td><td>0.78</td><td>0.25</td><td>Left</td><td>2.2</td><td>0.4</td><td>2.1</td><td>SS05</td><td>MEG</td><td>EXP005</td></tr>
+            <tr><td>-20</td><td>-30</td><td>-40</td><td>Parietal Cortex</td><td>2.0</td><td>170</td><td>3.0</td><td>30</td><td>2.7</td><td>106</td><td>0.90</td><td>17</td><td>0.03</td><td>0.07</td><td>0.80</td><td>0.22</td><td>Right</td><td>2.0</td><td>0.5</td><td>1.9</td><td>SS06</td><td>EEG</td><td>EXP006</td></tr>
+            <tr><td>25</td><td>35</td><td>45</td><td>Medial Temporal</td><td>3.3</td><td>130</td><td>3.3</td><td>35</td><td>3.0</td><td>107</td><td>0.94</td><td>15</td><td>0.02</td><td>0.06</td><td>0.83</td><td>0.3</td><td>Left</td><td>2.3</td><td>0.7</td><td>2.2</td><td>SS07</td><td>fMRI</td><td>EXP007</td></tr>
+            <tr><td>-25</td><td>-35</td><td>-45</td><td>Occipital Cortex</td><td>1.7</td><td>190</td><td>2.7</td><td>40</td><td>1.8</td><td>108</td><td>0.91</td><td>19</td><td>0.03</td><td>0.08</td><td>0.70</td><td>0.1</td><td>Right</td><td>1.5</td><td>0.3</td><td>1.4</td><td>SS08</td><td>MEG</td><td>EXP008</td></tr>
+            <tr><td>30</td><td>40</td><td>50</td><td>Cerebellum</td><td>2.4</td><td>140</td><td>3.6</td><td>45</td><td>2.9</td><td>109</td><td>0.93</td><td>11</td><td>0.05</td><td>0.07</td><td>0.84</td><td>0.3</td><td>Left</td><td>2.0</td><td>0.4</td><td>1.8</td><td>SS09</td><td>EEG</td><td>EXP009</td></tr>
+            <tr><td>-30</td><td>-40</td><td>-50</td><td>Basal Ganglia</td><td>1.9</td><td>210</td><td>2.5</td><td>50</td><td>1.6</td><td>110</td><td>0.87</td><td>20</td><td>0.06</td><td>0.05</td><td>0.82</td><td>0.2</td><td>Right</td><td>1.7</td><td>0.6</td><td>1.5</td><td>SS10</td><td>fMRI</td><td>EXP010</td></tr>
+        </table>
+    </table-wrap>
+</body>
   <back>
     <fn-group>
       <fn>
