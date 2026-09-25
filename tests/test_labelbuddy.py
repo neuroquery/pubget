@@ -1,5 +1,6 @@
 import json
 import math
+import re
 from unittest.mock import Mock
 
 import pandas as pd
@@ -65,7 +66,9 @@ def test_make_labelbuddy_documents(
     ) as f:
         docs = [json.loads(doc_json) for doc_json in f]
     assert len(docs) == expected_batch_size
-    assert all("Body\n The text of" in d["text"] for d in docs)
+    # the whitespace between the "Body" heading and the start of the body
+    # depends on how the article's XML is indented
+    assert all(re.search(r"# Body\s+The text of", d["text"]) for d in docs)
     _check_batch_info(labelbuddy_dir)
 
 

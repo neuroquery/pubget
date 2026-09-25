@@ -21,13 +21,21 @@ from pubget._typing import (
 _LOG = logging.getLogger(__name__)
 _STEP_NAME = "extract_vocabulary"
 _STEP_DESCRIPTION = "Extract vocabulary of word n-grams from text."
+_TEXT_FIELDS = ("title", "keywords", "abstract", "body")
 
 
 def _iter_corpus(corpus_fh: TextIO) -> Generator[str, None, None]:
     """Yield the concatenated text fields of articles one by one."""
     n_articles = 0
-    for chunk in pd.read_csv(corpus_fh, chunksize=500):
-        chunk.fillna("", inplace=True)
+    # The text fields are read as strings and missing values as empty strings:
+    # pandas would otherwise give an empty field the float dtype, and refuse to
+    # store the empty strings in it.
+    for chunk in pd.read_csv(
+        corpus_fh,
+        chunksize=500,
+        dtype=dict.fromkeys(_TEXT_FIELDS, str),
+        keep_default_na=False,
+    ):
         text = chunk["title"].str.cat(
             chunk.loc[:, ["keywords", "abstract", "body"]], sep="\n"
         )
