@@ -54,7 +54,8 @@ def _check_extracted_data(data_dir, articles_with_coords_only):
     assert text.shape == (n_articles, 5)
     assert text.at[0, "body"].strip().startswith("The text")
     coordinates = pd.read_csv(data_dir.joinpath("coordinates.csv"))
-    assert coordinates.shape == (12, 6)
+    # 5 articles with a 2-row coordinate table and one with a 10-row one
+    assert coordinates.shape == (20, 6)
     authors = pd.read_csv(data_dir.joinpath("authors.csv"))
     assert authors.shape == (n_authors, 3)
     assert authors["pmcid"].nunique() == n_articles
@@ -104,9 +105,16 @@ def test_extract_data_to_csv_with_tables(tmp_path, articles_dir):
         articles_dir, tmp_path.joinpath("extracted_data"), keep_tables=True
     )
     assert code == ExitCode.COMPLETED
-    text = pd.read_csv(data_dir.joinpath("text.csv"))
-    assert text.at[0, "body"].strip().startswith("The text")
-    assert "X\tY\tZ\n10\t20\t30\n" in text.at[0, "body"]
+    # rows are in the order in which the article directories are visited, so
+    # articles are looked up by pmcid rather than by position.
+    text = pd.read_csv(data_dir.joinpath("text.csv"), index_col="pmcid")
+    body = text.at[9054084, "body"]
+    assert body.strip().startswith("The text")
+    assert "X\tY\tZ\n10\t20\t30\n" in body
+    # a table with many columns is inserted in full, not truncated
+    wide_table_body = text.at[9056519, "body"]
+    assert "X\tY\tZ\tRegion\tActivation_Level" in wide_table_body
+    assert "-30\t-40\t-50\tBasal Ganglia" in wide_table_body
 
 
 def test_extractor_failures(articles_dir, tmp_path, monkeypatch):
