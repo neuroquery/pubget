@@ -165,7 +165,6 @@ def _vectorize_articles(
 
     Returns the pmcids and the mapping text field: csr matrix of features.
     """
-    articles.fillna("", inplace=True)
     vectorized = {}
     for field in _FIELDS:
         vectorized[field] = vectorizer.transform(articles[field].values)
@@ -185,7 +184,15 @@ def _extract_word_counts(
     ).fit()
     chunksize = 200
     with open(corpus_file, encoding="utf-8") as corpus_fh:
-        all_chunks = pd.read_csv(corpus_fh, chunksize=chunksize)
+        # The text fields are read as strings and missing values as empty
+        # strings: pandas would otherwise give an empty field the float dtype,
+        # and the vectorizer expects text.
+        all_chunks = pd.read_csv(
+            corpus_fh,
+            chunksize=chunksize,
+            dtype=dict.fromkeys(_FIELDS, str),
+            keep_default_na=False,
+        )
         vectorized_chunks = Parallel(n_jobs=n_jobs, verbose=8)(
             delayed(_vectorize_articles)(chunk, vectorizer=vectorizer)
             for chunk in all_chunks
