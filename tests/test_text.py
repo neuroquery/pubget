@@ -140,17 +140,39 @@ def test_table_text_reproduces_table_csv(tmp_path):
     assert _text._load_tables(tmp_path) == {0: "\tSubject\n\t0012\n"}
 
 
-def test_text_extractor_drops_placeholders_of_missing_tables(
+def test_text_extractor_renders_tables_it_could_not_parse(
     article_with_table,
 ):
-    """Tables that `extract_articles` failed to parse leave no placeholder."""
+    """A table `extract_articles` failed to parse is read from the XML."""
     for table_file in article_with_table.joinpath("tables").glob("table_*"):
         table_file.unlink()
     extractor = _text.TextExtractor(keep_tables=True)
     article = etree.parse(str(article_with_table.joinpath("article.xml")))
     result = extractor.extract(article, article_with_table, {})
-    assert "Peak coordinates." in result["body"]
+    assert _TABLE_TEXT in result["body"]
+    assert result["body"].index("Peak coordinates.") < result["body"].index(
+        _TABLE_TEXT
+    )
     assert "pubget-table" not in result["body"]
+
+
+def test_text_extractor_appends_tables_outside_the_body(tmp_path):
+    """A table in `<floats-group>` has no place in the body; it is appended."""
+    article_dir = tmp_path.joinpath("pmcid_123")
+    article_dir.mkdir()
+    article_dir.joinpath("article.xml").write_bytes(
+        _make_article("<p>Results.</p>").replace(
+            b"</article>",
+            f"<floats-group>{_TABLE}</floats-group></article>".encode(),
+        )
+    )
+    _articles._extract_tables(article_dir)
+    extractor = _text.TextExtractor(keep_tables=True)
+    article = etree.parse(str(article_dir.joinpath("article.xml")))
+    body = extractor.extract(article, article_dir, {})["body"]
+    assert body.index("Results.") < body.index("Peak coordinates.")
+    assert body.index("Peak coordinates.") < body.index(_TABLE_TEXT)
+    assert body.count("IFG\t-42") == 1
 
 
 def test_text_extractor_reports_unreadable_tables(article_with_table, caplog):
@@ -160,5 +182,6 @@ def test_text_extractor_reports_unreadable_tables(article_with_table, caplog):
     article = etree.parse(str(article_with_table.joinpath("article.xml")))
     result = extractor.extract(article, article_with_table, {})
     assert "Peak coordinates." in result["body"]
+    assert _TABLE_TEXT in result["body"]
     assert "pubget-table" not in result["body"]
     assert "failed to read table" in caplog.text
