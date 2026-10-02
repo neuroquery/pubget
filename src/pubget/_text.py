@@ -137,7 +137,9 @@ def _article_tables(article_dir: pathlib.Path) -> Dict[int, Tuple[str, str]]:
 
 
 def _text_of(elem: "etree._Element | None") -> str:
-    return " ".join("".join(elem.itertext()).split()) if elem is not None else ""
+    if elem is None:
+        return ""
+    return " ".join("".join(elem.itertext()).split())
 
 
 def _table_rows(wrap: etree._Element) -> List[List[str]]:

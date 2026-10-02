@@ -162,7 +162,8 @@ def test_text_extractor_appends_tables_outside_the_body(tmp_path):
     article_dir.mkdir()
     article_dir.joinpath("article.xml").write_bytes(
         _make_article("<p>Results.</p>").replace(
-            b"</article>", f"<floats-group>{_TABLE}</floats-group></article>".encode()
+            b"</article>",
+            f"<floats-group>{_TABLE}</floats-group></article>".encode(),
         )
     )
     _articles._extract_tables(article_dir)
