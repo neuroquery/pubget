@@ -9,6 +9,7 @@
   <xsl:strip-space elements="*"/>
   <xsl:param name="preserve-crossrefs" select="'true'"/>
   <xsl:param name="keep-tables" select="'false'"/>
+  <xsl:param name="keep-superscripts" select="'false'"/>
 
   <xsl:template match="/">
     <extracted-text>
@@ -292,7 +293,13 @@
   <xsl:template match="string-name" />
   <xsl:template match="sub" />
   <xsl:template match="suffix" />
-  <xsl:template match="sup" />
+  <!-- Dropped by default. Kept, a superscript is often a citation marker
+       ("as shown previously.<sup>12</sup>"). -->
+  <xsl:template match="sup">
+    <xsl:if test="$keep-superscripts = 'true'">
+      <xsl:apply-templates />
+    </xsl:if>
+  </xsl:template>
   <xsl:template match="supplement" />
   <xsl:template match="supplementary-material" />
   <xsl:template match="surname" />

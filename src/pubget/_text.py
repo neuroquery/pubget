@@ -33,9 +33,11 @@ class TextExtractor(Extractor):
         self,
         preserve_cross_references: bool = True,
         keep_tables: bool = False,
+        keep_superscripts: bool = False,
     ) -> None:
         self.preserve_cross_references = preserve_cross_references
         self.keep_tables = keep_tables
+        self.keep_superscripts = keep_superscripts
 
     def extract(
         self,
@@ -58,6 +60,9 @@ class TextExtractor(Extractor):
                     ),
                     "keep-tables": etree.XSLT.strparam(
                         "true" if self.keep_tables else "false"
+                    ),
+                    "keep-superscripts": etree.XSLT.strparam(
+                        "true" if self.keep_superscripts else "false"
                     ),
                 },
             )

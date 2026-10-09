@@ -1,4 +1,5 @@
 import json
+import re
 from pathlib import Path
 from unittest.mock import Mock
 
@@ -185,3 +186,35 @@ def test_text_extractor_reports_unreadable_tables(article_with_table, caplog):
     assert _TABLE_TEXT in result["body"]
     assert "pubget-table" not in result["body"]
     assert "failed to read table" in caplog.text
+
+
+_SUPERSCRIPT_BODY = (
+    "<p>As shown before.<sup><xref ref-type='bibr' rid='B1'>12</xref></sup>"
+    " An effect of 10<sup>3</sup> trials.</p>"
+)
+
+
+def test_text_extractor_drops_superscripts_by_default(tmp_path):
+    article = etree.fromstring(_make_article(_SUPERSCRIPT_BODY))
+    body = _text.TextExtractor().extract(article, tmp_path, {})["body"]
+    assert "12" not in body
+    assert "As shown before." in body
+
+
+def test_text_extractor_keeps_superscripts_when_enabled(tmp_path):
+    """A superscript citation marker stays in the sentence it cites from."""
+    article = etree.fromstring(_make_article(_SUPERSCRIPT_BODY))
+    body = _text.TextExtractor(keep_superscripts=True).extract(
+        article, tmp_path, {}
+    )["body"]
+    assert re.search(r"As shown before\.\s*12\s+An effect of 10\s*3", body)
+
+
+def test_superscripts_follow_the_cross_reference_option(tmp_path):
+    """A citation inside a superscript goes with the cross-references."""
+    article = etree.fromstring(_make_article(_SUPERSCRIPT_BODY))
+    body = _text.TextExtractor(
+        preserve_cross_references=False, keep_superscripts=True
+    ).extract(article, tmp_path, {})["body"]
+    assert "12" not in body
+    assert re.search(r"10\s*3", body)

@@ -141,6 +141,7 @@ def extract_data_to_csv(
     articles_with_coords_only: bool = False,
     preserve_cross_references: bool = True,
     keep_tables: bool = False,
+    keep_superscripts: bool = False,
     n_jobs: int = 1,
 ) -> Tuple[Path, ExitCode]:
     """Extract text and coordinates from articles and store in csv files.
@@ -169,6 +170,10 @@ def extract_data_to_csv(
         contents as tab-separated values, then their footer. If False, tables
         are only available in the separate CSV files created by
         `pubget.extract_articles`.
+    keep_superscripts
+        If True, the text of superscripts is kept in the extracted text. If
+        False, superscripts are removed, and with them superscript citation
+        markers ("as shown previously.<sup>12</sup>").
     n_jobs
         Number of processes to run in parallel. `-1` means using all
         processors.
@@ -206,6 +211,7 @@ def extract_data_to_csv(
         articles_with_coords_only,
         preserve_cross_references=preserve_cross_references,
         keep_tables=keep_tables,
+        keep_superscripts=keep_superscripts,
         n_jobs=n_jobs,
     )
     is_complete = bool(status["previous_step_complete"])
@@ -223,6 +229,7 @@ def extract_data_to_csv(
 def _get_data_extractors(
     preserve_cross_references: bool,
     keep_tables: bool,
+    keep_superscripts: bool = False,
 ) -> List[Extractor]:
     return [
         MetadataExtractor(),
@@ -230,6 +237,7 @@ def _get_data_extractors(
         TextExtractor(
             preserve_cross_references=preserve_cross_references,
             keep_tables=keep_tables,
+            keep_superscripts=keep_superscripts,
         ),
         TableInfoExtractor(),
         CoordinateExtractor(),
@@ -246,6 +254,7 @@ def _do_extract_data_to_csv(
     *,
     preserve_cross_references: bool,
     keep_tables: bool,
+    keep_superscripts: bool = False,
     n_jobs: int,
 ) -> int:
     """Do the data extraction and return the number of articles whose data was
@@ -254,7 +263,7 @@ def _do_extract_data_to_csv(
     """
     n_to_process = _utils.get_n_articles(articles_dir)
     data_extractors = _get_data_extractors(
-        preserve_cross_references, keep_tables
+        preserve_cross_references, keep_tables, keep_superscripts
     )
     all_writers = [
         CSVWriter.from_extractor(extractor, output_dir)
@@ -328,6 +337,12 @@ def _edit_argument_parser(
         "position where they appear in the article: their label, then their "
         "contents as tab-separated values, then their footer.",
     )
+    argument_parser.add_argument(
+        "--keep_superscripts",
+        action="store_true",
+        help="Keep the text of superscripts, such as superscript citation "
+        "markers, in the extracted text.",
+    )
     _utils.add_n_jobs_argument(argument_parser)
 
 
@@ -350,6 +365,7 @@ class DataExtractionStep(PipelineStep):
             articles_with_coords_only=args.articles_with_coords_only,
             preserve_cross_references=not args.strip_cross_references,
             keep_tables=args.keep_tables,
+            keep_superscripts=args.keep_superscripts,
             n_jobs=args.n_jobs,
         )
         if not _utils.get_n_articles(output_dir):
@@ -386,5 +402,6 @@ class DataExtractionCommand(Command):
             articles_with_coords_only=args.articles_with_coords_only,
             preserve_cross_references=not args.strip_cross_references,
             keep_tables=args.keep_tables,
+            keep_superscripts=args.keep_superscripts,
             n_jobs=args.n_jobs,
         )[1]
