@@ -257,6 +257,7 @@ If we had not used `--articles_with_coords_only`, the new subdirectory would be 
   If we use the `--keep_tables` option, each table is inserted in the `body` at the position where it appears in the article: its label, then its contents as tab-separated values (with one line per header row), then its footer.
   The cells are those of the table's CSV file, so the text and the CSV files always agree.
   Tables that `pubget` failed to parse are still left out.
+  Superscripts are left out of the text by default; the `--keep_superscripts` option keeps their text, which keeps superscript citation markers ("as shown previously.<sup>12</sup>"); likewise `--keep_subscripts` for subscripts ("p<sub>FWE</sub>").
 - `links.csv` contains the external links found in the articles.
   The fields are `pmcid`, `ext-link-type` (the type of link, for example "uri", "doi"), and `href` (usually an URL).
 - `neurovault_collections.csv` and `neurovault_images.csv`: [NeuroVault](https://neurovault.org/) collection and image IDs that could be extracted from links in the articles, if any.

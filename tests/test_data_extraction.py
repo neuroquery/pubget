@@ -157,6 +157,8 @@ def test_stop_pipeline(empty_articles_dir):
         articles_with_coords_only=False,
         strip_cross_references=False,
         keep_tables=False,
+        keep_superscripts=False,
+        keep_subscripts=False,
         n_jobs=1,
     )
     previous_steps = {"extract_articles": empty_articles_dir}
