@@ -218,3 +218,22 @@ def test_superscripts_follow_the_cross_reference_option(tmp_path):
     ).extract(article, tmp_path, {})["body"]
     assert "12" not in body
     assert re.search(r"10\s*3", body)
+
+
+_SUBSCRIPT_BODY = (
+    "<p>Corrected at p<sub>FWE</sub> &lt; 0.05 on T<sub>1</sub> images.</p>"
+)
+
+
+def test_text_extractor_drops_subscripts_by_default(tmp_path):
+    article = etree.fromstring(_make_article(_SUBSCRIPT_BODY))
+    body = _text.TextExtractor().extract(article, tmp_path, {})["body"]
+    assert "FWE" not in body
+
+
+def test_text_extractor_keeps_subscripts_when_enabled(tmp_path):
+    article = etree.fromstring(_make_article(_SUBSCRIPT_BODY))
+    body = _text.TextExtractor(keep_subscripts=True).extract(
+        article, tmp_path, {}
+    )["body"]
+    assert re.search(r"p\s*FWE\s*< 0.05 on T\s*1\s+images", body)
